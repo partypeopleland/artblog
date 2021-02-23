@@ -1,0 +1,179 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=2"><meta name="theme-color" content="#222"><meta name="generator" content="Hexo 3.8.0"><link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png"><link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png"><link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png"><link rel="mask-icon" href="/artblog/images/logo.svg" color="#222"><link rel="stylesheet" href="/artblog/css/main.css"><link rel="stylesheet" href="/artblog/lib/font-awesome/css/all.min.css"><link rel="stylesheet" href="/artblog/lib/pace/pace-theme-minimal.min.css"><script src="/artblog/lib/pace/pace.min.js"></script><script id="hexo-configurations">var NexT=window.NexT||{},CONFIG={hostname:"partypeopleland.github.io",root:"/artblog/",scheme:"Pisces",version:"7.8.0",exturl:!1,sidebar:{position:"left",display:"post",padding:18,offset:12,onmobile:!1},copycode:{enable:!0,show_result:!1,style:null},back2top:{enable:!0,sidebar:!1,scrollpercent:!0},bookmark:{enable:!1,color:"#222",save:"auto"},fancybox:!1,mediumzoom:!1,lazyload:!0,pangu:!1,comments:{style:"tabs",active:null,storage:!0,lazyload:!1,nav:null},algolia:{hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}},localsearch:{enable:!0,trigger:"auto",top_n_per_article:1,unescape:!1,preload:!1},motion:{enable:!0,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},path:"search.xml"}</script><meta name="description" content="這次利用官網介紹的IUserId Provider來替換掉單一使用者群組"><meta property="og:type" content="article"><meta property="og:title" content="[SignalR] 04 - IUserIdProvider"><meta property="og:url" content="https://partypeopleland.github.io/artblog/2018/11/22/[SignalR]04-IUserIdProvider/index.html"><meta property="og:site_name" content="Art的辦公桌"><meta property="og:description" content="這次利用官網介紹的IUserId Provider來替換掉單一使用者群組"><meta property="og:locale" content="zh-TW"><meta property="og:updated_time" content="2020-08-31T07:22:50.094Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="[SignalR] 04 - IUserIdProvider"><meta name="twitter:description" content="這次利用官網介紹的IUserId Provider來替換掉單一使用者群組"><link rel="canonical" href="https://partypeopleland.github.io/artblog/2018/11/22/[SignalR]04-IUserIdProvider/"><script id="page-configurations">CONFIG.page={sidebar:"",isHome:!1,isPost:!0,lang:"zh-TW"}</script><title>[SignalR] 04 - IUserIdProvider | Art的辦公桌</title><script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script><script data-pjax>function gtag(){dataLayer.push(arguments)}CONFIG.hostname===location.hostname&&(window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","UA-147720279-1"))</script><noscript><style>.sidebar-inner,.use-motion .brand,.use-motion .collection-header,.use-motion .comments,.use-motion .menu-item,.use-motion .pagination,.use-motion .post-block,.use-motion .post-body,.use-motion .post-header{opacity:initial}.use-motion .site-subtitle,.use-motion .site-title{opacity:initial;top:initial}.use-motion .logo-line-before i{left:initial}.use-motion .logo-line-after i{right:initial}</style></noscript></head><body itemscope itemtype="http://schema.org/WebPage"><div class="container use-motion"><div class="headband"></div><header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-container"><div class="site-nav-toggle"><div class="toggle" aria-label="切換導航欄"><span class="toggle-line toggle-line-first"></span> <span class="toggle-line toggle-line-middle"></span> <span class="toggle-line toggle-line-last"></span></div></div><div class="site-meta"><a href="/artblog/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Art的辦公桌</h1><span class="logo-line-after"><i></i></span></a><p class="site-subtitle" itemprop="description">有兩個螢幕真好</p></div><div class="site-nav-right"><div class="toggle popup-trigger"><i class="fa fa-search fa-fw fa-lg"></i></div></div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-search"><a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋</a></li></ul></nav><div class="search-pop-overlay"><div class="popup search-popup"><div class="search-header"><span class="search-icon"><i class="fa fa-search"></i></span><div class="search-input-container"><input autocomplete="off" autocapitalize="off" placeholder="搜尋..." spellcheck="false" type="search" class="search-input"></div><span class="popup-btn-close"><i class="fa fa-times-circle"></i></span></div><div id="search-result"><div id="no-result"><i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i></div></div></div></div></div></header><div class="back-to-top"><i class="fa fa-arrow-up"></i> <span>0%</span></div><div class="reading-progress-bar"></div><main class="main"><div class="main-inner"><div class="content-wrap"><div class="content post posts-expand"><article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW"><link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/2018/11/22/[SignalR]04-IUserIdProvider/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="image" content="/artblog/images/avatar.gif"><meta itemprop="name" content="art"><meta itemprop="description" content="日常工作、學習隨筆"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="Art的辦公桌"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">[SignalR] 04 - IUserIdProvider</h1><div class="post-meta"><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-calendar"></i> </span><span class="post-meta-item-text">發表於</span> <time title="創建時間：2018-11-22 09:24:45" itemprop="dateCreated datePublished" datetime="2018-11-22T09:24:45+08:00">2018-11-22</time> </span><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-calendar-check"></i> </span><span class="post-meta-item-text">更新於</span> <time title="修改時間：2020-08-31 15:22:50" itemprop="dateModified" datetime="2020-08-31T15:22:50+08:00">2020-08-31</time> </span><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-folder"></i> </span><span class="post-meta-item-text">分類於</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/artblog/categories/signalR/" itemprop="url" rel="index"><span itemprop="name">signalR</span></a> </span></span><span id="/artblog/2018/11/22/[SignalR]04-IUserIdProvider/" class="post-meta-item leancloud_visitors" data-flag-title="[SignalR] 04 - IUserIdProvider" title="閱讀次數"><span class="post-meta-item-icon"><i class="fa fa-eye"></i> </span><span class="post-meta-item-text">閱讀次數：</span> <span class="leancloud-visitors-count"></span> </span><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-comment"></i> </span><span class="post-meta-item-text">Disqus：</span> <a title="disqus" href="/artblog/2018/11/22/[SignalR]04-IUserIdProvider/#disqus_thread" itemprop="discussionUrl"><span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/11/22/[SignalR]04-IUserIdProvider/" itemprop="commentCount"></span></a></span><br><span class="post-meta-item" title="文章字數"><span class="post-meta-item-icon"><i class="far fa-file-word"></i> </span><span class="post-meta-item-text">文章字數：</span> <span>2.1k</span> </span><span class="post-meta-item" title="所需閱讀時間"><span class="post-meta-item-icon"><i class="far fa-clock"></i> </span><span class="post-meta-item-text">所需閱讀時間 &asymp;</span> <span>3 分鐘</span></span></div></header><div class="post-body" itemprop="articleBody"><p>這次利用官網介紹的<code>IUserId Provider</code>來替換掉單一使用者群組</p><a id="more"></a><p>當初為了向某位多開視窗的使用者也可以正確發送、接收訊息，採用了單一使用者群組的方式實作，但是這樣子會發現程式碼需要在 OnConnected 的時候做一些事情，而且是每一個 Hub 都要這樣做，所以今天改用 IUserIdProvider 的方式處理</p><p>Ref：<a href="https://docs.microsoft.com/zh-tw/aspnet/signalr/overview/guide-to-the-api/mapping-users-to-connections" target="_blank" rel="noopener">將 SignalR 使用者對應至連線</a></p><hr><p>原先 Hub 推訊息的部分<code>Clients.Group(userId).Received($&quot;{msg} at {DateTime.Now:f}&quot;);</code>，是依據我們給的 UserId 去找到該 Group，然後傳送給這個 Group 裡面所有的 Client；現在我們改用<code>Clients.User(userId).Received(msg);</code>，直接將訊息送給使用者，但是要用<code>Clients.Usre(userId)</code>之前，我們還必須要先告訴 SignalR，怎麼樣取得使用者 ID</p><h2 id="自訂-UserIdProvider"><a href="#自訂-UserIdProvider" class="headerlink" title="自訂 UserIdProvider"></a>自訂 UserIdProvider</h2><p>依照<a href="https://docs.microsoft.com/zh-tw/aspnet/core/signalr/groups?view=aspnetcore-2.1" target="_blank" rel="noopener">文件</a>，繼承<code>IUserIdProvider</code>，實作介面方法，裡面撰寫如何取得使用者 ID 的邏輯，此處依照先前作法，仍舊是從 QueryString 取得 client 傳來的使用者唯一識別碼</p><blockquote><p>需要注意的是使用者識別碼有區分大小寫</p></blockquote><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">CustomUserIdProvider</span> : <span class="title">IUserIdProvider</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">string</span> <span class="title">GetUserId</span>(<span class="params">IRequest request</span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        <span class="comment">// 從QueryString中取得ID作為使用者的識別名稱</span></span><br><span class="line">        <span class="keyword">var</span> id = request.QueryString[<span class="string">"id"</span>];</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">string</span>.IsNullOrWhiteSpace(id) ? <span class="keyword">string</span>.Empty : id;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="註冊自訂的-Provider"><a href="#註冊自訂的-Provider" class="headerlink" title="註冊自訂的 Provider"></a>註冊自訂的 Provider</h2><p>直接在<code>startup.cs</code>裡面註冊即可</p><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Startup</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Configuration</span>(<span class="params">IAppBuilder app</span>)</span></span><br><span class="line"><span class="function"></span>    &#123;</span><br><span class="line">        <span class="comment">// 註冊自訂的使用者ID Provider規則</span></span><br><span class="line">        <span class="keyword">var</span> idProvider = <span class="keyword">new</span> CustomUserIdProvider();</span><br><span class="line">        GlobalHost.DependencyResolver.Register(<span class="keyword">typeof</span>(IUserIdProvider), () =&gt; idProvider);</span><br><span class="line"></span><br><span class="line">        app.Map(<span class="string">"/signalr"</span>, map =&gt;</span><br><span class="line">        &#123;</span><br><span class="line">            map.UseCors(CorsOptions.AllowAll);</span><br><span class="line">            <span class="keyword">var</span> hubConfiguration = <span class="keyword">new</span> HubConfiguration &#123; &#125;;</span><br><span class="line">            map.RunSignalR(hubConfiguration);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>順便列出 Hub 的程式碼</p><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">public abstract class BaseHub : Hub&lt;IClient&gt;</span><br><span class="line">   &#123;</span><br><span class="line">       <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">       <span class="comment"><span class="doctag">///</span> 傳遞訊息給某人</span></span><br><span class="line">       <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">       <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name="userId"&gt;</span>要傳遞的對象<span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">       <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name="msg"&gt;</span>訊息內容<span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">       <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SendPrivateMsg</span>(<span class="params"><span class="keyword">string</span> userId, <span class="keyword">string</span> msg</span>)</span></span><br><span class="line"><span class="function"></span>       &#123;</span><br><span class="line">           <span class="comment">//透過使用者ID來針對該使用者相關聯的連接發送訊息</span></span><br><span class="line">           <span class="comment">//此處Clients.User()必須要先註冊自訂的IUserIdProvider，讓SignalR知道怎麼取得使用者Id</span></span><br><span class="line">           Clients.User(userId).Received(<span class="string">$"<span class="subst">&#123;msg&#125;</span> at <span class="subst">&#123;DateTime.Now:f&#125;</span> By User"</span>);</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">       <span class="comment"><span class="doctag">///</span> 傳送訊息給Hub的所有人</span></span><br><span class="line">       <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">       <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name="msg"&gt;</span>The MSG.<span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">       <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Send</span>(<span class="params"><span class="keyword">string</span> msg</span>)</span></span><br><span class="line"><span class="function"></span>       &#123;</span><br><span class="line">           Clients.All.Received(<span class="string">$"<span class="subst">&#123;msg&#125;</span> at <span class="subst">&#123;DateTime.Now:f&#125;</span> By All"</span>);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   [<span class="meta">HubName(<span class="meta-string">"v4hub"</span>)</span>]</span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">V4Hub</span> : <span class="title">BaseHub</span></span><br><span class="line">   &#123;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure><p>嗯，沒錯，v4 測試版本的 Hub 程式碼直接就是繼承就好了，東西都在父類別，而且也不用再去 override，如果有多個 Hub，就直接繼承。因為我上一個版本也沒有重構…現在也懶得回頭重構了</p><p>細節有需要的請直接參考 <a href="https://github.com/partypeopleland/SignalRDemo" target="_blank" rel="noopener">GitHub</a></p></div><footer class="post-footer"><div class="post-nav"><div class="post-nav-item"><a href="/artblog/2018/11/22/[SignalR]03-Single-User-Group/" rel="prev" title="[SignalR] 03 - Single-User-Group"><i class="fa fa-chevron-left"></i> [SignalR] 03 - Single-User-Group</a></div><div class="post-nav-item"><a href="/artblog/2018/11/23/[SignalR]05-In-Memory/" rel="next" title="[SignalR] 05 - In-Memory">[SignalR] 05 - In-Memory <i class="fa fa-chevron-right"></i></a></div></div></footer></article></div><div class="comments"><div id="disqus_thread"><noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript></div></div><script>window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }</script></div><div class="toggle sidebar-toggle"><span class="toggle-line toggle-line-first"></span> <span class="toggle-line toggle-line-middle"></span> <span class="toggle-line toggle-line-last"></span></div><aside class="sidebar"><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc">文章目錄</li><li class="sidebar-nav-overview">本站概要</li></ul><div class="post-toc-wrap sidebar-panel"><div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#自訂-UserIdProvider"><span class="nav-number">1.</span> <span class="nav-text">自訂 UserIdProvider</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#註冊自訂的-Provider"><span class="nav-number">2.</span> <span class="nav-text">註冊自訂的 Provider</span></a></li></ol></div></div><div class="site-overview-wrap sidebar-panel"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"><p class="site-author-name" itemprop="name">art</p><div class="site-description" itemprop="description">日常工作、學習隨筆</div></div><div class="site-state-wrap motion-element"><nav class="site-state"><div class="site-state-item site-state-posts"><a href="/artblog/archives/"><span class="site-state-item-count">107</span> <span class="site-state-item-name">文章</span></a></div><div class="site-state-item site-state-categories"><a href="/artblog/categories/"><span class="site-state-item-count">24</span> <span class="site-state-item-name">分類</span></a></div><div class="site-state-item site-state-tags"><a href="/artblog/tags/"><span class="site-state-item-count">63</span> <span class="site-state-item-name">標籤</span></a></div></nav></div><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/partypeopleland" title="GitHub → https://github.com/partypeopleland" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a> </span><span class="links-of-author-item"><a href="https://www.facebook.com/sliceart" title="FB Page → https://www.facebook.com/sliceart" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a></span></div></div></div></aside><div id="sidebar-dimmer"></div></div></main><footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2021</span> <span class="with-love"><i class="fa fa-heart"></i> </span><span class="author" itemprop="copyrightHolder">art</span> <span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-chart-area"></i> </span><span title="總字數">315k</span> <span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-coffee"></i> </span><span title="所需總閱讀時間">8:46</span></div><script data-pjax>(function() {
+    function leancloudSelector(url) {
+      //url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();</script></div></footer></div><script src="/artblog/lib/anime.min.js"></script><script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-pjax@0/pjax.min.js"></script><script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script><script src="/artblog/lib/velocity/velocity.min.js"></script><script src="/artblog/lib/velocity/velocity.ui.min.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/schemes/pisces.js"></script><script src="/artblog/js/next-boot.js"></script><script>var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});</script><script src="/artblog/js/local-search.js"></script><div id="pjax"><script>function loadCount(){var d=document,t=d.createElement("script");t.src="https://daddyart.disqus.com/count.js",t.id="dsq-count-scr",(d.head||d.body).appendChild(t)}window.addEventListener("load",loadCount,!1)</script><script>var disqus_config = function() {
+    this.page.url = "https://partypeopleland.github.io/artblog/2018/11/22/[SignalR]04-IUserIdProvider/";
+    this.page.identifier = "2018/11/22/[SignalR]04-IUserIdProvider/";
+    this.page.title = "[SignalR] 04 - IUserIdProvider";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://daddyart.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });</script></div></body></html>

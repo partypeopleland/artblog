@@ -1,0 +1,179 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=2"><meta name="theme-color" content="#222"><meta name="generator" content="Hexo 3.8.0"><link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png"><link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png"><link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png"><link rel="mask-icon" href="/artblog/images/logo.svg" color="#222"><link rel="stylesheet" href="/artblog/css/main.css"><link rel="stylesheet" href="/artblog/lib/font-awesome/css/all.min.css"><link rel="stylesheet" href="/artblog/lib/pace/pace-theme-minimal.min.css"><script src="/artblog/lib/pace/pace.min.js"></script><script id="hexo-configurations">var NexT=window.NexT||{},CONFIG={hostname:"partypeopleland.github.io",root:"/artblog/",scheme:"Pisces",version:"7.8.0",exturl:!1,sidebar:{position:"left",display:"post",padding:18,offset:12,onmobile:!1},copycode:{enable:!0,show_result:!1,style:null},back2top:{enable:!0,sidebar:!1,scrollpercent:!0},bookmark:{enable:!1,color:"#222",save:"auto"},fancybox:!1,mediumzoom:!1,lazyload:!0,pangu:!1,comments:{style:"tabs",active:null,storage:!0,lazyload:!1,nav:null},algolia:{hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}},localsearch:{enable:!0,trigger:"auto",top_n_per_article:1,unescape:!1,preload:!1},motion:{enable:!0,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},path:"search.xml"}</script><meta name="description" content="介紹 Jenkins 參數化建置的設定方式"><meta name="keywords" content="jenkins"><meta property="og:type" content="article"><meta property="og:title" content="Jenkins參數化建置與上下游專案"><meta property="og:url" content="https://partypeopleland.github.io/artblog/2020/02/25/Jenkins參數化建置與上下游專案/index.html"><meta property="og:site_name" content="Art的辦公桌"><meta property="og:description" content="介紹 Jenkins 參數化建置的設定方式"><meta property="og:locale" content="zh-TW"><meta property="og:updated_time" content="2020-08-31T06:04:25.622Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Jenkins參數化建置與上下游專案"><meta name="twitter:description" content="介紹 Jenkins 參數化建置的設定方式"><link rel="canonical" href="https://partypeopleland.github.io/artblog/2020/02/25/Jenkins參數化建置與上下游專案/"><script id="page-configurations">CONFIG.page={sidebar:"",isHome:!1,isPost:!0,lang:"zh-TW"}</script><title>Jenkins參數化建置與上下游專案 | Art的辦公桌</title><script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script><script data-pjax>function gtag(){dataLayer.push(arguments)}CONFIG.hostname===location.hostname&&(window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","UA-147720279-1"))</script><noscript><style>.sidebar-inner,.use-motion .brand,.use-motion .collection-header,.use-motion .comments,.use-motion .menu-item,.use-motion .pagination,.use-motion .post-block,.use-motion .post-body,.use-motion .post-header{opacity:initial}.use-motion .site-subtitle,.use-motion .site-title{opacity:initial;top:initial}.use-motion .logo-line-before i{left:initial}.use-motion .logo-line-after i{right:initial}</style></noscript></head><body itemscope itemtype="http://schema.org/WebPage"><div class="container use-motion"><div class="headband"></div><header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-container"><div class="site-nav-toggle"><div class="toggle" aria-label="切換導航欄"><span class="toggle-line toggle-line-first"></span> <span class="toggle-line toggle-line-middle"></span> <span class="toggle-line toggle-line-last"></span></div></div><div class="site-meta"><a href="/artblog/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Art的辦公桌</h1><span class="logo-line-after"><i></i></span></a><p class="site-subtitle" itemprop="description">有兩個螢幕真好</p></div><div class="site-nav-right"><div class="toggle popup-trigger"><i class="fa fa-search fa-fw fa-lg"></i></div></div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-search"><a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋</a></li></ul></nav><div class="search-pop-overlay"><div class="popup search-popup"><div class="search-header"><span class="search-icon"><i class="fa fa-search"></i></span><div class="search-input-container"><input autocomplete="off" autocapitalize="off" placeholder="搜尋..." spellcheck="false" type="search" class="search-input"></div><span class="popup-btn-close"><i class="fa fa-times-circle"></i></span></div><div id="search-result"><div id="no-result"><i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i></div></div></div></div></div></header><div class="back-to-top"><i class="fa fa-arrow-up"></i> <span>0%</span></div><div class="reading-progress-bar"></div><main class="main"><div class="main-inner"><div class="content-wrap"><div class="content post posts-expand"><article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW"><link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/2020/02/25/Jenkins參數化建置與上下游專案/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="image" content="/artblog/images/avatar.gif"><meta itemprop="name" content="art"><meta itemprop="description" content="日常工作、學習隨筆"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="Art的辦公桌"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">Jenkins參數化建置與上下游專案</h1><div class="post-meta"><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-calendar"></i> </span><span class="post-meta-item-text">發表於</span> <time title="創建時間：2020-02-25 10:02:26" itemprop="dateCreated datePublished" datetime="2020-02-25T10:02:26+08:00">2020-02-25</time> </span><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-calendar-check"></i> </span><span class="post-meta-item-text">更新於</span> <time title="修改時間：2020-08-31 14:04:25" itemprop="dateModified" datetime="2020-08-31T14:04:25+08:00">2020-08-31</time> </span><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-folder"></i> </span><span class="post-meta-item-text">分類於</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/artblog/categories/devOps/" itemprop="url" rel="index"><span itemprop="name">devOps</span></a> </span></span><span id="/artblog/2020/02/25/Jenkins參數化建置與上下游專案/" class="post-meta-item leancloud_visitors" data-flag-title="Jenkins參數化建置與上下游專案" title="閱讀次數"><span class="post-meta-item-icon"><i class="fa fa-eye"></i> </span><span class="post-meta-item-text">閱讀次數：</span> <span class="leancloud-visitors-count"></span> </span><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-comment"></i> </span><span class="post-meta-item-text">Disqus：</span> <a title="disqus" href="/artblog/2020/02/25/Jenkins參數化建置與上下游專案/#disqus_thread" itemprop="discussionUrl"><span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/02/25/Jenkins參數化建置與上下游專案/" itemprop="commentCount"></span></a></span><br><span class="post-meta-item" title="文章字數"><span class="post-meta-item-icon"><i class="far fa-file-word"></i> </span><span class="post-meta-item-text">文章字數：</span> <span>652</span> </span><span class="post-meta-item" title="所需閱讀時間"><span class="post-meta-item-icon"><i class="far fa-clock"></i> </span><span class="post-meta-item-text">所需閱讀時間 &asymp;</span> <span>1 分鐘</span></span></div></header><div class="post-body" itemprop="articleBody"><p>介紹 Jenkins 參數化建置的設定方式</p><a id="more"></a><h2 id="參數化建置"><a href="#參數化建置" class="headerlink" title="參數化建置"></a>參數化建置</h2><p>假設我目前有兩個 Jenkins Job，第一個 Job 執行成功後，才執行第二個 Job</p><p>第一個 Job 我們假設叫做【job01】；第二個 Job 我們把它叫做【job02】；這兩個專案都透過參數化建置與 Git Parameter 來控制檔案來源為哪一個 Branch，這邊先定義變數名稱為 Branch<br><img data-src="2020-02-25_101604.png" alt></p><p>在版控來源指定分支就可以將參數帶過來用了<br><img data-src="2020-02-25_101843.png" alt></p><p>執行也很簡單，透過<code>Build with parameter</code>就可以選擇 branch<br><img data-src="2020-02-25_102700.png" alt></p><p>透過參數化建置其他專案<br><img data-src="2020-02-25_103243.png" alt><br><img data-src="2020-02-25_103420.png" alt></p><p>這樣執行 Job1 之後，就會自動觸發 Job2<br><img data-src="2020-02-25_103642.png" alt></p><p>透過上面的方式，Job02 被觸發的原因是因為 Job01 我們有設定建置後動作，觸發其他專案的參數化建置，其實並不是上下游專案的設定</p><h2 id="上下游專案-從上游專案設定"><a href="#上下游專案-從上游專案設定" class="headerlink" title="上下游專案 從上游專案設定"></a>上下游專案 從上游專案設定</h2><p>建立 Job03、Job04 兩個任務，其中 Job03 設定建置後動作：建置其他專案<br><img data-src="2020-02-25_104350.png" alt><br>這樣子回到 Job03 就會看到他的下游專案為 Job04<br><img data-src="2020-02-25_104602.png" alt></p><p>而回到 Job04，也會看到它的上游專案為 Job03</p><h2 id="上下游專案-從下游專案設定"><a href="#上下游專案-從下游專案設定" class="headerlink" title="上下游專案 從下游專案設定"></a>上下游專案 從下游專案設定</h2><p>也可以直接在下游專案中設定<code>build after other project are built</code><br><img data-src="2020-02-25_104807.png" alt></p><p>效果是一樣的</p><h2 id="拉拉作伙ㄟ阿娜？"><a href="#拉拉作伙ㄟ阿娜？" class="headerlink" title="拉拉作伙ㄟ阿娜？"></a>拉拉作伙ㄟ阿娜？</h2><p>比較妙的是，如果我上游、下游專案都設定，那會發生甚麼事情？<br>答案是實際的任務仍舊觸發一次，但是 Log 紀錄會顯示兩次<br><img data-src="2020-02-25_105516.png" alt><br><img data-src="2020-02-25_105118.png" alt></p><p>那如果加上參數化建置呢？</p><p><img data-src="2020-02-25_105606.png" alt></p><p>答案是，任務觸發兩次</p><p><img data-src="2020-02-25_105720.png" alt><br><img data-src="2020-02-25_105754.png" alt><br><img data-src="2020-02-25_105817.png" alt></p><p>透過任務的上下游設置，會觸發一次；而透過參數化建置其他專案，也會觸發一次；這兩者是分開計算的<br>所以如果是需要傳遞參數的場合，不要再設定任務的上下游依賴關係，避免多次觸發執行</p></div><footer class="post-footer"><div class="post-tags"><a href="/artblog/tags/jenkins/" rel="tag"># jenkins</a></div><div class="post-nav"><div class="post-nav-item"><a href="/artblog/2020/01/15/如何於Jenkins-Pipeline專案整合sonarQube/" rel="prev" title="如何於Jenkins Pipeline專案整合sonarQube"><i class="fa fa-chevron-left"></i> 如何於Jenkins Pipeline專案整合sonarQube</a></div><div class="post-nav-item"><a href="/artblog/2020/02/25/Jenkins檢查前端編譯程式有無簽入版控/" rel="next" title="Jenkins檢查前端編譯程式有無簽入版控">Jenkins檢查前端編譯程式有無簽入版控 <i class="fa fa-chevron-right"></i></a></div></div></footer></article></div><div class="comments"><div id="disqus_thread"><noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript></div></div><script>window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }</script></div><div class="toggle sidebar-toggle"><span class="toggle-line toggle-line-first"></span> <span class="toggle-line toggle-line-middle"></span> <span class="toggle-line toggle-line-last"></span></div><aside class="sidebar"><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc">文章目錄</li><li class="sidebar-nav-overview">本站概要</li></ul><div class="post-toc-wrap sidebar-panel"><div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#參數化建置"><span class="nav-number">1.</span> <span class="nav-text">參數化建置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#上下游專案-從上游專案設定"><span class="nav-number">2.</span> <span class="nav-text">上下游專案 從上游專案設定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#上下游專案-從下游專案設定"><span class="nav-number">3.</span> <span class="nav-text">上下游專案 從下游專案設定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拉拉作伙ㄟ阿娜？"><span class="nav-number">4.</span> <span class="nav-text">拉拉作伙ㄟ阿娜？</span></a></li></ol></div></div><div class="site-overview-wrap sidebar-panel"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"><p class="site-author-name" itemprop="name">art</p><div class="site-description" itemprop="description">日常工作、學習隨筆</div></div><div class="site-state-wrap motion-element"><nav class="site-state"><div class="site-state-item site-state-posts"><a href="/artblog/archives/"><span class="site-state-item-count">107</span> <span class="site-state-item-name">文章</span></a></div><div class="site-state-item site-state-categories"><a href="/artblog/categories/"><span class="site-state-item-count">24</span> <span class="site-state-item-name">分類</span></a></div><div class="site-state-item site-state-tags"><a href="/artblog/tags/"><span class="site-state-item-count">63</span> <span class="site-state-item-name">標籤</span></a></div></nav></div><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/partypeopleland" title="GitHub → https://github.com/partypeopleland" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a> </span><span class="links-of-author-item"><a href="https://www.facebook.com/sliceart" title="FB Page → https://www.facebook.com/sliceart" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a></span></div></div></div></aside><div id="sidebar-dimmer"></div></div></main><footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2021</span> <span class="with-love"><i class="fa fa-heart"></i> </span><span class="author" itemprop="copyrightHolder">art</span> <span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-chart-area"></i> </span><span title="總字數">315k</span> <span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-coffee"></i> </span><span title="所需總閱讀時間">8:46</span></div><script data-pjax>(function() {
+    function leancloudSelector(url) {
+      //url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();</script></div></footer></div><script src="/artblog/lib/anime.min.js"></script><script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-pjax@0/pjax.min.js"></script><script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script><script src="/artblog/lib/velocity/velocity.min.js"></script><script src="/artblog/lib/velocity/velocity.ui.min.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/schemes/pisces.js"></script><script src="/artblog/js/next-boot.js"></script><script>var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});</script><script src="/artblog/js/local-search.js"></script><div id="pjax"><script>function loadCount(){var d=document,t=d.createElement("script");t.src="https://daddyart.disqus.com/count.js",t.id="dsq-count-scr",(d.head||d.body).appendChild(t)}window.addEventListener("load",loadCount,!1)</script><script>var disqus_config = function() {
+    this.page.url = "https://partypeopleland.github.io/artblog/2020/02/25/Jenkins參數化建置與上下游專案/";
+    this.page.identifier = "2020/02/25/Jenkins參數化建置與上下游專案/";
+    this.page.title = "Jenkins參數化建置與上下游專案";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://daddyart.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });</script></div></body></html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=2"><meta name="theme-color" content="#222"><meta name="generator" content="Hexo 3.8.0"><link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png"><link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png"><link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png"><link rel="mask-icon" href="/artblog/images/logo.svg" color="#222"><link rel="stylesheet" href="/artblog/css/main.css"><link rel="stylesheet" href="/artblog/lib/font-awesome/css/all.min.css"><link rel="stylesheet" href="/artblog/lib/pace/pace-theme-minimal.min.css"><script src="/artblog/lib/pace/pace.min.js"></script><script id="hexo-configurations">var NexT=window.NexT||{},CONFIG={hostname:"partypeopleland.github.io",root:"/artblog/",scheme:"Pisces",version:"7.8.0",exturl:!1,sidebar:{position:"left",display:"post",padding:18,offset:12,onmobile:!1},copycode:{enable:!0,show_result:!1,style:null},back2top:{enable:!0,sidebar:!1,scrollpercent:!0},bookmark:{enable:!1,color:"#222",save:"auto"},fancybox:!1,mediumzoom:!1,lazyload:!0,pangu:!1,comments:{style:"tabs",active:null,storage:!0,lazyload:!1,nav:null},algolia:{hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}},localsearch:{enable:!0,trigger:"auto",top_n_per_article:1,unescape:!1,preload:!1},motion:{enable:!0,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},path:"search.xml"}</script><meta name="description" content="在實務上常常遇到的情況是針對遺留程式碼做調整，這些 Code，有一些是半年之前的我自己寫的，有一些是別人寫的，不可避免的是我無法記得所有系統的細節，所以很多時候我必須要先重新看過一次程式碼，知道在做什麼事情之後，才能開始修改，如何修改Legacy code都是老生常談了，這次有機會可以從頭到尾感受一下Joey的重構影片，尤其是都有旁白說明，是非常難得的機會，推薦給大家看看"><meta name="keywords" content="refactor"><meta property="og:type" content="article"><meta property="og:title" content="心得-Refactor Tennis Game By Baby Step in Java"><meta property="og:url" content="https://partypeopleland.github.io/artblog/2021/02/05/心得-Refactor-Tennis-Game-By-Baby-Step-in-Java/index.html"><meta property="og:site_name" content="Art的辦公桌"><meta property="og:description" content="在實務上常常遇到的情況是針對遺留程式碼做調整，這些 Code，有一些是半年之前的我自己寫的，有一些是別人寫的，不可避免的是我無法記得所有系統的細節，所以很多時候我必須要先重新看過一次程式碼，知道在做什麼事情之後，才能開始修改，如何修改Legacy code都是老生常談了，這次有機會可以從頭到尾感受一下Joey的重構影片，尤其是都有旁白說明，是非常難得的機會，推薦給大家看看"><meta property="og:locale" content="zh-TW"><meta property="og:updated_time" content="2021-02-05T09:42:06.365Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="心得-Refactor Tennis Game By Baby Step in Java"><meta name="twitter:description" content="在實務上常常遇到的情況是針對遺留程式碼做調整，這些 Code，有一些是半年之前的我自己寫的，有一些是別人寫的，不可避免的是我無法記得所有系統的細節，所以很多時候我必須要先重新看過一次程式碼，知道在做什麼事情之後，才能開始修改，如何修改Legacy code都是老生常談了，這次有機會可以從頭到尾感受一下Joey的重構影片，尤其是都有旁白說明，是非常難得的機會，推薦給大家看看"><link rel="canonical" href="https://partypeopleland.github.io/artblog/2021/02/05/心得-Refactor-Tennis-Game-By-Baby-Step-in-Java/"><script id="page-configurations">CONFIG.page={sidebar:"",isHome:!1,isPost:!0,lang:"zh-TW"}</script><title>心得-Refactor Tennis Game By Baby Step in Java | Art的辦公桌</title><script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script><script data-pjax>function gtag(){dataLayer.push(arguments)}CONFIG.hostname===location.hostname&&(window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","UA-147720279-1"))</script><noscript><style>.sidebar-inner,.use-motion .brand,.use-motion .collection-header,.use-motion .comments,.use-motion .menu-item,.use-motion .pagination,.use-motion .post-block,.use-motion .post-body,.use-motion .post-header{opacity:initial}.use-motion .site-subtitle,.use-motion .site-title{opacity:initial;top:initial}.use-motion .logo-line-before i{left:initial}.use-motion .logo-line-after i{right:initial}</style></noscript></head><body itemscope itemtype="http://schema.org/WebPage"><div class="container use-motion"><div class="headband"></div><header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-container"><div class="site-nav-toggle"><div class="toggle" aria-label="切換導航欄"><span class="toggle-line toggle-line-first"></span> <span class="toggle-line toggle-line-middle"></span> <span class="toggle-line toggle-line-last"></span></div></div><div class="site-meta"><a href="/artblog/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Art的辦公桌</h1><span class="logo-line-after"><i></i></span></a><p class="site-subtitle" itemprop="description">有兩個螢幕真好</p></div><div class="site-nav-right"><div class="toggle popup-trigger"><i class="fa fa-search fa-fw fa-lg"></i></div></div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-search"><a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋</a></li></ul></nav><div class="search-pop-overlay"><div class="popup search-popup"><div class="search-header"><span class="search-icon"><i class="fa fa-search"></i></span><div class="search-input-container"><input autocomplete="off" autocapitalize="off" placeholder="搜尋..." spellcheck="false" type="search" class="search-input"></div><span class="popup-btn-close"><i class="fa fa-times-circle"></i></span></div><div id="search-result"><div id="no-result"><i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i></div></div></div></div></div></header><div class="back-to-top"><i class="fa fa-arrow-up"></i> <span>0%</span></div><div class="reading-progress-bar"></div><main class="main"><div class="main-inner"><div class="content-wrap"><div class="content post posts-expand"><article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW"><link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/2021/02/05/心得-Refactor-Tennis-Game-By-Baby-Step-in-Java/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="image" content="/artblog/images/avatar.gif"><meta itemprop="name" content="art"><meta itemprop="description" content="日常工作、學習隨筆"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="Art的辦公桌"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">心得-Refactor Tennis Game By Baby Step in Java</h1><div class="post-meta"><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-calendar"></i> </span><span class="post-meta-item-text">發表於</span> <time title="創建時間：2021-02-05 16:39:48 / 修改時間：17:42:06" itemprop="dateCreated datePublished" datetime="2021-02-05T16:39:48+08:00">2021-02-05</time> </span><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-folder"></i> </span><span class="post-meta-item-text">分類於</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/artblog/categories/心得/" itemprop="url" rel="index"><span itemprop="name">心得</span></a> </span></span><span id="/artblog/2021/02/05/心得-Refactor-Tennis-Game-By-Baby-Step-in-Java/" class="post-meta-item leancloud_visitors" data-flag-title="心得-Refactor Tennis Game By Baby Step in Java" title="閱讀次數"><span class="post-meta-item-icon"><i class="fa fa-eye"></i> </span><span class="post-meta-item-text">閱讀次數：</span> <span class="leancloud-visitors-count"></span> </span><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-comment"></i> </span><span class="post-meta-item-text">Disqus：</span> <a title="disqus" href="/artblog/2021/02/05/心得-Refactor-Tennis-Game-By-Baby-Step-in-Java/#disqus_thread" itemprop="discussionUrl"><span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021/02/05/心得-Refactor-Tennis-Game-By-Baby-Step-in-Java/" itemprop="commentCount"></span></a></span><br><span class="post-meta-item" title="文章字數"><span class="post-meta-item-icon"><i class="far fa-file-word"></i> </span><span class="post-meta-item-text">文章字數：</span> <span>2.1k</span> </span><span class="post-meta-item" title="所需閱讀時間"><span class="post-meta-item-icon"><i class="far fa-clock"></i> </span><span class="post-meta-item-text">所需閱讀時間 &asymp;</span> <span>4 分鐘</span></span></div></header><div class="post-body" itemprop="articleBody"><p>在實務上常常遇到的情況是針對遺留程式碼做調整，這些 Code，有一些是半年之前的我自己寫的，有一些是別人寫的，不可避免的是我無法記得所有系統的細節，所以很多時候我必須要先重新看過一次程式碼，知道在做什麼事情之後，才能開始修改，如何修改<code>Legacy code</code>都是老生常談了，這次有機會可以從頭到尾感受一下<code>Joey</code>的重構影片，尤其是都有旁白說明，是非常難得的機會，推薦給大家看看</p><a id="more"></a><p><code>Joey</code>針對這個主題也錄製了影片、撰寫了文章、提供了完整的 Github Commit History，相信可以讓大家更完整的感受到重構的威力、及善用工具的優勢</p><p>影片連結：<a href="https://www.youtube.com/watch?v=d70T_lqxBmY" target="_blank" rel="noopener">[Fake it till you make it] refactoring tennis by baby steps in Java - By Joey Youtube Channel</a><br>文章連結：<a href="https://tdd.best/code-4-fun/fake-it-till-you-make-it/" target="_blank" rel="noopener">重構全 hard-code 的 tennis</a></p><p>還不了解 <code>Tennis Game</code>的人，可以先看一下<a href="https://codingdojo.org/kata/Tennis/" target="_blank" rel="noopener">Tennis Kata</a>的規則說明，其實就是網球的計分規則，在網路上關於<code>Tennis TDD Kata</code>有不少文章，大家可以自行搜尋一下。</p><h2 id="Magic-String-Magic-Number"><a href="#Magic-String-Magic-Number" class="headerlink" title="Magic String / Magic Number"></a>Magic String / Magic Number</h2><p>影片中第一件事情就是去除掉<code>Magic String</code>，又或者是數字，那就叫做<code>Magic Number</code></p><p>這些東西不注意的話就會充斥在整份程式碼當中，事過境遷，真正的意義很可能被遺忘在歷史長河中，為了避免這件事情，應該要用一個有意義的變數取代這些寫死的字串(或是數字)。</p><h2 id="抽象共用的變數"><a href="#抽象共用的變數" class="headerlink" title="抽象共用的變數"></a>抽象共用的變數</h2><p>這是影片中第二個用到的技巧，實務上這樣做的原因也很簡單，你不會想要同時修改很多次，如果你只需要修改一個地方，那不是很好嗎？所以將所有相同的字串都用一樣的變數取代掉，這個技巧在影片當中的速度很快，快捷鍵看樣子是按下<code>Ctrl+Alt+F</code>，這在 Intellij 裡面應該是把東西變成<code>Field</code>的快捷鍵，但是我在<code>Rider</code>裡面並沒有辦法像影片中那樣，只抽取反白的區域而已，如果有相同的字串，在<code>Rider</code>裡面也會問你是否要處理所有相同的字串，這點很方便</p><h2 id="讓分數與顯示結果的關係更明顯"><a href="#讓分數與顯示結果的關係更明顯" class="headerlink" title="讓分數與顯示結果的關係更明顯"></a>讓分數與顯示結果的關係更明顯</h2><p>為了讓玩家的分數，與實際顯示的字串對應關係更明顯一點，透過<code>HashMap</code>來存放這份關係，讓使用者分數為 Key，這樣的方式會更清楚，相對的也可以將原先的邏輯，逐漸替換掉，讓分數作為條件，取得對應的文字顯示，在 CSharp 裡面，我常用的也是<code>Dictionary</code>，在<code>Javascript</code>則可以直接用<code>{}</code>的方式來宣告，這些都是 Key-Value-Pair</p><h2 id="整理程式碼區塊內的程式"><a href="#整理程式碼區塊內的程式" class="headerlink" title="整理程式碼區塊內的程式"></a>整理程式碼區塊內的程式</h2><p>對應關係的<code>HashMap</code>是固定的，其實可以在<code>Create Instance</code>的時候就建立好，這樣子實際上取得分數的方法內，就只需要包含邏輯就好，不再有初始化的事情，讓職責更清晰，也讓三個月後的你回來看 Code 能更快速的理解程式碼邏輯</p><h2 id="Inline-變數"><a href="#Inline-變數" class="headerlink" title="Inline 變數"></a>Inline 變數</h2><p>在影片後面接著會將所有的變數搬來搬去，到最後放到 HashMap 的時候，最後一個動作是把變數 inline 進去，一開始抽象出來是為了 reuse，最後 inline 是為了消滅非必要的變數，這一系列的過程其實就是重構，重構最常做的事情其實也就是這樣子，改一下命名，把東西搬過去、搬過來、抽出一個 Function 之類的，最終的目的都是為了讓程式碼更容易理解</p><h2 id="合併相似的邏輯"><a href="#合併相似的邏輯" class="headerlink" title="合併相似的邏輯"></a>合併相似的邏輯</h2><p>程式碼中有很多 if 分支，在裡面的邏輯是都相同的，所以這個時候可以將判斷修改一下，就可以移除重複的程式碼</p><h2 id="組織程式碼順序"><a href="#組織程式碼順序" class="headerlink" title="組織程式碼順序"></a>組織程式碼順序</h2><p>這個行為我不太知道該怎麼說，影片中是將類似的邏輯放在一起，這也有助於理解程式碼，透過這樣的搬移，又發現這幾個程式碼都有相同的邏輯實作，所以又可以精簡，這樣的動作不一定每次都奏效，但起碼可以幫助你理解程式碼的行為，類似的行為放在一起總是更容易理解不是嗎？</p><p>影片中的範例透過這樣子操作，合併判斷式之後最後又發現可以進行更精簡的修改，逐漸減少判斷條件，程式碼也越來越清晰，如果有練習過 <code>Tennis TDD Kata</code> 的人，應該到這邊就開始發現，程式碼開始有點像了</p><h2 id="取個容易理解的名字"><a href="#取個容易理解的名字" class="headerlink" title="取個容易理解的名字"></a>取個容易理解的名字</h2><p>具體的範例就是影片中的<code>isDeuce()</code>、<code>sameScore()</code>、<code>lookupScore()</code>這樣的東西，一看到這個 Function 名稱，你就知道它在幹什麼的，它怎麼實作的，你不要去管它，讓你的注意力集中在商業邏輯，而不是實作方式，當然方法的內容也要清晰明瞭</p><h2 id="重複這些操作"><a href="#重複這些操作" class="headerlink" title="重複這些操作"></a>重複這些操作</h2><p>在部分合併後的判斷式調整，需要用腦子去想想商業邏輯，應該怎麼改寫可以更簡單，其他都是重複操作了，最終你看到的程式碼，所有方法都是一行，而主要的方法邏輯很清楚，你可以透過方法的名稱知道整個商業邏輯，計算分數的規則是甚麼</p><h1 id="心得"><a href="#心得" class="headerlink" title="心得"></a>心得</h1><p>我寫完程式碼之後，也都是用上面的方式來 review 我的程式碼，在剛入這行的時候都不知道這些事情，所以跌跌撞撞了很久，這些東西跟技巧都很簡單，但是觀念的培養是需要時間的，要不然就是真的踩雷才會記得，推薦這影片給大家，有機會多看看，重複看也很不錯，這影片暴露的東西很多了</p><ol><li>如何善用你的開發工具：熱鍵、Vim、IDE 重構支援</li><li>如何理解你的需求：透過<code>Joey</code>的旁白，你可以知道判斷式修改是為什麼，如何組織在一起的，為什麼可以這樣合併，這些都是需要先理解需求，才能知道應該怎麼寫的</li></ol><p>這也是我推薦給大家的主因，理解需求，並修改既有的程式碼</p></div><footer class="post-footer"><div class="post-tags"><a href="/artblog/tags/refactor/" rel="tag"># refactor</a></div><div class="post-nav"><div class="post-nav-item"><a href="/artblog/2020/12/31/Rider-快速撰寫程式的小技巧/" rel="prev" title="Rider-快速撰寫程式的小技巧"><i class="fa fa-chevron-left"></i> Rider-快速撰寫程式的小技巧</a></div><div class="post-nav-item"><a href="/artblog/2021/02/17/testing-vue-js-applications/" rel="next" title="讀書心得-Vue.js應用測試">讀書心得-Vue.js應用測試 <i class="fa fa-chevron-right"></i></a></div></div></footer></article></div><div class="comments"><div id="disqus_thread"><noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript></div></div><script>window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }</script></div><div class="toggle sidebar-toggle"><span class="toggle-line toggle-line-first"></span> <span class="toggle-line toggle-line-middle"></span> <span class="toggle-line toggle-line-last"></span></div><aside class="sidebar"><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc">文章目錄</li><li class="sidebar-nav-overview">本站概要</li></ul><div class="post-toc-wrap sidebar-panel"><div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Magic-String-Magic-Number"><span class="nav-number">1.</span> <span class="nav-text">Magic String / Magic Number</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#抽象共用的變數"><span class="nav-number">2.</span> <span class="nav-text">抽象共用的變數</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#讓分數與顯示結果的關係更明顯"><span class="nav-number">3.</span> <span class="nav-text">讓分數與顯示結果的關係更明顯</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#整理程式碼區塊內的程式"><span class="nav-number">4.</span> <span class="nav-text">整理程式碼區塊內的程式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Inline-變數"><span class="nav-number">5.</span> <span class="nav-text">Inline 變數</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#合併相似的邏輯"><span class="nav-number">6.</span> <span class="nav-text">合併相似的邏輯</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#組織程式碼順序"><span class="nav-number">7.</span> <span class="nav-text">組織程式碼順序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#取個容易理解的名字"><span class="nav-number">8.</span> <span class="nav-text">取個容易理解的名字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重複這些操作"><span class="nav-number">9.</span> <span class="nav-text">重複這些操作</span></a></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#心得"><span class="nav-number"></span> <span class="nav-text">心得</span></a></li></div></div><div class="site-overview-wrap sidebar-panel"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"><p class="site-author-name" itemprop="name">art</p><div class="site-description" itemprop="description">日常工作、學習隨筆</div></div><div class="site-state-wrap motion-element"><nav class="site-state"><div class="site-state-item site-state-posts"><a href="/artblog/archives/"><span class="site-state-item-count">107</span> <span class="site-state-item-name">文章</span></a></div><div class="site-state-item site-state-categories"><a href="/artblog/categories/"><span class="site-state-item-count">24</span> <span class="site-state-item-name">分類</span></a></div><div class="site-state-item site-state-tags"><a href="/artblog/tags/"><span class="site-state-item-count">63</span> <span class="site-state-item-name">標籤</span></a></div></nav></div><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/partypeopleland" title="GitHub → https://github.com/partypeopleland" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a> </span><span class="links-of-author-item"><a href="https://www.facebook.com/sliceart" title="FB Page → https://www.facebook.com/sliceart" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a></span></div></div></div></aside><div id="sidebar-dimmer"></div></div></main><footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2021</span> <span class="with-love"><i class="fa fa-heart"></i> </span><span class="author" itemprop="copyrightHolder">art</span> <span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-chart-area"></i> </span><span title="總字數">315k</span> <span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-coffee"></i> </span><span title="所需總閱讀時間">8:46</span></div><script data-pjax>(function() {
+    function leancloudSelector(url) {
+      //url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();</script></div></footer></div><script src="/artblog/lib/anime.min.js"></script><script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-pjax@0/pjax.min.js"></script><script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script><script src="/artblog/lib/velocity/velocity.min.js"></script><script src="/artblog/lib/velocity/velocity.ui.min.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/schemes/pisces.js"></script><script src="/artblog/js/next-boot.js"></script><script>var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});</script><script src="/artblog/js/local-search.js"></script><div id="pjax"><script>function loadCount(){var d=document,t=d.createElement("script");t.src="https://daddyart.disqus.com/count.js",t.id="dsq-count-scr",(d.head||d.body).appendChild(t)}window.addEventListener("load",loadCount,!1)</script><script>var disqus_config = function() {
+    this.page.url = "https://partypeopleland.github.io/artblog/2021/02/05/心得-Refactor-Tennis-Game-By-Baby-Step-in-Java/";
+    this.page.identifier = "2021/02/05/心得-Refactor-Tennis-Game-By-Baby-Step-in-Java/";
+    this.page.title = "心得-Refactor Tennis Game By Baby Step in Java";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://daddyart.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });</script></div></body></html>

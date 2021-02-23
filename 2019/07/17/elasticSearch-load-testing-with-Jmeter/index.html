@@ -1,0 +1,179 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=2"><meta name="theme-color" content="#222"><meta name="generator" content="Hexo 3.8.0"><link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png"><link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png"><link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png"><link rel="mask-icon" href="/artblog/images/logo.svg" color="#222"><link rel="stylesheet" href="/artblog/css/main.css"><link rel="stylesheet" href="/artblog/lib/font-awesome/css/all.min.css"><link rel="stylesheet" href="/artblog/lib/pace/pace-theme-minimal.min.css"><script src="/artblog/lib/pace/pace.min.js"></script><script id="hexo-configurations">var NexT=window.NexT||{},CONFIG={hostname:"partypeopleland.github.io",root:"/artblog/",scheme:"Pisces",version:"7.8.0",exturl:!1,sidebar:{position:"left",display:"post",padding:18,offset:12,onmobile:!1},copycode:{enable:!0,show_result:!1,style:null},back2top:{enable:!0,sidebar:!1,scrollpercent:!0},bookmark:{enable:!1,color:"#222",save:"auto"},fancybox:!1,mediumzoom:!1,lazyload:!0,pangu:!1,comments:{style:"tabs",active:null,storage:!0,lazyload:!1,nav:null},algolia:{hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}},localsearch:{enable:!0,trigger:"auto",top_n_per_article:1,unescape:!1,preload:!1},motion:{enable:!0,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},path:"search.xml"}</script><meta name="description" content="對於網站效能很重要的一個指標就是：能夠承受多少壓力。評估你的網站使用者，並實際測試給出數據，就是壓力測試的目標"><meta name="keywords" content="jmeter"><meta property="og:type" content="article"><meta property="og:title" content="elasticSearch load testing with Jmeter"><meta property="og:url" content="https://partypeopleland.github.io/artblog/2019/07/17/elasticSearch-load-testing-with-Jmeter/index.html"><meta property="og:site_name" content="Art的辦公桌"><meta property="og:description" content="對於網站效能很重要的一個指標就是：能夠承受多少壓力。評估你的網站使用者，並實際測試給出數據，就是壓力測試的目標"><meta property="og:locale" content="zh-TW"><meta property="og:updated_time" content="2020-08-31T07:17:40.296Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="elasticSearch load testing with Jmeter"><meta name="twitter:description" content="對於網站效能很重要的一個指標就是：能夠承受多少壓力。評估你的網站使用者，並實際測試給出數據，就是壓力測試的目標"><link rel="canonical" href="https://partypeopleland.github.io/artblog/2019/07/17/elasticSearch-load-testing-with-Jmeter/"><script id="page-configurations">CONFIG.page={sidebar:"",isHome:!1,isPost:!0,lang:"zh-TW"}</script><title>elasticSearch load testing with Jmeter | Art的辦公桌</title><script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script><script data-pjax>function gtag(){dataLayer.push(arguments)}CONFIG.hostname===location.hostname&&(window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","UA-147720279-1"))</script><noscript><style>.sidebar-inner,.use-motion .brand,.use-motion .collection-header,.use-motion .comments,.use-motion .menu-item,.use-motion .pagination,.use-motion .post-block,.use-motion .post-body,.use-motion .post-header{opacity:initial}.use-motion .site-subtitle,.use-motion .site-title{opacity:initial;top:initial}.use-motion .logo-line-before i{left:initial}.use-motion .logo-line-after i{right:initial}</style></noscript></head><body itemscope itemtype="http://schema.org/WebPage"><div class="container use-motion"><div class="headband"></div><header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-container"><div class="site-nav-toggle"><div class="toggle" aria-label="切換導航欄"><span class="toggle-line toggle-line-first"></span> <span class="toggle-line toggle-line-middle"></span> <span class="toggle-line toggle-line-last"></span></div></div><div class="site-meta"><a href="/artblog/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Art的辦公桌</h1><span class="logo-line-after"><i></i></span></a><p class="site-subtitle" itemprop="description">有兩個螢幕真好</p></div><div class="site-nav-right"><div class="toggle popup-trigger"><i class="fa fa-search fa-fw fa-lg"></i></div></div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-search"><a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋</a></li></ul></nav><div class="search-pop-overlay"><div class="popup search-popup"><div class="search-header"><span class="search-icon"><i class="fa fa-search"></i></span><div class="search-input-container"><input autocomplete="off" autocapitalize="off" placeholder="搜尋..." spellcheck="false" type="search" class="search-input"></div><span class="popup-btn-close"><i class="fa fa-times-circle"></i></span></div><div id="search-result"><div id="no-result"><i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i></div></div></div></div></div></header><div class="back-to-top"><i class="fa fa-arrow-up"></i> <span>0%</span></div><div class="reading-progress-bar"></div><main class="main"><div class="main-inner"><div class="content-wrap"><div class="content post posts-expand"><article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW"><link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/2019/07/17/elasticSearch-load-testing-with-Jmeter/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="image" content="/artblog/images/avatar.gif"><meta itemprop="name" content="art"><meta itemprop="description" content="日常工作、學習隨筆"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="Art的辦公桌"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">elasticSearch load testing with Jmeter</h1><div class="post-meta"><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-calendar"></i> </span><span class="post-meta-item-text">發表於</span> <time title="創建時間：2019-07-17 11:01:33" itemprop="dateCreated datePublished" datetime="2019-07-17T11:01:33+08:00">2019-07-17</time> </span><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-calendar-check"></i> </span><span class="post-meta-item-text">更新於</span> <time title="修改時間：2020-08-31 15:17:40" itemprop="dateModified" datetime="2020-08-31T15:17:40+08:00">2020-08-31</time> </span><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-folder"></i> </span><span class="post-meta-item-text">分類於</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/artblog/categories/測試/" itemprop="url" rel="index"><span itemprop="name">測試</span></a> </span></span><span id="/artblog/2019/07/17/elasticSearch-load-testing-with-Jmeter/" class="post-meta-item leancloud_visitors" data-flag-title="elasticSearch load testing with Jmeter" title="閱讀次數"><span class="post-meta-item-icon"><i class="fa fa-eye"></i> </span><span class="post-meta-item-text">閱讀次數：</span> <span class="leancloud-visitors-count"></span> </span><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-comment"></i> </span><span class="post-meta-item-text">Disqus：</span> <a title="disqus" href="/artblog/2019/07/17/elasticSearch-load-testing-with-Jmeter/#disqus_thread" itemprop="discussionUrl"><span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/07/17/elasticSearch-load-testing-with-Jmeter/" itemprop="commentCount"></span></a></span><br><span class="post-meta-item" title="文章字數"><span class="post-meta-item-icon"><i class="far fa-file-word"></i> </span><span class="post-meta-item-text">文章字數：</span> <span>1.3k</span> </span><span class="post-meta-item" title="所需閱讀時間"><span class="post-meta-item-icon"><i class="far fa-clock"></i> </span><span class="post-meta-item-text">所需閱讀時間 &asymp;</span> <span>2 分鐘</span></span></div></header><div class="post-body" itemprop="articleBody"><p>對於網站效能很重要的一個指標就是：能夠承受多少壓力。評估你的網站使用者，並實際測試給出數據，就是壓力測試的目標</p><a id="more"></a><h2 id="壓力測試工具-Jmeter"><a href="#壓力測試工具-Jmeter" class="headerlink" title="壓力測試工具 Jmeter"></a>壓力測試工具 Jmeter</h2><p>免費，好用，windows 也可以用，透過 GUI 撰寫測試腳本，利用 CLI 執行，產出美美的報告及數據結果，不用嗎？</p><p>當然要囉，安裝方法很簡單，搞定 Java SDK 再下載一個 windows 版本的 jmeter 解壓縮執行就行了</p><h3 id="Java-SDK"><a href="#Java-SDK" class="headerlink" title="Java SDK"></a>Java SDK</h3><p>如果在 command line 下<code>java -version</code>有出現版本資訊的話就行了，沒有的話就需要去官網下載，過程會需要加入它們的會員</p><h3 id="Jmeter"><a href="#Jmeter" class="headerlink" title="Jmeter"></a>Jmeter</h3><p>到<a href="http://jmeter.apache.org/download_jmeter.cgi" target="_blank" rel="noopener">APACHE Jmeter download</a>下載 Binaries 的 zip 檔案，拿回來後挑一個喜歡的地方放置解壓縮，解壓縮完成後在<code>bin</code>目錄底下有一個<code>jmeter.bat</code>，執行就會出現 jmeter GUI 了。</p><blockquote><p>他同時會開啟一個 command line 視窗，不用關閉，在視窗中也會提醒你若需要跑測試，最好還是用 cli 的方式執行</p></blockquote><h3 id="撰寫測試腳本"><a href="#撰寫測試腳本" class="headerlink" title="撰寫測試腳本"></a>撰寫測試腳本</h3><p>透過 GUI 來撰寫測試腳本</p><h4 id="TestPlan-Add-gt-Threads-gt-Thread-Group"><a href="#TestPlan-Add-gt-Threads-gt-Thread-Group" class="headerlink" title="TestPlan: Add -&gt; Threads -&gt; Thread Group"></a>TestPlan: Add -&gt; Threads -&gt; Thread Group</h4><p>Number of Threads: 模擬多少個使用者的請求，ex:3000<br>Ramp-Up Period: 在幾秒內達到所設定的使用者人數，ex:10<br>Loop Count: 跑幾次，1</p><blockquote><p>上面這段設定口語化一點就是：10 秒鐘內發出 3000 個請求，重複一次</p></blockquote><h4 id="Thread-Group-Add-gt-Sampler-gt-HTTP-Request"><a href="#Thread-Group-Add-gt-Sampler-gt-HTTP-Request" class="headerlink" title="Thread Group: Add -&gt; Sampler -&gt; HTTP Request"></a>Thread Group: Add -&gt; Sampler -&gt; HTTP Request</h4><p>Name: 給這個 request 一個名字<br>Protocol: 通訊協定，這邊要輸入<code>http</code>或其他的，沒輸入不能用的<br>Server Name or IP: 把主機 host 或 IP 填入<br>Port Number: elasticSearch 預設是 9200，照著填吧</p><p>在 HTTP Request 的部分，就看要測試甚麼路徑、Method，依序填入</p><h4 id="HTTP-Request-Add-gt-Config-Element-gt-HTTP-Header-Manager"><a href="#HTTP-Request-Add-gt-Config-Element-gt-HTTP-Header-Manager" class="headerlink" title="HTTP Request: Add-&gt; Config Element -&gt; HTTP Header Manager"></a>HTTP Request: Add-&gt; Config Element -&gt; HTTP Header Manager</h4><p>因為送的是 Json，所以加一個 Content-Type header 的資料在這邊</p><h4 id="Thread-Group-Add-gt-Listener-gt-Summary-Report"><a href="#Thread-Group-Add-gt-Listener-gt-Summary-Report" class="headerlink" title="Thread Group: Add -&gt; Listener -&gt; Summary Report"></a>Thread Group: Add -&gt; Listener -&gt; Summary Report</h4><p>於 GUI 內用來看測試結果的</p><p>這些東西都做完之後，可以點綠色三角形 ICON 跑測試，就可以在這邊看到測試結果，但建議還是先存檔，然後用 CLI 跑</p><h3 id="指令備忘"><a href="#指令備忘" class="headerlink" title="指令備忘"></a>指令備忘</h3><p>透過 command line 到剛才安裝的目錄/bin 底下，於此處執行命令，可附加參數</p><p>-n: 不跑 GUI<br>-t: 執行計畫的檔案名稱, 附檔名為 jmx 的檔案<br>-l: 執行結果的儲存檔案名稱，副檔名為 jtl<br>-e: load testing 後產生報表 dashboard<br>-o: 輸出資料夾名稱</p><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jmeter -n -t test<span class="selector-class">.jmx</span> -l result<span class="selector-class">.jtl</span> -e -o report</span><br></pre></td></tr></table></figure><h3 id="參考連結"><a href="#參考連結" class="headerlink" title="參考連結"></a>參考連結</h3><ol><li><a href="https://www.blazemeter.com/blog/elasticsearch-load-testing-learn-how/" target="_blank" rel="noopener">Elasticsearch Load Testing - Learn How</a></li><li><a href="http://dog0416.blogspot.com/2017/06/stress-test-jmeter-command-line-mode.html" target="_blank" rel="noopener">[Stress Test] JMeter Command line mode and report dashboard 指令操作模式與報表儀表板</a></li></ol></div><footer class="post-footer"><div class="post-tags"><a href="/artblog/tags/jmeter/" rel="tag"># jmeter</a></div><div class="post-nav"><div class="post-nav-item"><a href="/artblog/2019/07/13/LeetCode-RemoveDuplicates/" rel="prev" title="LeetCode - RemoveDuplicates"><i class="fa fa-chevron-left"></i> LeetCode - RemoveDuplicates</a></div><div class="post-nav-item"><a href="/artblog/2019/08/02/CSharp委派練習/" rel="next" title="C#委派練習">C#委派練習 <i class="fa fa-chevron-right"></i></a></div></div></footer></article></div><div class="comments"><div id="disqus_thread"><noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript></div></div><script>window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }</script></div><div class="toggle sidebar-toggle"><span class="toggle-line toggle-line-first"></span> <span class="toggle-line toggle-line-middle"></span> <span class="toggle-line toggle-line-last"></span></div><aside class="sidebar"><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc">文章目錄</li><li class="sidebar-nav-overview">本站概要</li></ul><div class="post-toc-wrap sidebar-panel"><div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#壓力測試工具-Jmeter"><span class="nav-number">1.</span> <span class="nav-text">壓力測試工具 Jmeter</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-SDK"><span class="nav-number">1.1.</span> <span class="nav-text">Java SDK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Jmeter"><span class="nav-number">1.2.</span> <span class="nav-text">Jmeter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#撰寫測試腳本"><span class="nav-number">1.3.</span> <span class="nav-text">撰寫測試腳本</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#TestPlan-Add-gt-Threads-gt-Thread-Group"><span class="nav-number">1.3.1.</span> <span class="nav-text">TestPlan: Add -&gt; Threads -&gt; Thread Group</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread-Group-Add-gt-Sampler-gt-HTTP-Request"><span class="nav-number">1.3.2.</span> <span class="nav-text">Thread Group: Add -&gt; Sampler -&gt; HTTP Request</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTP-Request-Add-gt-Config-Element-gt-HTTP-Header-Manager"><span class="nav-number">1.3.3.</span> <span class="nav-text">HTTP Request: Add-&gt; Config Element -&gt; HTTP Header Manager</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread-Group-Add-gt-Listener-gt-Summary-Report"><span class="nav-number">1.3.4.</span> <span class="nav-text">Thread Group: Add -&gt; Listener -&gt; Summary Report</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指令備忘"><span class="nav-number">1.4.</span> <span class="nav-text">指令備忘</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#參考連結"><span class="nav-number">1.5.</span> <span class="nav-text">參考連結</span></a></li></ol></li></ol></div></div><div class="site-overview-wrap sidebar-panel"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"><p class="site-author-name" itemprop="name">art</p><div class="site-description" itemprop="description">日常工作、學習隨筆</div></div><div class="site-state-wrap motion-element"><nav class="site-state"><div class="site-state-item site-state-posts"><a href="/artblog/archives/"><span class="site-state-item-count">107</span> <span class="site-state-item-name">文章</span></a></div><div class="site-state-item site-state-categories"><a href="/artblog/categories/"><span class="site-state-item-count">24</span> <span class="site-state-item-name">分類</span></a></div><div class="site-state-item site-state-tags"><a href="/artblog/tags/"><span class="site-state-item-count">63</span> <span class="site-state-item-name">標籤</span></a></div></nav></div><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/partypeopleland" title="GitHub → https://github.com/partypeopleland" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a> </span><span class="links-of-author-item"><a href="https://www.facebook.com/sliceart" title="FB Page → https://www.facebook.com/sliceart" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a></span></div></div></div></aside><div id="sidebar-dimmer"></div></div></main><footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2021</span> <span class="with-love"><i class="fa fa-heart"></i> </span><span class="author" itemprop="copyrightHolder">art</span> <span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-chart-area"></i> </span><span title="總字數">315k</span> <span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-coffee"></i> </span><span title="所需總閱讀時間">8:46</span></div><script data-pjax>(function() {
+    function leancloudSelector(url) {
+      //url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();</script></div></footer></div><script src="/artblog/lib/anime.min.js"></script><script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-pjax@0/pjax.min.js"></script><script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script><script src="/artblog/lib/velocity/velocity.min.js"></script><script src="/artblog/lib/velocity/velocity.ui.min.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/schemes/pisces.js"></script><script src="/artblog/js/next-boot.js"></script><script>var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});</script><script src="/artblog/js/local-search.js"></script><div id="pjax"><script>function loadCount(){var d=document,t=d.createElement("script");t.src="https://daddyart.disqus.com/count.js",t.id="dsq-count-scr",(d.head||d.body).appendChild(t)}window.addEventListener("load",loadCount,!1)</script><script>var disqus_config = function() {
+    this.page.url = "https://partypeopleland.github.io/artblog/2019/07/17/elasticSearch-load-testing-with-Jmeter/";
+    this.page.identifier = "2019/07/17/elasticSearch-load-testing-with-Jmeter/";
+    this.page.title = "elasticSearch load testing with Jmeter";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://daddyart.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });</script></div></body></html>

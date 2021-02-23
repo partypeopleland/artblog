@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Art的辦公桌</title>
+  
+  <subtitle>有兩個螢幕真好</subtitle>
+  <link href="/artblog/atom.xml" rel="self"/>
+  
+  <link href="https://partypeopleland.github.io/artblog/"/>
+  <updated>2021-02-23T08:29:12.862Z</updated>
+  <id>https://partypeopleland.github.io/artblog/</id>
+  
+  <author>
+    <name>art</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>讀書心得-Vue.js應用測試</title>
+    <link href="https://partypeopleland.github.io/artblog/2021/02/17/testing-vue-js-applications/"/>
+    <id>https://partypeopleland.github.io/artblog/2021/02/17/testing-vue-js-applications/</id>
+    <published>2021-02-17T01:51:55.000Z</published>
+    <updated>2021-02-23T08:29:12.862Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;a href=&quot;https://www.tenlong.com.tw/products/9787111646709&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;vue.js 應用測試 - testing vue.js application&lt;/a&gt;一本專注於如何測試 vue.js 應用程式的書籍，雖然出版已經有一陣子了，但對於如何測試 &lt;code&gt;vue.js&lt;/code&gt; 來說，是一本很優秀的入門書籍&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="心得" scheme="https://partypeopleland.github.io/artblog/categories/%E5%BF%83%E5%BE%97/"/>
+    
+    
+      <category term="vue" scheme="https://partypeopleland.github.io/artblog/tags/vue/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>心得-Refactor Tennis Game By Baby Step in Java</title>
+    <link href="https://partypeopleland.github.io/artblog/2021/02/05/%E5%BF%83%E5%BE%97-Refactor-Tennis-Game-By-Baby-Step-in-Java/"/>
+    <id>https://partypeopleland.github.io/artblog/2021/02/05/心得-Refactor-Tennis-Game-By-Baby-Step-in-Java/</id>
+    <published>2021-02-05T08:39:48.000Z</published>
+    <updated>2021-02-05T09:42:06.365Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;在實務上常常遇到的情況是針對遺留程式碼做調整，這些 Code，有一些是半年之前的我自己寫的，有一些是別人寫的，不可避免的是我無法記得所有系統的細節，所以很多時候我必須要先重新看過一次程式碼，知道在做什麼事情之後，才能開始修改，如何修改&lt;code&gt;Legacy code&lt;/code&gt;都是老生常談了，這次有機會可以從頭到尾感受一下&lt;code&gt;Joey&lt;/code&gt;的重構影片，尤其是都有旁白說明，是非常難得的機會，推薦給大家看看&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="心得" scheme="https://partypeopleland.github.io/artblog/categories/%E5%BF%83%E5%BE%97/"/>
+    
+    
+      <category term="refactor" scheme="https://partypeopleland.github.io/artblog/tags/refactor/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Rider-快速撰寫程式的小技巧</title>
+    <link href="https://partypeopleland.github.io/artblog/2020/12/31/Rider-%E5%BF%AB%E9%80%9F%E6%92%B0%E5%AF%AB%E7%A8%8B%E5%BC%8F%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7/"/>
+    <id>https://partypeopleland.github.io/artblog/2020/12/31/Rider-快速撰寫程式的小技巧/</id>
+    <published>2020-12-31T09:12:58.000Z</published>
+    <updated>2021-01-04T00:19:26.388Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;透過這些技巧可以在開發程式的時候少打一些字，讓整個開發體驗更為順暢，一個好的 IDE 就應該能夠支援這樣的功能，讓開發人員的想法快速變成程式碼，這些技巧都是 Rider 提供的教學中提到的，如果有空的話直接開啟教學專案來自己嘗試一下應該是比較有效率的&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="rider" scheme="https://partypeopleland.github.io/artblog/categories/rider/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>使用 jest 及 wallaby.js  撰寫測試</title>
+    <link href="https://partypeopleland.github.io/artblog/2020/11/30/unittest-with-jest-and-wallabyjs/"/>
+    <id>https://partypeopleland.github.io/artblog/2020/11/30/unittest-with-jest-and-wallabyjs/</id>
+    <published>2020-11-30T04:05:07.000Z</published>
+    <updated>2020-11-30T06:59:35.835Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;透過 wallaby.js 進行 javascript TDD , 利用 jest 作為測試框架則可以省掉&lt;code&gt;wallaby.js&lt;/code&gt;的設定檔&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="javascript" scheme="https://partypeopleland.github.io/artblog/categories/javascript/"/>
+    
+    
+      <category term="unittest" scheme="https://partypeopleland.github.io/artblog/tags/unittest/"/>
+    
+      <category term="wallaby.js" scheme="https://partypeopleland.github.io/artblog/tags/wallaby-js/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>利用反射取代if判斷</title>
+    <link href="https://partypeopleland.github.io/artblog/2020/11/24/%E5%88%A9%E7%94%A8%E5%8F%8D%E5%B0%84%E5%8F%96%E4%BB%A3if%E5%88%A4%E6%96%B7/"/>
+    <id>https://partypeopleland.github.io/artblog/2020/11/24/利用反射取代if判斷/</id>
+    <published>2020-11-24T01:50:03.000Z</published>
+    <updated>2020-12-07T04:15:13.313Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;日常開發很常碰到一個情況，就是需要依據傳入的參數，決定 new 不一樣的 instance 出來，所以在數量少的時候，我們可以透過&lt;code&gt;if...else...&lt;/code&gt;的方式直衝，再多一些些，可以用&lt;code&gt;switch...case...&lt;/code&gt;的方式來做，但如果這個分支已經有 5~7 個以上，再接著用上述的兩種做法就有點&lt;code&gt;bad smell&lt;/code&gt;的感覺了&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="csharp" scheme="https://partypeopleland.github.io/artblog/categories/csharp/"/>
+    
+    
+      <category term="refactor" scheme="https://partypeopleland.github.io/artblog/tags/refactor/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ELK stack with filebeat</title>
+    <link href="https://partypeopleland.github.io/artblog/2020/11/04/ELK-stack-with-filebeat/"/>
+    <id>https://partypeopleland.github.io/artblog/2020/11/04/ELK-stack-with-filebeat/</id>
+    <published>2020-11-04T03:20:24.000Z</published>
+    <updated>2020-11-10T01:13:35.192Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;本次練習如何透過&lt;code&gt;filebeat&lt;/code&gt;採集主機資訊，並傳遞給&lt;code&gt;logstash&lt;/code&gt;進行分析過濾後，由&lt;code&gt;kibana&lt;/code&gt;的介面去查看資料；另外一個用法是直接讓&lt;code&gt;filebeat&lt;/code&gt;的資料丟給&lt;code&gt;elasticSearch&lt;/code&gt;，並且最終在&lt;code&gt;kibana&lt;/code&gt;的&lt;code&gt;Logs&lt;/code&gt;功能裡面查看，不過我沒有使用就不介紹了&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="elk" scheme="https://partypeopleland.github.io/artblog/categories/elk/"/>
+    
+    
+      <category term="elasticSearch" scheme="https://partypeopleland.github.io/artblog/tags/elasticSearch/"/>
+    
+      <category term="APM" scheme="https://partypeopleland.github.io/artblog/tags/APM/"/>
+    
+      <category term="filebeat" scheme="https://partypeopleland.github.io/artblog/tags/filebeat/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>selenium-E2E測試</title>
+    <link href="https://partypeopleland.github.io/artblog/2020/09/30/selenium-E2E%E6%B8%AC%E8%A9%A6/"/>
+    <id>https://partypeopleland.github.io/artblog/2020/09/30/selenium-E2E測試/</id>
+    <published>2020-09-30T01:27:44.000Z</published>
+    <updated>2020-11-05T09:06:37.840Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;本篇記錄透過 CSharp，使用 selenium 進行 e2e 測試的一些心得，因此會比較雜亂，未來可能會、也可能不會再整理&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="selenium" scheme="https://partypeopleland.github.io/artblog/categories/selenium/"/>
+    
+    
+      <category term="e2e" scheme="https://partypeopleland.github.io/artblog/tags/e2e/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>webpack-編譯vue single file component</title>
+    <link href="https://partypeopleland.github.io/artblog/2020/09/09/webpack-compile-vue-single-file-component/"/>
+    <id>https://partypeopleland.github.io/artblog/2020/09/09/webpack-compile-vue-single-file-component/</id>
+    <published>2020-09-09T07:53:55.000Z</published>
+    <updated>2020-09-30T09:49:46.980Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;之前的專案採用&lt;code&gt;ASP.NET MVC5&lt;/code&gt;的方式建立，當時沒有採用&lt;code&gt;webpack&lt;/code&gt;編譯前端程式碼，使用的方式是透過&lt;code&gt;script&lt;/code&gt; tag 載入&lt;code&gt;vue.js&lt;/code&gt;使用，在 component 的部分則是利用字串模板的方式，以&lt;code&gt;Vue.component()&lt;/code&gt;的方式全域註冊，嘗試透過&lt;code&gt;webpack&lt;/code&gt;將前端程式編譯，並改用 single file component 的方式撰寫 vue 元件&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="webpack" scheme="https://partypeopleland.github.io/artblog/categories/webpack/"/>
+    
+    
+      <category term="vue" scheme="https://partypeopleland.github.io/artblog/tags/vue/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Stub, Mock是甚麼？</title>
+    <link href="https://partypeopleland.github.io/artblog/2020/09/08/what-is-stub-and-mock/"/>
+    <id>https://partypeopleland.github.io/artblog/2020/09/08/what-is-stub-and-mock/</id>
+    <published>2020-09-08T08:27:42.000Z</published>
+    <updated>2020-09-08T09:54:32.473Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Test Double, Dummy, Fake, Stubs, Spies, Mocks，第一次接觸這些英文名詞的時候，通常也就是剛接觸到測試相關技術的時候，一些文章，或者是課程、說明，或多或少都會帶到這幾個測試領域常見的名詞，之所以會為此專門寫一篇文章，其實除了在鞏固自己記憶之外，也順便備忘一下&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="測試" scheme="https://partypeopleland.github.io/artblog/categories/%E6%B8%AC%E8%A9%A6/"/>
+    
+    
+      <category term="stub" scheme="https://partypeopleland.github.io/artblog/tags/stub/"/>
+    
+      <category term="mock" scheme="https://partypeopleland.github.io/artblog/tags/mock/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>SonarQube-分析JavaScript專案</title>
+    <link href="https://partypeopleland.github.io/artblog/2020/09/02/SonarQube-%E5%88%86%E6%9E%90JavaScript%E5%B0%88%E6%A1%88/"/>
+    <id>https://partypeopleland.github.io/artblog/2020/09/02/SonarQube-分析JavaScript專案/</id>
+    <published>2020-09-02T04:02:20.000Z</published>
+    <updated>2020-09-11T07:43:58.714Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;原本以為在 C#專案中指定了 js 的報告就可以看到覆蓋率，但事實好像不是這麼一回事，稍微測試了幾次皆以失敗告終，於是我想還是單獨建立一個 js 的專案，來分析 C#裡面的 js 部分&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="devOps" scheme="https://partypeopleland.github.io/artblog/categories/devOps/"/>
+    
+    
+      <category term="sonarQube" scheme="https://partypeopleland.github.io/artblog/tags/sonarQube/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>javascript 顯示金額</title>
+    <link href="https://partypeopleland.github.io/artblog/2020/08/31/javascript-%E9%A1%AF%E7%A4%BA%E9%87%91%E9%A1%8D/"/>
+    <id>https://partypeopleland.github.io/artblog/2020/08/31/javascript-顯示金額/</id>
+    <published>2020-08-31T04:18:38.000Z</published>
+    <updated>2020-08-31T07:08:31.661Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;因為很簡單的一個金額顯示的問題，查詢了一下發現有很多東西需要紀錄阿…&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="javascript" scheme="https://partypeopleland.github.io/artblog/categories/javascript/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>SonarQube-測試報告的產生</title>
+    <link href="https://partypeopleland.github.io/artblog/2020/08/12/SonarQube-%E6%B8%AC%E8%A9%A6%E5%A0%B1%E5%91%8A%E7%9A%84%E7%94%A2%E7%94%9F/"/>
+    <id>https://partypeopleland.github.io/artblog/2020/08/12/SonarQube-測試報告的產生/</id>
+    <published>2020-08-12T01:23:40.000Z</published>
+    <updated>2020-09-02T06:32:55.876Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;關於 sonarQube 裡面的測試覆蓋率是需要先建立測試報告，並指定路徑提供給 sonarQube 進行分析，這樣才會顯示正確的數據，這一篇文章將會介紹一下個人的使用經驗&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="devOps" scheme="https://partypeopleland.github.io/artblog/categories/devOps/"/>
+    
+    
+      <category term="sonarQube" scheme="https://partypeopleland.github.io/artblog/tags/sonarQube/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Rider 使用 quokka.js 提升開發體驗</title>
+    <link href="https://partypeopleland.github.io/artblog/2020/08/11/Rider-%E4%BD%BF%E7%94%A8quokka.js%E6%8F%90%E5%8D%87%E9%96%8B%E7%99%BC%E9%AB%94%E9%A9%97/"/>
+    <id>https://partypeopleland.github.io/artblog/2020/08/11/Rider-使用quokka.js提升開發體驗/</id>
+    <published>2020-08-11T06:45:35.000Z</published>
+    <updated>2020-08-31T07:08:33.084Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;通常在撰寫 js 的時候，會希望能夠即時看到程式的執行結果，這時候就可以安裝外掛套件&lt;code&gt;quokka.js&lt;/code&gt;來體驗一下&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="rider" scheme="https://partypeopleland.github.io/artblog/categories/rider/"/>
+    
+    
+      <category term="quokka.js" scheme="https://partypeopleland.github.io/artblog/tags/quokka-js/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>讀書心得-依賴注入：原理、實作與設計模式</title>
+    <link href="https://partypeopleland.github.io/artblog/2020/08/09/%E8%AE%80%E6%9B%B8%E5%BF%83%E5%BE%97-%E4%BE%9D%E8%B3%B4%E6%B3%A8%E5%85%A5%EF%BC%9A%E5%8E%9F%E7%90%86%E3%80%81%E5%AF%A6%E4%BD%9C%E8%88%87%E8%A8%AD%E8%A8%88%E6%A8%A1%E5%BC%8F/"/>
+    <id>https://partypeopleland.github.io/artblog/2020/08/09/讀書心得-依賴注入：原理、實作與設計模式/</id>
+    <published>2020-08-09T14:25:14.000Z</published>
+    <updated>2021-02-17T01:49:55.177Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h1&gt;&lt;p&gt;基本上我的讀書心得大概都是看到哪裡寫到哪裡，也很有可能看到一半就忘了這件事情&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="心得" scheme="https://partypeopleland.github.io/artblog/categories/%E5%BF%83%E5%BE%97/"/>
+    
+    
+      <category term="DI" scheme="https://partypeopleland.github.io/artblog/tags/DI/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Cypress.io 搭配 cucumber 進行測試</title>
+    <link href="https://partypeopleland.github.io/artblog/2020/07/24/Cypress.io-%E6%90%AD%E9%85%8Dcucumber%E9%80%B2%E8%A1%8C%E6%B8%AC%E8%A9%A6/"/>
+    <id>https://partypeopleland.github.io/artblog/2020/07/24/Cypress.io-搭配cucumber進行測試/</id>
+    <published>2020-07-24T02:37:29.000Z</published>
+    <updated>2020-08-31T07:09:33.152Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;這一篇文章主要是針對 cypress.io + cucumber 的介紹&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="cypress" scheme="https://partypeopleland.github.io/artblog/categories/cypress/"/>
+    
+    
+      <category term="e2e" scheme="https://partypeopleland.github.io/artblog/tags/e2e/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Cypress.io 測試資料的處理</title>
+    <link href="https://partypeopleland.github.io/artblog/2020/07/23/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/"/>
+    <id>https://partypeopleland.github.io/artblog/2020/07/23/Cypress.io-測試資料的處理/</id>
+    <published>2020-07-23T08:36:33.000Z</published>
+    <updated>2020-09-08T07:29:51.595Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;實際上撰寫 e2e 測試的時候，我們常常會需要做一些預設的測試資料在資料庫內，假設我今天想要測試會員在網站上購物的流程，那麼網站一定會需要有商品、會員、訂單等等資料結構。&lt;br&gt;在這樣的情況下，為了確保測試的可重複性，通常會在測試開始之前做測試資料的初始化；測試完畢之後做測試資料的清除。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="cypress" scheme="https://partypeopleland.github.io/artblog/categories/cypress/"/>
+    
+    
+      <category term="e2e" scheme="https://partypeopleland.github.io/artblog/tags/e2e/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>NPOI-ASP.net網站匯出Excel範例</title>
+    <link href="https://partypeopleland.github.io/artblog/2020/07/22/NPOI-ASP.net%E7%B6%B2%E7%AB%99%E5%8C%AF%E5%87%BAExcel%E7%AF%84%E4%BE%8B/"/>
+    <id>https://partypeopleland.github.io/artblog/2020/07/22/NPOI-ASP.net網站匯出Excel範例/</id>
+    <published>2020-07-22T01:53:44.000Z</published>
+    <updated>2020-08-31T06:04:25.625Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;這篇文章主要是為了記錄使用 NPOI 的方法及踩坑經驗，更細節還是請移步&lt;a href=&quot;https://github.com/tonyqus/npoi&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;官網&lt;/a&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="NPOI" scheme="https://partypeopleland.github.io/artblog/categories/NPOI/"/>
+    
+    
+      <category term="excel" scheme="https://partypeopleland.github.io/artblog/tags/excel/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Rider-利用檔案監控來編譯scss</title>
+    <link href="https://partypeopleland.github.io/artblog/2020/07/16/Rider-%E5%88%A9%E7%94%A8%E6%AA%94%E6%A1%88%E7%9B%A3%E6%8E%A7%E4%BE%86%E7%B7%A8%E8%AD%AFscss/"/>
+    <id>https://partypeopleland.github.io/artblog/2020/07/16/Rider-利用檔案監控來編譯scss/</id>
+    <published>2020-07-16T02:37:31.000Z</published>
+    <updated>2020-08-28T01:15:02.222Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;這篇文章在介紹如何在 Rider 中將 Sass、Less、SCSS 編譯為 css 的實際做法&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="rider" scheme="https://partypeopleland.github.io/artblog/categories/rider/"/>
+    
+    
+      <category term="file watchers" scheme="https://partypeopleland.github.io/artblog/tags/file-watchers/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Cypress.io 登入的測試案例</title>
+    <link href="https://partypeopleland.github.io/artblog/2020/07/09/Cypress.io-%E7%99%BB%E5%85%A5%E7%9A%84%E6%B8%AC%E8%A9%A6%E6%A1%88%E4%BE%8B/"/>
+    <id>https://partypeopleland.github.io/artblog/2020/07/09/Cypress.io-登入的測試案例/</id>
+    <published>2020-07-09T08:23:43.000Z</published>
+    <updated>2020-08-31T07:09:39.652Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;這一篇專門講一下如何在&lt;code&gt;cypress.io&lt;/code&gt;的測試程式裡面，撰寫登入系統的部分，之後如果有機會會慢慢更新&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="cypress" scheme="https://partypeopleland.github.io/artblog/categories/cypress/"/>
+    
+    
+      <category term="e2e" scheme="https://partypeopleland.github.io/artblog/tags/e2e/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>VSCode 好用套件</title>
+    <link href="https://partypeopleland.github.io/artblog/2020/06/08/VSCode-%E5%A5%BD%E7%94%A8%E5%A5%97%E4%BB%B6/"/>
+    <id>https://partypeopleland.github.io/artblog/2020/06/08/VSCode-好用套件/</id>
+    <published>2020-06-08T04:18:34.000Z</published>
+    <updated>2020-08-31T07:08:34.312Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;羅列出部分目前較喜歡用的 VSCode 套件，套件的細節請自行參考官網&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="工具" scheme="https://partypeopleland.github.io/artblog/categories/%E5%B7%A5%E5%85%B7/"/>
+    
+    
+      <category term="vscode" scheme="https://partypeopleland.github.io/artblog/tags/vscode/"/>
+    
+  </entry>
+  
+</feed>

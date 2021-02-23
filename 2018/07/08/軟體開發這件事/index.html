@@ -1,0 +1,179 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=2"><meta name="theme-color" content="#222"><meta name="generator" content="Hexo 3.8.0"><link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png"><link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png"><link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png"><link rel="mask-icon" href="/artblog/images/logo.svg" color="#222"><link rel="stylesheet" href="/artblog/css/main.css"><link rel="stylesheet" href="/artblog/lib/font-awesome/css/all.min.css"><link rel="stylesheet" href="/artblog/lib/pace/pace-theme-minimal.min.css"><script src="/artblog/lib/pace/pace.min.js"></script><script id="hexo-configurations">var NexT=window.NexT||{},CONFIG={hostname:"partypeopleland.github.io",root:"/artblog/",scheme:"Pisces",version:"7.8.0",exturl:!1,sidebar:{position:"left",display:"post",padding:18,offset:12,onmobile:!1},copycode:{enable:!0,show_result:!1,style:null},back2top:{enable:!0,sidebar:!1,scrollpercent:!0},bookmark:{enable:!1,color:"#222",save:"auto"},fancybox:!1,mediumzoom:!1,lazyload:!0,pangu:!1,comments:{style:"tabs",active:null,storage:!0,lazyload:!1,nav:null},algolia:{hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}},localsearch:{enable:!0,trigger:"auto",top_n_per_article:1,unescape:!1,preload:!1},motion:{enable:!0,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},path:"search.xml"}</script><meta name="description" content="本來是打算寫一下物件導向，寫著寫著就覺得應該先寫一下軟體開發，可是我又不是理論派，所以只好分享一下自己的經驗了。"><meta property="og:type" content="article"><meta property="og:title" content="軟體開發這件事"><meta property="og:url" content="https://partypeopleland.github.io/artblog/2018/07/08/軟體開發這件事/index.html"><meta property="og:site_name" content="Art的辦公桌"><meta property="og:description" content="本來是打算寫一下物件導向，寫著寫著就覺得應該先寫一下軟體開發，可是我又不是理論派，所以只好分享一下自己的經驗了。"><meta property="og:locale" content="zh-TW"><meta property="og:updated_time" content="2020-08-28T01:15:02.073Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="軟體開發這件事"><meta name="twitter:description" content="本來是打算寫一下物件導向，寫著寫著就覺得應該先寫一下軟體開發，可是我又不是理論派，所以只好分享一下自己的經驗了。"><link rel="canonical" href="https://partypeopleland.github.io/artblog/2018/07/08/軟體開發這件事/"><script id="page-configurations">CONFIG.page={sidebar:"",isHome:!1,isPost:!0,lang:"zh-TW"}</script><title>軟體開發這件事 | Art的辦公桌</title><script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script><script data-pjax>function gtag(){dataLayer.push(arguments)}CONFIG.hostname===location.hostname&&(window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","UA-147720279-1"))</script><noscript><style>.sidebar-inner,.use-motion .brand,.use-motion .collection-header,.use-motion .comments,.use-motion .menu-item,.use-motion .pagination,.use-motion .post-block,.use-motion .post-body,.use-motion .post-header{opacity:initial}.use-motion .site-subtitle,.use-motion .site-title{opacity:initial;top:initial}.use-motion .logo-line-before i{left:initial}.use-motion .logo-line-after i{right:initial}</style></noscript></head><body itemscope itemtype="http://schema.org/WebPage"><div class="container use-motion"><div class="headband"></div><header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-container"><div class="site-nav-toggle"><div class="toggle" aria-label="切換導航欄"><span class="toggle-line toggle-line-first"></span> <span class="toggle-line toggle-line-middle"></span> <span class="toggle-line toggle-line-last"></span></div></div><div class="site-meta"><a href="/artblog/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Art的辦公桌</h1><span class="logo-line-after"><i></i></span></a><p class="site-subtitle" itemprop="description">有兩個螢幕真好</p></div><div class="site-nav-right"><div class="toggle popup-trigger"><i class="fa fa-search fa-fw fa-lg"></i></div></div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-search"><a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋</a></li></ul></nav><div class="search-pop-overlay"><div class="popup search-popup"><div class="search-header"><span class="search-icon"><i class="fa fa-search"></i></span><div class="search-input-container"><input autocomplete="off" autocapitalize="off" placeholder="搜尋..." spellcheck="false" type="search" class="search-input"></div><span class="popup-btn-close"><i class="fa fa-times-circle"></i></span></div><div id="search-result"><div id="no-result"><i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i></div></div></div></div></div></header><div class="back-to-top"><i class="fa fa-arrow-up"></i> <span>0%</span></div><div class="reading-progress-bar"></div><main class="main"><div class="main-inner"><div class="content-wrap"><div class="content post posts-expand"><article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW"><link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/2018/07/08/軟體開發這件事/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="image" content="/artblog/images/avatar.gif"><meta itemprop="name" content="art"><meta itemprop="description" content="日常工作、學習隨筆"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="Art的辦公桌"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">軟體開發這件事</h1><div class="post-meta"><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-calendar"></i> </span><span class="post-meta-item-text">發表於</span> <time title="創建時間：2018-07-08 08:18:09" itemprop="dateCreated datePublished" datetime="2018-07-08T08:18:09+08:00">2018-07-08</time> </span><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-calendar-check"></i> </span><span class="post-meta-item-text">更新於</span> <time title="修改時間：2020-08-28 09:15:02" itemprop="dateModified" datetime="2020-08-28T09:15:02+08:00">2020-08-28</time> </span><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-folder"></i> </span><span class="post-meta-item-text">分類於</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/artblog/categories/心得/" itemprop="url" rel="index"><span itemprop="name">心得</span></a> </span></span><span id="/artblog/2018/07/08/軟體開發這件事/" class="post-meta-item leancloud_visitors" data-flag-title="軟體開發這件事" title="閱讀次數"><span class="post-meta-item-icon"><i class="fa fa-eye"></i> </span><span class="post-meta-item-text">閱讀次數：</span> <span class="leancloud-visitors-count"></span> </span><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-comment"></i> </span><span class="post-meta-item-text">Disqus：</span> <a title="disqus" href="/artblog/2018/07/08/軟體開發這件事/#disqus_thread" itemprop="discussionUrl"><span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/07/08/軟體開發這件事/" itemprop="commentCount"></span></a></span><br><span class="post-meta-item" title="文章字數"><span class="post-meta-item-icon"><i class="far fa-file-word"></i> </span><span class="post-meta-item-text">文章字數：</span> <span>2.8k</span> </span><span class="post-meta-item" title="所需閱讀時間"><span class="post-meta-item-icon"><i class="far fa-clock"></i> </span><span class="post-meta-item-text">所需閱讀時間 &asymp;</span> <span>5 分鐘</span></span></div></header><div class="post-body" itemprop="articleBody"><p>本來是打算寫一下物件導向，寫著寫著就覺得應該先寫一下軟體開發，可是我又不是理論派，所以只好分享一下自己的經驗了。</p><a id="more"></a><blockquote><p>底下所有內容皆屬於個人看法，如果有錯誤，請砲小力一點~謝謝</p></blockquote><h2 id="物件導向這一件事情"><a href="#物件導向這一件事情" class="headerlink" title="物件導向這一件事情"></a>物件導向這一件事情</h2><p>物件導向是一種抽象性的概念，將真實世界的需求，轉變成一個一個的物件，而這些物件又有自己的屬性及方法。透過這樣的方式彼此互動，達到模擬真實世界的需求。</p><p>當然這樣的模擬不可能會是無窮無盡的，不然你程式就寫不完了。所以我們在透過程式語言都是為了要解決某一個問題，要達成這個目標所使用的工具、方法。比如，要讓客戶的產品能夠直接在網路上賣出去，因此替客戶架設一個電子商務網站就是一個達成目標的方式之一。</p><blockquote><p>客戶是為了要讓它們的產品能夠透過網路觸及到更多潛在的消費者，網站是一個解決方案；但這個目標不會只有一個解決方案，在本文僅以網站作為範例說明。</p></blockquote><p>而這個電子商務網站並不一定只能用特定的技術來實作，可以用 php、asp.net、node.js 當然也包括了很久、很久、很久以前的技術：asp。</p><p>一般來說，在傳統的方式及學校裡面學到的知識，都會提到一個專有名詞：<a href="http://wiki.mbalib.com/zh-tw/%E7%80%91%E5%B8%83%E6%A8%A1%E5%9E%8B" target="_blank" rel="noopener">瀑布開發模式</a>，記得是在學校的專案管理這門課裡面學到的。大致上的意思我們也不是專攻理論派的，就直接口語化的解釋一下：在軟體開發的過程當中會有許多腳色，分別處理不同的事情，其中最重要的是【確認客戶需求】，這件事情，我們交給一個叫做 PM 的人去負責</p><p>PM 可以是專案經理 ( Project Manager )，或是產品經理 ( Product Manager )，依據開發團隊的性質來決定，例如這一家公司是專門接案子進來做，我會認為他的這個腳色是專案經理；如果是自己公司有自身產品，那麼我會認為應該是產品經理。這兩者做的事情有很多都一樣，但是卻又有很多不同。學問很大，細節很多，我們就略過不表</p><p>而當需求已經被確定了，那麼就會交由系統分析師 ( System Analysis )，將需求分析出來，這個腳色我覺得最重要的事情是：確認什麼事情要做；而那些東西又是不用去做的。最終產出一份規格書，爾後，所有程式開發的部分都將以這份規格書當作依據。</p><blockquote><p>好吧，上面那一段是理論上的，實務上我從來沒有看過能夠跟規格書對的上的程式碼，所以你們也就參考就好。</p></blockquote><p>而在這個環節，還有一個部分叫做系統設計 ( System Design )，因為 SA 的部分做的事情是比較抽象一點的，而落在實務設計上，會經由 SD 這個腳色，將理論與實務合而為一，從而開出一份真正能夠實作出來的文件，在這個階段， SD 主要的工作項目就會是比較偏程式語言出身的人能看懂的東西，也就是建構出一個又一個的類別，寫一下這個類別有甚麼屬性阿、方法阿，之類的。請原諒我這一段沒有辦法給出太多經驗，因為在我的職涯中，沒看過 SD 這號人物。</p><blockquote><p>這也是很多小公司的通病， SD 這個職務常常是不存在的</p></blockquote><p>直接是由 SA 開規格給程式設計師，所以常常很多 SD 的工作，都落在了所謂資深程式設計師身上；或者是由 SA 順便做掉了這一部份的工作；或者是在認知不足的情況下；這部分工作就直接被忽略掉了。</p><p>甚麼？你說不可能忽略？怎麼不可能。你以為動輒數千行的 Legacy Code 一開始是怎麼來的呢？把一份規格書交給一個新人 PG 就出來了。在沒有資深工程師的帶領之下，新手 PG 一個人開副本打怪的結果就是只會用最原始的方式，一刀一槍的打拼，你說他不認真嗎？不一定。但是那份程式碼可能會有許多維護上的困難，而這些，是開發團隊成員的其他腳色感受不到、也不會理解的。出錢的那一位也不一定會理解，老闆都是看結果的，程式能不能跑？能跑。程式對不對？是對的。那就行了。誰還管 SD 這件事情？</p><blockquote><p>這邊定義的新手PG屬於程式設計新人，沒有物件導向概念及程式開發背景</p></blockquote><p>好吧，終於輪到 Programmer 了，說到這個腳色需要會的東西真的很多，但是，都不會好像也沒有關係，因為老闆不會知道。只有技術人懂技術人啊。</p><p>所以老板不會清楚軟體開發流程中，一個資深的程式設計師能夠起到的作用，絕大多數都是在看不見的地方。一樣是接收到規格書，資淺的程式設計師當然就是按照規格書一步一腳印的實作出來。而資深的程式設計師，還會考量很多事情，我們講最簡單的：以後好不好維護就是一個例子。</p><p>PG 其實就是將需求，用程式碼一行一行的處理掉，如果是不懂物件導向概念的人，很有可能會寫出難以維護的程式碼，而有概念的人，會將這些完成需求的程式碼，思考如何抽象出來共用。以後再添加新需求，或者是需求異動的時候，維護成本就看的出來了。</p><p>我就曾經看過好幾個例子，一樣是加一個需求，某位程式設計師的手法是複製貼上，然後前面加個判斷，原程式從三千行直接翻倍成長變成六千行。而另外一個的手法是先重構，然後抽象出來，接著才去改程式碼。前者工時花費一小時，眾人好評不斷；後者工時花費一天，承受抨擊無數。</p><p>去除掉政治因素的考量，我們純粹以程式設計師的角度來看這一件事情。你願意日常維護哪一份程式碼呢？</p><blockquote><p>在這邊還是要呼籲一下，拜託不要別人的孩子死不完，你搞的不是公司，是接手你工作的其他同事。這個世界很小，遇得到的。<br>在軟體功能開發完成之後，通常會有人來複測這份程式碼功能對不對，這個腳色通常我會用 QC ( Quality Control ) 來稱呼。在其他公司可能會有其他的稱呼，對於這一點我有看到一篇文章寫得還蠻不錯的，提供給各位參考一下：<a href="https://www.ithome.com.tw/voice/85554" target="_blank" rel="noopener">QA、QC、傻傻分不清楚</a>。</p></blockquote><p>測試如果通過了，通常會交由另外一個腳色開始做產品發布的動作。這一段因為我涉獵不多就略過了。但是軟體從無到有，大概就是經過了這樣的流程來開發、產生出來的。</p><p>以上說得通通是屬於古早年代的作法。</p><p>以上說得通通是屬於古早年代的作法。</p><p>以上說得通通是屬於古早年代的作法。</p><p>是的。很悲哀的是，軟體產業在今天，還是有許多公司、企業，仍然奉行這一套軟體開發模式。在變動較少的產業、需求中，如果還在使用瀑布開發模式，那沒有問題。</p><p>但是在資訊變遷非常快速的現代社會中，這一套軟體開發方式無疑是被擊中了弱點。因為這一套走下來，往往耗時費工，當你發現了一個能夠賺錢的商業模式希望要趕快上線的時候，卻發現打完這一套組合拳，人家葉師傅已經打十個了。</p><blockquote><p>怎麼那麼帥 怎麼那麼屌 怎麼那麼有腦袋<br>怎麼那麼罩 這麼多的才華 這麼少時間 怎麼做的到 - 熊仔 【凶宅】</p></blockquote><p>我不禁想到背景音樂的這首歌，對阿，這麼少的時間，別的競爭對手怎麼做的到？？</p><p>其實就是另外一套模式：<a href="https://zh.wikipedia.org/wiki/%E6%95%8F%E6%8D%B7%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91" target="_blank" rel="noopener">敏捷軟體開發</a></p><p>敏捷開發打破了先前瀑布模式的許多觀念，核心就是一個快速反應、持續交付的概念。而要達到這個目標，從骨子裡都與傳統的瀑布開發有著本質上的不同。</p><p>最淺顯易見的就是常常聽到的，敏捷樂於擁抱變化；而傳統的規格書你動他一個需求試試看，跟你說啦，會議就開不完了。</p><p>要Run敏捷也有很多限制，最大的一個限制當然就是老闆要支持。而 PG 成員可能自己本身的底子也要夠，因為要做到持續交付，單元測試是少不了的，這裡頭太多學問，等以後我有了解再分享給各位。</p></div><footer class="post-footer"><div class="post-nav"><div class="post-nav-item"><a href="/artblog/2018/06/23/Facade-Pattern/" rel="prev" title="Facade Pattern"><i class="fa fa-chevron-left"></i> Facade Pattern</a></div><div class="post-nav-item"><a href="/artblog/2018/07/19/ASP單元測試/" rel="next" title="ASP單元測試">ASP單元測試 <i class="fa fa-chevron-right"></i></a></div></div></footer></article></div><div class="comments"><div id="disqus_thread"><noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript></div></div><script>window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }</script></div><div class="toggle sidebar-toggle"><span class="toggle-line toggle-line-first"></span> <span class="toggle-line toggle-line-middle"></span> <span class="toggle-line toggle-line-last"></span></div><aside class="sidebar"><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc">文章目錄</li><li class="sidebar-nav-overview">本站概要</li></ul><div class="post-toc-wrap sidebar-panel"><div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#物件導向這一件事情"><span class="nav-number">1.</span> <span class="nav-text">物件導向這一件事情</span></a></li></ol></div></div><div class="site-overview-wrap sidebar-panel"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"><p class="site-author-name" itemprop="name">art</p><div class="site-description" itemprop="description">日常工作、學習隨筆</div></div><div class="site-state-wrap motion-element"><nav class="site-state"><div class="site-state-item site-state-posts"><a href="/artblog/archives/"><span class="site-state-item-count">107</span> <span class="site-state-item-name">文章</span></a></div><div class="site-state-item site-state-categories"><a href="/artblog/categories/"><span class="site-state-item-count">24</span> <span class="site-state-item-name">分類</span></a></div><div class="site-state-item site-state-tags"><a href="/artblog/tags/"><span class="site-state-item-count">63</span> <span class="site-state-item-name">標籤</span></a></div></nav></div><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/partypeopleland" title="GitHub → https://github.com/partypeopleland" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a> </span><span class="links-of-author-item"><a href="https://www.facebook.com/sliceart" title="FB Page → https://www.facebook.com/sliceart" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a></span></div></div></div></aside><div id="sidebar-dimmer"></div></div></main><footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2021</span> <span class="with-love"><i class="fa fa-heart"></i> </span><span class="author" itemprop="copyrightHolder">art</span> <span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-chart-area"></i> </span><span title="總字數">315k</span> <span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-coffee"></i> </span><span title="所需總閱讀時間">8:46</span></div><script data-pjax>(function() {
+    function leancloudSelector(url) {
+      //url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();</script></div></footer></div><script src="/artblog/lib/anime.min.js"></script><script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-pjax@0/pjax.min.js"></script><script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script><script src="/artblog/lib/velocity/velocity.min.js"></script><script src="/artblog/lib/velocity/velocity.ui.min.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/schemes/pisces.js"></script><script src="/artblog/js/next-boot.js"></script><script>var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});</script><script src="/artblog/js/local-search.js"></script><div id="pjax"><script>function loadCount(){var d=document,t=d.createElement("script");t.src="https://daddyart.disqus.com/count.js",t.id="dsq-count-scr",(d.head||d.body).appendChild(t)}window.addEventListener("load",loadCount,!1)</script><script>var disqus_config = function() {
+    this.page.url = "https://partypeopleland.github.io/artblog/2018/07/08/軟體開發這件事/";
+    this.page.identifier = "2018/07/08/軟體開發這件事/";
+    this.page.title = "軟體開發這件事";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://daddyart.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });</script></div></body></html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=2"><meta name="theme-color" content="#222"><meta name="generator" content="Hexo 3.8.0"><link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png"><link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png"><link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png"><link rel="mask-icon" href="/artblog/images/logo.svg" color="#222"><link rel="stylesheet" href="/artblog/css/main.css"><link rel="stylesheet" href="/artblog/lib/font-awesome/css/all.min.css"><link rel="stylesheet" href="/artblog/lib/pace/pace-theme-minimal.min.css"><script src="/artblog/lib/pace/pace.min.js"></script><script id="hexo-configurations">var NexT=window.NexT||{},CONFIG={hostname:"partypeopleland.github.io",root:"/artblog/",scheme:"Pisces",version:"7.8.0",exturl:!1,sidebar:{position:"left",display:"post",padding:18,offset:12,onmobile:!1},copycode:{enable:!0,show_result:!1,style:null},back2top:{enable:!0,sidebar:!1,scrollpercent:!0},bookmark:{enable:!1,color:"#222",save:"auto"},fancybox:!1,mediumzoom:!1,lazyload:!0,pangu:!1,comments:{style:"tabs",active:null,storage:!0,lazyload:!1,nav:null},algolia:{hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}},localsearch:{enable:!0,trigger:"auto",top_n_per_article:1,unescape:!1,preload:!1},motion:{enable:!0,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},path:"search.xml"}</script><meta name="description" content="End-To-End Testing 在自動化測試中，扮演著很重要的一個腳色，以往在單元測試的部分，若與外部溝通，通常我們會運用 mock、stub 來對依賴關係做一個隔離但是在 End-To-End 測試中，反而是盡量避免使用 mock、stub，為的是要模擬使用者操作網站介面，來驗證我們的網站功能是否正確"><meta name="keywords" content="testCafe,E2E testing"><meta property="og:type" content="article"><meta property="og:title" content="使用 testCafe 做E2E測試"><meta property="og:url" content="https://partypeopleland.github.io/artblog/2019/06/24/使用testCafe做E2E測試/index.html"><meta property="og:site_name" content="Art的辦公桌"><meta property="og:description" content="End-To-End Testing 在自動化測試中，扮演著很重要的一個腳色，以往在單元測試的部分，若與外部溝通，通常我們會運用 mock、stub 來對依賴關係做一個隔離但是在 End-To-End 測試中，反而是盡量避免使用 mock、stub，為的是要模擬使用者操作網站介面，來驗證我們的網站功能是否正確"><meta property="og:locale" content="zh-TW"><meta property="og:updated_time" content="2020-08-31T07:15:52.948Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="使用 testCafe 做E2E測試"><meta name="twitter:description" content="End-To-End Testing 在自動化測試中，扮演著很重要的一個腳色，以往在單元測試的部分，若與外部溝通，通常我們會運用 mock、stub 來對依賴關係做一個隔離但是在 End-To-End 測試中，反而是盡量避免使用 mock、stub，為的是要模擬使用者操作網站介面，來驗證我們的網站功能是否正確"><link rel="canonical" href="https://partypeopleland.github.io/artblog/2019/06/24/使用testCafe做E2E測試/"><script id="page-configurations">CONFIG.page={sidebar:"",isHome:!1,isPost:!0,lang:"zh-TW"}</script><title>使用 testCafe 做E2E測試 | Art的辦公桌</title><script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script><script data-pjax>function gtag(){dataLayer.push(arguments)}CONFIG.hostname===location.hostname&&(window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","UA-147720279-1"))</script><noscript><style>.sidebar-inner,.use-motion .brand,.use-motion .collection-header,.use-motion .comments,.use-motion .menu-item,.use-motion .pagination,.use-motion .post-block,.use-motion .post-body,.use-motion .post-header{opacity:initial}.use-motion .site-subtitle,.use-motion .site-title{opacity:initial;top:initial}.use-motion .logo-line-before i{left:initial}.use-motion .logo-line-after i{right:initial}</style></noscript></head><body itemscope itemtype="http://schema.org/WebPage"><div class="container use-motion"><div class="headband"></div><header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-container"><div class="site-nav-toggle"><div class="toggle" aria-label="切換導航欄"><span class="toggle-line toggle-line-first"></span> <span class="toggle-line toggle-line-middle"></span> <span class="toggle-line toggle-line-last"></span></div></div><div class="site-meta"><a href="/artblog/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Art的辦公桌</h1><span class="logo-line-after"><i></i></span></a><p class="site-subtitle" itemprop="description">有兩個螢幕真好</p></div><div class="site-nav-right"><div class="toggle popup-trigger"><i class="fa fa-search fa-fw fa-lg"></i></div></div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-search"><a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋</a></li></ul></nav><div class="search-pop-overlay"><div class="popup search-popup"><div class="search-header"><span class="search-icon"><i class="fa fa-search"></i></span><div class="search-input-container"><input autocomplete="off" autocapitalize="off" placeholder="搜尋..." spellcheck="false" type="search" class="search-input"></div><span class="popup-btn-close"><i class="fa fa-times-circle"></i></span></div><div id="search-result"><div id="no-result"><i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i></div></div></div></div></div></header><div class="back-to-top"><i class="fa fa-arrow-up"></i> <span>0%</span></div><div class="reading-progress-bar"></div><main class="main"><div class="main-inner"><div class="content-wrap"><div class="content post posts-expand"><article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW"><link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/2019/06/24/使用testCafe做E2E測試/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="image" content="/artblog/images/avatar.gif"><meta itemprop="name" content="art"><meta itemprop="description" content="日常工作、學習隨筆"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="Art的辦公桌"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">使用 testCafe 做E2E測試</h1><div class="post-meta"><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-calendar"></i> </span><span class="post-meta-item-text">發表於</span> <time title="創建時間：2019-06-24 14:12:45" itemprop="dateCreated datePublished" datetime="2019-06-24T14:12:45+08:00">2019-06-24</time> </span><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-calendar-check"></i> </span><span class="post-meta-item-text">更新於</span> <time title="修改時間：2020-08-31 15:15:52" itemprop="dateModified" datetime="2020-08-31T15:15:52+08:00">2020-08-31</time> </span><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-folder"></i> </span><span class="post-meta-item-text">分類於</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/artblog/categories/測試/" itemprop="url" rel="index"><span itemprop="name">測試</span></a> </span></span><span id="/artblog/2019/06/24/使用testCafe做E2E測試/" class="post-meta-item leancloud_visitors" data-flag-title="使用 testCafe 做E2E測試" title="閱讀次數"><span class="post-meta-item-icon"><i class="fa fa-eye"></i> </span><span class="post-meta-item-text">閱讀次數：</span> <span class="leancloud-visitors-count"></span> </span><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-comment"></i> </span><span class="post-meta-item-text">Disqus：</span> <a title="disqus" href="/artblog/2019/06/24/使用testCafe做E2E測試/#disqus_thread" itemprop="discussionUrl"><span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/06/24/使用testCafe做E2E測試/" itemprop="commentCount"></span></a></span><br><span class="post-meta-item" title="文章字數"><span class="post-meta-item-icon"><i class="far fa-file-word"></i> </span><span class="post-meta-item-text">文章字數：</span> <span>2.8k</span> </span><span class="post-meta-item" title="所需閱讀時間"><span class="post-meta-item-icon"><i class="far fa-clock"></i> </span><span class="post-meta-item-text">所需閱讀時間 &asymp;</span> <span>5 分鐘</span></span></div></header><div class="post-body" itemprop="articleBody"><p>End-To-End Testing 在自動化測試中，扮演著很重要的一個腳色，以往在單元測試的部分，若與外部溝通，通常我們會運用 mock、stub 來對依賴關係做一個隔離<br>但是在 End-To-End 測試中，反而是盡量避免使用 mock、stub，為的是要模擬使用者操作網站介面，來驗證我們的網站功能是否正確</p><a id="more"></a><h2 id="testcafe"><a href="#testcafe" class="headerlink" title="testcafe"></a>testcafe</h2><p>基於 node.js 的自動化端對端測試工具</p><ul><li><a href="https://github.com/DevExpress/testcafe" target="_blank" rel="noopener">Github</a></li><li><a href="https://devexpress.github.io/testcafe/" target="_blank" rel="noopener">webSite</a></li></ul><h2 id="優點"><a href="#優點" class="headerlink" title="優點"></a>優點</h2><ol><li>支援主流平台:Mac、Linux、Windows</li><li>安裝簡易、一分鐘搞定 <code>npm install testcafe -g</code></li><li>open source</li></ol><h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h2><ol><li>支援 ES6 與 typeScript，所以可以直接用 typescript 寫測試，配合 VSCode，享受強型別及 intellisense</li><li>提供 Live Runner 模式，監測檔案變更自動重跑測試</li><li>自動等候網頁載入完成及 XHR，這個真的很方便，省去很多麻煩</li><li>並行測試，可同時開啟同個瀏覽器的多個實體跑測試，加快速度</li><li>支持 page object pattern，並附上<a href="https://devexpress.github.io/testcafe/documentation/recipes/extract-reusable-test-code/use-page-model.html" target="_blank" rel="noopener">範例</a>教學</li></ol><h2 id="持續交付"><a href="#持續交付" class="headerlink" title="持續交付"></a>持續交付</h2><p>官方文件也提供各式工具的文章說明，此部分請自行查看<a href="https://devexpress.github.io/testcafe/documentation/continuous-integration/" target="_blank" rel="noopener">Continuous Integration</a></p><h2 id="Report"><a href="#Report" class="headerlink" title="Report"></a>Report</h2><p>報告的格式，testcafe 是直接做成 npm 套件，文件上也有說要怎麼自行建立喜歡的報告格式，但是我還是直接在<a href="https://www.npmjs.com/search?q=testcafe-reporter" target="_blank" rel="noopener">NPM</a>上搜尋人家做好的比較方便</p><p>比較漂亮的有一份是<a href="https://www.npmjs.com/package/testcafe-reporter-cucumber-json" target="_blank" rel="noopener">Cucumber JSON TestCafe Reporter</a>，這一套實際上是幫你產一個 Json 出來，然後用另外一套報告產生器來讀這份資料</p><p>使用上就是直接下命令即可，這邊的<code>reporter-app-name</code>、<code>reporter-app-version</code>會直接顯示在報告內的 App 欄位那邊，產出的 json 則是被指定到<code>reports/report.json</code></p><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">testcafe chrome ./path-<span class="keyword">to</span>-tests/*(.js|.testcafe|.<span class="keyword">ts</span>) --reporter cucumber-json:reports/report.json --reporter-app-name=<span class="string">'My App'</span> --reporter-app-<span class="keyword">version</span>=<span class="string">'x.y.z'</span></span><br></pre></td></tr></table></figure><p>產生 Html report 則還需要先安裝套件</p><figure class="highlight q"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --<span class="built_in">save</span>-<span class="built_in">dev</span> multiple-cucumber-html-reporter</span><br></pre></td></tr></table></figure><p>接著建立一個<code>report-generator.js</code>，照著貼就行了</p><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> report = <span class="built_in">require</span>(<span class="string">"multiple-cucumber-html-reporter"</span>);</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">"path"</span>);</span><br><span class="line"><span class="keyword">const</span> projectName = path.basename(__dirname);</span><br><span class="line"><span class="keyword">const</span> projectVersion = process.env.npm_package_version;</span><br><span class="line"><span class="keyword">const</span> reportGenerationTime = <span class="keyword">new</span> <span class="built_in">Date</span>().toISOString();</span><br><span class="line">report.generate(&#123;</span><br><span class="line">  reportName: <span class="string">"TestCafe Report"</span>,</span><br><span class="line">  jsonDir: <span class="string">"reports"</span>,</span><br><span class="line">  reportPath: <span class="string">"reports"</span>,</span><br><span class="line">  openReportInBrowser: <span class="literal">true</span>,</span><br><span class="line">  disableLog: <span class="literal">true</span>,</span><br><span class="line">  displayDuration: <span class="literal">true</span>,</span><br><span class="line">  durationInMS: <span class="literal">true</span>,</span><br><span class="line">  customData: &#123;</span><br><span class="line">    title: <span class="string">"Run info"</span>,</span><br><span class="line">    data: [</span><br><span class="line">      &#123; <span class="attr">label</span>: <span class="string">"Project"</span>, <span class="attr">value</span>: <span class="string">`<span class="subst">$&#123;projectName&#125;</span>`</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">label</span>: <span class="string">"Release"</span>, <span class="attr">value</span>: <span class="string">`<span class="subst">$&#123;projectVersion&#125;</span>`</span> &#125;,</span><br><span class="line">      &#123; <span class="attr">label</span>: <span class="string">"Report Generation Time"</span>, <span class="attr">value</span>: <span class="string">`<span class="subst">$&#123;reportGenerationTime&#125;</span>`</span> &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure><p>最後，在<code>package.json</code>之內加一個別名</p><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"report"</span>: <span class="string">"node report-generator.js"</span>,</span><br></pre></td></tr></table></figure><p>這樣子就可以先</p><ol><li>產生數據</li><li>透過數據產生報告</li></ol><h2 id="如何撰寫測試"><a href="#如何撰寫測試" class="headerlink" title="如何撰寫測試"></a>如何撰寫測試</h2><p>細節就不說明了，官方文件照著參考就行，這邊提幾個記憶點</p><h3 id="page-model"><a href="#page-model" class="headerlink" title="page-model"></a>page-model</h3><p>如果還不熟悉，那先撰寫測試好些，然後呢，順利跑過之後，再想著重構。別一開始就想著重構重構、到最後拆得亂七八糟，調整個需求都差點忘記去哪裡改的話，那還不如別重構呢。</p><p>文件上說的支援 page-object 的方式，其實也就是以前 91 上課曾經提到過的將程式與 UI 中間再加一層，避免它們彼此相依，這樣若 UI 有變動，程式碼是不會受影響的，看著文件倒是又重新溫習了一次</p><p>程式碼可以參考一下<a href="https://github.com/mwq27/testcafe-page-model-example/blob/master/testcafe/page-models/Login.ts" target="_blank" rel="noopener">GitHub:mwq27/testcafe-page-model-example</a>，參考這份程式碼直接利用 typeScript 撰寫，搭配 VSCode 也是不錯的選擇</p><h3 id="網站登入"><a href="#網站登入" class="headerlink" title="網站登入"></a>網站登入</h3><p>可以將登入方法封裝於 pageObject 內重複使用，也可以利用<a href="https://devexpress.github.io/testcafe/documentation/test-api/authentication/user-roles.html" target="_blank" rel="noopener">Role()</a>的方式來設定目前要使用的身分，這樣要用哪一個身分來測試網站，就直接在測試中調用<code>t.useRole(role)</code>，在測試上應該是挺語意化的。</p><h3 id="埋-DOM-的-data-test-屬性"><a href="#埋-DOM-的-data-test-屬性" class="headerlink" title="埋 DOM 的 data-test 屬性"></a>埋 DOM 的 data-test 屬性</h3><p>如果不想要未來改變 HTML 屬性影響到測試，那就最好將要測試的 DOM，給他一個測試用的選取方式，<code>例如 &lt;span data-test=&quot;result&quot;&gt;--&lt;/span&gt;</code>。 這樣做的好處是測試中的<code>Selector</code>會清晰很多，而且測試程式也不再與 DOM 的 id、name 掛勾</p><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 方法1</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">OrderHistory</span> </span>&#123;</span><br><span class="line">  EditButton: Selector = Selector(</span><br><span class="line">    <span class="string">"#orderTable &gt; tbody &gt; tr &gt; td &gt; div &gt; div.row.order-history-info__table-row.ml-0.mr-0 &gt; div:nth-child(14) &gt; a"</span></span><br><span class="line">  );</span><br><span class="line">  <span class="keyword">async</span> ShowOrderDetail(browser: TestController) &#123;</span><br><span class="line">    <span class="keyword">await</span> browser.click(<span class="keyword">this</span>.EditButton);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 方法2</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">OrderHistory</span> </span>&#123;</span><br><span class="line">  EditButton: Selector = Selector(<span class="string">"[data-test='editButton']"</span>);</span><br><span class="line">  <span class="keyword">async</span> ShowOrderDetail(browser: TestController) &#123;</span><br><span class="line">    <span class="keyword">await</span> browser.click(<span class="keyword">this</span>.EditButton);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div><footer class="post-footer"><div class="post-tags"><a href="/artblog/tags/testCafe/" rel="tag"># testCafe</a> <a href="/artblog/tags/E2E-testing/" rel="tag"># E2E testing</a></div><div class="post-nav"><div class="post-nav-item"><a href="/artblog/2019/05/23/import與export的用法/" rel="prev" title="import 與 export 的用法"><i class="fa fa-chevron-left"></i> import 與 export 的用法</a></div><div class="post-nav-item"><a href="/artblog/2019/06/27/ELK-Stack-on-Docker/" rel="next" title="ELK Stack on Docker">ELK Stack on Docker <i class="fa fa-chevron-right"></i></a></div></div></footer></article></div><div class="comments"><div id="disqus_thread"><noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript></div></div><script>window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }</script></div><div class="toggle sidebar-toggle"><span class="toggle-line toggle-line-first"></span> <span class="toggle-line toggle-line-middle"></span> <span class="toggle-line toggle-line-last"></span></div><aside class="sidebar"><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc">文章目錄</li><li class="sidebar-nav-overview">本站概要</li></ul><div class="post-toc-wrap sidebar-panel"><div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#testcafe"><span class="nav-number">1.</span> <span class="nav-text">testcafe</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#優點"><span class="nav-number">2.</span> <span class="nav-text">優點</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#功能"><span class="nav-number">3.</span> <span class="nav-text">功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#持續交付"><span class="nav-number">4.</span> <span class="nav-text">持續交付</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Report"><span class="nav-number">5.</span> <span class="nav-text">Report</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何撰寫測試"><span class="nav-number">6.</span> <span class="nav-text">如何撰寫測試</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#page-model"><span class="nav-number">6.1.</span> <span class="nav-text">page-model</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#網站登入"><span class="nav-number">6.2.</span> <span class="nav-text">網站登入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#埋-DOM-的-data-test-屬性"><span class="nav-number">6.3.</span> <span class="nav-text">埋 DOM 的 data-test 屬性</span></a></li></ol></li></ol></div></div><div class="site-overview-wrap sidebar-panel"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"><p class="site-author-name" itemprop="name">art</p><div class="site-description" itemprop="description">日常工作、學習隨筆</div></div><div class="site-state-wrap motion-element"><nav class="site-state"><div class="site-state-item site-state-posts"><a href="/artblog/archives/"><span class="site-state-item-count">107</span> <span class="site-state-item-name">文章</span></a></div><div class="site-state-item site-state-categories"><a href="/artblog/categories/"><span class="site-state-item-count">24</span> <span class="site-state-item-name">分類</span></a></div><div class="site-state-item site-state-tags"><a href="/artblog/tags/"><span class="site-state-item-count">63</span> <span class="site-state-item-name">標籤</span></a></div></nav></div><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/partypeopleland" title="GitHub → https://github.com/partypeopleland" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a> </span><span class="links-of-author-item"><a href="https://www.facebook.com/sliceart" title="FB Page → https://www.facebook.com/sliceart" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a></span></div></div></div></aside><div id="sidebar-dimmer"></div></div></main><footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2021</span> <span class="with-love"><i class="fa fa-heart"></i> </span><span class="author" itemprop="copyrightHolder">art</span> <span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-chart-area"></i> </span><span title="總字數">315k</span> <span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-coffee"></i> </span><span title="所需總閱讀時間">8:46</span></div><script data-pjax>(function() {
+    function leancloudSelector(url) {
+      //url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();</script></div></footer></div><script src="/artblog/lib/anime.min.js"></script><script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-pjax@0/pjax.min.js"></script><script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script><script src="/artblog/lib/velocity/velocity.min.js"></script><script src="/artblog/lib/velocity/velocity.ui.min.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/schemes/pisces.js"></script><script src="/artblog/js/next-boot.js"></script><script>var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});</script><script src="/artblog/js/local-search.js"></script><div id="pjax"><script>function loadCount(){var d=document,t=d.createElement("script");t.src="https://daddyart.disqus.com/count.js",t.id="dsq-count-scr",(d.head||d.body).appendChild(t)}window.addEventListener("load",loadCount,!1)</script><script>var disqus_config = function() {
+    this.page.url = "https://partypeopleland.github.io/artblog/2019/06/24/使用testCafe做E2E測試/";
+    this.page.identifier = "2019/06/24/使用testCafe做E2E測試/";
+    this.page.title = "使用 testCafe 做E2E測試";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://daddyart.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });</script></div></body></html>

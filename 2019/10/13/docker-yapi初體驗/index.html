@@ -1,0 +1,179 @@
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=2"><meta name="theme-color" content="#222"><meta name="generator" content="Hexo 3.8.0"><link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png"><link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png"><link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png"><link rel="mask-icon" href="/artblog/images/logo.svg" color="#222"><link rel="stylesheet" href="/artblog/css/main.css"><link rel="stylesheet" href="/artblog/lib/font-awesome/css/all.min.css"><link rel="stylesheet" href="/artblog/lib/pace/pace-theme-minimal.min.css"><script src="/artblog/lib/pace/pace.min.js"></script><script id="hexo-configurations">var NexT=window.NexT||{},CONFIG={hostname:"partypeopleland.github.io",root:"/artblog/",scheme:"Pisces",version:"7.8.0",exturl:!1,sidebar:{position:"left",display:"post",padding:18,offset:12,onmobile:!1},copycode:{enable:!0,show_result:!1,style:null},back2top:{enable:!0,sidebar:!1,scrollpercent:!0},bookmark:{enable:!1,color:"#222",save:"auto"},fancybox:!1,mediumzoom:!1,lazyload:!0,pangu:!1,comments:{style:"tabs",active:null,storage:!0,lazyload:!1,nav:null},algolia:{hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}},localsearch:{enable:!0,trigger:"auto",top_n_per_article:1,unescape:!1,preload:!1},motion:{enable:!0,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},path:"search.xml"}</script><meta name="description" content="這幾天在查 testcafe 的東西，不小心看到鐵人賽 30 天文章的介紹，所以才知道這東西，一看之下驚為天人，這東西可以用來做什麼我都還沒清楚的了解，我就光看特色包含了，整合自動化測試、Mock Server，就決定要找時間好好了解一下了"><meta name="keywords" content="docker,yApi"><meta property="og:type" content="article"><meta property="og:title" content="docker-yapi初體驗"><meta property="og:url" content="https://partypeopleland.github.io/artblog/2019/10/13/docker-yapi初體驗/index.html"><meta property="og:site_name" content="Art的辦公桌"><meta property="og:description" content="這幾天在查 testcafe 的東西，不小心看到鐵人賽 30 天文章的介紹，所以才知道這東西，一看之下驚為天人，這東西可以用來做什麼我都還沒清楚的了解，我就光看特色包含了，整合自動化測試、Mock Server，就決定要找時間好好了解一下了"><meta property="og:locale" content="zh-TW"><meta property="og:updated_time" content="2020-08-31T06:04:25.609Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="docker-yapi初體驗"><meta name="twitter:description" content="這幾天在查 testcafe 的東西，不小心看到鐵人賽 30 天文章的介紹，所以才知道這東西，一看之下驚為天人，這東西可以用來做什麼我都還沒清楚的了解，我就光看特色包含了，整合自動化測試、Mock Server，就決定要找時間好好了解一下了"><link rel="canonical" href="https://partypeopleland.github.io/artblog/2019/10/13/docker-yapi初體驗/"><script id="page-configurations">CONFIG.page={sidebar:"",isHome:!1,isPost:!0,lang:"zh-TW"}</script><title>docker-yapi初體驗 | Art的辦公桌</title><script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script><script data-pjax>function gtag(){dataLayer.push(arguments)}CONFIG.hostname===location.hostname&&(window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","UA-147720279-1"))</script><noscript><style>.sidebar-inner,.use-motion .brand,.use-motion .collection-header,.use-motion .comments,.use-motion .menu-item,.use-motion .pagination,.use-motion .post-block,.use-motion .post-body,.use-motion .post-header{opacity:initial}.use-motion .site-subtitle,.use-motion .site-title{opacity:initial;top:initial}.use-motion .logo-line-before i{left:initial}.use-motion .logo-line-after i{right:initial}</style></noscript></head><body itemscope itemtype="http://schema.org/WebPage"><div class="container use-motion"><div class="headband"></div><header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-container"><div class="site-nav-toggle"><div class="toggle" aria-label="切換導航欄"><span class="toggle-line toggle-line-first"></span> <span class="toggle-line toggle-line-middle"></span> <span class="toggle-line toggle-line-last"></span></div></div><div class="site-meta"><a href="/artblog/" class="brand" rel="start"><span class="logo-line-before"><i></i></span><h1 class="site-title">Art的辦公桌</h1><span class="logo-line-after"><i></i></span></a><p class="site-subtitle" itemprop="description">有兩個螢幕真好</p></div><div class="site-nav-right"><div class="toggle popup-trigger"><i class="fa fa-search fa-fw fa-lg"></i></div></div></div><nav class="site-nav"><ul id="menu" class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-search"><a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋</a></li></ul></nav><div class="search-pop-overlay"><div class="popup search-popup"><div class="search-header"><span class="search-icon"><i class="fa fa-search"></i></span><div class="search-input-container"><input autocomplete="off" autocapitalize="off" placeholder="搜尋..." spellcheck="false" type="search" class="search-input"></div><span class="popup-btn-close"><i class="fa fa-times-circle"></i></span></div><div id="search-result"><div id="no-result"><i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i></div></div></div></div></div></header><div class="back-to-top"><i class="fa fa-arrow-up"></i> <span>0%</span></div><div class="reading-progress-bar"></div><main class="main"><div class="main-inner"><div class="content-wrap"><div class="content post posts-expand"><article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW"><link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/2019/10/13/docker-yapi初體驗/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="image" content="/artblog/images/avatar.gif"><meta itemprop="name" content="art"><meta itemprop="description" content="日常工作、學習隨筆"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="Art的辦公桌"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">docker-yapi初體驗</h1><div class="post-meta"><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-calendar"></i> </span><span class="post-meta-item-text">發表於</span> <time title="創建時間：2019-10-13 10:07:53" itemprop="dateCreated datePublished" datetime="2019-10-13T10:07:53+08:00">2019-10-13</time> </span><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-calendar-check"></i> </span><span class="post-meta-item-text">更新於</span> <time title="修改時間：2020-08-31 14:04:25" itemprop="dateModified" datetime="2020-08-31T14:04:25+08:00">2020-08-31</time> </span><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-folder"></i> </span><span class="post-meta-item-text">分類於</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/artblog/categories/測試/" itemprop="url" rel="index"><span itemprop="name">測試</span></a> </span></span><span id="/artblog/2019/10/13/docker-yapi初體驗/" class="post-meta-item leancloud_visitors" data-flag-title="docker-yapi初體驗" title="閱讀次數"><span class="post-meta-item-icon"><i class="fa fa-eye"></i> </span><span class="post-meta-item-text">閱讀次數：</span> <span class="leancloud-visitors-count"></span> </span><span class="post-meta-item"><span class="post-meta-item-icon"><i class="far fa-comment"></i> </span><span class="post-meta-item-text">Disqus：</span> <a title="disqus" href="/artblog/2019/10/13/docker-yapi初體驗/#disqus_thread" itemprop="discussionUrl"><span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/13/docker-yapi初體驗/" itemprop="commentCount"></span></a></span><br><span class="post-meta-item" title="文章字數"><span class="post-meta-item-icon"><i class="far fa-file-word"></i> </span><span class="post-meta-item-text">文章字數：</span> <span>1.7k</span> </span><span class="post-meta-item" title="所需閱讀時間"><span class="post-meta-item-icon"><i class="far fa-clock"></i> </span><span class="post-meta-item-text">所需閱讀時間 &asymp;</span> <span>3 分鐘</span></span></div></header><div class="post-body" itemprop="articleBody"><p>這幾天在查 testcafe 的東西，不小心看到鐵人賽 30 天文章的介紹，所以才知道這東西，一看之下驚為天人，這東西可以用來做什麼我都還沒清楚的了解，我就光看特色包含了，整合自動化測試、Mock Server，就決定要找時間好好了解一下了</p><a id="more"></a><p>當然當初逛到的那系列鐵人賽文章也是必須要拜讀一下的，尤其 PO 文大大還同時放上了 Youtube 錄影，實在太感謝了<br><a href="https://ithelp.ithome.com.tw/users/20120775/ironman/2653?page=1" target="_blank" rel="noopener">持續測試 30 天</a></p><h2 id="yapi-是甚麼東西？"><a href="#yapi-是甚麼東西？" class="headerlink" title="yapi 是甚麼東西？"></a>yapi 是甚麼東西？</h2><p><img data-src="https://github.com/YMFE/yapi/raw/master/yapi-base-flow.jpg" alt><br>YApi 是高效、易用、功能強大的 api 管理平台，旨在為開發、產品、測試人員提供更優雅的接口管理服務。可以幫助開發者輕鬆創建、發布、維護 API，YApi 還為用戶提供了優秀的交互體驗，開發人員只需利用平台提供的接口數據寫入工具以及簡單的點擊操作就可以實現接口的管理。</p><p>這邊列出一些 yApi 的特色</p><ol><li>基於 Json5 和 Mockjs 定義接口返回數據的結構和文檔，效率提升多倍</li><li>扁平化權限設計，即保證了大型企業級項目的管理，又保證了易用性</li><li>類似 postman 的接口調試</li><li>自動化測試, 支持對 Response 斷言</li><li>MockServer 除支持普通的隨機 mock 外，還增加了 Mock 期望功能，根據設置的請求過濾規則，返回期望數據</li><li>支持 postman, har, swagger 數據導入</li><li>免費開源，內網部署，信息再也不怕洩露了</li></ol><blockquote><p>好吧，我承認上面那段是從官網抄來的，在我沒有更好的辦法解釋他是個甚麼東西之前，介紹文案用官網的也是一個不錯的選擇</p></blockquote><h3 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h3><p><a href="https://hellosean1025.github.io/yapi/" target="_blank" rel="noopener">yAPI 使用說明</a></p><h2 id="如何安裝-yapi"><a href="#如何安裝-yapi" class="headerlink" title="如何安裝 yapi"></a>如何安裝 yapi</h2><p><a href="https://github.com/YMFE/yapi" target="_blank" rel="noopener">官方 Github</a>有中文說明，挺好的，可以去看看，不過像這種平台式的東西肯定有人弄成 docker，果不其然，搜尋<code>docker-compose yapi</code>，資料還挺多的，不過有的可以更新、有的不行，看來看去好像這個很簡潔，而且 readme 也有提到若官方有更新，他也會盡快跟上，挺好！就用它了</p><blockquote><p>open source 有個很重要的原則，就是用任何東西之前，看看 readme 以及檔案最後更新的時間，很多時候會是決定你要不要採用的關鍵因素</p></blockquote><h3 id="docler-Yapi-by-fjc0k"><a href="#docler-Yapi-by-fjc0k" class="headerlink" title="docler-Yapi by fjc0k"></a>docler-Yapi by fjc0k</h3><p>docker-Yapi:<a href="https://github.com/fjc0k/docker-YApi" target="_blank" rel="noopener">https://github.com/fjc0k/docker-YApi</a></p><ol><li>需要先修改<code>.config.js</code>中的<code>adminAccount</code>管理者登入信箱，密碼預設為<code>ymfe.org</code></li><li>透過<code>docker-compose up -d</code>執行</li><li>瀏覽器開啟<code>localhost:40001</code>即可訪問 yapi 平台</li></ol><blockquote><p>這些在 github readme 也有提及</p></blockquote><p>如果沒有更改其他設定的情況下，預設是禁止註冊新帳號的，所以管理者就是唯一的使用者<br>因為平台沒有資料，都是存放在資料庫內，所以勢必是透過 volume 來處理這一塊，在 windows 平台上使用 mongo db 好像會有些問題，我碰到的是<code>系統權限不足</code>，解決方案如下</p><h3 id="如何在-win10-安裝-mongo-db"><a href="#如何在-win10-安裝-mongo-db" class="headerlink" title="如何在 win10 安裝 mongo db"></a>如何在 win10 安裝 mongo db</h3><p>在 windows 環境下使用 mongo db，需要寫入資料到硬碟，但似乎是與微軟 NTFS 格式有關而發生無法寫入的問題，<a href="https://github.com/docker-library/mongo/issues/190" target="_blank" rel="noopener">這一篇</a>有提到解法，在啟動 docker 的時候利用<code>-g &lt;path&gt;</code>參數，但我啟動 docker 都是滑鼠 double click icon 耶，哈哈，不過既然知道與 volume 有關，那就先建立 docker volume，並且在<code>docker-compose.yml</code>之中調用已建立好的 volume 即可</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker volume create yapi-mongo-db</span><br></pre></td></tr></table></figure><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">"3"</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line"><span class="attr">  yapi-web:</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">jayfong/yapi:latest</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">yapi-web</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="number">40001</span><span class="string">:3000</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">./config.js:/yapi/config.js</span></span><br><span class="line"><span class="attr">    depends_on:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">yapi-mongo</span></span><br><span class="line"><span class="attr">    restart:</span> <span class="string">unless-stopped</span></span><br><span class="line"><span class="attr">  yapi-mongo:</span></span><br><span class="line"><span class="attr">    image:</span> <span class="attr">mongo:latest</span></span><br><span class="line"><span class="attr">    container_name:</span> <span class="string">yapi-mongo</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line"><span class="attr">      - yapi-mongo-db:</span><span class="string">/data/db</span></span><br><span class="line"><span class="attr">    expose:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="number">27017</span></span><br><span class="line"><span class="attr">    restart:</span> <span class="string">unless-stopped</span></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line"><span class="attr">  yapi-mongo-db:</span></span><br></pre></td></tr></table></figure></div><footer class="post-footer"><div class="post-tags"><a href="/artblog/tags/docker/" rel="tag"># docker</a> <a href="/artblog/tags/yApi/" rel="tag"># yApi</a></div><div class="post-nav"><div class="post-nav-item"><a href="/artblog/2019/09/27/LeetCode-FindTheDifference/" rel="prev" title="LeetCode-FindTheDifference"><i class="fa fa-chevron-left"></i> LeetCode-FindTheDifference</a></div><div class="post-nav-item"><a href="/artblog/2019/10/18/docker-管理工具-portainer/" rel="next" title="docker 管理工具 portainer">docker 管理工具 portainer <i class="fa fa-chevron-right"></i></a></div></div></footer></article></div><div class="comments"><div id="disqus_thread"><noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript></div></div><script>window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }</script></div><div class="toggle sidebar-toggle"><span class="toggle-line toggle-line-first"></span> <span class="toggle-line toggle-line-middle"></span> <span class="toggle-line toggle-line-last"></span></div><aside class="sidebar"><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc">文章目錄</li><li class="sidebar-nav-overview">本站概要</li></ul><div class="post-toc-wrap sidebar-panel"><div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#yapi-是甚麼東西？"><span class="nav-number">1.</span> <span class="nav-text">yapi 是甚麼東西？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文件"><span class="nav-number">1.1.</span> <span class="nav-text">文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何安裝-yapi"><span class="nav-number">2.</span> <span class="nav-text">如何安裝 yapi</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#docler-Yapi-by-fjc0k"><span class="nav-number">2.1.</span> <span class="nav-text">docler-Yapi by fjc0k</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何在-win10-安裝-mongo-db"><span class="nav-number">2.2.</span> <span class="nav-text">如何在 win10 安裝 mongo db</span></a></li></ol></li></ol></div></div><div class="site-overview-wrap sidebar-panel"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"><p class="site-author-name" itemprop="name">art</p><div class="site-description" itemprop="description">日常工作、學習隨筆</div></div><div class="site-state-wrap motion-element"><nav class="site-state"><div class="site-state-item site-state-posts"><a href="/artblog/archives/"><span class="site-state-item-count">107</span> <span class="site-state-item-name">文章</span></a></div><div class="site-state-item site-state-categories"><a href="/artblog/categories/"><span class="site-state-item-count">24</span> <span class="site-state-item-name">分類</span></a></div><div class="site-state-item site-state-tags"><a href="/artblog/tags/"><span class="site-state-item-count">63</span> <span class="site-state-item-name">標籤</span></a></div></nav></div><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/partypeopleland" title="GitHub → https://github.com/partypeopleland" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a> </span><span class="links-of-author-item"><a href="https://www.facebook.com/sliceart" title="FB Page → https://www.facebook.com/sliceart" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a></span></div></div></div></aside><div id="sidebar-dimmer"></div></div></main><footer class="footer"><div class="footer-inner"><div class="copyright">&copy; <span itemprop="copyrightYear">2021</span> <span class="with-love"><i class="fa fa-heart"></i> </span><span class="author" itemprop="copyrightHolder">art</span> <span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-chart-area"></i> </span><span title="總字數">315k</span> <span class="post-meta-divider">|</span> <span class="post-meta-item-icon"><i class="fa fa-coffee"></i> </span><span title="所需總閱讀時間">8:46</span></div><script data-pjax>(function() {
+    function leancloudSelector(url) {
+      //url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              Counter('post', '/classes/Counter', { title, url, time: 1 })
+                .then(response => response.json())
+                .then(() => {
+                  leancloudSelector(url).innerText = 1;
+                })
+                .catch(error => {
+                  console.error('Failed to create', error);
+                });
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();</script></div></footer></div><script src="/artblog/lib/anime.min.js"></script><script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-pjax@0/pjax.min.js"></script><script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script><script src="/artblog/lib/velocity/velocity.min.js"></script><script src="/artblog/lib/velocity/velocity.ui.min.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/schemes/pisces.js"></script><script src="/artblog/js/next-boot.js"></script><script>var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});</script><script src="/artblog/js/local-search.js"></script><div id="pjax"><script>function loadCount(){var d=document,t=d.createElement("script");t.src="https://daddyart.disqus.com/count.js",t.id="dsq-count-scr",(d.head||d.body).appendChild(t)}window.addEventListener("load",loadCount,!1)</script><script>var disqus_config = function() {
+    this.page.url = "https://partypeopleland.github.io/artblog/2019/10/13/docker-yapi初體驗/";
+    this.page.identifier = "2019/10/13/docker-yapi初體驗/";
+    this.page.title = "docker-yapi初體驗";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://daddyart.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });</script></div></body></html>
