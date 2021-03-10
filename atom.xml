@@ -6,7 +6,7 @@
   <link href="/artblog/atom.xml" rel="self"/>
   
   <link href="https://partypeopleland.github.io/artblog/"/>
-  <updated>2021-02-23T08:29:12.862Z</updated>
+  <updated>2021-02-24T08:13:51.245Z</updated>
   <id>https://partypeopleland.github.io/artblog/</id>
   
   <author>
@@ -21,11 +21,11 @@
     <link href="https://partypeopleland.github.io/artblog/2021/02/17/testing-vue-js-applications/"/>
     <id>https://partypeopleland.github.io/artblog/2021/02/17/testing-vue-js-applications/</id>
     <published>2021-02-17T01:51:55.000Z</published>
-    <updated>2021-02-23T08:29:12.862Z</updated>
+    <updated>2021-02-24T08:13:51.245Z</updated>
     
     <summary type="html">
     
-      &lt;p&gt;&lt;a href=&quot;https://www.tenlong.com.tw/products/9787111646709&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;vue.js 應用測試 - testing vue.js application&lt;/a&gt;一本專注於如何測試 vue.js 應用程式的書籍，雖然出版已經有一陣子了，但對於如何測試 &lt;code&gt;vue.js&lt;/code&gt; 來說，是一本很優秀的入門書籍&lt;/p&gt;
+      &lt;p&gt;專注於如何測試 vue.js 應用程式的書籍，雖然出版已經有一陣子了，但對於如何測試 &lt;code&gt;vue.js&lt;/code&gt; 來說，是一本很優秀的入門書籍，網路上有找到這本書的英文版，看起來好像可以免費觀看：&lt;a href=&quot;https://livebook.manning.com/book/testing-vue-js-applications/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Testing Vue.js Applications&lt;/a&gt;，如果喜歡的話也可以考慮去天瓏入手一本&lt;a href=&quot;https://www.tenlong.com.tw/products/9787111646709&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;vue.js 應用測試 - testing vue.js application&lt;/a&gt;&lt;/p&gt;
     
     </summary>
     
@@ -61,7 +61,7 @@
     <link href="https://partypeopleland.github.io/artblog/2020/12/31/Rider-%E5%BF%AB%E9%80%9F%E6%92%B0%E5%AF%AB%E7%A8%8B%E5%BC%8F%E7%9A%84%E5%B0%8F%E6%8A%80%E5%B7%A7/"/>
     <id>https://partypeopleland.github.io/artblog/2020/12/31/Rider-快速撰寫程式的小技巧/</id>
     <published>2020-12-31T09:12:58.000Z</published>
-    <updated>2021-01-04T00:19:26.388Z</updated>
+    <updated>2021-03-08T06:30:06.823Z</updated>
     
     <summary type="html">
     
@@ -165,7 +165,7 @@
     <link href="https://partypeopleland.github.io/artblog/2020/09/09/webpack-compile-vue-single-file-component/"/>
     <id>https://partypeopleland.github.io/artblog/2020/09/09/webpack-compile-vue-single-file-component/</id>
     <published>2020-09-09T07:53:55.000Z</published>
-    <updated>2020-09-30T09:49:46.980Z</updated>
+    <updated>2021-03-10T09:13:14.438Z</updated>
     
     <summary type="html">
     
