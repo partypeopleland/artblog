@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>如何套用 CKEditor5 上傳圖片 | Art的辦公桌</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="大概所見即所得的編輯器，應該都是採用 CKEditor 的解決方案了，因為它真的還蠻好用的，CKEditor 已經來到版本 5，提供的編輯器也有很多種">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何套用 CKEditor5 上傳圖片">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/%E5%A6%82%E4%BD%95%E5%A5%97%E7%94%A8CKEditor5%E4%B8%8A%E5%82%B3%E5%9C%96%E7%89%87/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="大概所見即所得的編輯器，應該都是採用 CKEditor 的解決方案了，因為它真的還蠻好用的，CKEditor 已經來到版本 5，提供的編輯器也有很多種">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2020-02-25T03:57:58.000Z">
+<meta property="article:modified_time" content="2024-02-13T10:30:19.257Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="CKEditor">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/artblog/atom.xml" title="Art的辦公桌" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/artblog/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/artblog/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/artblog/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/artblog/" id="logo">Art的辦公桌</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/artblog/" id="subtitle">有兩個螢幕真好</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/artblog/">Home</a>
+        
+          <a class="main-nav-link" href="/artblog/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/artblog/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="搜尋"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜尋"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://partypeopleland.github.io/artblog"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-如何套用CKEditor5上傳圖片" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/artblog/%E5%A6%82%E4%BD%95%E5%A5%97%E7%94%A8CKEditor5%E4%B8%8A%E5%82%B3%E5%9C%96%E7%89%87/" class="article-date">
+  <time class="dt-published" datetime="2020-02-25T03:57:58.000Z" itemprop="datePublished">2020-02-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/artblog/categories/javascript/">javascript</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      如何套用 CKEditor5 上傳圖片
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>大概所見即所得的編輯器，應該都是採用 CKEditor 的解決方案了，因為它真的還蠻好用的，CKEditor 已經來到版本 5，提供的編輯器也有很多種</p>
+<span id="more"></span>
+
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><p>官方有提供 vue.js 框架整合 CKEditor，可透過 npm 安裝套件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save @ckeditor/ckeditor5-vue @ckeditor/ckeditor5-build-classic</span><br></pre></td></tr></table></figure>
+
+<p>或者是利用 inline script 引用，相較於一般的版本，整合 vue.js 的 ckeditor 還需要額外載入一個<code>ckeditor5-vue</code>的<code>ckeditor.js</code></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">ckeditor</span> <span class="attr">:editor</span>=<span class="string">&quot;editor&quot;</span> <span class="attr">v-model</span>=<span class="string">&quot;editorData&quot;</span> <span class="attr">:config</span>=<span class="string">&quot;editorConfig&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">ckeditor</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&#x27;https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.min.js&#x27;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;./node_modules/@ckeditor/ckeditor5-build-classic/build/ckeditor.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;./node_modules/@ckeditor/ckeditor5-vue/dist/ckeditor.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    <span class="title class_">Vue</span>.<span class="title function_">use</span>(<span class="title class_">CKEditor</span>);</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">const</span> app = <span class="keyword">new</span> <span class="title class_">Vue</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">el</span>: <span class="string">&quot;#app&quot;</span>,</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">data</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">editor</span>: <span class="title class_">ClassicEditor</span>,</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">editorData</span>: <span class="string">&quot;&lt;p&gt;Content of the editor.&lt;/p&gt;&quot;</span>,</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">editorConfig</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">                <span class="comment">// The configuration of the editor.</span></span></span><br><span class="line"><span class="language-javascript">            &#125;,</span></span><br><span class="line"><span class="language-javascript">        &#125;,</span></span><br><span class="line"><span class="language-javascript">    &#125;);</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="CKEditor5-Editor-type"><a href="#CKEditor5-Editor-type" class="headerlink" title="CKEditor5 Editor type"></a>CKEditor5 Editor type</h2><p>其實用第一個就夠了，如果想多了解一下這幾種編輯器的差異，可以直接瀏覽官方的範例會更清楚</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://ckeditor.com/docs/ckeditor5/latest/examples/builds/classic-editor.html">Classic Editor</a></li>
+<li><a target="_blank" rel="noopener" href="https://ckeditor.com/docs/ckeditor5/latest/examples/builds/inline-editor.html">Inline Editor</a></li>
+<li><a target="_blank" rel="noopener" href="https://ckeditor.com/docs/ckeditor5/latest/examples/builds/balloon-block-editor.html">Ballon block Editor</a></li>
+<li><a target="_blank" rel="noopener" href="https://ckeditor.com/docs/ckeditor5/latest/examples/builds/balloon-editor.html">Ballon Editor</a></li>
+<li><a target="_blank" rel="noopener" href="https://ckeditor.com/docs/ckeditor5/latest/examples/builds/document-editor.html">Document Editor</a></li>
+</ol>
+<h2 id="CKEditor5-Editor-Config"><a href="#CKEditor5-Editor-Config" class="headerlink" title="CKEditor5 Editor Config"></a>CKEditor5 Editor Config</h2><p><a target="_blank" rel="noopener" href="https://ckeditor.com/docs/ckeditor5/latest/api/module_core_editor_editorconfig-EditorConfig.html">EditorConfig</a>可以設定要用的功能、外掛，但其實如果不需要用的話，在一開始就不要打包那個版本，透過線上自訂工具取得 Lib 即可，這也是官方比較推薦的方式，畢竟你不需要的話，不要打包那些內容，速度也比較快</p>
+<h2 id="CKEditor5-Online-Builder"><a href="#CKEditor5-Online-Builder" class="headerlink" title="CKEditor5 Online Builder"></a>CKEditor5 Online Builder</h2><p>可以在線自訂需要的 plugin 並下載 lib<br><a target="_blank" rel="noopener" href="https://ckeditor.com/ckeditor-5/online-builder/">Online Builder</a></p>
+<h2 id="上傳圖片-by-simple-upload-adapter"><a href="#上傳圖片-by-simple-upload-adapter" class="headerlink" title="上傳圖片 by simple upload adapter"></a>上傳圖片 by simple upload adapter</h2><p>上傳圖片官方有提供數種做法</p>
+<ol>
+<li>使用 Easy Image (官方提供的雲端服務)</li>
+<li>透過 CKFinder (官方提供的另外一套解決方案)</li>
+<li>simple upload adapter</li>
+<li>base64 upload adapter</li>
+</ol>
+<p>這邊我們採用 simple upload adapter，在 online build lib 的時候，選擇 simple upload adapter 外掛，此一外掛可以透過設定，讓 CKEditor 加入圖片的時候，向指定 URI 發送 POST 請求將圖片上傳到後端</p>
+<blockquote>
+<p>base64 upload adapter 並不需要圖片處理的後端，因為她是將圖片先轉為 base64 格式，與文章一起儲存，缺點是對於資料庫效能會有影響</p>
+</blockquote>
+<p><strong>simple upload adapter 設定</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	...editorConfig,</span><br><span class="line">	<span class="attr">simpleUpload</span>: &#123;</span><br><span class="line">        <span class="comment">// The URL that the images are uploaded to.</span></span><br><span class="line">        <span class="attr">uploadUrl</span>: <span class="string">&#x27;/Upload/Image&#x27;</span>,</span><br><span class="line">        <span class="comment">// // Headers sent along with the XMLHttpRequest to the upload server.</span></span><br><span class="line">        <span class="attr">headers</span>: &#123;</span><br><span class="line">            <span class="string">&#x27;X-CSRF-TOKEN&#x27;</span>: <span class="string">&#x27;CSFR-Token&#x27;</span>,</span><br><span class="line">            <span class="title class_">Authorization</span>: <span class="string">&#x27;Bearer &lt;JSON Web Token&gt;&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>後端回傳格式</strong></p>
+<p>正確會回傳一個 url，前端會依照此 url 的內容，將其內崁於<code>img src</code>之內，所以如果最終回傳的 url 內容是 base64 字串，也可以直接顯示圖片</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">	<span class="attr">&quot;url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://localhost/xxxxxx&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>錯誤需要回傳一個 error message ，結構如下，此錯誤訊息會直接在前端透過 alert 顯示</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">	<span class="attr">&quot;error&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">		<span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="string">&quot;錯誤訊息&quot;</span></span><br><span class="line">	<span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="上傳圖片-自定義-upload-adapter"><a href="#上傳圖片-自定義-upload-adapter" class="headerlink" title="上傳圖片 自定義 upload adapter"></a>上傳圖片 自定義 upload adapter</h2><p>採用 simple upload adapter 還是會有沒有辦法做到的事情，這個時候就需要自定義 adapter 了，官方也有提供完整的程式碼範例，可以直接修改拿來用即可</p>
+<p>更詳細的東西還是參考一下<a target="_blank" rel="noopener" href="https://ckeditor.com/docs/ckeditor5/latest/framework/guides/deep-dive/upload-adapter.html">官方文件</a>吧</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyUploadAdapter</span> &#123;</span><br><span class="line">	<span class="title function_">constructor</span>(<span class="params">loader</span>) &#123;</span><br><span class="line">		<span class="comment">// The file loader instance to use during the upload.</span></span><br><span class="line">		<span class="variable language_">this</span>.<span class="property">loader</span> = loader;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Starts the upload process.</span></span><br><span class="line">	<span class="title function_">upload</span>(<span class="params"></span>) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">loader</span>.<span class="property">file</span>.<span class="title function_">then</span>(</span><br><span class="line">			<span class="function"><span class="params">file</span> =&gt;</span></span><br><span class="line">				<span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">					<span class="variable language_">this</span>.<span class="title function_">_initRequest</span>();</span><br><span class="line">					<span class="variable language_">this</span>.<span class="title function_">_initListeners</span>(resolve, reject, file);</span><br><span class="line">					<span class="variable language_">this</span>.<span class="title function_">_sendRequest</span>(file);</span><br><span class="line">				&#125;)</span><br><span class="line">		);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Aborts the upload process.</span></span><br><span class="line">	<span class="title function_">abort</span>(<span class="params"></span>) &#123;</span><br><span class="line">		<span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">xhr</span>) &#123;</span><br><span class="line">			<span class="variable language_">this</span>.<span class="property">xhr</span>.<span class="title function_">abort</span>();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Initializes the XMLHttpRequest object using the URL passed to the constructor.</span></span><br><span class="line">	<span class="title function_">_initRequest</span>(<span class="params"></span>) &#123;</span><br><span class="line">		<span class="keyword">const</span> xhr = (<span class="variable language_">this</span>.<span class="property">xhr</span> = <span class="keyword">new</span> <span class="title class_">XMLHttpRequest</span>());</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Note that your request may look different. It is up to you and your editor</span></span><br><span class="line">		<span class="comment">// integration to choose the right communication channel. This example uses</span></span><br><span class="line">		<span class="comment">// a POST request with JSON as a data structure but your configuration</span></span><br><span class="line">		<span class="comment">// could be different.</span></span><br><span class="line">		xhr.<span class="title function_">open</span>(<span class="string">&quot;POST&quot;</span>, <span class="string">&quot;http://example.com/image/upload/path&quot;</span>, <span class="literal">true</span>);</span><br><span class="line">		xhr.<span class="property">responseType</span> = <span class="string">&quot;json&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Initializes XMLHttpRequest listeners.</span></span><br><span class="line">	<span class="title function_">_initListeners</span>(<span class="params">resolve, reject, file</span>) &#123;</span><br><span class="line">		<span class="keyword">const</span> xhr = <span class="variable language_">this</span>.<span class="property">xhr</span>;</span><br><span class="line">		<span class="keyword">const</span> loader = <span class="variable language_">this</span>.<span class="property">loader</span>;</span><br><span class="line">		<span class="keyword">const</span> genericErrorText = <span class="string">`Couldn&#x27;t upload file: <span class="subst">$&#123;file.name&#125;</span>.`</span>;</span><br><span class="line"></span><br><span class="line">		xhr.<span class="title function_">addEventListener</span>(<span class="string">&quot;error&quot;</span>, <span class="function">() =&gt;</span> <span class="title function_">reject</span>(genericErrorText));</span><br><span class="line">		xhr.<span class="title function_">addEventListener</span>(<span class="string">&quot;abort&quot;</span>, <span class="function">() =&gt;</span> <span class="title function_">reject</span>());</span><br><span class="line">		xhr.<span class="title function_">addEventListener</span>(<span class="string">&quot;load&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">			<span class="keyword">const</span> response = xhr.<span class="property">response</span>;</span><br><span class="line"></span><br><span class="line">			<span class="comment">// This example assumes the XHR server&#x27;s &quot;response&quot; object will come with</span></span><br><span class="line">			<span class="comment">// an &quot;error&quot; which has its own &quot;message&quot; that can be passed to reject()</span></span><br><span class="line">			<span class="comment">// in the upload promise.</span></span><br><span class="line">			<span class="comment">//</span></span><br><span class="line">			<span class="comment">// Your integration may handle upload errors in a different way so make sure</span></span><br><span class="line">			<span class="comment">// it is done properly. The reject() function must be called when the upload fails.</span></span><br><span class="line">			<span class="keyword">if</span> (!response || response.<span class="property">error</span>) &#123;</span><br><span class="line">				<span class="keyword">return</span> <span class="title function_">reject</span>(response &amp;&amp; response.<span class="property">error</span> ? response.<span class="property">error</span>.<span class="property">message</span> : genericErrorText);</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			<span class="comment">// If the upload is successful, resolve the upload promise with an object containing</span></span><br><span class="line">			<span class="comment">// at least the &quot;default&quot; URL, pointing to the image on the server.</span></span><br><span class="line">			<span class="comment">// This URL will be used to display the image in the content. Learn more in the</span></span><br><span class="line">			<span class="comment">// UploadAdapter#upload documentation.</span></span><br><span class="line">			<span class="title function_">resolve</span>(&#123;</span><br><span class="line">				<span class="attr">default</span>: response.<span class="property">url</span>,</span><br><span class="line">			&#125;);</span><br><span class="line">		&#125;);</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Upload progress when it is supported. The file loader has the #uploadTotal and #uploaded</span></span><br><span class="line">		<span class="comment">// properties which are used e.g. to display the upload progress bar in the editor</span></span><br><span class="line">		<span class="comment">// user interface.</span></span><br><span class="line">		<span class="keyword">if</span> (xhr.<span class="property">upload</span>) &#123;</span><br><span class="line">			xhr.<span class="property">upload</span>.<span class="title function_">addEventListener</span>(<span class="string">&quot;progress&quot;</span>, <span class="function"><span class="params">evt</span> =&gt;</span> &#123;</span><br><span class="line">				<span class="keyword">if</span> (evt.<span class="property">lengthComputable</span>) &#123;</span><br><span class="line">					loader.<span class="property">uploadTotal</span> = evt.<span class="property">total</span>;</span><br><span class="line">					loader.<span class="property">uploaded</span> = evt.<span class="property">loaded</span>;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Prepares the data and sends the request.</span></span><br><span class="line">	<span class="title function_">_sendRequest</span>(<span class="params">file</span>) &#123;</span><br><span class="line">		<span class="comment">// Prepare the form data.</span></span><br><span class="line">		<span class="keyword">const</span> data = <span class="keyword">new</span> <span class="title class_">FormData</span>();</span><br><span class="line"></span><br><span class="line">		data.<span class="title function_">append</span>(<span class="string">&quot;upload&quot;</span>, file);</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Important note: This is the right place to implement security mechanisms</span></span><br><span class="line">		<span class="comment">// like authentication and CSRF protection. For instance, you can use</span></span><br><span class="line">		<span class="comment">// XMLHttpRequest.setRequestHeader() to set the request headers containing</span></span><br><span class="line">		<span class="comment">// the CSRF token generated earlier by your application.</span></span><br><span class="line"></span><br><span class="line">		<span class="comment">// Send the request.</span></span><br><span class="line">		<span class="variable language_">this</span>.<span class="property">xhr</span>.<span class="title function_">send</span>(data);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">MyCustomUploadAdapterPlugin</span>(<span class="params">editor</span>) &#123;</span><br><span class="line">	editor.<span class="property">plugins</span>.<span class="title function_">get</span>(<span class="string">&quot;FileRepository&quot;</span>).<span class="property">createUploadAdapter</span> = <span class="function"><span class="params">loader</span> =&gt;</span> &#123;</span><br><span class="line">		<span class="comment">// Configure the URL to the upload script in your back-end here!</span></span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">MyUploadAdapter</span>(loader);</span><br><span class="line">	&#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line"><span class="title class_">ClassicEditor</span>.<span class="title function_">create</span>(<span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&quot;#editor&quot;</span>), &#123;</span><br><span class="line">	<span class="attr">extraPlugins</span>: [<span class="title class_">MyCustomUploadAdapterPlugin</span>],</span><br><span class="line"></span><br><span class="line">	<span class="comment">// ...</span></span><br><span class="line">&#125;).<span class="title function_">catch</span>(<span class="function"><span class="params">error</span> =&gt;</span> &#123;</span><br><span class="line">	<span class="variable language_">console</span>.<span class="title function_">log</span>(error);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://cdn.ckeditor.com/#ckeditor5">CKEditor5 CDN</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.itread01.com/content/1545018850.html">vue+CKEditor5 入門</a></li>
+<li><a target="_blank" rel="noopener" href="https://ckeditor.com/docs/ckeditor5/latest/builds/guides/integration/frameworks/vuejs.html">Vue Component CKEditor</a></li>
+<li><a target="_blank" rel="noopener" href="https://ckeditor.com/docs/ckeditor5/latest/features/ui-language.html">Setting the UI language</a></li>
+<li><a target="_blank" rel="noopener" href="https://ckeditor.com/docs/ckeditor5/latest/api/module_core_editor_editorconfig-EditorConfig.html">EditorConfig</a></li>
+<li><a target="_blank" rel="noopener" href="https://ckeditor.com/ckfinder/download/">CKFinder 3 下載網頁</a></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://partypeopleland.github.io/artblog/%E5%A6%82%E4%BD%95%E5%A5%97%E7%94%A8CKEditor5%E4%B8%8A%E5%82%B3%E5%9C%96%E7%89%87/" data-id="clsk82ube008tfctccsrq3z2o" data-title="如何套用 CKEditor5 上傳圖片" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/artblog/tags/CKEditor/" rel="tag">CKEditor</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/artblog/Javascript%E7%9A%84Proxy/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Javascript的Proxy
+        
+      </div>
+    </a>
+  
+  
+    <a href="/artblog/Jenkins%E6%AA%A2%E6%9F%A5%E5%89%8D%E7%AB%AF%E7%B7%A8%E8%AD%AF%E7%A8%8B%E5%BC%8F%E6%9C%89%E7%84%A1%E7%B0%BD%E5%85%A5%E7%89%88%E6%8E%A7/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Jenkins檢查前端編譯程式有無簽入版控</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分類</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/LUIS/">LUIS</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/LeetCode/">LeetCode</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/NPOI/">NPOI</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/SRE/">SRE</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/Selenium/">Selenium</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/azure/">azure</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/csharp/">csharp</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/devOps/">devOps</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/docker/">docker</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/dotnet/">dotnet</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/e2e/">e2e</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/elk/">elk</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/html5/">html5</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/javascript/">javascript</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/pattern/">pattern</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/practice/">practice</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/redis/">redis</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/refactor/">refactor</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/rider/">rider</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/selenium/">selenium</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/vb6/">vb6</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/vue/">vue</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/vue3/">vue3</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/webpack/">webpack</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/%E5%B7%A5%E5%85%B7/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/%E5%BF%83%E5%BE%97/">心得</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/%E6%B8%AC%E8%A9%A6/">測試</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/netCore/" rel="tag">.netCore</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/APM/" rel="tag">APM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/Alex%E5%AE%85%E5%B9%B9%E5%98%9B/" rel="tag">Alex宅幹嘛</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/CKEditor/" rel="tag">CKEditor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/DI/" rel="tag">DI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/E2E-testing/" rel="tag">E2E testing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/ESLint/" rel="tag">ESLint</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/JWT/" rel="tag">JWT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/MPA/" rel="tag">MPA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/NAS/" rel="tag">NAS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/RUM/" rel="tag">RUM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/SPA/" rel="tag">SPA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/ScreenShot/" rel="tag">ScreenShot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/TDD/" rel="tag">TDD</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/appSetting/" rel="tag">appSetting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/asp/" rel="tag">asp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/async-await/" rel="tag">async&#x2F;await</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/auditLog/" rel="tag">auditLog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/axios/" rel="tag">axios</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/azureSearch/" rel="tag">azureSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/crawler/" rel="tag">crawler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/cypress/" rel="tag">cypress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/decorator/" rel="tag">decorator</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/delegate/" rel="tag">delegate</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/design-pattern/" rel="tag">design pattern</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/e2e/" rel="tag">e2e</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/elasticSearch/" rel="tag">elasticSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/environment/" rel="tag">environment</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/es6/" rel="tag">es6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/eunm/" rel="tag">eunm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/excel/" rel="tag">excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/facade/" rel="tag">facade</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/factory/" rel="tag">factory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/file-watchers/" rel="tag">file watchers</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/filebeat/" rel="tag">filebeat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/gitLab/" rel="tag">gitLab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/gitea/" rel="tag">gitea</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/github-pages/" rel="tag">github pages</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/gulp/" rel="tag">gulp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/hangfire/" rel="tag">hangfire</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/identity/" rel="tag">identity</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/jenkins/" rel="tag">jenkins</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/jmeter/" rel="tag">jmeter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/linq/" rel="tag">linq</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/localStorage/" rel="tag">localStorage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/mock/" rel="tag">mock</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/netCore/" rel="tag">netCore</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/nginx/" rel="tag">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/node-js/" rel="tag">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/npm/" rel="tag">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/nuget/" rel="tag">nuget</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/nvm/" rel="tag">nvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/polly/" rel="tag">polly</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/promise/" rel="tag">promise</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/proxy/" rel="tag">proxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/publish/" rel="tag">publish</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/quokka-js/" rel="tag">quokka.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/refactor/" rel="tag">refactor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/registry/" rel="tag">registry</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/rider/" rel="tag">rider</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/sentry/" rel="tag">sentry</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/sessionStorage/" rel="tag">sessionStorage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/signalR/" rel="tag">signalR</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/sonarQube/" rel="tag">sonarQube</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/strategy/" rel="tag">strategy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/stub/" rel="tag">stub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/testCafe/" rel="tag">testCafe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/twmvc/" rel="tag">twmvc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/unittest/" rel="tag">unittest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vitejs/" rel="tag">vitejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vscode/" rel="tag">vscode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vue/" rel="tag">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vue-cli3/" rel="tag">vue-cli3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vue3/" rel="tag">vue3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vuex/" rel="tag">vuex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/wallaby-js/" rel="tag">wallaby.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/web-config/" rel="tag">web.config</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/webpack/" rel="tag">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/yApi/" rel="tag">yApi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/%E5%BE%85%E8%A3%9C/" rel="tag">待補</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤雲</h3>
+    <div class="widget tagcloud">
+      <a href="/artblog/tags/netCore/" style="font-size: 10px;">.netCore</a> <a href="/artblog/tags/APM/" style="font-size: 11.43px;">APM</a> <a href="/artblog/tags/Alex%E5%AE%85%E5%B9%B9%E5%98%9B/" style="font-size: 10px;">Alex宅幹嘛</a> <a href="/artblog/tags/CKEditor/" style="font-size: 10px;">CKEditor</a> <a href="/artblog/tags/DI/" style="font-size: 10px;">DI</a> <a href="/artblog/tags/E2E-testing/" style="font-size: 10px;">E2E testing</a> <a href="/artblog/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/artblog/tags/JWT/" style="font-size: 10px;">JWT</a> <a href="/artblog/tags/MPA/" style="font-size: 10px;">MPA</a> <a href="/artblog/tags/NAS/" style="font-size: 10px;">NAS</a> <a href="/artblog/tags/RUM/" style="font-size: 10px;">RUM</a> <a href="/artblog/tags/SPA/" style="font-size: 10px;">SPA</a> <a href="/artblog/tags/ScreenShot/" style="font-size: 10px;">ScreenShot</a> <a href="/artblog/tags/TDD/" style="font-size: 12.86px;">TDD</a> <a href="/artblog/tags/appSetting/" style="font-size: 10px;">appSetting</a> <a href="/artblog/tags/asp/" style="font-size: 10px;">asp</a> <a href="/artblog/tags/async-await/" style="font-size: 10px;">async/await</a> <a href="/artblog/tags/auditLog/" style="font-size: 10px;">auditLog</a> <a href="/artblog/tags/axios/" style="font-size: 10px;">axios</a> <a href="/artblog/tags/azureSearch/" style="font-size: 10px;">azureSearch</a> <a href="/artblog/tags/crawler/" style="font-size: 10px;">crawler</a> <a href="/artblog/tags/cypress/" style="font-size: 14.29px;">cypress</a> <a href="/artblog/tags/decorator/" style="font-size: 11.43px;">decorator</a> <a href="/artblog/tags/delegate/" style="font-size: 10px;">delegate</a> <a href="/artblog/tags/design-pattern/" style="font-size: 10px;">design pattern</a> <a href="/artblog/tags/docker/" style="font-size: 18.57px;">docker</a> <a href="/artblog/tags/e2e/" style="font-size: 10px;">e2e</a> <a href="/artblog/tags/elasticSearch/" style="font-size: 14.29px;">elasticSearch</a> <a href="/artblog/tags/environment/" style="font-size: 10px;">environment</a> <a href="/artblog/tags/es6/" style="font-size: 10px;">es6</a> <a href="/artblog/tags/eunm/" style="font-size: 10px;">eunm</a> <a href="/artblog/tags/excel/" style="font-size: 10px;">excel</a> <a href="/artblog/tags/facade/" style="font-size: 10px;">facade</a> <a href="/artblog/tags/factory/" style="font-size: 10px;">factory</a> <a href="/artblog/tags/file-watchers/" style="font-size: 10px;">file watchers</a> <a href="/artblog/tags/filebeat/" style="font-size: 10px;">filebeat</a> <a href="/artblog/tags/git/" style="font-size: 10px;">git</a> <a href="/artblog/tags/gitLab/" style="font-size: 10px;">gitLab</a> <a href="/artblog/tags/gitea/" style="font-size: 10px;">gitea</a> <a href="/artblog/tags/github-pages/" style="font-size: 10px;">github pages</a> <a href="/artblog/tags/gulp/" style="font-size: 11.43px;">gulp</a> <a href="/artblog/tags/hangfire/" style="font-size: 10px;">hangfire</a> <a href="/artblog/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/artblog/tags/identity/" style="font-size: 12.86px;">identity</a> <a href="/artblog/tags/jenkins/" style="font-size: 20px;">jenkins</a> <a href="/artblog/tags/jmeter/" style="font-size: 10px;">jmeter</a> <a href="/artblog/tags/linq/" style="font-size: 10px;">linq</a> <a href="/artblog/tags/localStorage/" style="font-size: 10px;">localStorage</a> <a href="/artblog/tags/mock/" style="font-size: 10px;">mock</a> <a href="/artblog/tags/netCore/" style="font-size: 10px;">netCore</a> <a href="/artblog/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/artblog/tags/node-js/" style="font-size: 10px;">node.js</a> <a href="/artblog/tags/npm/" style="font-size: 10px;">npm</a> <a href="/artblog/tags/nuget/" style="font-size: 10px;">nuget</a> <a href="/artblog/tags/nvm/" style="font-size: 10px;">nvm</a> <a href="/artblog/tags/polly/" style="font-size: 10px;">polly</a> <a href="/artblog/tags/promise/" style="font-size: 10px;">promise</a> <a href="/artblog/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/artblog/tags/publish/" style="font-size: 10px;">publish</a> <a href="/artblog/tags/quokka-js/" style="font-size: 10px;">quokka.js</a> <a href="/artblog/tags/refactor/" style="font-size: 12.86px;">refactor</a> <a href="/artblog/tags/registry/" style="font-size: 10px;">registry</a> <a href="/artblog/tags/rider/" style="font-size: 10px;">rider</a> <a href="/artblog/tags/sentry/" style="font-size: 10px;">sentry</a> <a href="/artblog/tags/sessionStorage/" style="font-size: 10px;">sessionStorage</a> <a href="/artblog/tags/signalR/" style="font-size: 17.14px;">signalR</a> <a href="/artblog/tags/sonarQube/" style="font-size: 20px;">sonarQube</a> <a href="/artblog/tags/strategy/" style="font-size: 10px;">strategy</a> <a href="/artblog/tags/stub/" style="font-size: 10px;">stub</a> <a href="/artblog/tags/testCafe/" style="font-size: 10px;">testCafe</a> <a href="/artblog/tags/twmvc/" style="font-size: 15.71px;">twmvc</a> <a href="/artblog/tags/unittest/" style="font-size: 12.86px;">unittest</a> <a href="/artblog/tags/vitejs/" style="font-size: 10px;">vitejs</a> <a href="/artblog/tags/vscode/" style="font-size: 15.71px;">vscode</a> <a href="/artblog/tags/vue/" style="font-size: 11.43px;">vue</a> <a href="/artblog/tags/vue-cli3/" style="font-size: 10px;">vue-cli3</a> <a href="/artblog/tags/vue3/" style="font-size: 10px;">vue3</a> <a href="/artblog/tags/vuex/" style="font-size: 10px;">vuex</a> <a href="/artblog/tags/wallaby-js/" style="font-size: 10px;">wallaby.js</a> <a href="/artblog/tags/web-config/" style="font-size: 10px;">web.config</a> <a href="/artblog/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/artblog/tags/yApi/" style="font-size: 10px;">yApi</a> <a href="/artblog/tags/%E5%BE%85%E8%A3%9C/" style="font-size: 10px;">待補</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">彙整</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/08/">八月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/07/">七月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/06/">六月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/05/">五月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/03/">三月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/02/">二月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/01/">一月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/12/">十二月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/11/">十一月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/09/">九月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/08/">八月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/06/">六月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/05/">五月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/04/">四月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/03/">三月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/01/">一月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/11/">十一月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/10/">十月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/08/">八月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/07/">七月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/04/">四月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/03/">三月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/02/">二月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/12/">十二月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/09/">九月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/08/">八月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/07/">七月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/06/">六月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/05/">五月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/04/">四月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/03/">三月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/02/">二月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/01/">一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/12/">十二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/11/">十一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/09/">九月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/08/">八月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/07/">七月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/06/">六月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2016/01/">一月 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/artblog/sentry-self-hosted-by-docker-compose/">使用 sentry 追蹤前端錯誤</a>
+          </li>
+        
+          <li>
+            <a href="/artblog/eml-format-download-with-decorator-pattern/">將資料存成eml格式下載-使用裝飾模式</a>
+          </li>
+        
+          <li>
+            <a href="/artblog/aspnet-core-publish-and-environment/">aspnet core publish and environment</a>
+          </li>
+        
+          <li>
+            <a href="/artblog/sonarqube-jenkins-pipeline-get-metrics-then-notify-via-teams/">SonarQube-Jenkins執行分析後透過Teams通知</a>
+          </li>
+        
+          <li>
+            <a href="/artblog/vee-validate-options-awareOfUnicodeTokens-must-be-set-to-true-to-use-yyyy-token/">vee-validate 提示 options.awareOfUnicodeTokens  錯誤</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2024 art<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/artblog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/artblog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/artblog/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/artblog/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/artblog/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

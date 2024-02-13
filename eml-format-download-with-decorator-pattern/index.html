@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>將資料存成eml格式下載-使用裝飾模式 | Art的辦公桌</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="之前曾經有個案例是要將使用者輸入的文案轉存成 EMAIL 的格式，下載後可以讓他們自行編輯再轉發出去，這邊就記錄一下重點">
+<meta property="og:type" content="article">
+<meta property="og:title" content="將資料存成eml格式下載-使用裝飾模式">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/eml-format-download-with-decorator-pattern/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="之前曾經有個案例是要將使用者輸入的文案轉存成 EMAIL 的格式，下載後可以讓他們自行編輯再轉發出去，這邊就記錄一下重點">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2023-07-24T02:35:28.000Z">
+<meta property="article:modified_time" content="2024-02-13T10:30:19.466Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="decorator">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/artblog/atom.xml" title="Art的辦公桌" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/artblog/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/artblog/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/artblog/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/artblog/" id="logo">Art的辦公桌</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/artblog/" id="subtitle">有兩個螢幕真好</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/artblog/">Home</a>
+        
+          <a class="main-nav-link" href="/artblog/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/artblog/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="搜尋"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜尋"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://partypeopleland.github.io/artblog"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-將資料存成eml格式下載-使用裝飾模式" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/artblog/eml-format-download-with-decorator-pattern/" class="article-date">
+  <time class="dt-published" datetime="2023-07-24T02:35:28.000Z" itemprop="datePublished">2023-07-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/artblog/categories/pattern/">pattern</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      將資料存成eml格式下載-使用裝飾模式
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>之前曾經有個案例是要將使用者輸入的文案轉存成 EMAIL 的格式，下載後可以讓他們自行編輯再轉發出去，這邊就記錄一下重點</p>
+<span id="more"></span>
+
+<h2 id="概略說明"><a href="#概略說明" class="headerlink" title="概略說明"></a>概略說明</h2><p>因為先前採用的輸入介面是 CKEditor , 然後使用者如果在裡面編輯的話，實際上是存成 HTML，但如果它們又想要轉寄這些信件，CKEditor 的所見即所得就會造成很大的困擾。因為並不是每一家的 EMAIL 服務都能夠支援這些 HTML 語法與 CSS，大都是只有支援一部分，有許多新的語法並不支援。但是使用者又希望它們能夠在網站上直接將這些東西轉寄出去，當然如果直接這樣幹的話會有很多繞不過去的問題。</p>
+<p>最終的解決方案就是將這些東西轉存成 eml 格式，然後讓使用者下載下來，讓它們自己編輯後再轉寄出去<br>附件的部分直接在編輯時附加在信件內；圖片則是轉 base64 後就可以直接顯示</p>
+<ol>
+<li>前端就是點擊後呼叫後端並下載存成 EML 檔案</li>
+<li>後端就是負責提供某個文章的 EMAIL 格式資料給前端</li>
+</ol>
+<h2 id="下載檔案"><a href="#下載檔案" class="headerlink" title="下載檔案"></a>下載檔案</h2><p>前端的部分比較單純，呼叫後端後將內容存檔即可</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="title function_">mailDownload</span>(<span class="params">id</span>) &#123;</span><br><span class="line">    <span class="comment">// 向後端發出請求取得檔案內容</span></span><br><span class="line">    <span class="keyword">let</span> response = <span class="keyword">await</span> <span class="title class_">ArticleModule</span>.<span class="title function_">downloadEmail</span>(id)</span><br><span class="line">    <span class="comment">// 檔案下載</span></span><br><span class="line">    <span class="keyword">const</span> $a = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&quot;a&quot;</span>)</span><br><span class="line">    <span class="keyword">const</span> url = <span class="variable constant_">URL</span>.<span class="title function_">createObjectURL</span>(response.<span class="property">data</span>)</span><br><span class="line">    <span class="keyword">const</span> fileName = response.<span class="property">headers</span>[<span class="string">&quot;content-disposition&quot;</span>].<span class="title function_">split</span>(<span class="string">&quot;=&quot;</span>)[<span class="number">1</span>]</span><br><span class="line">    <span class="keyword">const</span> currentFileName = fileName.<span class="title function_">replace</span>(<span class="regexp">/&quot;(.*)&quot;/</span>, <span class="string">&quot;$1&quot;</span>).<span class="title function_">replace</span>(<span class="string">&quot;UTF-8&#x27;&#x27;&quot;</span>, <span class="string">&quot;&quot;</span>)</span><br><span class="line">    $a.<span class="property">download</span> = <span class="built_in">decodeURIComponent</span>(currentFileName)</span><br><span class="line">    $a.<span class="property">href</span> = url</span><br><span class="line">    $a.<span class="title function_">click</span>()</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> <span class="variable constant_">URL</span>.<span class="title function_">revokeObjectURL</span>(url), <span class="number">5000</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="轉存成-eml-格式"><a href="#轉存成-eml-格式" class="headerlink" title="轉存成 eml 格式"></a>轉存成 eml 格式</h2><p>透過<a target="_blank" rel="noopener" href="https://jsfiddle.net/seanodotcom/yd1n8Lfh/">.EML - Email Generation in JS</a>範例，可以知道核心的解決方案就是像範例中一樣，把一些郵件的資訊放在最前面，指定好收件人、信件主旨，接著就是準備 HTML 的信件內容</p>
+<p>又因為這邊要做兩三件事情，都是針對信件內容作加工處理，我覺得還蠻適合用裝飾模式，就順便練習一下</p>
+<ol>
+<li>針對信件內容的圖片網址，轉 base64 編碼</li>
+<li>針對信件內容，最前面加上一些信件的資訊，例如收件人、寄件人、信件主旨等等</li>
+<li>針對信件內容的部分，將 CKEditor 的 CSS 附加上去</li>
+</ol>
+<h2 id="裝飾模式"><a href="#裝飾模式" class="headerlink" title="裝飾模式"></a>裝飾模式</h2><p>大概就跟穿衣服一樣，所有穿衣服的動作都是圍繞著人這個主體，概念就是這樣而已，穿衣服的行為就是在人的身上穿衣服、穿褲子、穿內衣、戴手錶、穿襪子、穿鞋子這些事情而已，所以就是用下面的介面來表示這個行為</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">IPeopleDecorator</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">Decorate</span>(<span class="params"><span class="built_in">string</span> people</span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>用這個例子來說的話，裝飾前是：<code>人</code>，裝飾後就會是:<code>穿著運動上衣的人</code>，其他的裝飾也是一樣的概念</p>
+</blockquote>
+<p>出門運動跑步，大概就會知道你要在你的身上弄好：衣服、褲子、鞋子，最後可能就會<code>穿著運動上衣、運動褲、運動鞋的人</code><br>出門上班上課，大概就會知道你在身上要弄好的是：衣服、褲子、鞋子、背包，最後可能就會<code>穿著襯衫、西裝褲、皮鞋、還拿個公事包的人</code></p>
+<blockquote>
+<p>這只是個例子，不要太認真要帶什麼東西</p>
+</blockquote>
+<p>所以用上面的概念，你就會知道有一個 人的裝飾工廠，可能有兩個方法，一個是準備出門運動的行頭 method、另外一個是準備出門上班上課的行頭 method</p>
+<p>like this</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">PeopleDecoratorFactory</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> IPeopleDecorator <span class="title">Sport</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 運動上衣</span></span><br><span class="line">        <span class="comment">// 運動褲</span></span><br><span class="line">        <span class="comment">// 運動鞋</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> PeopleDecorator(運動上衣,運動褲,運動鞋);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> IPeopleDecorator <span class="title">Work</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 襯衫</span></span><br><span class="line">        <span class="comment">// 西裝褲</span></span><br><span class="line">        <span class="comment">// 皮鞋</span></span><br><span class="line">        <span class="comment">// 公事包</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> PeopleDecorator(襯衫,西裝褲,皮鞋,公事包);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">```</span><br><span class="line">`PeopleDecorator`就是實際上穿衣服的行為，用程式碼的概念就是下面這樣</span><br><span class="line"></span><br><span class="line">```cs</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">PeopleDecorator</span> : <span class="title">IPeopleDecorator</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> List&lt;IPeopleDecorator&gt; _decorators;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ContentDecorator</span>(<span class="params"><span class="keyword">params</span> IPeopleDecorator[] decorators</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 透過建構式把剛剛要準備裝飾的東西都放進來</span></span><br><span class="line">        _decorators = decorators.ToList();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 好吧，下面這段我覺得如果改成中文的人，反而更難懂</span></span><br><span class="line">    <span class="comment">// 反正概念就是把剛剛準備要裝飾的東西，一個一個的裝飾在人的身上</span></span><br><span class="line">    <span class="comment">// 就等同於我們把要裝飾的項目，一個一個的在內容上加工是一樣的道理</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">Decorate</span>(<span class="params"><span class="built_in">string</span> content</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">string</span> decoratedContent = content;</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">var</span> decorator <span class="keyword">in</span> _decorators)</span><br><span class="line">        &#123;</span><br><span class="line">            decoratedContent = decorator.Decorate(decoratedContent);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> decoratedContent;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最終要使用的時候就是向下面這樣呼叫就可以了</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">GoToPark</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> people = <span class="string">&quot;art&quot;</span>;</span><br><span class="line">    <span class="keyword">var</span> decorator = PeopleDecoratorFactory.Sport();</span><br><span class="line">    <span class="keyword">var</span> result = decorator.Decorate(people);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">GoToWork</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> people = <span class="string">&quot;art&quot;</span>;</span><br><span class="line">    <span class="keyword">var</span> decorator = PeopleDecoratorFactory.Work();</span><br><span class="line">    <span class="keyword">var</span> result = decorator.Decorate(people);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>整體的概念及程式碼就是這樣了，下面用實際的範例來感覺一下</p>
+<h2 id="實際範例"><a href="#實際範例" class="headerlink" title="實際範例"></a>實際範例</h2><p>輸入驗證的部分以及例外處理的部分因為不是本文重點，直接略過，若實際要用的話記得補上</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Controller</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> FileResult <span class="title">DownloadEmail</span>(<span class="params"><span class="built_in">int</span> id</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 取得文章內容</span></span><br><span class="line">    <span class="keyword">var</span> article = ArticleModule.Get(id);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 準備好裝飾者</span></span><br><span class="line">    <span class="keyword">var</span> decorator = ContentDecoratorFactory.CreateDecorator(article);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 將裝飾者加工後的內容以UTF8編碼轉成byte陣列</span></span><br><span class="line">    <span class="keyword">var</span> emailContent = decorator.Decorate(article.Content);</span><br><span class="line">    <span class="keyword">var</span> fileBytes = Encoding.UTF8.GetBytes(emailContent);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 指定檔案名稱並回傳</span></span><br><span class="line">    <span class="keyword">var</span> fileName = <span class="string">$&quot;[<span class="subst">&#123;article.Type.GetDescription()&#125;</span>] <span class="subst">&#123;article.Subject&#125;</span>.eml&quot;</span>;</span><br><span class="line">    <span class="keyword">return</span> File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">ContentDecoratorFactory</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 規定好的圖片網址格式</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">const</span> <span class="built_in">string</span> ImageUrlPattern = <span class="string">@&quot;\/Common\/ArticleImage\/[a-zA-Z0-9]&#123;32&#125;&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> IContentDecorator <span class="title">CreateDecorator</span>(<span class="params">ArticleEntity article</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> pattern = <span class="keyword">new</span> Regex(ImageUrlPattern);</span><br><span class="line">        <span class="keyword">var</span> imageUrlDecorator = <span class="keyword">new</span> ArticleImageDecorator(pattern);</span><br><span class="line">        <span class="keyword">var</span> styleDecorator = <span class="keyword">new</span> CkeditorStyleDecorator();</span><br><span class="line">        <span class="keyword">var</span> htmlDecorator = <span class="keyword">new</span> HtmlTagDecorator(article.Subject);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ContentDecorator(imageUrlDecorator, styleDecorator, htmlDecorator);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">articleImageDecorator</span> : <span class="title">IContentDecorator</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> Regex _pattern;</span><br><span class="line">    <span class="keyword">private</span> IarticleFileInfoDao _articleFileInfoDao;</span><br><span class="line">    <span class="keyword">private</span> IarticleFileInfoDao articleFileInfoDao =&gt; _articleFileInfoDao ?? (_articleFileInfoDao = DataFactory.GetarticleImageInfoDAO());</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">articleImageDecorator</span>(<span class="params">Regex pattern</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        _pattern = pattern;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">Decorate</span>(<span class="params"><span class="built_in">string</span> content</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> _pattern.Replace(content, match =&gt;</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 取得圖片的 GUID</span></span><br><span class="line">            <span class="keyword">var</span> guid = match.Value.Split(<span class="string">&#x27;/&#x27;</span>).Last();</span><br><span class="line">            <span class="comment">// 依據 GUID 找實體檔案資料</span></span><br><span class="line">            articleFileInfo fileInfo = articleFileInfoDao.GetFileInfoByGuid(guid);</span><br><span class="line">            <span class="keyword">if</span> (fileInfo == <span class="literal">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> MyException(ExceptionCode.NotFound, <span class="string">$&quot;cannot found fileInfo by Guid:<span class="subst">&#123;match.Value&#125;</span>&quot;</span>);</span><br><span class="line">            <span class="comment">// 檔案實際儲存的路徑</span></span><br><span class="line">            <span class="keyword">var</span> baseFolder = <span class="string">&quot;D:\\article\\&quot;</span></span><br><span class="line">            <span class="comment">// 讀取檔案</span></span><br><span class="line">            <span class="keyword">var</span> filePath = <span class="built_in">string</span>.Concat(<span class="string">$@&quot;<span class="subst">&#123;baseFolder&#125;</span><span class="subst">&#123;fileInfo.articleId&#125;</span>\&quot;</span>, <span class="string">$&quot;<span class="subst">&#123;guid&#125;</span>.jpg&quot;</span>);</span><br><span class="line">            <span class="built_in">byte</span>[] imageBytes = File.ReadAllBytes(filePath);</span><br><span class="line">            <span class="built_in">string</span> base64String = Convert.ToBase64String(imageBytes);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> <span class="string">$&quot;data:image/jpeg;base64,<span class="subst">&#123;base64String&#125;</span>&quot;</span>;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">CkeditorStyleDecorator</span> : <span class="title">IContentDecorator</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">Decorate</span>(<span class="params"><span class="built_in">string</span> content</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        sb.AppendLine(<span class="string">&quot;&lt;style&gt;&quot;</span>);</span><br><span class="line">        <span class="comment">// 把 CKEditor CSS 放在這邊，當然也可以選擇不要做這件事情，這邊只是範例</span></span><br><span class="line">        <span class="comment">// sb.AppendLine(&quot;@&quot;.ck.ck-placeholder:before,.ck .ck......&quot;)</span></span><br><span class="line">        sb.AppendLine(<span class="string">&quot;&lt;/style&gt;&quot;</span>);</span><br><span class="line">        sb.AppendLine(content);</span><br><span class="line">        <span class="keyword">return</span> sb.ToString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">HtmlTagDecorator</span> : <span class="title">IContentDecorator</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="built_in">string</span> _subject;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">HtmlTagDecorator</span>(<span class="params"><span class="built_in">string</span> subject</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        _subject = subject;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">Decorate</span>(<span class="params"><span class="built_in">string</span> content</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        sb.AppendLine(<span class="string">&quot;To:&quot;</span>);</span><br><span class="line">        sb.AppendLine(<span class="string">&quot;Subject: &quot;</span> + _subject);</span><br><span class="line">        sb.AppendLine(<span class="string">&quot;X-Unsent: 1&quot;</span>);</span><br><span class="line">        sb.AppendLine(<span class="string">&quot;Content-Type: text/html; charset=utf-8&quot;</span>);</span><br><span class="line">        sb.AppendLine(<span class="string">&quot;&quot;</span>);</span><br><span class="line">        sb.AppendLine(<span class="string">@&quot;&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&quot;</span>);</span><br><span class="line">        sb.AppendLine(content);</span><br><span class="line">        sb.AppendLine(<span class="string">&quot;&lt;/body&gt;&lt;/html&gt;&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> sb.ToString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>整體上就是這樣子，看程式碼可能會有點難理解，不過如果概念懂了之後，用什麼辦法都沒關係，程式碼只是輔助而已，重點是能不能做到你想要的事情，這才是重點。關於裝飾模式有很多介紹的文章跟書籍都有談到，我也看了好多個，以前還寫了個 js 版本的<a href="https://partypeopleland.github.io/artblog/2018/06/19/JavaScript-Decorator-Pattern/">JavaScript Decorator Pattern</a>，最後還是因為這個工作上實際應用上了，才比較有感覺，所以這邊就記錄一下，希望也對別人有幫助。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://partypeopleland.github.io/artblog/eml-format-download-with-decorator-pattern/" data-id="clsk82ud000fqfctc6rkif67z" data-title="將資料存成eml格式下載-使用裝飾模式" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/artblog/tags/decorator/" rel="tag">decorator</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/artblog/sentry-self-hosted-by-docker-compose/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          使用 sentry 追蹤前端錯誤
+        
+      </div>
+    </a>
+  
+  
+    <a href="/artblog/aspnet-core-publish-and-environment/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">aspnet core publish and environment</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分類</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/LUIS/">LUIS</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/LeetCode/">LeetCode</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/NPOI/">NPOI</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/SRE/">SRE</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/Selenium/">Selenium</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/azure/">azure</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/csharp/">csharp</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/devOps/">devOps</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/docker/">docker</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/dotnet/">dotnet</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/e2e/">e2e</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/elk/">elk</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/html5/">html5</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/javascript/">javascript</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/pattern/">pattern</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/practice/">practice</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/redis/">redis</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/refactor/">refactor</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/rider/">rider</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/selenium/">selenium</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/vb6/">vb6</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/vue/">vue</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/vue3/">vue3</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/webpack/">webpack</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/%E5%B7%A5%E5%85%B7/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/%E5%BF%83%E5%BE%97/">心得</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/%E6%B8%AC%E8%A9%A6/">測試</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/netCore/" rel="tag">.netCore</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/APM/" rel="tag">APM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/Alex%E5%AE%85%E5%B9%B9%E5%98%9B/" rel="tag">Alex宅幹嘛</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/CKEditor/" rel="tag">CKEditor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/DI/" rel="tag">DI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/E2E-testing/" rel="tag">E2E testing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/ESLint/" rel="tag">ESLint</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/JWT/" rel="tag">JWT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/MPA/" rel="tag">MPA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/NAS/" rel="tag">NAS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/RUM/" rel="tag">RUM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/SPA/" rel="tag">SPA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/ScreenShot/" rel="tag">ScreenShot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/TDD/" rel="tag">TDD</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/appSetting/" rel="tag">appSetting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/asp/" rel="tag">asp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/async-await/" rel="tag">async&#x2F;await</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/auditLog/" rel="tag">auditLog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/axios/" rel="tag">axios</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/azureSearch/" rel="tag">azureSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/crawler/" rel="tag">crawler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/cypress/" rel="tag">cypress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/decorator/" rel="tag">decorator</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/delegate/" rel="tag">delegate</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/design-pattern/" rel="tag">design pattern</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/e2e/" rel="tag">e2e</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/elasticSearch/" rel="tag">elasticSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/environment/" rel="tag">environment</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/es6/" rel="tag">es6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/eunm/" rel="tag">eunm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/excel/" rel="tag">excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/facade/" rel="tag">facade</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/factory/" rel="tag">factory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/file-watchers/" rel="tag">file watchers</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/filebeat/" rel="tag">filebeat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/gitLab/" rel="tag">gitLab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/gitea/" rel="tag">gitea</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/github-pages/" rel="tag">github pages</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/gulp/" rel="tag">gulp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/hangfire/" rel="tag">hangfire</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/identity/" rel="tag">identity</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/jenkins/" rel="tag">jenkins</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/jmeter/" rel="tag">jmeter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/linq/" rel="tag">linq</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/localStorage/" rel="tag">localStorage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/mock/" rel="tag">mock</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/netCore/" rel="tag">netCore</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/nginx/" rel="tag">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/node-js/" rel="tag">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/npm/" rel="tag">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/nuget/" rel="tag">nuget</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/nvm/" rel="tag">nvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/polly/" rel="tag">polly</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/promise/" rel="tag">promise</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/proxy/" rel="tag">proxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/publish/" rel="tag">publish</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/quokka-js/" rel="tag">quokka.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/refactor/" rel="tag">refactor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/registry/" rel="tag">registry</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/rider/" rel="tag">rider</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/sentry/" rel="tag">sentry</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/sessionStorage/" rel="tag">sessionStorage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/signalR/" rel="tag">signalR</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/sonarQube/" rel="tag">sonarQube</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/strategy/" rel="tag">strategy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/stub/" rel="tag">stub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/testCafe/" rel="tag">testCafe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/twmvc/" rel="tag">twmvc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/unittest/" rel="tag">unittest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vitejs/" rel="tag">vitejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vscode/" rel="tag">vscode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vue/" rel="tag">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vue-cli3/" rel="tag">vue-cli3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vue3/" rel="tag">vue3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vuex/" rel="tag">vuex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/wallaby-js/" rel="tag">wallaby.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/web-config/" rel="tag">web.config</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/webpack/" rel="tag">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/yApi/" rel="tag">yApi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/%E5%BE%85%E8%A3%9C/" rel="tag">待補</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤雲</h3>
+    <div class="widget tagcloud">
+      <a href="/artblog/tags/netCore/" style="font-size: 10px;">.netCore</a> <a href="/artblog/tags/APM/" style="font-size: 11.43px;">APM</a> <a href="/artblog/tags/Alex%E5%AE%85%E5%B9%B9%E5%98%9B/" style="font-size: 10px;">Alex宅幹嘛</a> <a href="/artblog/tags/CKEditor/" style="font-size: 10px;">CKEditor</a> <a href="/artblog/tags/DI/" style="font-size: 10px;">DI</a> <a href="/artblog/tags/E2E-testing/" style="font-size: 10px;">E2E testing</a> <a href="/artblog/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/artblog/tags/JWT/" style="font-size: 10px;">JWT</a> <a href="/artblog/tags/MPA/" style="font-size: 10px;">MPA</a> <a href="/artblog/tags/NAS/" style="font-size: 10px;">NAS</a> <a href="/artblog/tags/RUM/" style="font-size: 10px;">RUM</a> <a href="/artblog/tags/SPA/" style="font-size: 10px;">SPA</a> <a href="/artblog/tags/ScreenShot/" style="font-size: 10px;">ScreenShot</a> <a href="/artblog/tags/TDD/" style="font-size: 12.86px;">TDD</a> <a href="/artblog/tags/appSetting/" style="font-size: 10px;">appSetting</a> <a href="/artblog/tags/asp/" style="font-size: 10px;">asp</a> <a href="/artblog/tags/async-await/" style="font-size: 10px;">async/await</a> <a href="/artblog/tags/auditLog/" style="font-size: 10px;">auditLog</a> <a href="/artblog/tags/axios/" style="font-size: 10px;">axios</a> <a href="/artblog/tags/azureSearch/" style="font-size: 10px;">azureSearch</a> <a href="/artblog/tags/crawler/" style="font-size: 10px;">crawler</a> <a href="/artblog/tags/cypress/" style="font-size: 14.29px;">cypress</a> <a href="/artblog/tags/decorator/" style="font-size: 11.43px;">decorator</a> <a href="/artblog/tags/delegate/" style="font-size: 10px;">delegate</a> <a href="/artblog/tags/design-pattern/" style="font-size: 10px;">design pattern</a> <a href="/artblog/tags/docker/" style="font-size: 18.57px;">docker</a> <a href="/artblog/tags/e2e/" style="font-size: 10px;">e2e</a> <a href="/artblog/tags/elasticSearch/" style="font-size: 14.29px;">elasticSearch</a> <a href="/artblog/tags/environment/" style="font-size: 10px;">environment</a> <a href="/artblog/tags/es6/" style="font-size: 10px;">es6</a> <a href="/artblog/tags/eunm/" style="font-size: 10px;">eunm</a> <a href="/artblog/tags/excel/" style="font-size: 10px;">excel</a> <a href="/artblog/tags/facade/" style="font-size: 10px;">facade</a> <a href="/artblog/tags/factory/" style="font-size: 10px;">factory</a> <a href="/artblog/tags/file-watchers/" style="font-size: 10px;">file watchers</a> <a href="/artblog/tags/filebeat/" style="font-size: 10px;">filebeat</a> <a href="/artblog/tags/git/" style="font-size: 10px;">git</a> <a href="/artblog/tags/gitLab/" style="font-size: 10px;">gitLab</a> <a href="/artblog/tags/gitea/" style="font-size: 10px;">gitea</a> <a href="/artblog/tags/github-pages/" style="font-size: 10px;">github pages</a> <a href="/artblog/tags/gulp/" style="font-size: 11.43px;">gulp</a> <a href="/artblog/tags/hangfire/" style="font-size: 10px;">hangfire</a> <a href="/artblog/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/artblog/tags/identity/" style="font-size: 12.86px;">identity</a> <a href="/artblog/tags/jenkins/" style="font-size: 20px;">jenkins</a> <a href="/artblog/tags/jmeter/" style="font-size: 10px;">jmeter</a> <a href="/artblog/tags/linq/" style="font-size: 10px;">linq</a> <a href="/artblog/tags/localStorage/" style="font-size: 10px;">localStorage</a> <a href="/artblog/tags/mock/" style="font-size: 10px;">mock</a> <a href="/artblog/tags/netCore/" style="font-size: 10px;">netCore</a> <a href="/artblog/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/artblog/tags/node-js/" style="font-size: 10px;">node.js</a> <a href="/artblog/tags/npm/" style="font-size: 10px;">npm</a> <a href="/artblog/tags/nuget/" style="font-size: 10px;">nuget</a> <a href="/artblog/tags/nvm/" style="font-size: 10px;">nvm</a> <a href="/artblog/tags/polly/" style="font-size: 10px;">polly</a> <a href="/artblog/tags/promise/" style="font-size: 10px;">promise</a> <a href="/artblog/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/artblog/tags/publish/" style="font-size: 10px;">publish</a> <a href="/artblog/tags/quokka-js/" style="font-size: 10px;">quokka.js</a> <a href="/artblog/tags/refactor/" style="font-size: 12.86px;">refactor</a> <a href="/artblog/tags/registry/" style="font-size: 10px;">registry</a> <a href="/artblog/tags/rider/" style="font-size: 10px;">rider</a> <a href="/artblog/tags/sentry/" style="font-size: 10px;">sentry</a> <a href="/artblog/tags/sessionStorage/" style="font-size: 10px;">sessionStorage</a> <a href="/artblog/tags/signalR/" style="font-size: 17.14px;">signalR</a> <a href="/artblog/tags/sonarQube/" style="font-size: 20px;">sonarQube</a> <a href="/artblog/tags/strategy/" style="font-size: 10px;">strategy</a> <a href="/artblog/tags/stub/" style="font-size: 10px;">stub</a> <a href="/artblog/tags/testCafe/" style="font-size: 10px;">testCafe</a> <a href="/artblog/tags/twmvc/" style="font-size: 15.71px;">twmvc</a> <a href="/artblog/tags/unittest/" style="font-size: 12.86px;">unittest</a> <a href="/artblog/tags/vitejs/" style="font-size: 10px;">vitejs</a> <a href="/artblog/tags/vscode/" style="font-size: 15.71px;">vscode</a> <a href="/artblog/tags/vue/" style="font-size: 11.43px;">vue</a> <a href="/artblog/tags/vue-cli3/" style="font-size: 10px;">vue-cli3</a> <a href="/artblog/tags/vue3/" style="font-size: 10px;">vue3</a> <a href="/artblog/tags/vuex/" style="font-size: 10px;">vuex</a> <a href="/artblog/tags/wallaby-js/" style="font-size: 10px;">wallaby.js</a> <a href="/artblog/tags/web-config/" style="font-size: 10px;">web.config</a> <a href="/artblog/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/artblog/tags/yApi/" style="font-size: 10px;">yApi</a> <a href="/artblog/tags/%E5%BE%85%E8%A3%9C/" style="font-size: 10px;">待補</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">彙整</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/08/">八月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/07/">七月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/06/">六月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/05/">五月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/03/">三月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/02/">二月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/01/">一月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/12/">十二月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/11/">十一月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/09/">九月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/08/">八月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/06/">六月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/05/">五月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/04/">四月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/03/">三月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/01/">一月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/11/">十一月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/10/">十月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/08/">八月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/07/">七月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/04/">四月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/03/">三月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/02/">二月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/12/">十二月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/09/">九月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/08/">八月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/07/">七月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/06/">六月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/05/">五月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/04/">四月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/03/">三月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/02/">二月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/01/">一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/12/">十二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/11/">十一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/09/">九月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/08/">八月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/07/">七月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/06/">六月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2016/01/">一月 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/artblog/sentry-self-hosted-by-docker-compose/">使用 sentry 追蹤前端錯誤</a>
+          </li>
+        
+          <li>
+            <a href="/artblog/eml-format-download-with-decorator-pattern/">將資料存成eml格式下載-使用裝飾模式</a>
+          </li>
+        
+          <li>
+            <a href="/artblog/aspnet-core-publish-and-environment/">aspnet core publish and environment</a>
+          </li>
+        
+          <li>
+            <a href="/artblog/sonarqube-jenkins-pipeline-get-metrics-then-notify-via-teams/">SonarQube-Jenkins執行分析後透過Teams通知</a>
+          </li>
+        
+          <li>
+            <a href="/artblog/vee-validate-options-awareOfUnicodeTokens-must-be-set-to-true-to-use-yyyy-token/">vee-validate 提示 options.awareOfUnicodeTokens  錯誤</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2024 art<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/artblog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/artblog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/artblog/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/artblog/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/artblog/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

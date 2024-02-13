@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>SonarQube-整合Jenkins Pipeline(使用jenkins套件) | Art的辦公桌</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="先前已經有直接在 pipeline 專案內執行批次指令來分析專案，但這樣做的話其實並沒有辦法在專案分析的時候，判斷分析結果，只能依照原先做好的流程一直走下去，因此這一篇文章主要在解決這一點，透過 Jenkins 套件來處理這件事情">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SonarQube-整合Jenkins Pipeline(使用jenkins套件)">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/sonarQube-analyze-jenkins-pipeline-by-plugin/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="先前已經有直接在 pipeline 專案內執行批次指令來分析專案，但這樣做的話其實並沒有辦法在專案分析的時候，判斷分析結果，只能依照原先做好的流程一直走下去，因此這一篇文章主要在解決這一點，透過 Jenkins 套件來處理這件事情">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarQube-analyze-jenkins-pipeline-by-plugin/2022-11-22-114417.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarQube-analyze-jenkins-pipeline-by-plugin/2022-11-22-115015.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarQube-analyze-jenkins-pipeline-by-plugin/2022-11-22-140708.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarQube-analyze-jenkins-pipeline-by-plugin/2022-11-22-113317.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarQube-analyze-jenkins-pipeline-by-plugin/2022-11-22-141249.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarQube-analyze-jenkins-pipeline-by-plugin/2022-11-22-113904.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarQube-analyze-jenkins-pipeline-by-plugin/2022-11-22-142838.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarQube-analyze-jenkins-pipeline-by-plugin/2022-11-22-142037.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarQube-analyze-jenkins-pipeline-by-plugin/2022-11-22-142213.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarQube-analyze-jenkins-pipeline-by-plugin/2022-11-22-153119.jpg">
+<meta property="article:published_time" content="2022-11-22T03:20:09.000Z">
+<meta property="article:modified_time" content="2024-02-13T10:30:19.336Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="sonarQube">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/sonarQube-analyze-jenkins-pipeline-by-plugin/2022-11-22-114417.jpg">
+  
+    <link rel="alternate" href="/artblog/atom.xml" title="Art的辦公桌" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/artblog/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/artblog/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/artblog/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/artblog/" id="logo">Art的辦公桌</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/artblog/" id="subtitle">有兩個螢幕真好</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/artblog/">Home</a>
+        
+          <a class="main-nav-link" href="/artblog/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/artblog/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="搜尋"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜尋"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://partypeopleland.github.io/artblog"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-SonarQube-整合Jenkins-Pipeline" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/artblog/sonarQube-analyze-jenkins-pipeline-by-plugin/" class="article-date">
+  <time class="dt-published" datetime="2022-11-22T03:20:09.000Z" itemprop="datePublished">2022-11-22</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/artblog/categories/devOps/">devOps</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      SonarQube-整合Jenkins Pipeline(使用jenkins套件)
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>先前已經有直接在 pipeline 專案內執行批次指令來分析專案，但這樣做的話其實並沒有辦法在專案分析的時候，判斷分析結果，只能依照原先做好的流程一直走下去，因此這一篇文章主要在解決這一點，透過 Jenkins 套件來處理這件事情</p>
+<span id="more"></span>
+
+<h2 id="事前準備"><a href="#事前準備" class="headerlink" title="事前準備"></a>事前準備</h2><p>整體的流程如下</p>
+<ol>
+<li>專案建置、產生測試報告等等</li>
+<li>執行分析</li>
+<li>等候分析結果<ul>
+<li>通過繼續往下</li>
+<li>失敗中止</li>
+</ul>
+</li>
+</ol>
+<h3 id="SonarQube-新增全域-token"><a href="#SonarQube-新增全域-token" class="headerlink" title="SonarQube:新增全域 token"></a>SonarQube:新增全域 token</h3><p>這裡新增的 token 請選擇 <code>Global</code>，這個是為了要給 Jenkins 後續分析專案、取得結果使用，那行只顯示一次的 token 也要先記起來，等等在 Jenkins 新增認證的時候會需要輸入<br><img src="/artblog/sonarQube-analyze-jenkins-pipeline-by-plugin/2022-11-22-114417.jpg"></p>
+<h3 id="SonarQube-新增分析專案-webHook"><a href="#SonarQube-新增分析專案-webHook" class="headerlink" title="SonarQube:新增分析專案 webHook"></a>SonarQube:新增分析專案 webHook</h3><p>要設定專案的 webHook，從下圖的地方點選進去<br><img src="/artblog/sonarQube-analyze-jenkins-pipeline-by-plugin/2022-11-22-115015.jpg"></p>
+<p>從右上角點新增跳出燈箱，輸入資料，名稱隨意，URL 指的是當分析完成之後 sonarQube 要打的網址，這個就填 Jenkins 主機加上<code>sonarqube-webhook</code>，例如:<code>http://localhost:8080/sonarqube-webhook</code>，最後面密碼指的是剛剛新增的全域 token，例如:<code>sqa_e6a8c5e3a2ce39b60501c5ddc319b3c90442daf1</code><br><img src="/artblog/sonarQube-analyze-jenkins-pipeline-by-plugin/2022-11-22-140708.jpg"></p>
+<blockquote>
+<p>在分析的流程當中所需要的 token 都要用相同的，否則在 Jenkins 請求訪問分析結果的時候，會出現 http 401</p>
+</blockquote>
+<h3 id="Jenkins-SonarQube-Scanner-for-Jenkins"><a href="#Jenkins-SonarQube-Scanner-for-Jenkins" class="headerlink" title="Jenkins:SonarQube Scanner for Jenkins"></a>Jenkins:SonarQube Scanner for Jenkins</h3><p>在這個步驟裡面，我們會需要透過<a target="_blank" rel="noopener" href="https://plugins.jenkins.io/sonar/">SonarQube Scanner for Jenkins</a>套件來完成分析、等候的這兩個部分，從<code>管理Jenkins</code>-&gt;<code>外掛總管</code>並選擇可用的，找到套件安裝即可<br><img src="/artblog/sonarQube-analyze-jenkins-pipeline-by-plugin/2022-11-22-113317.jpg"></p>
+<h3 id="Jenkins-新增認證"><a href="#Jenkins-新增認證" class="headerlink" title="Jenkins:新增認證"></a>Jenkins:新增認證</h3><p>在 Jenkins 透過 <code>SonarQube Scanner for Jenkins</code> 互動的時候會需要 sonarQube 的有效 token，因此在 Jenkins Credentials 這邊也需要新增一個 <code>Secret Text</code>。Secret 欄位就輸入上面新增的全域 token<br><img src="/artblog/sonarQube-analyze-jenkins-pipeline-by-plugin/2022-11-22-141249.jpg"></p>
+<h3 id="Jenkins-SonarQube-Server-設定"><a href="#Jenkins-SonarQube-Server-設定" class="headerlink" title="Jenkins:SonarQube Server 設定"></a>Jenkins:SonarQube Server 設定</h3><p>接著是<code>設定系統</code>，在這裡需要將我們的 sonarQube server 資訊設定好，包含</p>
+<ol>
+<li>Name: 填寫一個名稱，後續會用到，我這邊是填寫 <code>local-sonarqube</code></li>
+<li>Server URL: 這邊我的 SonarQube Server 是架在 <code>localhost:9000</code></li>
+<li>Server authentication token: 使用先前建立的 <code>sonarqube-key</code></li>
+<li>Webhook Secret: 使用先前建立的 <code>sonarqube-key</code></li>
+</ol>
+<p><img src="/artblog/sonarQube-analyze-jenkins-pipeline-by-plugin/2022-11-22-113904.jpg"></p>
+<h3 id="Jenkins-SonarQube-Scanner-設定"><a href="#Jenkins-SonarQube-Scanner-設定" class="headerlink" title="Jenkins:SonarQube Scanner 設定"></a>Jenkins:SonarQube Scanner 設定</h3><p>因為先前已經有下載過 scanner，所以我就直接把 scanner 路徑填一填，雖然他有自動安裝的選項但我沒有用過，這樣在隨後的 pipeline 就可以透過套件提供的工具 tool 來呼叫 scanner，如果是非 C# 專案，就要自己再去找找對的 scanner<br><img src="/artblog/sonarQube-analyze-jenkins-pipeline-by-plugin/2022-11-22-142838.jpg"></p>
+<h2 id="pipeline-設定"><a href="#pipeline-設定" class="headerlink" title="pipeline 設定"></a>pipeline 設定</h2><p>執行分析的範例如下，理論上測試報告產生之前要先 build 一次最新的建置，實務上請自行斟酌作法</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">node() &#123;</span><br><span class="line">    ws(<span class="string">&#x27;D:\\code\\Github\\Repos\\TaskProject&#x27;</span>) &#123;</span><br><span class="line">        stage(<span class="string">&#x27;Coverage&#x27;</span>) &#123;</span><br><span class="line">            <span class="comment">// 刪除先前產生的測試覆蓋報告</span></span><br><span class="line">            bat <span class="string">&quot;del *.dcvr&quot;</span></span><br><span class="line">            <span class="comment">// 產生測試覆蓋報告</span></span><br><span class="line">            bat <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">                &quot;D:\\art\\programs\\JetBrains.dotCover.CommandLineTools.2022.1.2\\dotCover.exe&quot; cover /TargetExecutable=&quot;D:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\Extensions\\TestPlatform\\vstest.console.exe&quot; /TargetArguments=&quot;TaskProjectTests.dll&quot; /TargetWorkingDir=&quot;TaskProjectTests\\bin\\debug&quot; /Output=&quot;TaskProjectTests.dcvr&quot;</span></span><br><span class="line"><span class="string">            &#x27;&#x27;&#x27;</span></span><br><span class="line">            <span class="comment">// 將報告轉換格式為 html</span></span><br><span class="line">            bat <span class="string">&#x27;&quot;D:\\art\\programs\\JetBrains.dotCover.CommandLineTools.2022.1.2\\dotCover.exe&quot; report --source=TaskProjectTests.dcvr --output=report.html --reportType=html&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        stage(<span class="string">&#x27;UnitTest&#x27;</span>) &#123;</span><br><span class="line">            <span class="comment">// 刪除先前產生的測試執行報告</span></span><br><span class="line">            bat <span class="string">&quot;del testResults /s /q&quot;</span></span><br><span class="line">            <span class="comment">// 產生測試執行報告</span></span><br><span class="line">            bat <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">                &quot;D:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow\\vstest.console.exe&quot; /Logger:trx TaskProjectTests\\bin\\Debug\\TaskProjectTests.dll</span></span><br><span class="line"><span class="string">            &#x27;&#x27;&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        stage(<span class="string">&#x27;SonarQube analysis&#x27;</span>) &#123;</span><br><span class="line">            <span class="comment">// 設定 sonarQube scanner 的名字(這邊的名字要跟先前在【Jenkins:SonarQube Scanner 設定】的一樣)</span></span><br><span class="line">            <span class="keyword">def</span> scanner = tool <span class="attr">name:</span> <span class="string">&#x27;SonarScanner.MSBuild-net46&#x27;</span></span><br><span class="line">            <span class="comment">// 透過 sonarQube 進行分析專案的準備，這裡填寫的值都要跟先前設定的相同</span></span><br><span class="line">            withSonarQubeEnv(<span class="attr">installationName:</span><span class="string">&#x27;local-sonarqube&#x27;</span>,<span class="attr">credentialsId:</span><span class="string">&#x27;sonarqube-key&#x27;</span>) &#123;</span><br><span class="line">              <span class="comment">// 刪除先前分析的暫存資料（如果沒有這個可能會在分析快結束的時候出錯）</span></span><br><span class="line">              bat <span class="string">&quot;del .sonarqube /s /q&quot;</span></span><br><span class="line">              <span class="comment">// 指定測試覆蓋報告、測試執行報告的路徑、sonarQube 位址，專案名稱</span></span><br><span class="line">              bat <span class="string">&quot;$&#123;scanner&#125;\\SonarScanner.MSBuild.exe begin /k:taskProject /d:sonar.host.url=http://localhost:9000 /d:sonar.cs.dotcover.reportsPaths=report.html  /d:sonar.cs.vstest.reportsPaths=TestResults/*.trx&quot;</span></span><br><span class="line">              <span class="comment">// 建置專案</span></span><br><span class="line">              bat <span class="string">&quot;msbuild.exe /t:Rebuild&quot;</span></span><br><span class="line">              <span class="comment">// 執行分析</span></span><br><span class="line">              bat <span class="string">&quot;$&#123;scanner&#125;\\SonarScanner.MSBuild.exe end&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            script &#123;</span><br><span class="line">              <span class="comment">// 預計最多等候分析一個小時</span></span><br><span class="line">              timeout(<span class="attr">time:</span> <span class="number">1</span>, <span class="attr">unit:</span> <span class="string">&#x27;HOURS&#x27;</span>) &#123;</span><br><span class="line">                <span class="comment">// 等候 sonarQube webHook，並且指定使用的是全域 token</span></span><br><span class="line">                <span class="keyword">def</span> qg = waitForQualityGate(<span class="attr">webhookSecretId:</span><span class="string">&#x27;sonarqube-key&#x27;</span>)</span><br><span class="line">                <span class="comment">// 如果返回狀態不ＯＫ，就丟出錯誤並中斷 pipeline</span></span><br><span class="line">                <span class="keyword">if</span> (qg.status != <span class="string">&#x27;OK&#x27;</span>) &#123;</span><br><span class="line">                    error <span class="string">&quot;Pipeline aborted due to quality gate failure: $&#123;qg.status&#125;&quot;</span></span><br><span class="line">                &#125;</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 這裡後續就是可以接著在寫自己想要的流程</span></span><br><span class="line">        stage(<span class="string">&#x27;END&#x27;</span>) &#123;</span><br><span class="line">            bat <span class="string">&#x27;@echo OK&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="測試"><a href="#測試" class="headerlink" title="測試"></a>測試</h2><p>這裡的測試專案我拿了一個 C# 的簡單的單元測試，因為之前有做過很多次這方面的練習了，如何分析專案的細節，怎麼加入測試數量、測試覆蓋率就不再贅述，利用 sonarQube 的 quality gate 設定，我設定了一個新增的程式碼覆蓋率必須要達到 99%才算成功，利用這個東西設定讓 Jenkins 取得分析結果是失敗的，然後看看他能不能中止<br><img src="/artblog/sonarQube-analyze-jenkins-pipeline-by-plugin/2022-11-22-142037.jpg"></p>
+<p>第一次先跑專案，當然先讓他過，第二次隨意加一些沒有用到的 code 並再次分析就會失敗了<br><img src="/artblog/sonarQube-analyze-jenkins-pipeline-by-plugin/2022-11-22-142213.jpg"></p>
+<p>在主畫面也可以看到建置紀錄與左側都有 SonarQube 的超連結，點過去就可以看到分析專案的資料了</p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>ＣＩ流程中若分析失敗，通常需要通知某些人，做某一些事情，而 SonarQube 本身的通知機制我是覺得有點難用，所以流程的事情最好還是交給 Jenkins 來處理，不管是透過 Email 通知，還是要透過 Teams 都很方便。接下來要考慮的就是什麼時間點進行分析的動作，這就看公司資源及需要了。</p>
+<h2 id="補充-加入信件通知"><a href="#補充-加入信件通知" class="headerlink" title="補充:加入信件通知"></a>補充:加入信件通知</h2><p>主要還是依靠外掛套件<a target="_blank" rel="noopener" href="https://plugins.jenkins.io/email-ext/">Email Extension</a>來做，測試用的 SMTP 服務可以用 <a target="_blank" rel="noopener" href="https://github.com/rnwood/smtp4dev">smtp4dev</a>，寄送 EMAIL 還要去設定一下，這裡就不贅述了，pipeline 範例如下</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 寄送信件</span></span><br><span class="line">emailext <span class="attr">attachLog:</span> <span class="literal">true</span>, <span class="attr">body:</span> <span class="string">&#x27;&#x27;</span>, <span class="attr">recipientProviders:</span> [buildUser(), developers()], <span class="attr">subject:</span> <span class="string">&#x27;[TaskProject] Success&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 完整範例:分析結果，成功或失敗都寄送EMAIL通知</span></span><br><span class="line">node() &#123;</span><br><span class="line">    ws(<span class="string">&#x27;D:\\code\\Github\\Repos\\TaskProject&#x27;</span>) &#123;</span><br><span class="line"></span><br><span class="line">        stage(<span class="string">&#x27;Coverage&#x27;</span>) &#123;</span><br><span class="line">            bat <span class="string">&quot;del *.dcvr&quot;</span></span><br><span class="line">            bat <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">                &quot;D:\\art\\programs\\JetBrains.dotCover.CommandLineTools.2022.1.2\\dotCover.exe&quot; cover /TargetExecutable=&quot;D:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\Extensions\\TestPlatform\\vstest.console.exe&quot; /TargetArguments=&quot;TaskProjectTests.dll&quot; /TargetWorkingDir=&quot;TaskProjectTests\\bin\\debug&quot; /Output=&quot;TaskProjectTests.dcvr&quot;</span></span><br><span class="line"><span class="string">            &#x27;&#x27;&#x27;</span></span><br><span class="line">            bat <span class="string">&#x27;&quot;D:\\art\\programs\\JetBrains.dotCover.CommandLineTools.2022.1.2\\dotCover.exe&quot; report --source=TaskProjectTests.dcvr --output=report.html --reportType=html&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        stage(<span class="string">&#x27;UnitTest&#x27;</span>) &#123;</span><br><span class="line">            bat <span class="string">&quot;del testResults /s /q&quot;</span></span><br><span class="line">            bat <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">                &quot;D:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow\\vstest.console.exe&quot; /Logger:trx TaskProjectTests\\bin\\Debug\\TaskProjectTests.dll</span></span><br><span class="line"><span class="string">            &#x27;&#x27;&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        stage(<span class="string">&#x27;SonarQube analysis&#x27;</span>) &#123;</span><br><span class="line">            <span class="keyword">def</span> scanner = tool <span class="attr">name:</span> <span class="string">&#x27;SonarScanner.MSBuild-net46&#x27;</span></span><br><span class="line">            bat <span class="string">&quot;@echo Scanner Path:$&#123;scanner&#125;&quot;</span></span><br><span class="line">            withSonarQubeEnv(<span class="attr">installationName:</span><span class="string">&#x27;local-sonarqube&#x27;</span>,<span class="attr">credentialsId:</span><span class="string">&#x27;sonarqube-key&#x27;</span>) &#123; <span class="comment">// If you have configured more than one global server connection, you can specify its name</span></span><br><span class="line">              bat <span class="string">&quot;del .sonarqube /s /q&quot;</span></span><br><span class="line">              bat <span class="string">&quot;$&#123;scanner&#125;\\SonarScanner.MSBuild.exe begin /k:taskProject /d:sonar.host.url=http://localhost:9000 /d:sonar.cs.dotcover.reportsPaths=report.html  /d:sonar.cs.vstest.reportsPaths=TestResults/*.trx&quot;</span></span><br><span class="line">              bat <span class="string">&quot;msbuild.exe /t:Rebuild&quot;</span></span><br><span class="line">              bat <span class="string">&quot;$&#123;scanner&#125;\\SonarScanner.MSBuild.exe end&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            script &#123;</span><br><span class="line">              timeout(<span class="attr">time:</span> <span class="number">1</span>, <span class="attr">unit:</span> <span class="string">&#x27;HOURS&#x27;</span>) &#123;</span><br><span class="line">                <span class="keyword">def</span> qg = waitForQualityGate(<span class="attr">webhookSecretId:</span><span class="string">&#x27;sonarqube-key&#x27;</span>)</span><br><span class="line">                <span class="keyword">if</span> (qg.status != <span class="string">&#x27;OK&#x27;</span>) &#123;</span><br><span class="line">                    emailext <span class="attr">attachLog:</span> <span class="literal">true</span>, <span class="attr">body:</span> <span class="string">&#x27;&#x27;</span>, <span class="attr">recipientProviders:</span> [buildUser(), developers()], <span class="attr">subject:</span> <span class="string">&#x27;[TaskProject] Failed&#x27;</span></span><br><span class="line">                    error <span class="string">&quot;Pipeline aborted due to quality gate failure: $&#123;qg.status&#125;&quot;</span></span><br><span class="line">                &#125;</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        stage(<span class="string">&#x27;END&#x27;</span>) &#123;</span><br><span class="line">            bat <span class="string">&#x27;@echo OK&#x27;</span></span><br><span class="line">            emailext <span class="attr">attachLog:</span> <span class="literal">true</span>, <span class="attr">body:</span> <span class="string">&#x27;&#x27;</span>, <span class="attr">recipientProviders:</span> [buildUser(), developers()], <span class="attr">subject:</span> <span class="string">&#x27;[TaskProject] Success&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/sonarQube-analyze-jenkins-pipeline-by-plugin/2022-11-22-153119.jpg"></p>
+<h2 id="補充-執行建置成功後觸發分析-JOB"><a href="#補充-執行建置成功後觸發分析-JOB" class="headerlink" title="補充:執行建置成功後觸發分析 JOB"></a>補充:執行建置成功後觸發分析 JOB</h2><p>先前的做法是在同一台主機上面執行，如果專案不多，或只是自己練習應該是合適的，但如果能夠拆開各自獨立的任務，應該更容易運用，因此將建置的部分獨立一個任務，在建置成功完畢後觸發分析任務。<br>因為建置任務先前採用的是 <code>pipeline script</code>，所以只需要透過<code>build</code>即可觸發任務，同時將<code>Git Parameter</code>傳遞出去即可，詳請請參照<a href="https://partypeopleland.github.io/artblog/2020/02/25/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/">Jenkins 參數化建置與上下游專案</a>的 【補充:觸發另一個任務並傳遞參數範例】一節</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://partypeopleland.github.io/artblog/sonarQube-analyze-jenkins-pipeline-by-plugin/" data-id="clsk82ubt00aufctc5flhcvz1" data-title="SonarQube-整合Jenkins Pipeline(使用jenkins套件)" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/artblog/tags/sonarQube/" rel="tag">sonarQube</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/artblog/Jenkins-%E5%B0%88%E6%A1%88%E6%AC%8A%E9%99%90%E7%AE%A1%E7%90%86/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Jenkins-專案權限管理
+        
+      </div>
+    </a>
+  
+  
+    <a href="/artblog/Selenium-FullPage-ScreenShot/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Selenium - FullPage ScreenShot</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分類</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/LUIS/">LUIS</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/LeetCode/">LeetCode</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/NPOI/">NPOI</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/SRE/">SRE</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/Selenium/">Selenium</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/azure/">azure</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/csharp/">csharp</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/devOps/">devOps</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/docker/">docker</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/dotnet/">dotnet</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/e2e/">e2e</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/elk/">elk</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/html5/">html5</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/javascript/">javascript</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/pattern/">pattern</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/practice/">practice</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/redis/">redis</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/refactor/">refactor</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/rider/">rider</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/selenium/">selenium</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/vb6/">vb6</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/vue/">vue</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/vue3/">vue3</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/webpack/">webpack</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/%E5%B7%A5%E5%85%B7/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/%E5%BF%83%E5%BE%97/">心得</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/%E6%B8%AC%E8%A9%A6/">測試</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/netCore/" rel="tag">.netCore</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/APM/" rel="tag">APM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/Alex%E5%AE%85%E5%B9%B9%E5%98%9B/" rel="tag">Alex宅幹嘛</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/CKEditor/" rel="tag">CKEditor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/DI/" rel="tag">DI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/E2E-testing/" rel="tag">E2E testing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/ESLint/" rel="tag">ESLint</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/JWT/" rel="tag">JWT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/MPA/" rel="tag">MPA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/NAS/" rel="tag">NAS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/RUM/" rel="tag">RUM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/SPA/" rel="tag">SPA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/ScreenShot/" rel="tag">ScreenShot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/TDD/" rel="tag">TDD</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/appSetting/" rel="tag">appSetting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/asp/" rel="tag">asp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/async-await/" rel="tag">async&#x2F;await</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/auditLog/" rel="tag">auditLog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/axios/" rel="tag">axios</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/azureSearch/" rel="tag">azureSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/crawler/" rel="tag">crawler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/cypress/" rel="tag">cypress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/decorator/" rel="tag">decorator</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/delegate/" rel="tag">delegate</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/design-pattern/" rel="tag">design pattern</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/e2e/" rel="tag">e2e</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/elasticSearch/" rel="tag">elasticSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/environment/" rel="tag">environment</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/es6/" rel="tag">es6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/eunm/" rel="tag">eunm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/excel/" rel="tag">excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/facade/" rel="tag">facade</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/factory/" rel="tag">factory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/file-watchers/" rel="tag">file watchers</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/filebeat/" rel="tag">filebeat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/gitLab/" rel="tag">gitLab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/gitea/" rel="tag">gitea</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/github-pages/" rel="tag">github pages</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/gulp/" rel="tag">gulp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/hangfire/" rel="tag">hangfire</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/identity/" rel="tag">identity</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/jenkins/" rel="tag">jenkins</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/jmeter/" rel="tag">jmeter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/linq/" rel="tag">linq</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/localStorage/" rel="tag">localStorage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/mock/" rel="tag">mock</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/netCore/" rel="tag">netCore</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/nginx/" rel="tag">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/node-js/" rel="tag">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/npm/" rel="tag">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/nuget/" rel="tag">nuget</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/nvm/" rel="tag">nvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/polly/" rel="tag">polly</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/promise/" rel="tag">promise</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/proxy/" rel="tag">proxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/publish/" rel="tag">publish</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/quokka-js/" rel="tag">quokka.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/refactor/" rel="tag">refactor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/registry/" rel="tag">registry</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/rider/" rel="tag">rider</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/sentry/" rel="tag">sentry</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/sessionStorage/" rel="tag">sessionStorage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/signalR/" rel="tag">signalR</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/sonarQube/" rel="tag">sonarQube</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/strategy/" rel="tag">strategy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/stub/" rel="tag">stub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/testCafe/" rel="tag">testCafe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/twmvc/" rel="tag">twmvc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/unittest/" rel="tag">unittest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vitejs/" rel="tag">vitejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vscode/" rel="tag">vscode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vue/" rel="tag">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vue-cli3/" rel="tag">vue-cli3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vue3/" rel="tag">vue3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vuex/" rel="tag">vuex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/wallaby-js/" rel="tag">wallaby.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/web-config/" rel="tag">web.config</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/webpack/" rel="tag">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/yApi/" rel="tag">yApi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/%E5%BE%85%E8%A3%9C/" rel="tag">待補</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤雲</h3>
+    <div class="widget tagcloud">
+      <a href="/artblog/tags/netCore/" style="font-size: 10px;">.netCore</a> <a href="/artblog/tags/APM/" style="font-size: 11.43px;">APM</a> <a href="/artblog/tags/Alex%E5%AE%85%E5%B9%B9%E5%98%9B/" style="font-size: 10px;">Alex宅幹嘛</a> <a href="/artblog/tags/CKEditor/" style="font-size: 10px;">CKEditor</a> <a href="/artblog/tags/DI/" style="font-size: 10px;">DI</a> <a href="/artblog/tags/E2E-testing/" style="font-size: 10px;">E2E testing</a> <a href="/artblog/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/artblog/tags/JWT/" style="font-size: 10px;">JWT</a> <a href="/artblog/tags/MPA/" style="font-size: 10px;">MPA</a> <a href="/artblog/tags/NAS/" style="font-size: 10px;">NAS</a> <a href="/artblog/tags/RUM/" style="font-size: 10px;">RUM</a> <a href="/artblog/tags/SPA/" style="font-size: 10px;">SPA</a> <a href="/artblog/tags/ScreenShot/" style="font-size: 10px;">ScreenShot</a> <a href="/artblog/tags/TDD/" style="font-size: 12.86px;">TDD</a> <a href="/artblog/tags/appSetting/" style="font-size: 10px;">appSetting</a> <a href="/artblog/tags/asp/" style="font-size: 10px;">asp</a> <a href="/artblog/tags/async-await/" style="font-size: 10px;">async/await</a> <a href="/artblog/tags/auditLog/" style="font-size: 10px;">auditLog</a> <a href="/artblog/tags/axios/" style="font-size: 10px;">axios</a> <a href="/artblog/tags/azureSearch/" style="font-size: 10px;">azureSearch</a> <a href="/artblog/tags/crawler/" style="font-size: 10px;">crawler</a> <a href="/artblog/tags/cypress/" style="font-size: 14.29px;">cypress</a> <a href="/artblog/tags/decorator/" style="font-size: 11.43px;">decorator</a> <a href="/artblog/tags/delegate/" style="font-size: 10px;">delegate</a> <a href="/artblog/tags/design-pattern/" style="font-size: 10px;">design pattern</a> <a href="/artblog/tags/docker/" style="font-size: 18.57px;">docker</a> <a href="/artblog/tags/e2e/" style="font-size: 10px;">e2e</a> <a href="/artblog/tags/elasticSearch/" style="font-size: 14.29px;">elasticSearch</a> <a href="/artblog/tags/environment/" style="font-size: 10px;">environment</a> <a href="/artblog/tags/es6/" style="font-size: 10px;">es6</a> <a href="/artblog/tags/eunm/" style="font-size: 10px;">eunm</a> <a href="/artblog/tags/excel/" style="font-size: 10px;">excel</a> <a href="/artblog/tags/facade/" style="font-size: 10px;">facade</a> <a href="/artblog/tags/factory/" style="font-size: 10px;">factory</a> <a href="/artblog/tags/file-watchers/" style="font-size: 10px;">file watchers</a> <a href="/artblog/tags/filebeat/" style="font-size: 10px;">filebeat</a> <a href="/artblog/tags/git/" style="font-size: 10px;">git</a> <a href="/artblog/tags/gitLab/" style="font-size: 10px;">gitLab</a> <a href="/artblog/tags/gitea/" style="font-size: 10px;">gitea</a> <a href="/artblog/tags/github-pages/" style="font-size: 10px;">github pages</a> <a href="/artblog/tags/gulp/" style="font-size: 11.43px;">gulp</a> <a href="/artblog/tags/hangfire/" style="font-size: 10px;">hangfire</a> <a href="/artblog/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/artblog/tags/identity/" style="font-size: 12.86px;">identity</a> <a href="/artblog/tags/jenkins/" style="font-size: 20px;">jenkins</a> <a href="/artblog/tags/jmeter/" style="font-size: 10px;">jmeter</a> <a href="/artblog/tags/linq/" style="font-size: 10px;">linq</a> <a href="/artblog/tags/localStorage/" style="font-size: 10px;">localStorage</a> <a href="/artblog/tags/mock/" style="font-size: 10px;">mock</a> <a href="/artblog/tags/netCore/" style="font-size: 10px;">netCore</a> <a href="/artblog/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/artblog/tags/node-js/" style="font-size: 10px;">node.js</a> <a href="/artblog/tags/npm/" style="font-size: 10px;">npm</a> <a href="/artblog/tags/nuget/" style="font-size: 10px;">nuget</a> <a href="/artblog/tags/nvm/" style="font-size: 10px;">nvm</a> <a href="/artblog/tags/polly/" style="font-size: 10px;">polly</a> <a href="/artblog/tags/promise/" style="font-size: 10px;">promise</a> <a href="/artblog/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/artblog/tags/publish/" style="font-size: 10px;">publish</a> <a href="/artblog/tags/quokka-js/" style="font-size: 10px;">quokka.js</a> <a href="/artblog/tags/refactor/" style="font-size: 12.86px;">refactor</a> <a href="/artblog/tags/registry/" style="font-size: 10px;">registry</a> <a href="/artblog/tags/rider/" style="font-size: 10px;">rider</a> <a href="/artblog/tags/sentry/" style="font-size: 10px;">sentry</a> <a href="/artblog/tags/sessionStorage/" style="font-size: 10px;">sessionStorage</a> <a href="/artblog/tags/signalR/" style="font-size: 17.14px;">signalR</a> <a href="/artblog/tags/sonarQube/" style="font-size: 20px;">sonarQube</a> <a href="/artblog/tags/strategy/" style="font-size: 10px;">strategy</a> <a href="/artblog/tags/stub/" style="font-size: 10px;">stub</a> <a href="/artblog/tags/testCafe/" style="font-size: 10px;">testCafe</a> <a href="/artblog/tags/twmvc/" style="font-size: 15.71px;">twmvc</a> <a href="/artblog/tags/unittest/" style="font-size: 12.86px;">unittest</a> <a href="/artblog/tags/vitejs/" style="font-size: 10px;">vitejs</a> <a href="/artblog/tags/vscode/" style="font-size: 15.71px;">vscode</a> <a href="/artblog/tags/vue/" style="font-size: 11.43px;">vue</a> <a href="/artblog/tags/vue-cli3/" style="font-size: 10px;">vue-cli3</a> <a href="/artblog/tags/vue3/" style="font-size: 10px;">vue3</a> <a href="/artblog/tags/vuex/" style="font-size: 10px;">vuex</a> <a href="/artblog/tags/wallaby-js/" style="font-size: 10px;">wallaby.js</a> <a href="/artblog/tags/web-config/" style="font-size: 10px;">web.config</a> <a href="/artblog/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/artblog/tags/yApi/" style="font-size: 10px;">yApi</a> <a href="/artblog/tags/%E5%BE%85%E8%A3%9C/" style="font-size: 10px;">待補</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">彙整</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/08/">八月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/07/">七月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/06/">六月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/05/">五月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/03/">三月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/02/">二月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/01/">一月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/12/">十二月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/11/">十一月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/09/">九月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/08/">八月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/06/">六月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/05/">五月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/04/">四月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/03/">三月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/01/">一月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/11/">十一月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/10/">十月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/08/">八月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/07/">七月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/04/">四月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/03/">三月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/02/">二月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/12/">十二月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/09/">九月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/08/">八月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/07/">七月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/06/">六月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/05/">五月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/04/">四月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/03/">三月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/02/">二月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/01/">一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/12/">十二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/11/">十一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/09/">九月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/08/">八月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/07/">七月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/06/">六月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2016/01/">一月 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/artblog/sentry-self-hosted-by-docker-compose/">使用 sentry 追蹤前端錯誤</a>
+          </li>
+        
+          <li>
+            <a href="/artblog/eml-format-download-with-decorator-pattern/">將資料存成eml格式下載-使用裝飾模式</a>
+          </li>
+        
+          <li>
+            <a href="/artblog/aspnet-core-publish-and-environment/">aspnet core publish and environment</a>
+          </li>
+        
+          <li>
+            <a href="/artblog/sonarqube-jenkins-pipeline-get-metrics-then-notify-via-teams/">SonarQube-Jenkins執行分析後透過Teams通知</a>
+          </li>
+        
+          <li>
+            <a href="/artblog/vee-validate-options-awareOfUnicodeTokens-must-be-set-to-true-to-use-yyyy-token/">vee-validate 提示 options.awareOfUnicodeTokens  錯誤</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2024 art<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/artblog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/artblog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/artblog/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/artblog/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/artblog/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

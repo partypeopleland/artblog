@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Jenkins參數化建置與上下游專案 | Art的辦公桌</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="介紹 Jenkins 參數化建置的設定方式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jenkins參數化建置與上下游專案">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="介紹 Jenkins 參數化建置的設定方式">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_101604.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_101843.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_102700.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_103243.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_103420.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_103642.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_104350.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_104602.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_104807.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_105516.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_105118.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_105606.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_105720.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_105754.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_105817.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2022-11-24-162819.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2022-11-24-163601.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2022-11-24-163715.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2022-11-24-163854.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2022-11-24-163411.jpg">
+<meta property="article:published_time" content="2020-02-25T02:02:26.000Z">
+<meta property="article:modified_time" content="2024-02-13T10:30:19.194Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="jenkins">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_101604.png">
+  
+    <link rel="alternate" href="/artblog/atom.xml" title="Art的辦公桌" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/artblog/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/artblog/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/artblog/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/artblog/" id="logo">Art的辦公桌</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/artblog/" id="subtitle">有兩個螢幕真好</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/artblog/">Home</a>
+        
+          <a class="main-nav-link" href="/artblog/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/artblog/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="搜尋"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜尋"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://partypeopleland.github.io/artblog"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Jenkins參數化建置與上下游專案" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/" class="article-date">
+  <time class="dt-published" datetime="2020-02-25T02:02:26.000Z" itemprop="datePublished">2020-02-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/artblog/categories/devOps/">devOps</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Jenkins參數化建置與上下游專案
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>介紹 Jenkins 參數化建置的設定方式</p>
+<span id="more"></span>
+
+<h2 id="參數化建置"><a href="#參數化建置" class="headerlink" title="參數化建置"></a>參數化建置</h2><p>假設我目前有兩個 Jenkins Job，第一個 Job 執行成功後，才執行第二個 Job</p>
+<p>第一個 Job 我們假設叫做【job01】；第二個 Job 我們把它叫做【job02】；這兩個專案都透過參數化建置與 Git Parameter 來控制檔案來源為哪一個 Branch，這邊先定義變數名稱為 Branch<br><img src="/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_101604.png"></p>
+<p>在版控來源指定分支就可以將參數帶過來用了<br><img src="/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_101843.png"></p>
+<p>執行也很簡單，透過<code>Build with parameter</code>就可以選擇 branch<br><img src="/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_102700.png"></p>
+<p>透過參數化建置其他專案<br><img src="/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_103243.png"><br><img src="/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_103420.png"></p>
+<p>這樣執行 Job1 之後，就會自動觸發 Job2<br><img src="/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_103642.png"></p>
+<p>透過上面的方式，Job02 被觸發的原因是因為 Job01 我們有設定建置後動作，觸發其他專案的參數化建置，其實並不是上下游專案的設定</p>
+<h2 id="上下游專案-從上游專案設定"><a href="#上下游專案-從上游專案設定" class="headerlink" title="上下游專案 從上游專案設定"></a>上下游專案 從上游專案設定</h2><p>建立 Job03、Job04 兩個任務，其中 Job03 設定建置後動作：建置其他專案<br><img src="/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_104350.png"><br>這樣子回到 Job03 就會看到他的下游專案為 Job04<br><img src="/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_104602.png"></p>
+<p>而回到 Job04，也會看到它的上游專案為 Job03</p>
+<h2 id="上下游專案-從下游專案設定"><a href="#上下游專案-從下游專案設定" class="headerlink" title="上下游專案 從下游專案設定"></a>上下游專案 從下游專案設定</h2><p>也可以直接在下游專案中設定<code>build after other project are built</code><br><img src="/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_104807.png"></p>
+<p>效果是一樣的</p>
+<h2 id="拉拉作伙ㄟ阿娜？"><a href="#拉拉作伙ㄟ阿娜？" class="headerlink" title="拉拉作伙ㄟ阿娜？"></a>拉拉作伙ㄟ阿娜？</h2><p>比較妙的是，如果我上游、下游專案都設定，那會發生甚麼事情？<br>答案是實際的任務仍舊觸發一次，但是 Log 紀錄會顯示兩次<br><img src="/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_105516.png"><br><img src="/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_105118.png"></p>
+<p>那如果加上參數化建置呢？</p>
+<p><img src="/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_105606.png"></p>
+<p>答案是，任務觸發兩次</p>
+<p><img src="/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_105720.png"><br><img src="/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_105754.png"><br><img src="/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2020-02-25_105817.png"></p>
+<p>透過任務的上下游設置，會觸發一次；而透過參數化建置其他專案，也會觸發一次；這兩者是分開計算的<br>所以如果是需要傳遞參數的場合，不要再設定任務的上下游依賴關係，避免多次觸發執行</p>
+<h2 id="補充-觸發另一個任務並傳遞參數範例"><a href="#補充-觸發另一個任務並傳遞參數範例" class="headerlink" title="補充:觸發另一個任務並傳遞參數範例"></a>補充:觸發另一個任務並傳遞參數範例</h2><p><img src="/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2022-11-24-162819.jpg"><br>如圖，新增 Git Parameter 還有字串參數， Git Parameter 之前有去抓 GIT 資料所以有清單可以選，但下方範例我註解掉了，想要實際練習的人請自行修改一下</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Job 1</span></span><br><span class="line">node &#123;</span><br><span class="line">    <span class="comment">// stage(&#x27;git&#x27;) &#123;</span></span><br><span class="line">    <span class="comment">//    checkout([$class: &#x27;GitSCM&#x27;, branches: [[name: &#x27;$Branch&#x27;]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: &#x27;credentials-id&#x27;, url: &#x27;xxx@git.fake.net:myProject/myProject.git&#x27;]]])</span></span><br><span class="line">    <span class="comment">// &#125;</span></span><br><span class="line"></span><br><span class="line">    stage(<span class="string">&#x27;echo parameter&#x27;</span>) &#123;</span><br><span class="line">        echo <span class="string">&quot;$&#123;Branch&#125;&quot;</span></span><br><span class="line">        echo <span class="string">&quot;$&#123;Greeting&#125;&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    stage(<span class="string">&#x27;Trigger Job 2&#x27;</span>) &#123;</span><br><span class="line">        build <span class="attr">wait:</span> <span class="literal">false</span>, <span class="attr">job:</span> <span class="string">&#x27;pipeline_job_2&#x27;</span>, <span class="attr">parameters:</span> [</span><br><span class="line">            gitParameter(<span class="attr">name:</span> <span class="string">&#x27;Branch&#x27;</span>, <span class="attr">value:</span> Branch),</span><br><span class="line">            string(<span class="attr">name:</span> <span class="string">&#x27;Greeting&#x27;</span>, <span class="attr">value:</span> Greeting),</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Job 2</span></span><br><span class="line">node &#123;</span><br><span class="line">    stage(<span class="string">&#x27;echo parameter&#x27;</span>) &#123;</span><br><span class="line">        echo <span class="string">&quot;$&#123;Branch&#125;&quot;</span></span><br><span class="line">        echo <span class="string">&quot;$&#123;Greeting&#125;&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>第二個任務的設定也要新增一樣的參數<br><img src="/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2022-11-24-163601.jpg"></p>
+<p>執行一下 pipeline，看看他有沒有正確傳遞參數跟觸發下一個任務<br><img src="/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2022-11-24-163715.jpg"></p>
+<p>看起來是正確的<br><img src="/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2022-11-24-163854.jpg"><br><img src="/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/2022-11-24-163411.jpg"></p>
+<p>因為其他類型的參數好像要一個一個試，我沒有用到就懶了，這邊列出三個應該夠用了</p>
+<table>
+<thead>
+<tr>
+<th>類型</th>
+<th>範例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Secret</td>
+<td><code>build job:&#39;pipeline_job_2&#39;, parameters: [ credentials(&#39;parameter-name&#39;, &#39;credentials-id&#39;) ]</code></td>
+</tr>
+<tr>
+<td>Git Parameter</td>
+<td><code>build job:&#39;pipeline_job_2&#39;, parameters: [ gitParameter(name: &#39;Branch&#39;, value: Branch) ]</code></td>
+</tr>
+<tr>
+<td>字串參數</td>
+<td><code>build job:&#39;pipeline_job_2&#39;, parameters: [ string(name: &#39;Greeting&#39;, value: Greeting) ]</code></td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://partypeopleland.github.io/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/" data-id="clsk82ub0006yfctceav2blef" data-title="Jenkins參數化建置與上下游專案" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/artblog/tags/jenkins/" rel="tag">jenkins</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/artblog/Jenkins%E6%AA%A2%E6%9F%A5%E5%89%8D%E7%AB%AF%E7%B7%A8%E8%AD%AF%E7%A8%8B%E5%BC%8F%E6%9C%89%E7%84%A1%E7%B0%BD%E5%85%A5%E7%89%88%E6%8E%A7/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Jenkins檢查前端編譯程式有無簽入版控
+        
+      </div>
+    </a>
+  
+  
+    <a href="/artblog/%E5%A6%82%E4%BD%95%E6%96%BCJenkins-Pipeline%E5%B0%88%E6%A1%88%E6%95%B4%E5%90%88sonarQube/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">如何於Jenkins Pipeline專案整合sonarQube</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分類</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/LUIS/">LUIS</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/LeetCode/">LeetCode</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/NPOI/">NPOI</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/SRE/">SRE</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/Selenium/">Selenium</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/azure/">azure</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/csharp/">csharp</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/devOps/">devOps</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/docker/">docker</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/dotnet/">dotnet</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/e2e/">e2e</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/elk/">elk</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/html5/">html5</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/javascript/">javascript</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/pattern/">pattern</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/practice/">practice</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/redis/">redis</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/refactor/">refactor</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/rider/">rider</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/selenium/">selenium</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/vb6/">vb6</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/vue/">vue</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/vue3/">vue3</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/webpack/">webpack</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/%E5%B7%A5%E5%85%B7/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/%E5%BF%83%E5%BE%97/">心得</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/%E6%B8%AC%E8%A9%A6/">測試</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/netCore/" rel="tag">.netCore</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/APM/" rel="tag">APM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/Alex%E5%AE%85%E5%B9%B9%E5%98%9B/" rel="tag">Alex宅幹嘛</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/CKEditor/" rel="tag">CKEditor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/DI/" rel="tag">DI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/E2E-testing/" rel="tag">E2E testing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/ESLint/" rel="tag">ESLint</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/JWT/" rel="tag">JWT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/MPA/" rel="tag">MPA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/NAS/" rel="tag">NAS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/RUM/" rel="tag">RUM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/SPA/" rel="tag">SPA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/ScreenShot/" rel="tag">ScreenShot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/TDD/" rel="tag">TDD</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/appSetting/" rel="tag">appSetting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/asp/" rel="tag">asp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/async-await/" rel="tag">async&#x2F;await</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/auditLog/" rel="tag">auditLog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/axios/" rel="tag">axios</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/azureSearch/" rel="tag">azureSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/crawler/" rel="tag">crawler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/cypress/" rel="tag">cypress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/decorator/" rel="tag">decorator</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/delegate/" rel="tag">delegate</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/design-pattern/" rel="tag">design pattern</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/e2e/" rel="tag">e2e</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/elasticSearch/" rel="tag">elasticSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/environment/" rel="tag">environment</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/es6/" rel="tag">es6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/eunm/" rel="tag">eunm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/excel/" rel="tag">excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/facade/" rel="tag">facade</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/factory/" rel="tag">factory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/file-watchers/" rel="tag">file watchers</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/filebeat/" rel="tag">filebeat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/gitLab/" rel="tag">gitLab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/gitea/" rel="tag">gitea</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/github-pages/" rel="tag">github pages</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/gulp/" rel="tag">gulp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/hangfire/" rel="tag">hangfire</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/identity/" rel="tag">identity</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/jenkins/" rel="tag">jenkins</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/jmeter/" rel="tag">jmeter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/linq/" rel="tag">linq</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/localStorage/" rel="tag">localStorage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/mock/" rel="tag">mock</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/netCore/" rel="tag">netCore</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/nginx/" rel="tag">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/node-js/" rel="tag">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/npm/" rel="tag">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/nuget/" rel="tag">nuget</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/nvm/" rel="tag">nvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/polly/" rel="tag">polly</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/promise/" rel="tag">promise</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/proxy/" rel="tag">proxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/publish/" rel="tag">publish</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/quokka-js/" rel="tag">quokka.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/refactor/" rel="tag">refactor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/registry/" rel="tag">registry</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/rider/" rel="tag">rider</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/sentry/" rel="tag">sentry</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/sessionStorage/" rel="tag">sessionStorage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/signalR/" rel="tag">signalR</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/sonarQube/" rel="tag">sonarQube</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/strategy/" rel="tag">strategy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/stub/" rel="tag">stub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/testCafe/" rel="tag">testCafe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/twmvc/" rel="tag">twmvc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/unittest/" rel="tag">unittest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vitejs/" rel="tag">vitejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vscode/" rel="tag">vscode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vue/" rel="tag">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vue-cli3/" rel="tag">vue-cli3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vue3/" rel="tag">vue3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vuex/" rel="tag">vuex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/wallaby-js/" rel="tag">wallaby.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/web-config/" rel="tag">web.config</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/webpack/" rel="tag">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/yApi/" rel="tag">yApi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/%E5%BE%85%E8%A3%9C/" rel="tag">待補</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤雲</h3>
+    <div class="widget tagcloud">
+      <a href="/artblog/tags/netCore/" style="font-size: 10px;">.netCore</a> <a href="/artblog/tags/APM/" style="font-size: 11.43px;">APM</a> <a href="/artblog/tags/Alex%E5%AE%85%E5%B9%B9%E5%98%9B/" style="font-size: 10px;">Alex宅幹嘛</a> <a href="/artblog/tags/CKEditor/" style="font-size: 10px;">CKEditor</a> <a href="/artblog/tags/DI/" style="font-size: 10px;">DI</a> <a href="/artblog/tags/E2E-testing/" style="font-size: 10px;">E2E testing</a> <a href="/artblog/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/artblog/tags/JWT/" style="font-size: 10px;">JWT</a> <a href="/artblog/tags/MPA/" style="font-size: 10px;">MPA</a> <a href="/artblog/tags/NAS/" style="font-size: 10px;">NAS</a> <a href="/artblog/tags/RUM/" style="font-size: 10px;">RUM</a> <a href="/artblog/tags/SPA/" style="font-size: 10px;">SPA</a> <a href="/artblog/tags/ScreenShot/" style="font-size: 10px;">ScreenShot</a> <a href="/artblog/tags/TDD/" style="font-size: 12.86px;">TDD</a> <a href="/artblog/tags/appSetting/" style="font-size: 10px;">appSetting</a> <a href="/artblog/tags/asp/" style="font-size: 10px;">asp</a> <a href="/artblog/tags/async-await/" style="font-size: 10px;">async/await</a> <a href="/artblog/tags/auditLog/" style="font-size: 10px;">auditLog</a> <a href="/artblog/tags/axios/" style="font-size: 10px;">axios</a> <a href="/artblog/tags/azureSearch/" style="font-size: 10px;">azureSearch</a> <a href="/artblog/tags/crawler/" style="font-size: 10px;">crawler</a> <a href="/artblog/tags/cypress/" style="font-size: 14.29px;">cypress</a> <a href="/artblog/tags/decorator/" style="font-size: 11.43px;">decorator</a> <a href="/artblog/tags/delegate/" style="font-size: 10px;">delegate</a> <a href="/artblog/tags/design-pattern/" style="font-size: 10px;">design pattern</a> <a href="/artblog/tags/docker/" style="font-size: 18.57px;">docker</a> <a href="/artblog/tags/e2e/" style="font-size: 10px;">e2e</a> <a href="/artblog/tags/elasticSearch/" style="font-size: 14.29px;">elasticSearch</a> <a href="/artblog/tags/environment/" style="font-size: 10px;">environment</a> <a href="/artblog/tags/es6/" style="font-size: 10px;">es6</a> <a href="/artblog/tags/eunm/" style="font-size: 10px;">eunm</a> <a href="/artblog/tags/excel/" style="font-size: 10px;">excel</a> <a href="/artblog/tags/facade/" style="font-size: 10px;">facade</a> <a href="/artblog/tags/factory/" style="font-size: 10px;">factory</a> <a href="/artblog/tags/file-watchers/" style="font-size: 10px;">file watchers</a> <a href="/artblog/tags/filebeat/" style="font-size: 10px;">filebeat</a> <a href="/artblog/tags/git/" style="font-size: 10px;">git</a> <a href="/artblog/tags/gitLab/" style="font-size: 10px;">gitLab</a> <a href="/artblog/tags/gitea/" style="font-size: 10px;">gitea</a> <a href="/artblog/tags/github-pages/" style="font-size: 10px;">github pages</a> <a href="/artblog/tags/gulp/" style="font-size: 11.43px;">gulp</a> <a href="/artblog/tags/hangfire/" style="font-size: 10px;">hangfire</a> <a href="/artblog/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/artblog/tags/identity/" style="font-size: 12.86px;">identity</a> <a href="/artblog/tags/jenkins/" style="font-size: 20px;">jenkins</a> <a href="/artblog/tags/jmeter/" style="font-size: 10px;">jmeter</a> <a href="/artblog/tags/linq/" style="font-size: 10px;">linq</a> <a href="/artblog/tags/localStorage/" style="font-size: 10px;">localStorage</a> <a href="/artblog/tags/mock/" style="font-size: 10px;">mock</a> <a href="/artblog/tags/netCore/" style="font-size: 10px;">netCore</a> <a href="/artblog/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/artblog/tags/node-js/" style="font-size: 10px;">node.js</a> <a href="/artblog/tags/npm/" style="font-size: 10px;">npm</a> <a href="/artblog/tags/nuget/" style="font-size: 10px;">nuget</a> <a href="/artblog/tags/nvm/" style="font-size: 10px;">nvm</a> <a href="/artblog/tags/polly/" style="font-size: 10px;">polly</a> <a href="/artblog/tags/promise/" style="font-size: 10px;">promise</a> <a href="/artblog/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/artblog/tags/publish/" style="font-size: 10px;">publish</a> <a href="/artblog/tags/quokka-js/" style="font-size: 10px;">quokka.js</a> <a href="/artblog/tags/refactor/" style="font-size: 12.86px;">refactor</a> <a href="/artblog/tags/registry/" style="font-size: 10px;">registry</a> <a href="/artblog/tags/rider/" style="font-size: 10px;">rider</a> <a href="/artblog/tags/sentry/" style="font-size: 10px;">sentry</a> <a href="/artblog/tags/sessionStorage/" style="font-size: 10px;">sessionStorage</a> <a href="/artblog/tags/signalR/" style="font-size: 17.14px;">signalR</a> <a href="/artblog/tags/sonarQube/" style="font-size: 20px;">sonarQube</a> <a href="/artblog/tags/strategy/" style="font-size: 10px;">strategy</a> <a href="/artblog/tags/stub/" style="font-size: 10px;">stub</a> <a href="/artblog/tags/testCafe/" style="font-size: 10px;">testCafe</a> <a href="/artblog/tags/twmvc/" style="font-size: 15.71px;">twmvc</a> <a href="/artblog/tags/unittest/" style="font-size: 12.86px;">unittest</a> <a href="/artblog/tags/vitejs/" style="font-size: 10px;">vitejs</a> <a href="/artblog/tags/vscode/" style="font-size: 15.71px;">vscode</a> <a href="/artblog/tags/vue/" style="font-size: 11.43px;">vue</a> <a href="/artblog/tags/vue-cli3/" style="font-size: 10px;">vue-cli3</a> <a href="/artblog/tags/vue3/" style="font-size: 10px;">vue3</a> <a href="/artblog/tags/vuex/" style="font-size: 10px;">vuex</a> <a href="/artblog/tags/wallaby-js/" style="font-size: 10px;">wallaby.js</a> <a href="/artblog/tags/web-config/" style="font-size: 10px;">web.config</a> <a href="/artblog/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/artblog/tags/yApi/" style="font-size: 10px;">yApi</a> <a href="/artblog/tags/%E5%BE%85%E8%A3%9C/" style="font-size: 10px;">待補</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">彙整</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/08/">八月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/07/">七月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/06/">六月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/05/">五月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/03/">三月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/02/">二月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/01/">一月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/12/">十二月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/11/">十一月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/09/">九月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/08/">八月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/06/">六月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/05/">五月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/04/">四月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/03/">三月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/01/">一月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/11/">十一月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/10/">十月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/08/">八月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/07/">七月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/04/">四月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/03/">三月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/02/">二月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/12/">十二月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/09/">九月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/08/">八月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/07/">七月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/06/">六月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/05/">五月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/04/">四月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/03/">三月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/02/">二月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/01/">一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/12/">十二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/11/">十一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/09/">九月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/08/">八月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/07/">七月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/06/">六月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2016/01/">一月 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/artblog/sentry-self-hosted-by-docker-compose/">使用 sentry 追蹤前端錯誤</a>
+          </li>
+        
+          <li>
+            <a href="/artblog/eml-format-download-with-decorator-pattern/">將資料存成eml格式下載-使用裝飾模式</a>
+          </li>
+        
+          <li>
+            <a href="/artblog/aspnet-core-publish-and-environment/">aspnet core publish and environment</a>
+          </li>
+        
+          <li>
+            <a href="/artblog/sonarqube-jenkins-pipeline-get-metrics-then-notify-via-teams/">SonarQube-Jenkins執行分析後透過Teams通知</a>
+          </li>
+        
+          <li>
+            <a href="/artblog/vee-validate-options-awareOfUnicodeTokens-must-be-set-to-true-to-use-yyyy-token/">vee-validate 提示 options.awareOfUnicodeTokens  錯誤</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2024 art<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/artblog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/artblog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/artblog/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/artblog/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/artblog/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

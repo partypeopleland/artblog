@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>elastic search 練習 audit log | Art的辦公桌</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="其實會有這一篇原因也只是因為DB是珍貴資源，如果將Log都放在DB內是很傷的一件事情，如果可以將Log從DB拿出來，對DB的負擔就減輕了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="elastic search 練習 audit log">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/elastic-search-%E7%B7%B4%E7%BF%92-audit-log/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="其實會有這一篇原因也只是因為DB是珍貴資源，如果將Log都放在DB內是很傷的一件事情，如果可以將Log從DB拿出來，對DB的負擔就減輕了">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2019-07-02T06:20:13.000Z">
+<meta property="article:modified_time" content="2024-02-13T10:30:19.091Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="elasticSearch">
+<meta property="article:tag" content="auditLog">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/artblog/atom.xml" title="Art的辦公桌" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/artblog/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/artblog/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/artblog/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/artblog/" id="logo">Art的辦公桌</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/artblog/" id="subtitle">有兩個螢幕真好</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/artblog/">Home</a>
+        
+          <a class="main-nav-link" href="/artblog/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/artblog/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="搜尋"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜尋"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://partypeopleland.github.io/artblog"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-elastic-search-練習" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/artblog/elastic-search-%E7%B7%B4%E7%BF%92-audit-log/" class="article-date">
+  <time class="dt-published" datetime="2019-07-02T06:20:13.000Z" itemprop="datePublished">2019-07-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      elastic search 練習 audit log
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>其實會有這一篇原因也只是因為DB是珍貴資源，如果將Log都放在DB內是很傷的一件事情，如果可以將Log從DB拿出來，對DB的負擔就減輕了</p>
+<span id="more"></span>
+
+<p>在實作 audit log 系統的時候，除了程式的部分，其實在儲存體的部分也可以改用 elastic Search 來做<br>關於 audit log 的文章，可以參考這一篇:<a target="_blank" rel="noopener" href="https://www.c-sharpcorner.com/article/audit-trail-and-data-versioning-with-c-sharp-and-mvc/">Audit Trail And Data Versioning With C# And MVC</a></p>
+<p>範例文章是利用 C#及 EF 來實作，從頭到尾都解說過一次，連 UI 的 razor 頁面都做了，可以先瀏覽過一次<br>es 的功能很多也蠻強大的，可以做全文檢索搜尋、可以跟 APM 整合來記錄應用程式效能紀錄，作為改善效能的依據，不過那些就等以後學習到在研究了</p>
+<p>這一次的練習則是延續上次的 ELK Stack，這次直接透過 <code>Restful API</code> 進行資料的操作，為的就是要先模擬出來後端資料儲存的這一塊<br>使用 es 的好處最直覺的一個就是將 log 記錄與 DB 拆開來，對於 LOG 的查詢、操作，不再影響現有的資料庫<br>對於 DB 效能是有好處的，否則當資料量大，大家都在查詢的時候，網站卻因為資料庫效能的關係而影響到 end-user 體驗，那就不是很好了</p>
+<p>一般來說，大部分的專案可能都會有兩種資訊需要被記錄下來</p>
+<ol>
+<li>歷程：資料異動後，需要記錄異動前後、異動人員、時間的資料，例如：商品資料異動、會員資料異動</li>
+<li>紀錄：發生事件後，需要記錄觸發事件的相關資料，例如：個資查詢記錄、系統登入記錄</li>
+</ol>
+<p>設計思路是利用群組、類型來區分資料，查詢則透過 unique Key，紀錄的內容則放在一個自定義的屬性內</p>
+<blockquote>
+<p>要注意的是，因為 elasticSearch 先前設計上的錯誤，同一個 index 底下目前僅支援一個 type</p>
+</blockquote>
+<p>中文的文件可以先參考<a target="_blank" rel="noopener" href="https://www.elastic.co/guide/cn/elasticsearch/guide/current/query-dsl-intro.html">這一份</a></p>
+<ol>
+<li><code>logType</code>：資料類型</li>
+<li><code>refId</code>：unique Key</li>
+<li><code>content</code>：要保存的資料內容</li>
+</ol>
+<h2 id="客戶異動歷程試資料"><a href="#客戶異動歷程試資料" class="headerlink" title="客戶異動歷程試資料"></a>客戶異動歷程試資料</h2><p><code>content</code>的資料內容為一個資料集合，可儲存多筆，每一筆資料紀錄異動的資料項目，異動前後的值</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;refId&quot;</span><span class="punctuation">:</span> <span class="number">10002000</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;logType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;customer&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;modifiedBy&quot;</span><span class="punctuation">:</span> <span class="number">1234</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;modifiedDate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2019-04-24 06:22:16&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span> <span class="attr">&quot;field&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Mobile Phone&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;valueBefore&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0912345678&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;valueAfter&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0912333444&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="系統登入紀錄測試資料"><a href="#系統登入紀錄測試資料" class="headerlink" title="系統登入紀錄測試資料"></a>系統登入紀錄測試資料</h2><p><code>content</code>的資料內容為一個物件，紀錄了登錄時間、狀態、IP 等資訊</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;refId&quot;</span><span class="punctuation">:</span> <span class="number">1234</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;logType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;login&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;loginDate&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2018-10-09 12:03:00&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;ipAddress&quot;</span><span class="punctuation">:</span> <span class="string">&quot;123.123.123.123&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;machineName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;LAPTOP-XXXXXXX&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;loginStatus&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Y&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="查詢某位客戶的異動歷程紀錄"><a href="#查詢某位客戶的異動歷程紀錄" class="headerlink" title="查詢某位客戶的異動歷程紀錄"></a>查詢某位客戶的異動歷程紀錄</h2><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;query&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;bool&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;must&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;match&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;logType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;customer&quot;</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;match&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;refId&quot;</span><span class="punctuation">:</span> <span class="number">10002000</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="查詢某位使用者針對客戶資料操作的歷程記錄"><a href="#查詢某位使用者針對客戶資料操作的歷程記錄" class="headerlink" title="查詢某位使用者針對客戶資料操作的歷程記錄"></a>查詢某位使用者針對客戶資料操作的歷程記錄</h2><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;query&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;bool&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;must&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;match&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;logType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;customer&quot;</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;match&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;modifiedBy&quot;</span><span class="punctuation">:</span> <span class="number">1234</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>在異動紀錄的部分可以猜想的到的情境，大概都是以某個客戶、某個東西為出發點，所以就拿它當作 unique key</p>
+<p>以個資紀錄查詢的這個例子來看，情境如果是客戶資料外洩，要求來查詢他的資料有誰看過，那麼就以客戶編號查詢即可<br>但假設第二個情境：內部稽核發現某位系統使用者有做一些資安疑慮的事情，因此需要查詢他看過那些人的資料，這個時候就會需要用員工編號查詢</p>
+<p>因此在這邊的資料結構設計可能需要再想想<br>在 Content 目前的結構是沒有辦法很好的運用索引，可能就是要拆開來，做兩個不同的 index&#x2F;type 來處理這兩類的紀錄 (歷程、LOG)</p>
+<p>不過目前為止，只是為了練習基本操作，就先這樣吧</p>
+<blockquote>
+<p>瀏覽器操作 Elastic Search 有一個外掛很好用，叫做 Elastic Search HEAD，有興趣的再自己研究一下吧</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://partypeopleland.github.io/artblog/elastic-search-%E7%B7%B4%E7%BF%92-audit-log/" data-id="clsk82uak004tfctchjcw1fli" data-title="elastic search 練習 audit log" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/artblog/tags/auditLog/" rel="tag">auditLog</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/artblog/tags/elasticSearch/" rel="tag">elasticSearch</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/artblog/APM-Server-RUM/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          APM-Server RUM
+        
+      </div>
+    </a>
+  
+  
+    <a href="/artblog/%E5%87%BD%E6%95%B8%E7%B0%BD%E7%AB%A0%E6%96%B9%E6%B3%95%E7%9A%84%E9%A0%90%E8%A8%AD%E5%80%BC/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">函數簽章方法的預設值</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分類</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/LUIS/">LUIS</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/LeetCode/">LeetCode</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/NPOI/">NPOI</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/SRE/">SRE</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/Selenium/">Selenium</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/azure/">azure</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/csharp/">csharp</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/devOps/">devOps</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/docker/">docker</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/dotnet/">dotnet</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/e2e/">e2e</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/elk/">elk</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/html5/">html5</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/javascript/">javascript</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/pattern/">pattern</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/practice/">practice</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/redis/">redis</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/refactor/">refactor</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/rider/">rider</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/selenium/">selenium</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/vb6/">vb6</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/vue/">vue</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/vue3/">vue3</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/webpack/">webpack</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/%E5%B7%A5%E5%85%B7/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/%E5%BF%83%E5%BE%97/">心得</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/%E6%B8%AC%E8%A9%A6/">測試</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/netCore/" rel="tag">.netCore</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/APM/" rel="tag">APM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/Alex%E5%AE%85%E5%B9%B9%E5%98%9B/" rel="tag">Alex宅幹嘛</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/CKEditor/" rel="tag">CKEditor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/DI/" rel="tag">DI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/E2E-testing/" rel="tag">E2E testing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/ESLint/" rel="tag">ESLint</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/JWT/" rel="tag">JWT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/MPA/" rel="tag">MPA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/NAS/" rel="tag">NAS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/RUM/" rel="tag">RUM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/SPA/" rel="tag">SPA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/ScreenShot/" rel="tag">ScreenShot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/TDD/" rel="tag">TDD</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/appSetting/" rel="tag">appSetting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/asp/" rel="tag">asp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/async-await/" rel="tag">async&#x2F;await</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/auditLog/" rel="tag">auditLog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/axios/" rel="tag">axios</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/azureSearch/" rel="tag">azureSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/crawler/" rel="tag">crawler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/cypress/" rel="tag">cypress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/decorator/" rel="tag">decorator</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/delegate/" rel="tag">delegate</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/design-pattern/" rel="tag">design pattern</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/e2e/" rel="tag">e2e</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/elasticSearch/" rel="tag">elasticSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/environment/" rel="tag">environment</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/es6/" rel="tag">es6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/eunm/" rel="tag">eunm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/excel/" rel="tag">excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/facade/" rel="tag">facade</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/factory/" rel="tag">factory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/file-watchers/" rel="tag">file watchers</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/filebeat/" rel="tag">filebeat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/gitLab/" rel="tag">gitLab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/gitea/" rel="tag">gitea</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/github-pages/" rel="tag">github pages</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/gulp/" rel="tag">gulp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/hangfire/" rel="tag">hangfire</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/identity/" rel="tag">identity</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/jenkins/" rel="tag">jenkins</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/jmeter/" rel="tag">jmeter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/linq/" rel="tag">linq</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/localStorage/" rel="tag">localStorage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/mock/" rel="tag">mock</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/netCore/" rel="tag">netCore</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/nginx/" rel="tag">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/node-js/" rel="tag">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/npm/" rel="tag">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/nuget/" rel="tag">nuget</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/nvm/" rel="tag">nvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/polly/" rel="tag">polly</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/promise/" rel="tag">promise</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/proxy/" rel="tag">proxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/publish/" rel="tag">publish</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/quokka-js/" rel="tag">quokka.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/refactor/" rel="tag">refactor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/registry/" rel="tag">registry</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/rider/" rel="tag">rider</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/sentry/" rel="tag">sentry</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/sessionStorage/" rel="tag">sessionStorage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/signalR/" rel="tag">signalR</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/sonarQube/" rel="tag">sonarQube</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/strategy/" rel="tag">strategy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/stub/" rel="tag">stub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/testCafe/" rel="tag">testCafe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/twmvc/" rel="tag">twmvc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/unittest/" rel="tag">unittest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vitejs/" rel="tag">vitejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vscode/" rel="tag">vscode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vue/" rel="tag">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vue-cli3/" rel="tag">vue-cli3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vue3/" rel="tag">vue3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vuex/" rel="tag">vuex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/wallaby-js/" rel="tag">wallaby.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/web-config/" rel="tag">web.config</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/webpack/" rel="tag">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/yApi/" rel="tag">yApi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/%E5%BE%85%E8%A3%9C/" rel="tag">待補</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤雲</h3>
+    <div class="widget tagcloud">
+      <a href="/artblog/tags/netCore/" style="font-size: 10px;">.netCore</a> <a href="/artblog/tags/APM/" style="font-size: 11.43px;">APM</a> <a href="/artblog/tags/Alex%E5%AE%85%E5%B9%B9%E5%98%9B/" style="font-size: 10px;">Alex宅幹嘛</a> <a href="/artblog/tags/CKEditor/" style="font-size: 10px;">CKEditor</a> <a href="/artblog/tags/DI/" style="font-size: 10px;">DI</a> <a href="/artblog/tags/E2E-testing/" style="font-size: 10px;">E2E testing</a> <a href="/artblog/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/artblog/tags/JWT/" style="font-size: 10px;">JWT</a> <a href="/artblog/tags/MPA/" style="font-size: 10px;">MPA</a> <a href="/artblog/tags/NAS/" style="font-size: 10px;">NAS</a> <a href="/artblog/tags/RUM/" style="font-size: 10px;">RUM</a> <a href="/artblog/tags/SPA/" style="font-size: 10px;">SPA</a> <a href="/artblog/tags/ScreenShot/" style="font-size: 10px;">ScreenShot</a> <a href="/artblog/tags/TDD/" style="font-size: 12.86px;">TDD</a> <a href="/artblog/tags/appSetting/" style="font-size: 10px;">appSetting</a> <a href="/artblog/tags/asp/" style="font-size: 10px;">asp</a> <a href="/artblog/tags/async-await/" style="font-size: 10px;">async/await</a> <a href="/artblog/tags/auditLog/" style="font-size: 10px;">auditLog</a> <a href="/artblog/tags/axios/" style="font-size: 10px;">axios</a> <a href="/artblog/tags/azureSearch/" style="font-size: 10px;">azureSearch</a> <a href="/artblog/tags/crawler/" style="font-size: 10px;">crawler</a> <a href="/artblog/tags/cypress/" style="font-size: 14.29px;">cypress</a> <a href="/artblog/tags/decorator/" style="font-size: 11.43px;">decorator</a> <a href="/artblog/tags/delegate/" style="font-size: 10px;">delegate</a> <a href="/artblog/tags/design-pattern/" style="font-size: 10px;">design pattern</a> <a href="/artblog/tags/docker/" style="font-size: 18.57px;">docker</a> <a href="/artblog/tags/e2e/" style="font-size: 10px;">e2e</a> <a href="/artblog/tags/elasticSearch/" style="font-size: 14.29px;">elasticSearch</a> <a href="/artblog/tags/environment/" style="font-size: 10px;">environment</a> <a href="/artblog/tags/es6/" style="font-size: 10px;">es6</a> <a href="/artblog/tags/eunm/" style="font-size: 10px;">eunm</a> <a href="/artblog/tags/excel/" style="font-size: 10px;">excel</a> <a href="/artblog/tags/facade/" style="font-size: 10px;">facade</a> <a href="/artblog/tags/factory/" style="font-size: 10px;">factory</a> <a href="/artblog/tags/file-watchers/" style="font-size: 10px;">file watchers</a> <a href="/artblog/tags/filebeat/" style="font-size: 10px;">filebeat</a> <a href="/artblog/tags/git/" style="font-size: 10px;">git</a> <a href="/artblog/tags/gitLab/" style="font-size: 10px;">gitLab</a> <a href="/artblog/tags/gitea/" style="font-size: 10px;">gitea</a> <a href="/artblog/tags/github-pages/" style="font-size: 10px;">github pages</a> <a href="/artblog/tags/gulp/" style="font-size: 11.43px;">gulp</a> <a href="/artblog/tags/hangfire/" style="font-size: 10px;">hangfire</a> <a href="/artblog/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/artblog/tags/identity/" style="font-size: 12.86px;">identity</a> <a href="/artblog/tags/jenkins/" style="font-size: 20px;">jenkins</a> <a href="/artblog/tags/jmeter/" style="font-size: 10px;">jmeter</a> <a href="/artblog/tags/linq/" style="font-size: 10px;">linq</a> <a href="/artblog/tags/localStorage/" style="font-size: 10px;">localStorage</a> <a href="/artblog/tags/mock/" style="font-size: 10px;">mock</a> <a href="/artblog/tags/netCore/" style="font-size: 10px;">netCore</a> <a href="/artblog/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/artblog/tags/node-js/" style="font-size: 10px;">node.js</a> <a href="/artblog/tags/npm/" style="font-size: 10px;">npm</a> <a href="/artblog/tags/nuget/" style="font-size: 10px;">nuget</a> <a href="/artblog/tags/nvm/" style="font-size: 10px;">nvm</a> <a href="/artblog/tags/polly/" style="font-size: 10px;">polly</a> <a href="/artblog/tags/promise/" style="font-size: 10px;">promise</a> <a href="/artblog/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/artblog/tags/publish/" style="font-size: 10px;">publish</a> <a href="/artblog/tags/quokka-js/" style="font-size: 10px;">quokka.js</a> <a href="/artblog/tags/refactor/" style="font-size: 12.86px;">refactor</a> <a href="/artblog/tags/registry/" style="font-size: 10px;">registry</a> <a href="/artblog/tags/rider/" style="font-size: 10px;">rider</a> <a href="/artblog/tags/sentry/" style="font-size: 10px;">sentry</a> <a href="/artblog/tags/sessionStorage/" style="font-size: 10px;">sessionStorage</a> <a href="/artblog/tags/signalR/" style="font-size: 17.14px;">signalR</a> <a href="/artblog/tags/sonarQube/" style="font-size: 20px;">sonarQube</a> <a href="/artblog/tags/strategy/" style="font-size: 10px;">strategy</a> <a href="/artblog/tags/stub/" style="font-size: 10px;">stub</a> <a href="/artblog/tags/testCafe/" style="font-size: 10px;">testCafe</a> <a href="/artblog/tags/twmvc/" style="font-size: 15.71px;">twmvc</a> <a href="/artblog/tags/unittest/" style="font-size: 12.86px;">unittest</a> <a href="/artblog/tags/vitejs/" style="font-size: 10px;">vitejs</a> <a href="/artblog/tags/vscode/" style="font-size: 15.71px;">vscode</a> <a href="/artblog/tags/vue/" style="font-size: 11.43px;">vue</a> <a href="/artblog/tags/vue-cli3/" style="font-size: 10px;">vue-cli3</a> <a href="/artblog/tags/vue3/" style="font-size: 10px;">vue3</a> <a href="/artblog/tags/vuex/" style="font-size: 10px;">vuex</a> <a href="/artblog/tags/wallaby-js/" style="font-size: 10px;">wallaby.js</a> <a href="/artblog/tags/web-config/" style="font-size: 10px;">web.config</a> <a href="/artblog/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/artblog/tags/yApi/" style="font-size: 10px;">yApi</a> <a href="/artblog/tags/%E5%BE%85%E8%A3%9C/" style="font-size: 10px;">待補</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">彙整</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/08/">八月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/07/">七月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/06/">六月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/05/">五月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/03/">三月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/02/">二月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/01/">一月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/12/">十二月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/11/">十一月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/09/">九月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/08/">八月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/06/">六月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/05/">五月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/04/">四月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/03/">三月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/01/">一月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/11/">十一月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/10/">十月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/08/">八月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/07/">七月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/04/">四月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/03/">三月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/02/">二月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/12/">十二月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/09/">九月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/08/">八月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/07/">七月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/06/">六月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/05/">五月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/04/">四月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/03/">三月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/02/">二月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/01/">一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/12/">十二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/11/">十一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/09/">九月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/08/">八月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/07/">七月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/06/">六月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2016/01/">一月 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/artblog/sentry-self-hosted-by-docker-compose/">使用 sentry 追蹤前端錯誤</a>
+          </li>
+        
+          <li>
+            <a href="/artblog/eml-format-download-with-decorator-pattern/">將資料存成eml格式下載-使用裝飾模式</a>
+          </li>
+        
+          <li>
+            <a href="/artblog/aspnet-core-publish-and-environment/">aspnet core publish and environment</a>
+          </li>
+        
+          <li>
+            <a href="/artblog/sonarqube-jenkins-pipeline-get-metrics-then-notify-via-teams/">SonarQube-Jenkins執行分析後透過Teams通知</a>
+          </li>
+        
+          <li>
+            <a href="/artblog/vee-validate-options-awareOfUnicodeTokens-must-be-set-to-true-to-use-yyyy-token/">vee-validate 提示 options.awareOfUnicodeTokens  錯誤</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2024 art<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/artblog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/artblog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/artblog/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/artblog/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/artblog/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
