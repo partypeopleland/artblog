@@ -1,114 +1,265 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
 <head>
-  <meta charset="utf-8">
-  
-  
-  <title>Cypress.io 測試資料的處理 | Art的辦公桌</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="實際上撰寫 e2e 測試的時候，我們常常會需要做一些預設的測試資料在資料庫內，假設我今天想要測試會員在網站上購物的流程，那麼網站一定會需要有商品、會員、訂單等等資料結構。在這樣的情況下，為了確保測試的可重複性，通常會在測試開始之前做測試資料的初始化；測試完畢之後做測試資料的清除。">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Muse","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="實際上撰寫 e2e 測試的時候，我們常常會需要做一些預設的測試資料在資料庫內，假設我今天想要測試會員在網站上購物的流程，那麼網站一定會需要有商品、會員、訂單等等資料結構。在這樣的情況下，為了確保測試的可重複性，通常會在測試開始之前做測試資料的初始化；測試完畢之後做測試資料的清除。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Cypress.io 測試資料的處理">
 <meta property="og:url" content="https://partypeopleland.github.io/artblog/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/index.html">
 <meta property="og:site_name" content="Art的辦公桌">
 <meta property="og:description" content="實際上撰寫 e2e 測試的時候，我們常常會需要做一些預設的測試資料在資料庫內，假設我今天想要測試會員在網站上購物的流程，那麼網站一定會需要有商品、會員、訂單等等資料結構。在這樣的情況下，為了確保測試的可重複性，通常會在測試開始之前做測試資料的初始化；測試完畢之後做測試資料的清除。">
 <meta property="og:locale" content="zh_TW">
-<meta property="og:image" content="https://partypeopleland.github.io/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/2020-07-23-171258.png">
-<meta property="og:image" content="https://partypeopleland.github.io/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/20210930-2.jpg">
-<meta property="og:image" content="https://partypeopleland.github.io/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/20210930-3.jpg">
-<meta property="og:image" content="https://partypeopleland.github.io/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/20210930-4.jpg">
-<meta property="og:image" content="https://partypeopleland.github.io/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/20210930-1.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/2020-07-23-171258.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/20210930-2.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/20210930-3.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/20210930-4.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/20210930-1.jpg">
 <meta property="article:published_time" content="2020-07-23T08:36:33.000Z">
 <meta property="article:modified_time" content="2024-02-13T10:30:19.177Z">
 <meta property="article:author" content="art">
 <meta property="article:tag" content="cypress">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://partypeopleland.github.io/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/2020-07-23-171258.png">
-  
-    <link rel="alternate" href="/artblog/atom.xml" title="Art的辦公桌" type="application/atom+xml">
-  
-  
-    <link rel="shortcut icon" href="/artblog/favicon.png">
-  
-  
-  
-<link rel="stylesheet" href="/artblog/css/style.css">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/2020-07-23-171258.png">
 
-  
-    
-<link rel="stylesheet" href="/artblog/fancybox/jquery.fancybox.min.css">
 
-  
-  
-<meta name="generator" content="Hexo 7.1.1"></head>
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/">
 
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/artblog/" id="logo">Art的辦公桌</a>
-      </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/artblog/" id="subtitle">有兩個螢幕真好</a>
-        </h2>
-      
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/","path":"/Cypress.io-測試資料的處理/","title":"Cypress.io 測試資料的處理"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Cypress.io 測試資料的處理 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
         
-          <a class="main-nav-link" href="/artblog/">Home</a>
-        
-          <a class="main-nav-link" href="/artblog/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-        
-          <a class="nav-icon" href="/artblog/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
-        
-        <a class="nav-icon nav-search-btn" title="搜尋"><span class="fa fa-search"></span></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜尋"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://partypeopleland.github.io/artblog"></form>
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Cypress-io-%E7%9B%B8%E9%97%9C%E6%96%87%E7%AB%A0"><span class="nav-number">1.</span> <span class="nav-text">Cypress.io 相關文章</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hook"><span class="nav-number">2.</span> <span class="nav-text">Hook</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-node-js-%E5%9F%B7%E8%A1%8C%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">3.</span> <span class="nav-text">使用 node.js 執行初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%91%E4%B8%8D%E6%83%B3%E4%B8%B2%E7%9C%9F%E5%AF%A6%E8%B3%87%E6%96%99%E6%80%8E%E9%BA%BC%E8%BE%A6"><span class="nav-number">4.</span> <span class="nav-text">我不想串真實資料怎麼辦</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E6%93%AC%E4%B8%80%E5%80%8B%E5%81%87%E8%B3%87%E6%96%99%E5%9B%9E%E6%87%89"><span class="nav-number">4.1.</span> <span class="nav-text">模擬一個假資料回應</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E6%93%AC%E5%A4%9A%E5%80%8B%E5%81%87%E8%B3%87%E6%96%99%E5%9B%9E%E6%87%89"><span class="nav-number">4.2.</span> <span class="nav-text">模擬多個假資料回應</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9C%E6%85%8B%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99-fixture"><span class="nav-number">4.3.</span> <span class="nav-text">靜態測試資料 (fixture)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.</span> <span class="nav-text">結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">141</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">83</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
       </div>
     </div>
-  </div>
-</header>
 
-      <div class="outer">
-        <section id="main"><article id="post-Cypress-io-測試資料的處理" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/artblog/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/" class="article-date">
-  <time class="dt-published" datetime="2020-07-23T08:36:33.000Z" itemprop="datePublished">2020-07-23</time>
-</a>
     
-  <div class="article-category">
-    <a class="article-category-link" href="/artblog/categories/e2e/">e2e</a>
-  </div>
+  </aside>
 
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="p-name article-title" itemprop="headline name">
-      Cypress.io 測試資料的處理
-    </h1>
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
   
 
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Cypress.io 測試資料的處理 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Cypress.io 測試資料的處理
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2020-07-23 16:36:33" itemprop="dateCreated datePublished" datetime="2020-07-23T16:36:33+08:00">2020-07-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2024-02-13 18:30:19" itemprop="dateModified" datetime="2024-02-13T18:30:19+08:00">2024-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/e2e/" itemprop="url" rel="index"><span itemprop="name">e2e</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/" class="post-meta-item leancloud_visitors" data-flag-title="Cypress.io 測試資料的處理" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/Cypress.io-測試資料的處理/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
       </header>
+
     
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>實際上撰寫 e2e 測試的時候，我們常常會需要做一些預設的測試資料在資料庫內，假設我今天想要測試會員在網站上購物的流程，那麼網站一定會需要有商品、會員、訂單等等資料結構。<br>在這樣的情況下，為了確保測試的可重複性，通常會在測試開始之前做測試資料的初始化；測試完畢之後做測試資料的清除。</p>
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>實際上撰寫 e2e 測試的時候，我們常常會需要做一些預設的測試資料在資料庫內，假設我今天想要測試會員在網站上購物的流程，那麼網站一定會需要有商品、會員、訂單等等資料結構。<br>在這樣的情況下，為了確保測試的可重複性，通常會在測試開始之前做測試資料的初始化；測試完畢之後做測試資料的清除。</p>
 <span id="more"></span>
 
 <h2 id="Cypress-io-相關文章"><a href="#Cypress-io-相關文章" class="headerlink" title="Cypress.io 相關文章"></a>Cypress.io 相關文章</h2><ol>
@@ -130,7 +281,7 @@
 <p>實際在測試程式就利用<code>beforeEach</code>的<code>hook</code>來執行初始化的動作</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">describe</span>(<span class="string">&#x27;質檢單&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">	<span class="title function_">beforeEach</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">		cy.<span class="title function_">exec</span>(<span class="string">&#x27;npm run db:init&#x27;</span>);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">	<span class="title function_">it</span>(<span class="string">&#x27;myTest&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">		<span class="comment">//...some test code</span></span><br><span class="line"></span><br><span class="line">	&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>執行測試後，會發現左側有<code>Hook</code>的名稱<br><img src="/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/2020-07-23-171258.png"></p>
+<p>執行測試後，會發現左側有<code>Hook</code>的名稱<br><img src="/artblog/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/2020-07-23-171258.png"></p>
 <h2 id="我不想串真實資料怎麼辦"><a href="#我不想串真實資料怎麼辦" class="headerlink" title="我不想串真實資料怎麼辦"></a>我不想串真實資料怎麼辦</h2><p>那就用假資料來做測試吧，可能有一些情境是你不想再跑測試的時候，讓他去吃到 API 過來的資料，而是想要模擬一個固定的回傳結果來測試；這樣的做法就是讓測試與外部相依隔離開來，所以會這樣做的情況，一般來說就已經不會再是整合測試的範疇，而是逐漸往單元測試靠攏了，當然具體如何還是要看實際的程式碼與應用情境</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cy.<span class="title function_">route</span>(url);</span><br><span class="line">cy.<span class="title function_">route</span>(url, response);</span><br><span class="line">cy.<span class="title function_">route</span>(method, url);</span><br><span class="line">cy.<span class="title function_">route</span>(method, url, response);</span><br><span class="line">cy.<span class="title function_">route</span>(callbackFn);</span><br><span class="line">cy.<span class="title function_">route</span>(options);</span><br></pre></td></tr></table></figure>
 
@@ -165,163 +316,109 @@
 <li><code>cy.request()</code>會真的跟指定<code>end-point</code>發出請求，<code>cy.route()</code>則不一定</li>
 </ol>
 </blockquote>
-<p>此外，需要特別補充的是，在<code>/fixtures/</code>底下的 json 檔案，如果發生了無法解析<code>JSON</code>的錯誤，可以檢查一下是否檔案的編碼格式有沒有包含<code>BOM</code>，能夠正常運作的是不包含<code>BOM</code>的，所以記得要將<code>BOM</code>移除掉<br><img src="/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/20210930-2.jpg"><br><img src="/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/20210930-3.jpg"><br><img src="/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/20210930-4.jpg"></p>
-<p>如果使用<code>VSCode</code>做編輯器，可以在下方資訊點選後選擇<code>Save with Encoding</code>，並選擇<code>UTF-8</code>的格式；如果使用<code>Rider</code>的話，也可以點選<code>Remove BOM</code><br><img src="/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/20210930-1.jpg"></p>
+<p>此外，需要特別補充的是，在<code>/fixtures/</code>底下的 json 檔案，如果發生了無法解析<code>JSON</code>的錯誤，可以檢查一下是否檔案的編碼格式有沒有包含<code>BOM</code>，能夠正常運作的是不包含<code>BOM</code>的，所以記得要將<code>BOM</code>移除掉<br><img src="/artblog/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/20210930-2.jpg"><br><img src="/artblog/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/20210930-3.jpg"><br><img src="/artblog/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/20210930-4.jpg"></p>
+<p>如果使用<code>VSCode</code>做編輯器，可以在下方資訊點選後選擇<code>Save with Encoding</code>，並選擇<code>UTF-8</code>的格式；如果使用<code>Rider</code>的話，也可以點選<code>Remove BOM</code><br><img src="/artblog/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/20210930-1.jpg"></p>
 <h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>測試資料的初始化、清除。要做到怎樣的程度，應該還是要看環境決定，如果只是在工程師自己開發環境在練習可能還無所謂，能跑就好；但是，如果不是在開發環境內，可能就要考慮一下，如果資料庫有髒資料的話會不會有甚麼影響，最好能夠避免這些副作用，<code>cypress</code>能夠做到整合測試資料的初始化與清除，但它也能夠用<code>stub</code>的方式模擬回應結果來隔絕外部相依，這些應該是看情境搭配，相輔相成的</p>
 <p>如果我想要完全模擬使用者的操作行為，也做好了測試資料的初始化與清除作業，但是偏偏流程當中有一個環節是跟其他公司的服務串接的，例如串接外部金流，但是對方卻沒有提供測試信用卡給你刷，可是你卻又要測試刷卡購物流程，難道你會每次測試都拿自己的卡出來真的刷嗎？肯定不會嘛，所以勢必要針對這個服務做隔離，當然目的還是再整合測試，但是卻隔絕了外部環境的相依，畢竟我們要測試的是刷卡購物的流程，而不是這張卡到底能不能刷過；如果我們要測試刷卡不過的購物流程，那就再寫一個模擬刷卡失敗的情境就好了</p>
 <p>對於<code>cypress</code>的使用我還在摸著石頭過河，文章若有錯誤的地方，請不吝指正，謝謝</p>
 
-      
     </div>
-    <footer class="article-footer">
-      <a data-url="https://partypeopleland.github.io/artblog/Cypress.io-%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99%E7%9A%84%E8%99%95%E7%90%86/" data-id="clsk8aswj007oc8tc6iwd4frd" data-title="Cypress.io 測試資料的處理" class="article-share-link"><span class="fa fa-share">Share</span></a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/artblog/tags/cypress/" rel="tag">cypress</a></li></ul>
 
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/cypress/" rel="tag"># cypress</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/NPOI-ASP.net%E7%B6%B2%E7%AB%99%E5%8C%AF%E5%87%BAExcel%E7%AF%84%E4%BE%8B/" rel="prev" title="NPOI-ASP.net網站匯出Excel範例">
+                  <i class="fa fa-angle-left"></i> NPOI-ASP.net網站匯出Excel範例
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/Cypress.io-%E6%90%AD%E9%85%8Dcucumber%E9%80%B2%E8%A1%8C%E6%B8%AC%E8%A9%A6/" rel="next" title="Cypress.io 搭配 cucumber 進行測試">
+                  Cypress.io 搭配 cucumber 進行測試 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
     </footer>
-  </div>
-  
+  </article>
+</div>
+
+
+
+
+
+
     
-<nav id="article-nav">
-  
-    <a href="/artblog/Cypress.io-%E6%90%AD%E9%85%8Dcucumber%E9%80%B2%E8%A1%8C%E6%B8%AC%E8%A9%A6/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          Cypress.io 搭配 cucumber 進行測試
-        
-      </div>
-    </a>
-  
-  
-    <a href="/artblog/NPOI-ASP.net%E7%B6%B2%E7%AB%99%E5%8C%AF%E5%87%BAExcel%E7%AF%84%E4%BE%8B/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">NPOI-ASP.net網站匯出Excel範例</div>
-    </a>
-  
-</nav>
-
-  
-</article>
-
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">分類</h3>
-    <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/LUIS/">LUIS</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/LeetCode/">LeetCode</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/NPOI/">NPOI</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/SRE/">SRE</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/Selenium/">Selenium</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/azure/">azure</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/csharp/">csharp</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/devOps/">devOps</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/docker/">docker</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/dotnet/">dotnet</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/e2e/">e2e</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/elk/">elk</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/git/">git</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/html5/">html5</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/javascript/">javascript</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/node-js/">node.js</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/pattern/">pattern</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/practice/">practice</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/redis/">redis</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/refactor/">refactor</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/rider/">rider</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/selenium/">selenium</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/vb6/">vb6</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/vue/">vue</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/vue3/">vue3</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/webpack/">webpack</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/%E5%B7%A5%E5%85%B7/">工具</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/%E5%BF%83%E5%BE%97/">心得</a></li><li class="category-list-item"><a class="category-list-link" href="/artblog/categories/%E6%B8%AC%E8%A9%A6/">測試</a></li></ul>
-    </div>
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
   </div>
-
-
   
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">標籤</h3>
-    <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/netCore/" rel="tag">.netCore</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/APM/" rel="tag">APM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/Alex%E5%AE%85%E5%B9%B9%E5%98%9B/" rel="tag">Alex宅幹嘛</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/CKEditor/" rel="tag">CKEditor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/DI/" rel="tag">DI</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/E2E-testing/" rel="tag">E2E testing</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/ESLint/" rel="tag">ESLint</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/JWT/" rel="tag">JWT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/MPA/" rel="tag">MPA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/NAS/" rel="tag">NAS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/RUM/" rel="tag">RUM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/SPA/" rel="tag">SPA</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/ScreenShot/" rel="tag">ScreenShot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/TDD/" rel="tag">TDD</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/appSetting/" rel="tag">appSetting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/asp/" rel="tag">asp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/async-await/" rel="tag">async&#x2F;await</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/auditLog/" rel="tag">auditLog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/axios/" rel="tag">axios</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/azureSearch/" rel="tag">azureSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/crawler/" rel="tag">crawler</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/cypress/" rel="tag">cypress</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/decorator/" rel="tag">decorator</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/delegate/" rel="tag">delegate</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/design-pattern/" rel="tag">design pattern</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/e2e/" rel="tag">e2e</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/elasticSearch/" rel="tag">elasticSearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/environment/" rel="tag">environment</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/es6/" rel="tag">es6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/eunm/" rel="tag">eunm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/excel/" rel="tag">excel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/facade/" rel="tag">facade</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/factory/" rel="tag">factory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/file-watchers/" rel="tag">file watchers</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/filebeat/" rel="tag">filebeat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/git/" rel="tag">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/gitLab/" rel="tag">gitLab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/gitea/" rel="tag">gitea</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/github-pages/" rel="tag">github pages</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/gulp/" rel="tag">gulp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/hangfire/" rel="tag">hangfire</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/identity/" rel="tag">identity</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/jenkins/" rel="tag">jenkins</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/jmeter/" rel="tag">jmeter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/linq/" rel="tag">linq</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/localStorage/" rel="tag">localStorage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/mock/" rel="tag">mock</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/netCore/" rel="tag">netCore</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/nginx/" rel="tag">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/node-js/" rel="tag">node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/npm/" rel="tag">npm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/nuget/" rel="tag">nuget</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/nvm/" rel="tag">nvm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/polly/" rel="tag">polly</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/promise/" rel="tag">promise</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/proxy/" rel="tag">proxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/publish/" rel="tag">publish</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/quokka-js/" rel="tag">quokka.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/refactor/" rel="tag">refactor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/registry/" rel="tag">registry</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/rider/" rel="tag">rider</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/sentry/" rel="tag">sentry</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/sessionStorage/" rel="tag">sessionStorage</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/signalR/" rel="tag">signalR</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/sonarQube/" rel="tag">sonarQube</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/strategy/" rel="tag">strategy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/stub/" rel="tag">stub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/testCafe/" rel="tag">testCafe</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/twmvc/" rel="tag">twmvc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/unittest/" rel="tag">unittest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vitejs/" rel="tag">vitejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vscode/" rel="tag">vscode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vue/" rel="tag">vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vue-cli3/" rel="tag">vue-cli3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vue3/" rel="tag">vue3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/vuex/" rel="tag">vuex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/wallaby-js/" rel="tag">wallaby.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/web-config/" rel="tag">web.config</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/webpack/" rel="tag">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/yApi/" rel="tag">yApi</a></li><li class="tag-list-item"><a class="tag-list-link" href="/artblog/tags/%E5%BE%85%E8%A3%9C/" rel="tag">待補</a></li></ul>
-    </div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
   </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">標籤雲</h3>
-    <div class="widget tagcloud">
-      <a href="/artblog/tags/netCore/" style="font-size: 10px;">.netCore</a> <a href="/artblog/tags/APM/" style="font-size: 11.43px;">APM</a> <a href="/artblog/tags/Alex%E5%AE%85%E5%B9%B9%E5%98%9B/" style="font-size: 10px;">Alex宅幹嘛</a> <a href="/artblog/tags/CKEditor/" style="font-size: 10px;">CKEditor</a> <a href="/artblog/tags/DI/" style="font-size: 10px;">DI</a> <a href="/artblog/tags/E2E-testing/" style="font-size: 10px;">E2E testing</a> <a href="/artblog/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/artblog/tags/JWT/" style="font-size: 10px;">JWT</a> <a href="/artblog/tags/MPA/" style="font-size: 10px;">MPA</a> <a href="/artblog/tags/NAS/" style="font-size: 10px;">NAS</a> <a href="/artblog/tags/RUM/" style="font-size: 10px;">RUM</a> <a href="/artblog/tags/SPA/" style="font-size: 10px;">SPA</a> <a href="/artblog/tags/ScreenShot/" style="font-size: 10px;">ScreenShot</a> <a href="/artblog/tags/TDD/" style="font-size: 12.86px;">TDD</a> <a href="/artblog/tags/appSetting/" style="font-size: 10px;">appSetting</a> <a href="/artblog/tags/asp/" style="font-size: 10px;">asp</a> <a href="/artblog/tags/async-await/" style="font-size: 10px;">async/await</a> <a href="/artblog/tags/auditLog/" style="font-size: 10px;">auditLog</a> <a href="/artblog/tags/axios/" style="font-size: 10px;">axios</a> <a href="/artblog/tags/azureSearch/" style="font-size: 10px;">azureSearch</a> <a href="/artblog/tags/crawler/" style="font-size: 10px;">crawler</a> <a href="/artblog/tags/cypress/" style="font-size: 14.29px;">cypress</a> <a href="/artblog/tags/decorator/" style="font-size: 11.43px;">decorator</a> <a href="/artblog/tags/delegate/" style="font-size: 10px;">delegate</a> <a href="/artblog/tags/design-pattern/" style="font-size: 10px;">design pattern</a> <a href="/artblog/tags/docker/" style="font-size: 18.57px;">docker</a> <a href="/artblog/tags/e2e/" style="font-size: 10px;">e2e</a> <a href="/artblog/tags/elasticSearch/" style="font-size: 14.29px;">elasticSearch</a> <a href="/artblog/tags/environment/" style="font-size: 10px;">environment</a> <a href="/artblog/tags/es6/" style="font-size: 10px;">es6</a> <a href="/artblog/tags/eunm/" style="font-size: 10px;">eunm</a> <a href="/artblog/tags/excel/" style="font-size: 10px;">excel</a> <a href="/artblog/tags/facade/" style="font-size: 10px;">facade</a> <a href="/artblog/tags/factory/" style="font-size: 10px;">factory</a> <a href="/artblog/tags/file-watchers/" style="font-size: 10px;">file watchers</a> <a href="/artblog/tags/filebeat/" style="font-size: 10px;">filebeat</a> <a href="/artblog/tags/git/" style="font-size: 10px;">git</a> <a href="/artblog/tags/gitLab/" style="font-size: 10px;">gitLab</a> <a href="/artblog/tags/gitea/" style="font-size: 10px;">gitea</a> <a href="/artblog/tags/github-pages/" style="font-size: 10px;">github pages</a> <a href="/artblog/tags/gulp/" style="font-size: 11.43px;">gulp</a> <a href="/artblog/tags/hangfire/" style="font-size: 10px;">hangfire</a> <a href="/artblog/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/artblog/tags/identity/" style="font-size: 12.86px;">identity</a> <a href="/artblog/tags/jenkins/" style="font-size: 20px;">jenkins</a> <a href="/artblog/tags/jmeter/" style="font-size: 10px;">jmeter</a> <a href="/artblog/tags/linq/" style="font-size: 10px;">linq</a> <a href="/artblog/tags/localStorage/" style="font-size: 10px;">localStorage</a> <a href="/artblog/tags/mock/" style="font-size: 10px;">mock</a> <a href="/artblog/tags/netCore/" style="font-size: 10px;">netCore</a> <a href="/artblog/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/artblog/tags/node-js/" style="font-size: 10px;">node.js</a> <a href="/artblog/tags/npm/" style="font-size: 10px;">npm</a> <a href="/artblog/tags/nuget/" style="font-size: 10px;">nuget</a> <a href="/artblog/tags/nvm/" style="font-size: 10px;">nvm</a> <a href="/artblog/tags/polly/" style="font-size: 10px;">polly</a> <a href="/artblog/tags/promise/" style="font-size: 10px;">promise</a> <a href="/artblog/tags/proxy/" style="font-size: 10px;">proxy</a> <a href="/artblog/tags/publish/" style="font-size: 10px;">publish</a> <a href="/artblog/tags/quokka-js/" style="font-size: 10px;">quokka.js</a> <a href="/artblog/tags/refactor/" style="font-size: 12.86px;">refactor</a> <a href="/artblog/tags/registry/" style="font-size: 10px;">registry</a> <a href="/artblog/tags/rider/" style="font-size: 10px;">rider</a> <a href="/artblog/tags/sentry/" style="font-size: 10px;">sentry</a> <a href="/artblog/tags/sessionStorage/" style="font-size: 10px;">sessionStorage</a> <a href="/artblog/tags/signalR/" style="font-size: 17.14px;">signalR</a> <a href="/artblog/tags/sonarQube/" style="font-size: 20px;">sonarQube</a> <a href="/artblog/tags/strategy/" style="font-size: 10px;">strategy</a> <a href="/artblog/tags/stub/" style="font-size: 10px;">stub</a> <a href="/artblog/tags/testCafe/" style="font-size: 10px;">testCafe</a> <a href="/artblog/tags/twmvc/" style="font-size: 15.71px;">twmvc</a> <a href="/artblog/tags/unittest/" style="font-size: 12.86px;">unittest</a> <a href="/artblog/tags/vitejs/" style="font-size: 10px;">vitejs</a> <a href="/artblog/tags/vscode/" style="font-size: 15.71px;">vscode</a> <a href="/artblog/tags/vue/" style="font-size: 11.43px;">vue</a> <a href="/artblog/tags/vue-cli3/" style="font-size: 10px;">vue-cli3</a> <a href="/artblog/tags/vue3/" style="font-size: 10px;">vue3</a> <a href="/artblog/tags/vuex/" style="font-size: 10px;">vuex</a> <a href="/artblog/tags/wallaby-js/" style="font-size: 10px;">wallaby.js</a> <a href="/artblog/tags/web-config/" style="font-size: 10px;">web.config</a> <a href="/artblog/tags/webpack/" style="font-size: 10px;">webpack</a> <a href="/artblog/tags/yApi/" style="font-size: 10px;">yApi</a> <a href="/artblog/tags/%E5%BE%85%E8%A3%9C/" style="font-size: 10px;">待補</a>
-    </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
   </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">彙整</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/08/">八月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/07/">七月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/06/">六月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/05/">五月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/03/">三月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/02/">二月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2023/01/">一月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/12/">十二月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/11/">十一月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/09/">九月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/08/">八月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/06/">六月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/05/">五月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/04/">四月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/03/">三月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2022/01/">一月 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/11/">十一月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/10/">十月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/08/">八月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/07/">七月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/04/">四月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/03/">三月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2021/02/">二月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/12/">十二月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/11/">十一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/09/">九月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/08/">八月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/07/">七月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/06/">六月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/05/">五月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/04/">四月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/03/">三月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/02/">二月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2020/01/">一月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/12/">十二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/11/">十一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/09/">九月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/08/">八月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/07/">七月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/06/">六月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2017/04/">四月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2016/05/">五月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2016/02/">二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/artblog/archives/2016/01/">一月 2016</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">最新文章</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/artblog/sentry-self-hosted-by-docker-compose/">使用 sentry 追蹤前端錯誤</a>
-          </li>
-        
-          <li>
-            <a href="/artblog/eml-format-download-with-decorator-pattern/">將資料存成eml格式下載-使用裝飾模式</a>
-          </li>
-        
-          <li>
-            <a href="/artblog/aspnet-core-publish-and-environment/">aspnet core publish and environment</a>
-          </li>
-        
-          <li>
-            <a href="/artblog/sonarqube-jenkins-pipeline-get-metrics-then-notify-via-teams/">SonarQube-Jenkins執行分析後透過Teams通知</a>
-          </li>
-        
-          <li>
-            <a href="/artblog/vee-validate-options-awareOfUnicodeTokens-must-be-set-to-true-to-use-yyyy-token/">vee-validate 提示 options.awareOfUnicodeTokens  錯誤</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      
-      &copy; 2024 art<br>
-      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
 
     </div>
-    <nav id="mobile-nav">
-  
-    <a href="/artblog/" class="mobile-nav-link">Home</a>
-  
-    <a href="/artblog/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-
-<script src="/artblog/js/jquery-3.6.4.min.js"></script>
-
-
+  </footer>
 
   
-<script src="/artblog/fancybox/jquery.fancybox.min.js"></script>
-
-
-
-
-<script src="/artblog/js/script.js"></script>
-
-
-
-
-
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
   </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/schemes/muse.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
 </body>
 </html>
