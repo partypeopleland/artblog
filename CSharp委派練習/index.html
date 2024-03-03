@@ -26,13 +26,13 @@
 <meta property="og:site_name" content="Art的辦公桌">
 <meta property="og:description" content="一直以來C#委派的語法總是很難搞懂，有一天寫一寫javascript的callback，突然感覺好像就是一樣的東西，似乎也沒那麼難，剛好有時間就找找範例來練習一下">
 <meta property="og:locale" content="zh_TW">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/CSharp%E5%A7%94%E6%B4%BE%E7%B7%B4%E7%BF%92/fun01.png">
+<meta property="og:image" content="https://partypeopleland.github.io/CSharp%E5%A7%94%E6%B4%BE%E7%B7%B4%E7%BF%92/fun01.png">
 <meta property="article:published_time" content="2019-08-02T07:02:28.000Z">
 <meta property="article:modified_time" content="2024-02-13T10:30:19.077Z">
 <meta property="article:author" content="art">
 <meta property="article:tag" content="delegate">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/CSharp%E5%A7%94%E6%B4%BE%E7%B7%B4%E7%BF%92/fun01.png">
+<meta name="twitter:image" content="https://partypeopleland.github.io/CSharp%E5%A7%94%E6%B4%BE%E7%B7%B4%E7%BF%92/fun01.png">
 
 
 <link rel="canonical" href="https://partypeopleland.github.io/artblog/CSharp%E5%A7%94%E6%B4%BE%E7%B7%B4%E7%BF%92/">
@@ -164,12 +164,12 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">分類</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">84</span>
+        <span class="site-state-item-count">83</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -292,7 +292,7 @@
 </ul>
 <p>為了不要讓某些事情的程式碼寫死在方法 A 裡面，具體的行為應從外部傳入給方法 A，所以透過委派的方式來做</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 先宣告一個委派，輸入為字串，輸出是自訂的DTO物件，具體的方法則是定義在ConvertStrToDto</span></span><br><span class="line">    Func&lt;<span class="built_in">string</span>, OutBoundUserCsv&gt; myHandler = ConvertStrToDto;</span><br><span class="line">    ReadCsvFile(myHandler);</span><br><span class="line">    Console.ReadKey();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> OutBoundUserCsv <span class="title">ConvertStrToDto</span>(<span class="params"><span class="built_in">string</span> source</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 將原始字串切割為陣列後逐一填入entity</span></span><br><span class="line">    <span class="keyword">var</span> d = source.Split(<span class="keyword">new</span>[] &#123; <span class="string">&quot; &quot;</span> &#125;, StringSplitOptions.RemoveEmptyEntries);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> OutBoundUserCsv()</span><br><span class="line">    &#123;</span><br><span class="line">        UserId = d[<span class="number">0</span>],</span><br><span class="line">        UserName = d[<span class="number">1</span>]</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">ReadCsvFile</span>(<span class="params">Func&lt;<span class="built_in">string</span>, OutBoundUserCsv&gt; myHandler</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 透過StreamReader讀取檔案，否則檔案很大的話會拖垮系統</span></span><br><span class="line">    <span class="keyword">using</span> (<span class="keyword">var</span> reader = <span class="keyword">new</span> StreamReader(<span class="string">&quot;Input.txt&quot;</span>))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">while</span> (!reader.EndOfStream)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">var</span> line = reader.ReadLine();</span><br><span class="line">            <span class="keyword">var</span> usr = myHandler.Invoke(line);</span><br><span class="line">            Console.WriteLine(<span class="string">$&quot;UserId:[<span class="subst">&#123;usr.UserId&#125;</span>] Name:[<span class="subst">&#123;usr.UserName&#125;</span>] &quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/artblog/CSharp%E5%A7%94%E6%B4%BE%E7%B7%B4%E7%BF%92/fun01.png"></p>
+<p><img src="/CSharp%E5%A7%94%E6%B4%BE%E7%B7%B4%E7%BF%92/fun01.png"></p>
 <p>當然不要重複造輪子，所以其實 CSV 檔案的操作可以考慮使用<a target="_blank" rel="noopener" href="https://www.filehelpers.net/">FileHelpers</a> 之類的套件來處理，這邊只是為了練習一下委派的用法來示例</p>
 <p>Sample Code:<a target="_blank" rel="noopener" href="https://github.com/partypeopleland/FileCsvToEntity">GitHub</a></p>
 <h2 id="測試連線資料庫的數據"><a href="#測試連線資料庫的數據" class="headerlink" title="測試連線資料庫的數據"></a>測試連線資料庫的數據</h2><p>想要測試在不同的連線環境(固網、WIFI、VPN…Etc)之下，連線資料庫的速度</p>

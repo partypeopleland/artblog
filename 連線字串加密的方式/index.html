@@ -26,14 +26,14 @@
 <meta property="og:site_name" content="Art的辦公桌">
 <meta property="og:description" content="通常網站都會與資料庫溝通，也因此在 csharp 的專案設定檔，我們大都會將連線字串寫在這裡，便於程式調用，但資料庫連線字串包含了帳號密碼，直接寫在設定組態檔是一個資安漏洞為了不要讓明碼直接暴露出去，我們這裡最好做一些防護措施，利用演算法將明文加密，等到要用的時候再解密出來。 當然這樣的做法還是有風險的，因為加解密的 Key、IV 也還是一樣都放在組態檔內，所以這只能說是一個初步的防護方式">
 <meta property="og:locale" content="zh_TW">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/%E9%80%A3%E7%B7%9A%E5%AD%97%E4%B8%B2%E5%8A%A0%E5%AF%86%E7%9A%84%E6%96%B9%E5%BC%8F/2020-03-04_113723.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/%E9%80%A3%E7%B7%9A%E5%AD%97%E4%B8%B2%E5%8A%A0%E5%AF%86%E7%9A%84%E6%96%B9%E5%BC%8F/2020-03-04_121656.png">
+<meta property="og:image" content="https://partypeopleland.github.io/%E9%80%A3%E7%B7%9A%E5%AD%97%E4%B8%B2%E5%8A%A0%E5%AF%86%E7%9A%84%E6%96%B9%E5%BC%8F/2020-03-04_113723.png">
+<meta property="og:image" content="https://partypeopleland.github.io/%E9%80%A3%E7%B7%9A%E5%AD%97%E4%B8%B2%E5%8A%A0%E5%AF%86%E7%9A%84%E6%96%B9%E5%BC%8F/2020-03-04_121656.png">
 <meta property="article:published_time" content="2020-03-04T01:57:20.000Z">
 <meta property="article:modified_time" content="2024-02-13T10:30:19.270Z">
 <meta property="article:author" content="art">
 <meta property="article:tag" content="web.config">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/%E9%80%A3%E7%B7%9A%E5%AD%97%E4%B8%B2%E5%8A%A0%E5%AF%86%E7%9A%84%E6%96%B9%E5%BC%8F/2020-03-04_113723.png">
+<meta name="twitter:image" content="https://partypeopleland.github.io/%E9%80%A3%E7%B7%9A%E5%AD%97%E4%B8%B2%E5%8A%A0%E5%AF%86%E7%9A%84%E6%96%B9%E5%BC%8F/2020-03-04_113723.png">
 
 
 <link rel="canonical" href="https://partypeopleland.github.io/artblog/%E9%80%A3%E7%B7%9A%E5%AD%97%E4%B8%B2%E5%8A%A0%E5%AF%86%E7%9A%84%E6%96%B9%E5%BC%8F/">
@@ -165,12 +165,12 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">分類</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">84</span>
+        <span class="site-state-item-count">83</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -307,11 +307,11 @@
 <h3 id="判斷是否需要執行解密"><a href="#判斷是否需要執行解密" class="headerlink" title="判斷是否需要執行解密"></a>判斷是否需要執行解密</h3><p>直接取得連線字串的 function 當中判斷處理</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="built_in">string</span> <span class="title">GetVersion</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> connectionString = GetConnectionString(<span class="string">&quot;db&quot;</span>);</span><br><span class="line">    <span class="keyword">var</span> commandText = <span class="string">&quot;select @@version&quot;</span>;</span><br><span class="line">    <span class="keyword">using</span> (<span class="keyword">var</span> cnn = <span class="keyword">new</span> MySqlConnection(connectionString))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> cnn.Query&lt;<span class="built_in">string</span>&gt;(commandText).FirstOrDefault();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">GetConnectionString</span>(<span class="params"><span class="built_in">string</span> name</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> connectionString = ConfigurationManager.ConnectionStrings[name];</span><br><span class="line">    <span class="keyword">var</span> source = connectionString.ConnectionString;</span><br><span class="line">    <span class="keyword">if</span> (connectionString.LockItem)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> hashKey = ConfigurationManager.AppSettings[<span class="string">&quot;hashKey&quot;</span>];</span><br><span class="line">        <span class="keyword">var</span> iv = ConfigurationManager.AppSettings[<span class="string">&quot;iv&quot;</span>];</span><br><span class="line">        source = Decryption(source, hashKey, iv);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> source;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="Sample-Code"><a href="#Sample-Code" class="headerlink" title="Sample Code"></a>Sample Code</h3><p><img src="/artblog/%E9%80%A3%E7%B7%9A%E5%AD%97%E4%B8%B2%E5%8A%A0%E5%AF%86%E7%9A%84%E6%96%B9%E5%BC%8F/2020-03-04_113723.png"><br><a target="_blank" rel="noopener" href="https://github.com/art-Blog/CryptoConnStrDemo">Github</a></p>
+<h3 id="Sample-Code"><a href="#Sample-Code" class="headerlink" title="Sample Code"></a>Sample Code</h3><p><img src="/%E9%80%A3%E7%B7%9A%E5%AD%97%E4%B8%B2%E5%8A%A0%E5%AF%86%E7%9A%84%E6%96%B9%E5%BC%8F/2020-03-04_113723.png"><br><a target="_blank" rel="noopener" href="https://github.com/art-Blog/CryptoConnStrDemo">Github</a></p>
 <h2 id="組態檔案加密"><a href="#組態檔案加密" class="headerlink" title="組態檔案加密"></a>組態檔案加密</h2><p>透過 aspnet_regiis.exe 來處理，需要透過管理員權限來執行喔</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">透過 aspnet_regiis將 指定目錄下的 web.config 當中的 appSettings 區段加密</span></span><br><span class="line">aspnet_regiis -pef appSettings D:\code\Github\Repos\CryptoConnStrDemo\CryptoConnStrDemo</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">同上，參數改為 pdf 則為解密</span></span><br><span class="line">aspnet_regiis -pdf appSettings D:\code\Github\Repos\CryptoConnStrDemo\CryptoConnStrDemo</span><br></pre></td></tr></table></figure>
 
-<p><img src="/artblog/%E9%80%A3%E7%B7%9A%E5%AD%97%E4%B8%B2%E5%8A%A0%E5%AF%86%E7%9A%84%E6%96%B9%E5%BC%8F/2020-03-04_121656.png"></p>
+<p><img src="/%E9%80%A3%E7%B7%9A%E5%AD%97%E4%B8%B2%E5%8A%A0%E5%AF%86%E7%9A%84%E6%96%B9%E5%BC%8F/2020-03-04_121656.png"></p>
 <p>如果要在本機測試的話，需要先將 Visual Studio 在建置的時候使用 local 的 IIS，而非 IISExpress</p>
 <p>如果需要將本機的 RSA 金鑰容器給別台主機使用，則需要先將金鑰容器匯出，再由別的主機匯入使用</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">匯出</span></span><br><span class="line">aspnet_regiis -px &quot;NetFrameworkConfigurationKey&quot; D:/RSAkeys.xml -pri</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">匯入</span></span><br><span class="line">aspnet_regiis -pi &quot;NetFrameworkConfigurationKey&quot; D:/RSAkeys.xml</span><br></pre></td></tr></table></figure>

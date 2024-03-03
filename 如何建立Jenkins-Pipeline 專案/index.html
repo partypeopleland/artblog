@@ -26,18 +26,18 @@
 <meta property="og:site_name" content="Art的辦公桌">
 <meta property="og:description" content="這次想要練習的是 Jenkins 的 Pipeline 專案，所以就先在 local 裝 jenkins windows 版本囉，安裝過程很簡單就不贅述">
 <meta property="og:locale" content="zh_TW">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/2020-01-13_16-05-27.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/2020-01-13_15-31-45.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/2020-01-13_15-38-44.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/2020-01-14_17-58-39.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/2020-01-13_15-37-13.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/2020-01-13_15-41-50.png">
+<meta property="og:image" content="https://partypeopleland.github.io/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/2020-01-13_16-05-27.png">
+<meta property="og:image" content="https://partypeopleland.github.io/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/2020-01-13_15-31-45.png">
+<meta property="og:image" content="https://partypeopleland.github.io/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/2020-01-13_15-38-44.png">
+<meta property="og:image" content="https://partypeopleland.github.io/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/2020-01-14_17-58-39.png">
+<meta property="og:image" content="https://partypeopleland.github.io/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/2020-01-13_15-37-13.png">
+<meta property="og:image" content="https://partypeopleland.github.io/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/2020-01-13_15-41-50.png">
 <meta property="article:published_time" content="2020-01-14T09:53:47.000Z">
 <meta property="article:modified_time" content="2024-02-13T10:30:19.258Z">
 <meta property="article:author" content="art">
 <meta property="article:tag" content="jenkins">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/2020-01-13_16-05-27.png">
+<meta name="twitter:image" content="https://partypeopleland.github.io/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/2020-01-13_16-05-27.png">
 
 
 <link rel="canonical" href="https://partypeopleland.github.io/artblog/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/">
@@ -169,12 +169,12 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">分類</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">84</span>
+        <span class="site-state-item-count">83</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -290,7 +290,7 @@
     <div class="post-body" itemprop="articleBody"><p>這次想要練習的是 Jenkins 的 Pipeline 專案，所以就先在 local 裝 jenkins windows 版本囉，安裝過程很簡單就不贅述</p>
 <span id="more"></span>
 
-<h2 id="準備設置環境變數"><a href="#準備設置環境變數" class="headerlink" title="準備設置環境變數"></a>準備設置環境變數</h2><p>在這個步驟主要是為了將在 command line 環境下所使用到的指令，都放在 path 內，讓系統可以自行尋找，而不需要每次執行都打上完整路徑<br>在檔案總管-&gt;電腦-&gt;右鍵內容，接著如下圖即可設定<br><img src="/artblog/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/2020-01-13_16-05-27.png"></p>
+<h2 id="準備設置環境變數"><a href="#準備設置環境變數" class="headerlink" title="準備設置環境變數"></a>準備設置環境變數</h2><p>在這個步驟主要是為了將在 command line 環境下所使用到的指令，都放在 path 內，讓系統可以自行尋找，而不需要每次執行都打上完整路徑<br>在檔案總管-&gt;電腦-&gt;右鍵內容，接著如下圖即可設定<br><img src="/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/2020-01-13_16-05-27.png"></p>
 <p>以我自己的電腦為例，路徑如下</p>
 <table>
 <thead>
@@ -321,11 +321,11 @@
 <h2 id="新增-pipeline-專案"><a href="#新增-pipeline-專案" class="headerlink" title="新增 pipeline 專案"></a>新增 pipeline 專案</h2><h3 id="groovy-範例"><a href="#groovy-範例" class="headerlink" title="groovy 範例"></a>groovy 範例</h3><p>透過最簡單的 hello world 範例來認識 pipeline，在下面的指令共有一個 stage，這個 stage 的動作就只有一個，顯示 hello world</p>
 <figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">pipeline &#123;</span><br><span class="line">   agent any</span><br><span class="line"></span><br><span class="line">   stages &#123;</span><br><span class="line">      stage(<span class="string">&#x27;Hello&#x27;</span>) &#123;</span><br><span class="line">         steps &#123;</span><br><span class="line">            echo <span class="string">&#x27;Hello World&#x27;</span></span><br><span class="line">         &#125;</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/artblog/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/2020-01-13_15-31-45.png"></p>
-<h3 id="取得原始檔案-Git"><a href="#取得原始檔案-Git" class="headerlink" title="取得原始檔案 (Git)"></a>取得原始檔案 (Git)</h3><p>使用 Pipeline Syntax 的產生器來撰寫指令<br><img src="/artblog/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/2020-01-13_15-38-44.png"></p>
-<p>因為要從 Git 抓資料，所以選擇下拉選單項目：<code>checkout: Check Out from version control</code>；需要先自行建立憑證，此處利用 ssh key<br><img src="/artblog/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/2020-01-14_17-58-39.png"></p>
-<p>private Key 就拿<code>%userprofile%/.ssh/id_rsa</code>的內容<br><img src="/artblog/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/2020-01-13_15-37-13.png"></p>
-<p>點選下方的<code>Generate Pipeline Script</code>就會依照上方選擇的內容產生真正的指令碼<br><img src="/artblog/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/2020-01-13_15-41-50.png"></p>
+<p><img src="/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/2020-01-13_15-31-45.png"></p>
+<h3 id="取得原始檔案-Git"><a href="#取得原始檔案-Git" class="headerlink" title="取得原始檔案 (Git)"></a>取得原始檔案 (Git)</h3><p>使用 Pipeline Syntax 的產生器來撰寫指令<br><img src="/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/2020-01-13_15-38-44.png"></p>
+<p>因為要從 Git 抓資料，所以選擇下拉選單項目：<code>checkout: Check Out from version control</code>；需要先自行建立憑證，此處利用 ssh key<br><img src="/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/2020-01-14_17-58-39.png"></p>
+<p>private Key 就拿<code>%userprofile%/.ssh/id_rsa</code>的內容<br><img src="/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/2020-01-13_15-37-13.png"></p>
+<p>點選下方的<code>Generate Pipeline Script</code>就會依照上方選擇的內容產生真正的指令碼<br><img src="/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/2020-01-13_15-41-50.png"></p>
 <p>注意下方指令</p>
 <ol>
 <li>deleteDir()是另外加上去的，用來確保資料夾一開始都是空的</li>

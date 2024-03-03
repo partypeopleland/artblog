@@ -26,12 +26,12 @@
 <meta property="og:site_name" content="Art的辦公桌">
 <meta property="og:description" content="刪除相鄰的重複字元">
 <meta property="og:locale" content="zh_TW">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/LeetCode-RemoveDuplicates/leetcode_1047_01.png">
+<meta property="og:image" content="https://partypeopleland.github.io/LeetCode-RemoveDuplicates/leetcode_1047_01.png">
 <meta property="article:published_time" content="2019-07-12T21:52:13.000Z">
 <meta property="article:modified_time" content="2024-02-13T10:30:19.088Z">
 <meta property="article:author" content="art">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/LeetCode-RemoveDuplicates/leetcode_1047_01.png">
+<meta name="twitter:image" content="https://partypeopleland.github.io/LeetCode-RemoveDuplicates/leetcode_1047_01.png">
 
 
 <link rel="canonical" href="https://partypeopleland.github.io/artblog/LeetCode-RemoveDuplicates/">
@@ -163,12 +163,12 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">分類</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">84</span>
+        <span class="site-state-item-count">83</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -287,7 +287,7 @@
 <h2 id="Test-Case"><a href="#Test-Case" class="headerlink" title="Test Case"></a>Test Case</h2><p>Input:abbaca<br>Output:ca</p>
 <p>Input:aaaaaaa<br>Output:a</p>
 <h2 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h2><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Solution</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">RemoveDuplicates</span>(<span class="params"><span class="built_in">string</span> S</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> result = <span class="keyword">new</span> Stack&lt;<span class="built_in">char</span>&gt;();</span><br><span class="line">        <span class="keyword">foreach</span>(<span class="keyword">var</span> s <span class="keyword">in</span> S)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (result.Any())</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span> (result.First() == s)</span><br><span class="line">                &#123;</span><br><span class="line">                    result.Pop();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                &#123;</span><br><span class="line">                    result.Push(s);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                result.Push(s);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">string</span>.Join(<span class="built_in">string</span>.Empty, result.ToArray().Reverse());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/artblog/LeetCode-RemoveDuplicates/leetcode_1047_01.png"></p>
+<p><img src="/LeetCode-RemoveDuplicates/leetcode_1047_01.png"></p>
 <h2 id="心得"><a href="#心得" class="headerlink" title="心得"></a>心得</h2><p>這個版本其實是第三個版本，一開始是透過 <code>regex</code> 來做，有點拿大砲轟蚊子的感覺，當然效能也很不好<br>畢竟 regex 用來處理更複雜的文字結構才是他的優勢</p>
 <p>第二個版本依循前一個版本的思路，但沒注意到字串宣告在動態時期的問題，造成記憶體耗費過多的問題</p>
 <p>第三個版本的思路比較正確一點，但應該還是有其優化的空間</p>

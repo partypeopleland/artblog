@@ -26,13 +26,13 @@
 <meta property="og:site_name" content="Art的辦公桌">
 <meta property="og:description" content="本次練習如何透過filebeat採集主機資訊，並傳遞給logstash進行分析過濾後，由kibana的介面去查看資料；另外一個用法是直接讓filebeat的資料丟給elasticSearch，並且最終在kibana的Logs功能裡面查看，不過我沒有使用就不介紹了">
 <meta property="og:locale" content="zh_TW">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/ELK-stack-with-filebeat/01.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/ELK-stack-with-filebeat/04.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/ELK-stack-with-filebeat/05.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/ELK-stack-with-filebeat/06.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/ELK-stack-with-filebeat/IISREC.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/ELK-stack-with-filebeat/02.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/ELK-stack-with-filebeat/03.png">
+<meta property="og:image" content="https://partypeopleland.github.io/ELK-stack-with-filebeat/01.png">
+<meta property="og:image" content="https://partypeopleland.github.io/ELK-stack-with-filebeat/04.png">
+<meta property="og:image" content="https://partypeopleland.github.io/ELK-stack-with-filebeat/05.png">
+<meta property="og:image" content="https://partypeopleland.github.io/ELK-stack-with-filebeat/06.png">
+<meta property="og:image" content="https://partypeopleland.github.io/ELK-stack-with-filebeat/IISREC.png">
+<meta property="og:image" content="https://partypeopleland.github.io/ELK-stack-with-filebeat/02.png">
+<meta property="og:image" content="https://partypeopleland.github.io/ELK-stack-with-filebeat/03.png">
 <meta property="article:published_time" content="2020-11-04T03:20:24.000Z">
 <meta property="article:modified_time" content="2024-02-13T10:30:19.181Z">
 <meta property="article:author" content="art">
@@ -40,7 +40,7 @@
 <meta property="article:tag" content="APM">
 <meta property="article:tag" content="filebeat">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/ELK-stack-with-filebeat/01.png">
+<meta name="twitter:image" content="https://partypeopleland.github.io/ELK-stack-with-filebeat/01.png">
 
 
 <link rel="canonical" href="https://partypeopleland.github.io/artblog/ELK-stack-with-filebeat/">
@@ -172,12 +172,12 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">分類</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">84</span>
+        <span class="site-state-item-count">83</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -293,7 +293,7 @@
     <div class="post-body" itemprop="articleBody"><p>本次練習如何透過<code>filebeat</code>採集主機資訊，並傳遞給<code>logstash</code>進行分析過濾後，由<code>kibana</code>的介面去查看資料；另外一個用法是直接讓<code>filebeat</code>的資料丟給<code>elasticSearch</code>，並且最終在<code>kibana</code>的<code>Logs</code>功能裡面查看，不過我沒有使用就不介紹了</p>
 <span id="more"></span>
 
-<h2 id="架構"><a href="#架構" class="headerlink" title="架構"></a>架構</h2><p><img src="/artblog/ELK-stack-with-filebeat/01.png"></p>
+<h2 id="架構"><a href="#架構" class="headerlink" title="架構"></a>架構</h2><p><img src="/ELK-stack-with-filebeat/01.png"></p>
 <h2 id="環境建立"><a href="#環境建立" class="headerlink" title="環境建立"></a>環境建立</h2><p>基本上就是透過 docker 建立所需要的東西，這部分請參考我自己練習的<a target="_blank" rel="noopener" href="https://github.com/art-Blog/my-docker-elk">docker-compose</a>，當然我也是改自<a target="_blank" rel="noopener" href="https://github.com/deviantony/docker-elk">deviantony&#x2F;docker-elk</a>的<code>Elastic stack (ELK) on Docker</code>，有興趣的人可以了解一下</p>
 <h2 id="filebeat"><a href="#filebeat" class="headerlink" title="filebeat"></a>filebeat</h2><p>依照下列的設定表示要監控該目錄下的 log 檔案，本次練習要監控的目標檔案是由 IIS 產生的網站 log 資料，但因為預計是用 docker 建立，所以我們在此處只需要指定某個路徑，屆時要建立 container 的時候，再透過 volume 來掛載實際路徑即可</p>
 <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">filebeat.inputs:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">type:</span> <span class="string">log</span></span><br><span class="line">      <span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line">      <span class="attr">paths:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="string">/logs/*.log</span></span><br></pre></td></tr></table></figure>
@@ -316,15 +316,15 @@
 <p>先下載 logstash docker image</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull docker.elastic.co/logstash/logstash:7.9.3</span><br></pre></td></tr></table></figure>
 
-<p><img src="/artblog/ELK-stack-with-filebeat/04.png"></p>
+<p><img src="/ELK-stack-with-filebeat/04.png"></p>
 <p>嘗試一下看看版本</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --rm docker.elastic.co/logstash/logstash:7.9.3 --version</span><br></pre></td></tr></table></figure>
 
-<p><img src="/artblog/ELK-stack-with-filebeat/05.png"></p>
+<p><img src="/ELK-stack-with-filebeat/05.png"></p>
 <p>設定檔的結構分成三大區塊 <code>input</code>、<code>filter</code>、<code>output</code>，對應的行為就是：輸入資料、處理資料、輸出資料<br>在這邊我們希望由鍵盤輸入資料，顯示在螢幕上，採用的都是標準輸入、輸出，所以指令如下</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --rm logstash -e &quot;input &#123; stdin &#123; &#125; &#125; output &#123; stdout &#123; &#125; &#125;&quot;</span><br></pre></td></tr></table></figure>
 
-<p>輸入的<code>Hello World</code>之後可以看到螢幕上輸出的結果<br><img src="/artblog/ELK-stack-with-filebeat/06.png"></p>
+<p>輸入的<code>Hello World</code>之後可以看到螢幕上輸出的結果<br><img src="/ELK-stack-with-filebeat/06.png"></p>
 <h3 id="設定語法"><a href="#設定語法" class="headerlink" title="設定語法"></a>設定語法</h3><p><strong>區段</strong><br>用大括號來定義，裡面可以包含<code>logstash</code>外掛設定，例如</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">input &#123;</span><br><span class="line">    stdin &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -397,7 +397,7 @@
 <h3 id="codec"><a href="#codec" class="headerlink" title="codec"></a>codec</h3><p>logstash 在處理資料的部分，其實不只是 <code>input | filter | output</code>，應該是 <code>input | decode | filter | encode | output </code>，而<code>codec</code>就是在處理<code>decode</code>、<code>encode</code>的部分<br>不過因為我目前實務上並沒有需求使用到這些東西，所以先暫時知道有這麼一回事情就好，細節的部份可以看一下<a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/logstash/current/codec-plugins.html">官方介紹</a>，了解一下支援的編碼格式</p>
 <h3 id="filter"><a href="#filter" class="headerlink" title="filter"></a><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/logstash/7.9/filter-plugins.html">filter</a></h3><p>照字面上的翻譯是過濾，但其實可以想像成切割，因為這階段做的事情就是將輸入資料透過我們設定好的方式，從原始資料中切割出我們所需要的資料格式，然後交給下一個階段輸出</p>
 <p>IISLOG 原始的資料格式如下，一行就是一筆資料，以空格分開，對應的欄位順序如同<code>#Fields</code>一樣</p>
-<p>新增的自訂欄位設定如下<br><img src="/artblog/ELK-stack-with-filebeat/IISREC.png"></p>
+<p>新增的自訂欄位設定如下<br><img src="/ELK-stack-with-filebeat/IISREC.png"></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#Software: Microsoft Internet Information Services 10.0</span><br><span class="line">#Version: 1.0</span><br><span class="line">#Date: 2020-11-02 02:36:20</span><br><span class="line">#Fields: date time s-ip cs-method cs-uri-stem cs-uri-query s-port cs-username c-ip cs(User-Agent) cs(Referer) sc-status sc-substatus sc-win32-status sc-bytes cs-bytes time-taken t-id</span><br><span class="line">2020-11-02 02:36:19 ::1 POST /CustomerService/GetServerCustomer - 80 OB測試 ::1 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/86.0.4240.111+Safari/537.36 http://localhost/Order 200 0 0 235 2014 484 61901600</span><br><span class="line">2020-11-02 02:36:17 ::1 POST /CustomerService/GetServerCustomer - 80 OB測試 ::1 Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Chrome/86.0.4240.111+Safari/537.36 http://localhost/Order 200 0 0 235 2014 1753 25991359</span><br></pre></td></tr></table></figure>
 
 <p>由於將 filebeat 設定標籤為<code>iis-log</code>、<code>web</code>，所以在 filter 這邊就可以透過下列的判斷式處理</p>
@@ -407,12 +407,12 @@
 <p>注意，網站 IIS log 若沒有特別處理，通常都是用 W3C 的格式，而這個格式的時間是格林威治時間，所以在<code>logstash</code>為了要讓他在<code>kibana</code>裡面的時間是我們 UTC+8 的時間，所以利用<code>date</code>這個外掛指定<code>timezone</code></p>
 </blockquote>
 <p>在<code>filter</code>這個部分會常用到的是<code>grok</code>表達語法，格式是<code>%&#123;屬性:自訂切割後屬性名稱&#125;</code>，可以透過<a target="_blank" rel="noopener" href="https://grokdebug.herokuapp.com/">grokdebug</a>這個線上工具驗證語法，以上面的設定為例子，就是透過 IIS LOG 的訊息，撰寫對應的 grok 語法去切割我們所需要的資料，有興趣的人可以去網站試試看</p>
-<p><img src="/artblog/ELK-stack-with-filebeat/02.png"></p>
+<p><img src="/ELK-stack-with-filebeat/02.png"></p>
 <h3 id="output"><a href="#output" class="headerlink" title="output"></a><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/logstash/7.9/output-plugins.html">output</a></h3><p>輸出的部分就較簡單，確認是<code>web</code>的話就塞到<code>web-iis-log-XXXX.XX.XX</code>的 index 去，順便也用標準輸出 <code>stdout</code>，如果有問題還可以去 container 裡面看，如果不需要當然也可以移除 <code>stdout</code>這行</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">output &#123;</span><br><span class="line">    if &quot;web&quot; in [tags] &#123;</span><br><span class="line">        stdout &#123; codec =&gt; rubydebug &#125;</span><br><span class="line">        elasticsearch &#123;</span><br><span class="line">            hosts =&gt; &quot;elasticsearch:9200&quot;</span><br><span class="line">            index =&gt; &quot;web-iis-log-%&#123;+YYYY.MM.dd&#125;&quot;</span><br><span class="line">            ilm_enabled =&gt; true</span><br><span class="line">            ilm_policy =&gt; &quot;log-ilm-policy&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h2 id="結果"><a href="#結果" class="headerlink" title="結果"></a>結果</h2><p>elastic 跟 kibana 的部分就參考 github 內容，這邊比較沒什麼需要說明的，直接看結果</p>
-<p><img src="/artblog/ELK-stack-with-filebeat/03.png"></p>
+<p><img src="/ELK-stack-with-filebeat/03.png"></p>
 <p>可以看到我們經由<code>logstash</code>切割出來的欄位都已經能夠在<code>kibana</code>中出現，例如<code>tid</code>，<code>username</code>等等，這樣就可以利用來搜尋了</p>
 
     </div>

@@ -26,17 +26,17 @@
 <meta property="og:site_name" content="Art的辦公桌">
 <meta property="og:description" content="透過 wallaby.js 進行 javascript TDD , 利用 jest 作為測試框架則可以省掉wallaby.js的設定檔">
 <meta property="og:locale" content="zh_TW">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/unittest-with-jest-and-wallabyjs/2020-11-30_121650.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/unittest-with-jest-and-wallabyjs/2020-11-30_122551.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/unittest-with-jest-and-wallabyjs/2020-11-30_122700.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/unittest-with-jest-and-wallabyjs/2020-11-30_122757.png">
+<meta property="og:image" content="https://partypeopleland.github.io/unittest-with-jest-and-wallabyjs/2020-11-30_121650.png">
+<meta property="og:image" content="https://partypeopleland.github.io/unittest-with-jest-and-wallabyjs/2020-11-30_122551.png">
+<meta property="og:image" content="https://partypeopleland.github.io/unittest-with-jest-and-wallabyjs/2020-11-30_122700.png">
+<meta property="og:image" content="https://partypeopleland.github.io/unittest-with-jest-and-wallabyjs/2020-11-30_122757.png">
 <meta property="article:published_time" content="2020-11-30T04:05:07.000Z">
 <meta property="article:modified_time" content="2024-02-13T10:30:19.244Z">
 <meta property="article:author" content="art">
 <meta property="article:tag" content="unittest">
 <meta property="article:tag" content="wallaby.js">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/unittest-with-jest-and-wallabyjs/2020-11-30_121650.png">
+<meta name="twitter:image" content="https://partypeopleland.github.io/unittest-with-jest-and-wallabyjs/2020-11-30_121650.png">
 
 
 <link rel="canonical" href="https://partypeopleland.github.io/artblog/unittest-with-jest-and-wallabyjs/">
@@ -168,12 +168,12 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">分類</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">84</span>
+        <span class="site-state-item-count">83</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -298,7 +298,7 @@
 <h2 id="設定-Jest"><a href="#設定-Jest" class="headerlink" title="設定 Jest"></a>設定 Jest</h2><p>在 jest 的部分可以透過指令建立預設的設定檔，所有的設定都用預設直接 Enter，再去修改即可，設定的部分可以參考<a target="_blank" rel="noopener" href="https://jestjs.io/docs/en/configuration#testmatch-arraystring">Jest 官網說明</a></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jest --init</span><br></pre></td></tr></table></figure>
 
-<p><img src="/artblog/unittest-with-jest-and-wallabyjs/2020-11-30_121650.png"></p>
+<p><img src="/unittest-with-jest-and-wallabyjs/2020-11-30_121650.png"></p>
 <h2 id="設定-babel"><a href="#設定-babel" class="headerlink" title="設定 babel"></a>設定 babel</h2><p>建立<code>babel.config.js</code>內容如下</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// babel.config.js</span></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">	<span class="attr">presets</span>: [</span><br><span class="line">		[</span><br><span class="line">			<span class="string">&#x27;@babel/preset-env&#x27;</span>,</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="attr">targets</span>: &#123;</span><br><span class="line">					<span class="attr">node</span>: <span class="string">&#x27;current&#x27;</span>,</span><br><span class="line">				&#125;,</span><br><span class="line">			&#125;,</span><br><span class="line">		],</span><br><span class="line">	],</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
@@ -312,9 +312,9 @@
 <p>就可以利用<code>npm</code>或是<code>yarn</code>執行測試，當然這只是方便的做法，你可以選擇打完整指令<code>npx jest</code></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm run test</span><br><span class="line">yarn test</span><br></pre></td></tr></table></figure>
 
-<p><img src="/artblog/unittest-with-jest-and-wallabyjs/2020-11-30_122551.png"></p>
-<h2 id="使用-wallaby-js"><a href="#使用-wallaby-js" class="headerlink" title="使用 wallaby.js"></a>使用 wallaby.js</h2><p>透過 F1 執行 <code>wallaby.js</code><br><img src="/artblog/unittest-with-jest-and-wallabyjs/2020-11-30_122700.png"></p>
-<p><img src="/artblog/unittest-with-jest-and-wallabyjs/2020-11-30_122757.png"></p>
+<p><img src="/unittest-with-jest-and-wallabyjs/2020-11-30_122551.png"></p>
+<h2 id="使用-wallaby-js"><a href="#使用-wallaby-js" class="headerlink" title="使用 wallaby.js"></a>使用 wallaby.js</h2><p>透過 F1 執行 <code>wallaby.js</code><br><img src="/unittest-with-jest-and-wallabyjs/2020-11-30_122700.png"></p>
+<p><img src="/unittest-with-jest-and-wallabyjs/2020-11-30_122757.png"></p>
 
     </div>
 

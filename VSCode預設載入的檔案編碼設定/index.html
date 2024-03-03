@@ -26,15 +26,15 @@
 <meta property="og:site_name" content="Art的辦公桌">
 <meta property="og:description" content="打算使用VSCode做為主力Editor，時常會因為檔案編碼的問題困擾，研究了一下VSCode的設定">
 <meta property="og:locale" content="zh_TW">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/VSCode%E9%A0%90%E8%A8%AD%E8%BC%89%E5%85%A5%E7%9A%84%E6%AA%94%E6%A1%88%E7%B7%A8%E7%A2%BC%E8%A8%AD%E5%AE%9A/1524045432_09821.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/VSCode%E9%A0%90%E8%A8%AD%E8%BC%89%E5%85%A5%E7%9A%84%E6%AA%94%E6%A1%88%E7%B7%A8%E7%A2%BC%E8%A8%AD%E5%AE%9A/1524045324_30759.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/VSCode%E9%A0%90%E8%A8%AD%E8%BC%89%E5%85%A5%E7%9A%84%E6%AA%94%E6%A1%88%E7%B7%A8%E7%A2%BC%E8%A8%AD%E5%AE%9A/1524046021_75643.png">
+<meta property="og:image" content="https://partypeopleland.github.io/VSCode%E9%A0%90%E8%A8%AD%E8%BC%89%E5%85%A5%E7%9A%84%E6%AA%94%E6%A1%88%E7%B7%A8%E7%A2%BC%E8%A8%AD%E5%AE%9A/1524045432_09821.png">
+<meta property="og:image" content="https://partypeopleland.github.io/VSCode%E9%A0%90%E8%A8%AD%E8%BC%89%E5%85%A5%E7%9A%84%E6%AA%94%E6%A1%88%E7%B7%A8%E7%A2%BC%E8%A8%AD%E5%AE%9A/1524045324_30759.png">
+<meta property="og:image" content="https://partypeopleland.github.io/VSCode%E9%A0%90%E8%A8%AD%E8%BC%89%E5%85%A5%E7%9A%84%E6%AA%94%E6%A1%88%E7%B7%A8%E7%A2%BC%E8%A8%AD%E5%AE%9A/1524046021_75643.png">
 <meta property="article:published_time" content="2018-04-18T02:07:15.000Z">
 <meta property="article:modified_time" content="2024-02-13T10:30:19.044Z">
 <meta property="article:author" content="art">
 <meta property="article:tag" content="vscode">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/VSCode%E9%A0%90%E8%A8%AD%E8%BC%89%E5%85%A5%E7%9A%84%E6%AA%94%E6%A1%88%E7%B7%A8%E7%A2%BC%E8%A8%AD%E5%AE%9A/1524045432_09821.png">
+<meta name="twitter:image" content="https://partypeopleland.github.io/VSCode%E9%A0%90%E8%A8%AD%E8%BC%89%E5%85%A5%E7%9A%84%E6%AA%94%E6%A1%88%E7%B7%A8%E7%A2%BC%E8%A8%AD%E5%AE%9A/1524045432_09821.png">
 
 
 <link rel="canonical" href="https://partypeopleland.github.io/artblog/VSCode%E9%A0%90%E8%A8%AD%E8%BC%89%E5%85%A5%E7%9A%84%E6%AA%94%E6%A1%88%E7%B7%A8%E7%A2%BC%E8%A8%AD%E5%AE%9A/">
@@ -165,12 +165,12 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">分類</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">84</span>
+        <span class="site-state-item-count">83</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -286,13 +286,13 @@
     <div class="post-body" itemprop="articleBody"><p>打算使用VSCode做為主力Editor，時常會因為檔案編碼的問題困擾，研究了一下VSCode的設定</p>
 <span id="more"></span>
 <p>有的時候在改程式，常常會有編碼上的問題，往往舊程式是用BIG5編碼寫的，但是新專案的其他程式又都是用UTF8寫的，久而久之調整編碼就會是一項煩人的工作。</p>
-<p><img src="/artblog/VSCode%E9%A0%90%E8%A8%AD%E8%BC%89%E5%85%A5%E7%9A%84%E6%AA%94%E6%A1%88%E7%B7%A8%E7%A2%BC%E8%A8%AD%E5%AE%9A/1524045432_09821.png"></p>
+<p><img src="/VSCode%E9%A0%90%E8%A8%AD%E8%BC%89%E5%85%A5%E7%9A%84%E6%AA%94%E6%A1%88%E7%B7%A8%E7%A2%BC%E8%A8%AD%E5%AE%9A/1524045432_09821.png"></p>
 <p>VSCode其實有提供設定，可以讓程式載入預設的檔案，但是，這個好像對上述情境沒有什麼用，因為預設都用UTF8開啟，那普通的ANSI檔案怎麼辦？<br>下面還有一個設定是自動推測檔案編碼，這個應該是可用的，不過，看著設定的說明：可以根據每個語言加以設定，我開始對於針對附檔名設定預設編碼有點好奇。</p>
-<p><img src="/artblog/VSCode%E9%A0%90%E8%A8%AD%E8%BC%89%E5%85%A5%E7%9A%84%E6%AA%94%E6%A1%88%E7%B7%A8%E7%A2%BC%E8%A8%AD%E5%AE%9A/1524045324_30759.png"></p>
+<p><img src="/VSCode%E9%A0%90%E8%A8%AD%E8%BC%89%E5%85%A5%E7%9A%84%E6%AA%94%E6%A1%88%E7%B7%A8%E7%A2%BC%E8%A8%AD%E5%AE%9A/1524045324_30759.png"></p>
 <p>廢話不多說，直接貼設定，值得一提的是，asp的設定選項在VSCode好像不能用，但是VSCode-Insiders是可以用的。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;[javascript]&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;files.encoding&quot;</span>: <span class="string">&quot;cp950&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&quot;[html]&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;files.encoding&quot;</span>: <span class="string">&quot;utf8&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&quot;[asp]&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;files.encoding&quot;</span>: <span class="string">&quot;cp950&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&quot;files.autoGuessEncoding&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">&quot;files.associations&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;*.inc&quot;</span>: <span class="string">&quot;asp&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>對了，如果是用開啟資料夾的方式，在設定還會多一個工作區設定喔</p>
-<p><img src="/artblog/VSCode%E9%A0%90%E8%A8%AD%E8%BC%89%E5%85%A5%E7%9A%84%E6%AA%94%E6%A1%88%E7%B7%A8%E7%A2%BC%E8%A8%AD%E5%AE%9A/1524046021_75643.png"></p>
+<p><img src="/VSCode%E9%A0%90%E8%A8%AD%E8%BC%89%E5%85%A5%E7%9A%84%E6%AA%94%E6%A1%88%E7%B7%A8%E7%A2%BC%E8%A8%AD%E5%AE%9A/1524046021_75643.png"></p>
 
     </div>
 

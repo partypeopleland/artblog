@@ -26,18 +26,18 @@
 <meta property="og:site_name" content="Art的辦公桌">
 <meta property="og:description" content="分散式追蹤系統 系統架構從單體轉變成微服務之後，使用者發出的單次請求往往會涉及到多個服務之間的呼叫，以往採用的日誌服務也較難以窺見全貌，當我們需要追蹤某一次請求中間發生了那些事情，我們期望能獲取的資訊不外乎是這次的請求，總共經過哪些服務，每個服務花費了多久的時間，呼叫的順序等等，這就是分散式追蹤系統能夠幫我們做到的事情。只不過每一家系統的 API 都不太一樣，所以 W3C 也有提供一份Trace">
 <meta property="og:locale" content="zh_TW">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/NET6-Core-distributed-tracing/propagation-fields.jpg">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/NET6-Core-distributed-tracing/header-init-frontapp.jpg">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/NET6-Core-distributed-tracing/header-init-backend.jpg">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/NET6-Core-distributed-tracing/header-trace-backend.jpg">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/NET6-Core-distributed-tracing/seq-trace-backend.jpg">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/NET6-Core-distributed-tracing/seq-trace-all.jpg">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/NET6-Core-distributed-tracing/zipkin.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/NET6-Core-distributed-tracing/propagation-fields.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/NET6-Core-distributed-tracing/header-init-frontapp.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/NET6-Core-distributed-tracing/header-init-backend.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/NET6-Core-distributed-tracing/header-trace-backend.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/NET6-Core-distributed-tracing/seq-trace-backend.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/NET6-Core-distributed-tracing/seq-trace-all.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/NET6-Core-distributed-tracing/zipkin.jpg">
 <meta property="article:published_time" content="2022-04-15T08:51:27.000Z">
 <meta property="article:modified_time" content="2024-02-13T10:30:19.329Z">
 <meta property="article:author" content="art">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/NET6-Core-distributed-tracing/propagation-fields.jpg">
+<meta name="twitter:image" content="https://partypeopleland.github.io/NET6-Core-distributed-tracing/propagation-fields.jpg">
 
 
 <link rel="canonical" href="https://partypeopleland.github.io/artblog/NET6-Core-distributed-tracing/">
@@ -169,12 +169,12 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">分類</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">84</span>
+        <span class="site-state-item-count">83</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -291,7 +291,7 @@
 <li>trace-flags</li>
 </ol>
 <p>所以整個概念就像是下面這張圖一樣</p>
-<p><img src="/artblog/NET6-Core-distributed-tracing/propagation-fields.jpg"></p>
+<p><img src="/NET6-Core-distributed-tracing/propagation-fields.jpg"></p>
 <blockquote>
 <p>圖片取自<a target="_blank" rel="noopener" href="https://dev.to/luizhlelis/using-w3c-trace-context-standard-in-distributed-tracing-3743">Using W3C Trace Context standard in distributed tracing</a></p>
 </blockquote>
@@ -316,9 +316,9 @@
 <p><strong>測試步驟</strong></p>
 <p>開啟 <code>clientApp</code> 之後，透過中斷點檢視 <code>FrontEndApp</code> 跟 <code>BackEndApp</code> 的 request Header</p>
 <p><strong>frontEnd Header</strong></p>
-<p><img src="/artblog/NET6-Core-distributed-tracing/header-init-frontapp.jpg"></p>
+<p><img src="/NET6-Core-distributed-tracing/header-init-frontapp.jpg"></p>
 <p><strong>backEnd Header</strong></p>
-<p><img src="/artblog/NET6-Core-distributed-tracing/header-init-backend.jpg"></p>
+<p><img src="/NET6-Core-distributed-tracing/header-init-backend.jpg"></p>
 <p>可以注意到 header 裡面的 keyValuePair 有一組是<code>traceparent</code> , <code>00-6ef05abe949ce579cc110ab5b289df14-be6d36f4ecc27214-00</code></p>
 <blockquote>
 <p><code>traceparent</code>的格式為 <code>version &quot;-&quot; version-format</code>，而<code>version-format</code>在<code>version</code>為<code>00</code>的定義，又由三個部分組成<code>trace-id &quot;-&quot; parent-id &quot;-&quot; trace-flags</code></p>
@@ -328,9 +328,9 @@
 
 <figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// program.cs</span></span><br><span class="line"><span class="keyword">using</span> Serilog;</span><br><span class="line"></span><br><span class="line">Log.Logger = <span class="keyword">new</span> LoggerConfiguration()</span><br><span class="line">    .MinimumLevel.Debug()</span><br><span class="line">    .MinimumLevel.Override(<span class="string">&quot;Microsoft&quot;</span>, LogEventLevel.Information)</span><br><span class="line">    <span class="comment">// .MinimumLevel.Override(&quot;Microsoft.AspNetCore&quot;, LogEventLevel.Warning)</span></span><br><span class="line">    .Enrich.WithSpan()</span><br><span class="line">    .WriteTo.Console()</span><br><span class="line">    .WriteTo.Seq(<span class="string">&quot;http://localhost:5341&quot;</span>)</span><br><span class="line">    .CreateLogger();</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 原先內容</span></span><br><span class="line">    <span class="comment">// ... 略</span></span><br><span class="line">    builder.Host.UseSerilog();</span><br><span class="line">    <span class="comment">// ... 略</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span> (Exception ex)</span><br><span class="line">&#123;</span><br><span class="line">    Log.Fatal(ex, <span class="string">&quot;Host terminated unexpectedly&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">finally</span></span><br><span class="line">&#123;</span><br><span class="line">    Log.CloseAndFlush();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="確認-Seq-是否有紀錄到正確資訊"><a href="#確認-Seq-是否有紀錄到正確資訊" class="headerlink" title="確認 Seq 是否有紀錄到正確資訊"></a>確認 Seq 是否有紀錄到正確資訊</h3><p>開啟 frontEndApp 跟 backendApp，並透過中斷點檢視 <code>backendApp</code>所接收到的 <code>traceparent</code><br><img src="/artblog/NET6-Core-distributed-tracing/header-trace-backend.jpg"></p>
-<p>接著到 <code>seq</code> 查看是否有紀錄<code>TraceId</code>及<code>SpanId</code><br><img src="/artblog/NET6-Core-distributed-tracing/seq-trace-backend.jpg"></p>
-<p><img src="/artblog/NET6-Core-distributed-tracing/seq-trace-all.jpg"></p>
+<h3 id="確認-Seq-是否有紀錄到正確資訊"><a href="#確認-Seq-是否有紀錄到正確資訊" class="headerlink" title="確認 Seq 是否有紀錄到正確資訊"></a>確認 Seq 是否有紀錄到正確資訊</h3><p>開啟 frontEndApp 跟 backendApp，並透過中斷點檢視 <code>backendApp</code>所接收到的 <code>traceparent</code><br><img src="/NET6-Core-distributed-tracing/header-trace-backend.jpg"></p>
+<p>接著到 <code>seq</code> 查看是否有紀錄<code>TraceId</code>及<code>SpanId</code><br><img src="/NET6-Core-distributed-tracing/seq-trace-backend.jpg"></p>
+<p><img src="/NET6-Core-distributed-tracing/seq-trace-all.jpg"></p>
 <h3 id="使用-zipkin-檢視-tracing-紀錄"><a href="#使用-zipkin-檢視-tracing-紀錄" class="headerlink" title="使用 zipkin 檢視 tracing 紀錄"></a>使用 zipkin 檢視 tracing 紀錄</h3><p>安裝 nuget 套件(照著套件名稱搜尋，並勾選 <code>prerelease</code>)</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">PackageReference</span> <span class="attr">Include</span>=<span class="string">&quot;OpenTelemetry.Exporter.OpenTelemetryProtocol&quot;</span> <span class="attr">Version</span>=<span class="string">&quot;1.2.0-rc5&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">PackageReference</span> <span class="attr">Include</span>=<span class="string">&quot;OpenTelemetry.Exporter.OpenTelemetryProtocol.Logs&quot;</span> <span class="attr">Version</span>=<span class="string">&quot;1.0.0-rc9.2&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">PackageReference</span> <span class="attr">Include</span>=<span class="string">&quot;OpenTelemetry.Exporter.Zipkin&quot;</span> <span class="attr">Version</span>=<span class="string">&quot;1.2.0-rc5&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">PackageReference</span> <span class="attr">Include</span>=<span class="string">&quot;OpenTelemetry.Extensions.Hosting&quot;</span> <span class="attr">Version</span>=<span class="string">&quot;1.0.0-rc9.2&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">PackageReference</span> <span class="attr">Include</span>=<span class="string">&quot;OpenTelemetry.Instrumentation.AspNetCore&quot;</span> <span class="attr">Version</span>=<span class="string">&quot;1.0.0-rc9.2&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">PackageReference</span> <span class="attr">Include</span>=<span class="string">&quot;OpenTelemetry.Instrumentation.Http&quot;</span> <span class="attr">Version</span>=<span class="string">&quot;1.0.0-rc9.2&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
 
@@ -340,7 +340,7 @@
 <p><code>appsetting.json</code>裡面的<code>ServiceName</code>是提供給 zipkin 顯示的服務名稱</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//appsetting.json</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="comment">// .略.</span></span><br><span class="line">  <span class="attr">&quot;Zipkin&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;ServiceName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;frontendApp&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;Endpoint&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://localhost:9411/api/v2/spans&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="/artblog/NET6-Core-distributed-tracing/zipkin.jpg"></p>
+<p><img src="/NET6-Core-distributed-tracing/zipkin.jpg"></p>
 <h2 id="REF"><a href="#REF" class="headerlink" title="REF"></a>REF</h2><ol>
 <li><a target="_blank" rel="noopener" href="https://www.w3.org/TR/trace-context/#traceparent-header">3.2 Traceparent Header - W3C</a></li>
 <li><a target="_blank" rel="noopener" href="https://github.com/RehanSaeed/Serilog.Enrichers.Span">Serilog.Enrichers.Span - Github</a></li>

@@ -26,14 +26,14 @@
 <meta property="og:site_name" content="Art的辦公桌">
 <meta property="og:description" content="一般來說，程序猿、攻城獅在說的 Proxy 其實就是設計模式中的代理模式，說的文言一點就是指一個類別可以作為其它東西的介面；白話一點就是一個傳聲筒。">
 <meta property="og:locale" content="zh_TW">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/Javascript%E7%9A%84Proxy/Proxy_pattern_diagram.svg">
+<meta property="og:image" content="https://partypeopleland.github.io/Javascript%E7%9A%84Proxy/Proxy_pattern_diagram.svg">
 <meta property="article:published_time" content="2020-02-25T07:47:32.000Z">
 <meta property="article:modified_time" content="2024-02-13T10:30:19.194Z">
 <meta property="article:author" content="art">
 <meta property="article:tag" content="proxy">
 <meta property="article:tag" content="design pattern">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/Javascript%E7%9A%84Proxy/Proxy_pattern_diagram.svg">
+<meta name="twitter:image" content="https://partypeopleland.github.io/Javascript%E7%9A%84Proxy/Proxy_pattern_diagram.svg">
 
 
 <link rel="canonical" href="https://partypeopleland.github.io/artblog/Javascript%E7%9A%84Proxy/">
@@ -165,12 +165,12 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">分類</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">84</span>
+        <span class="site-state-item-count">83</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -297,7 +297,7 @@
 <blockquote>
 <p>突然又想到很像是武俠小說裏面的飛劍傳書，然後傳書的內容又偷偷被其他人改掉了這樣的狗血劇情….</p>
 </blockquote>
-<h2 id="proxy-pattern-UML"><a href="#proxy-pattern-UML" class="headerlink" title="proxy pattern UML"></a>proxy pattern UML</h2><p><img src="/artblog/Javascript%E7%9A%84Proxy/Proxy_pattern_diagram.svg"></p>
+<h2 id="proxy-pattern-UML"><a href="#proxy-pattern-UML" class="headerlink" title="proxy pattern UML"></a>proxy pattern UML</h2><p><img src="/Javascript%E7%9A%84Proxy/Proxy_pattern_diagram.svg"></p>
 <h2 id="Sample"><a href="#Sample" class="headerlink" title="Sample"></a>Sample</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Monster</span>(<span class="params"></span>) &#123;</span><br><span class="line">	<span class="variable language_">this</span>.<span class="property">eyeCount</span> = <span class="number">4</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> handler1 = &#123;</span><br><span class="line">	<span class="title function_">set</span>(<span class="params">obj, prop, value</span>) &#123;</span><br><span class="line">		<span class="keyword">if</span> (prop === <span class="string">&quot;eyeCount&quot;</span> &amp;&amp; value % <span class="number">2</span> !== <span class="number">0</span>) &#123;</span><br><span class="line">			<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Monsters must have an even number of eyes&quot;</span>);</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="title class_">Reflect</span>.<span class="title function_">set</span>(...<span class="variable language_">arguments</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> monster1 = <span class="keyword">new</span> <span class="title class_">Monster</span>();</span><br><span class="line"><span class="keyword">const</span> proxy1 = <span class="keyword">new</span> <span class="title class_">Proxy</span>(monster1, handler1);</span><br><span class="line">proxy1.<span class="property">eyeCount</span> = <span class="number">1</span>;</span><br><span class="line"><span class="comment">// expected output: &quot;Monsters must have an even number of eyes&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(proxy1.<span class="property">eyeCount</span>);</span><br><span class="line"><span class="comment">// expected output: 4</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><ol>

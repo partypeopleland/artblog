@@ -26,19 +26,19 @@
 <meta property="og:site_name" content="Art的辦公桌">
 <meta property="og:description" content="Test Double, Dummy, Fake, Stubs, Spies, Mocks，第一次接觸這些英文名詞的時候，通常也就是剛接觸到測試相關技術的時候，一些文章，或者是課程、說明，或多或少都會帶到這幾個測試領域常見的名詞，之所以會為此專門寫一篇文章，其實除了在鞏固自己記憶之外，也順便備忘一下">
 <meta property="og:locale" content="zh_TW">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/what-is-stub-and-mock/2020-09-08_171435.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/what-is-stub-and-mock/2020-09-08_171707.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/what-is-stub-and-mock/testFake.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/what-is-stub-and-mock/testStub.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/what-is-stub-and-mock/testSpy.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/what-is-stub-and-mock/testMock.png">
+<meta property="og:image" content="https://partypeopleland.github.io/what-is-stub-and-mock/2020-09-08_171435.png">
+<meta property="og:image" content="https://partypeopleland.github.io/what-is-stub-and-mock/2020-09-08_171707.png">
+<meta property="og:image" content="https://partypeopleland.github.io/what-is-stub-and-mock/testFake.png">
+<meta property="og:image" content="https://partypeopleland.github.io/what-is-stub-and-mock/testStub.png">
+<meta property="og:image" content="https://partypeopleland.github.io/what-is-stub-and-mock/testSpy.png">
+<meta property="og:image" content="https://partypeopleland.github.io/what-is-stub-and-mock/testMock.png">
 <meta property="article:published_time" content="2020-09-08T08:27:42.000Z">
 <meta property="article:modified_time" content="2024-02-13T10:30:19.241Z">
 <meta property="article:author" content="art">
 <meta property="article:tag" content="stub">
 <meta property="article:tag" content="mock">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/what-is-stub-and-mock/2020-09-08_171435.png">
+<meta name="twitter:image" content="https://partypeopleland.github.io/what-is-stub-and-mock/2020-09-08_171435.png">
 
 
 <link rel="canonical" href="https://partypeopleland.github.io/artblog/what-is-stub-and-mock/">
@@ -170,12 +170,12 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">分類</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">84</span>
+        <span class="site-state-item-count">83</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -308,12 +308,12 @@
 <li>Mocks are what we are talking about here: objects pre-programmed with expectations which form a specification of the calls they are expected to receive.</li>
 </ul>
 <p>於是我們直接到這本書的<a target="_blank" rel="noopener" href="http://xunitpatterns.com/Test%20Double%20Patterns.html">網站</a>去看看它怎麼解釋的，基本上這網站的圖就已經超級清楚的了，所以我也不打算畫蛇添足的解釋了</p>
-<p><img src="/artblog/what-is-stub-and-mock/2020-09-08_171435.png"><br><img src="/artblog/what-is-stub-and-mock/2020-09-08_171707.png"></p>
+<p><img src="/what-is-stub-and-mock/2020-09-08_171435.png"><br><img src="/what-is-stub-and-mock/2020-09-08_171707.png"></p>
 <h3 id="Dummy"><a href="#Dummy" class="headerlink" title="Dummy"></a>Dummy</h3><p>SUT 的某一些測試方法可能需要一些參數，但是這些參數其實沒用，但為了符合簽章方法，所以我們弄了一個測試替身，這就叫做 Dummy Object</p>
-<h3 id="Fake"><a href="#Fake" class="headerlink" title="Fake"></a>Fake</h3><p>Replace a component that the system under test (SUT) depends on with a much lighter-weight implementation.<br><img src="/artblog/what-is-stub-and-mock/testFake.png"></p>
-<h3 id="Stubs"><a href="#Stubs" class="headerlink" title="Stubs"></a>Stubs</h3><p>We replace a real object with a test-specific object that feeds the desired indirect inputs into the system under test.<br><img src="/artblog/what-is-stub-and-mock/testStub.png"></p>
-<h3 id="Spies"><a href="#Spies" class="headerlink" title="Spies"></a>Spies</h3><p>Use a Test Double to capture the indirect output calls made to another component by the system under test (SUT) for later verification by the test.<br><img src="/artblog/what-is-stub-and-mock/testSpy.png"></p>
-<h3 id="Mocks"><a href="#Mocks" class="headerlink" title="Mocks"></a>Mocks</h3><p>Replace an object the system under test (SUT) depends on with a test-specific object that verifies it is being used correctly by the SUT.<br><img src="/artblog/what-is-stub-and-mock/testMock.png"></p>
+<h3 id="Fake"><a href="#Fake" class="headerlink" title="Fake"></a>Fake</h3><p>Replace a component that the system under test (SUT) depends on with a much lighter-weight implementation.<br><img src="/what-is-stub-and-mock/testFake.png"></p>
+<h3 id="Stubs"><a href="#Stubs" class="headerlink" title="Stubs"></a>Stubs</h3><p>We replace a real object with a test-specific object that feeds the desired indirect inputs into the system under test.<br><img src="/what-is-stub-and-mock/testStub.png"></p>
+<h3 id="Spies"><a href="#Spies" class="headerlink" title="Spies"></a>Spies</h3><p>Use a Test Double to capture the indirect output calls made to another component by the system under test (SUT) for later verification by the test.<br><img src="/what-is-stub-and-mock/testSpy.png"></p>
+<h3 id="Mocks"><a href="#Mocks" class="headerlink" title="Mocks"></a>Mocks</h3><p>Replace an object the system under test (SUT) depends on with a test-specific object that verifies it is being used correctly by the SUT.<br><img src="/what-is-stub-and-mock/testMock.png"></p>
 <h2 id="江湖人稱-91-的解釋"><a href="#江湖人稱-91-的解釋" class="headerlink" title="江湖人稱 91 的解釋"></a>江湖人稱 91 的解釋</h2><p>非常的精闢，也是我第一次接觸到的解釋</p>
 <ul>
 <li>Stub：通常使用在驗證目標回傳值，以及驗證目標物件狀態的改變。</li>

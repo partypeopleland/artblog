@@ -26,15 +26,15 @@
 <meta property="og:site_name" content="Art的辦公桌">
 <meta property="og:description" content="一直以來很想嘗試一下自動化佈署這件事情，剛好今天有點時間，就開始菜鳥練習吧，透過發佈程式碼，經由Jenkins做到自動發佈，至於單元測試、分支那些東西，菜鳥還不太會，沒關係，那就先略過吧~~">
 <meta property="og:locale" content="zh_TW">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/Git+Jenkins%E4%BD%9C%E8%87%AA%E5%8B%95%E5%8C%96%E4%BD%88%E7%BD%B2/1492770590_08717.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/Git+Jenkins%E4%BD%9C%E8%87%AA%E5%8B%95%E5%8C%96%E4%BD%88%E7%BD%B2/1492770713_84888.png">
+<meta property="og:image" content="https://partypeopleland.github.io/Git+Jenkins%E4%BD%9C%E8%87%AA%E5%8B%95%E5%8C%96%E4%BD%88%E7%BD%B2/1492770590_08717.png">
+<meta property="og:image" content="https://partypeopleland.github.io/Git+Jenkins%E4%BD%9C%E8%87%AA%E5%8B%95%E5%8C%96%E4%BD%88%E7%BD%B2/1492770713_84888.png">
 <meta property="article:published_time" content="2017-04-21T02:42:12.000Z">
 <meta property="article:modified_time" content="2024-02-13T10:30:19.011Z">
 <meta property="article:author" content="art">
 <meta property="article:tag" content="git">
 <meta property="article:tag" content="jenkins">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/Git+Jenkins%E4%BD%9C%E8%87%AA%E5%8B%95%E5%8C%96%E4%BD%88%E7%BD%B2/1492770590_08717.png">
+<meta name="twitter:image" content="https://partypeopleland.github.io/Git+Jenkins%E4%BD%9C%E8%87%AA%E5%8B%95%E5%8C%96%E4%BD%88%E7%BD%B2/1492770590_08717.png">
 
 
 <link rel="canonical" href="https://partypeopleland.github.io/artblog/Git+Jenkins%E4%BD%9C%E8%87%AA%E5%8B%95%E5%8C%96%E4%BD%88%E7%BD%B2/">
@@ -166,12 +166,12 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">分類</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">84</span>
+        <span class="site-state-item-count">83</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -296,11 +296,11 @@
 <li>Using Gogs Git Service - <a target="_blank" rel="noopener" href="https://dotblogs.com.tw/wuanunet/2016/05/02/using-gogs-git-service-part3-diff-data-not-available">Part.3 - Diff Data Not Available 的解決方式</a></li>
 </ol>
 <h2 id="Step03：上傳程式後觸發Jenkins"><a href="#Step03：上傳程式後觸發Jenkins" class="headerlink" title="Step03：上傳程式後觸發Jenkins"></a>Step03：上傳程式後觸發Jenkins</h2><p>這邊實作的方式應該也很多種，但是我就仍然是用最簡單的一種，設定好token然後git push的時候就讓他發出這個request給jenkins</p>
-<p><img src="/artblog/Git+Jenkins%E4%BD%9C%E8%87%AA%E5%8B%95%E5%8C%96%E4%BD%88%E7%BD%B2/1492770590_08717.png"></p>
+<p><img src="/Git+Jenkins%E4%BD%9C%E8%87%AA%E5%8B%95%E5%8C%96%E4%BD%88%E7%BD%B2/1492770590_08717.png"></p>
 <h2 id="Step04：上傳怎麼可以沒有LFTP"><a href="#Step04：上傳怎麼可以沒有LFTP" class="headerlink" title="Step04：上傳怎麼可以沒有LFTP"></a>Step04：上傳怎麼可以沒有LFTP</h2><p>因為windows內建的ftp指令實在是不堪使用，沒有辦法達到同步這件事情，但是LFTP這東西可以做到，很幸運的找到了好心人士的文章，照著實作也的確成功了。</p>
 <p>細節就請移步前往該文章：<a target="_blank" rel="noopener" href="http://coding.bang.tw/Article/43">使用lftp指令工具差異備份檔案至FTP</a>吧，當CopyCat也不是很好。</p>
 <h2 id="Step05：把Jenkins搞起來"><a href="#Step05：把Jenkins搞起來" class="headerlink" title="Step05：把Jenkins搞起來"></a>Step05：把Jenkins搞起來</h2><p>基本上Jenkins沒有大家想的那麼神奇，最主要就是取得最新的程式碼，並且佈署到我希望他佈署的機器上面。</p>
-<p>因為剛才要從Git觸發Jenkins，所以這邊Jenkins就也要做一下設定<br><img src="/artblog/Git+Jenkins%E4%BD%9C%E8%87%AA%E5%8B%95%E5%8C%96%E4%BD%88%E7%BD%B2/1492770713_84888.png"></p>
+<p>因為剛才要從Git觸發Jenkins，所以這邊Jenkins就也要做一下設定<br><img src="/Git+Jenkins%E4%BD%9C%E8%87%AA%E5%8B%95%E5%8C%96%E4%BD%88%E7%BD%B2/1492770713_84888.png"></p>
 <p>以前曾經上過保哥的課，有了解了一些，這次把它給實作出來(最基本的而已….)課程中最大的收穫就是，Jenkins其實所有的動作背後都只是幫你轉換成command line指令，透過console去偵錯為何設定不能用是最重要的。也就是因為這樣，其實我對於Git還不熟悉，只會用git clone跟git pull之類的指令，所以我很偷吃步的先在jenkins內的工作目錄當中，直接把他給git clone，之後在Jenkins之內的指令，就只是很單純的把最新的檔案抓下來，然後還原他 (老實說我真的不熟GIT，看了實際上的git的指令，應該是還要去判斷分支，還有一大堆的，不過那就留到以後一步一步學習吧，現在只是為了要能夠抓到最新版本的程式碼而已)</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git pull</span><br><span class="line">git reset --hard</span><br></pre></td></tr></table></figure>
 

@@ -26,18 +26,18 @@
 <meta property="og:site_name" content="Art的辦公桌">
 <meta property="og:description" content="使用 VSCode 自動格式化 logstash 的設定檔，pipeline.conf">
 <meta property="og:locale" content="zh_TW">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/vscode-logstash-conf-formatter/2021-10-25-090849.jpg">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/vscode-logstash-conf-formatter/2021-10-25-091041.jpg">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/vscode-logstash-conf-formatter/2021-10-25-092426.jpg">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/vscode-logstash-conf-formatter/2021-10-25-092528.jpg">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/vscode-logstash-conf-formatter/2021-10-25-092617.jpg">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/vscode-logstash-conf-formatter/2021-10-25-092934.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/vscode-logstash-conf-formatter/2021-10-25-090849.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/vscode-logstash-conf-formatter/2021-10-25-091041.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/vscode-logstash-conf-formatter/2021-10-25-092426.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/vscode-logstash-conf-formatter/2021-10-25-092528.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/vscode-logstash-conf-formatter/2021-10-25-092617.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/vscode-logstash-conf-formatter/2021-10-25-092934.jpg">
 <meta property="article:published_time" content="2021-10-25T01:05:34.000Z">
 <meta property="article:modified_time" content="2024-02-13T10:30:19.295Z">
 <meta property="article:author" content="art">
 <meta property="article:tag" content="vscode">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/vscode-logstash-conf-formatter/2021-10-25-090849.jpg">
+<meta name="twitter:image" content="https://partypeopleland.github.io/vscode-logstash-conf-formatter/2021-10-25-090849.jpg">
 
 
 <link rel="canonical" href="https://partypeopleland.github.io/artblog/vscode-logstash-conf-formatter/">
@@ -168,12 +168,12 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">分類</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">84</span>
+        <span class="site-state-item-count">83</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -290,17 +290,17 @@
 <span id="more"></span>
 
 <p>為了確保這個步驟是正確的，所以我下載 <a target="_blank" rel="noopener" href="https://code.visualstudio.com/docs/?dv=winzip&build=insiders">VSCode Insiders</a> 的 zip 版作為一個初始的 Editor 環境，可以看到外掛這邊都是沒東西的</p>
-<p><img src="/artblog/vscode-logstash-conf-formatter/2021-10-25-090849.jpg"></p>
+<p><img src="/vscode-logstash-conf-formatter/2021-10-25-090849.jpg"></p>
 <p>接著安裝 logStash 相關的套件</p>
-<p><img src="/artblog/vscode-logstash-conf-formatter/2021-10-25-091041.jpg"></p>
+<p><img src="/vscode-logstash-conf-formatter/2021-10-25-091041.jpg"></p>
 <ol>
 <li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=RandomChance.logstash">Logstash Configuration Syntax &#x2F; Language Support</a></li>
 <li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=fbaligand.vscode-logstash-editor">Logstash Editor</a></li>
 </ol>
 <p>這個時候如果開啟設定檔嘗試去做自動格式化的動作，當然是沒用的，因為我們還需要正確設定檔案類型，並且設定該檔案類型的 formatter 是誰，所以在 VSCode 右下角那邊正確設定檔案類型為 <code>logStash</code> 就可以了</p>
-<p><img src="/artblog/vscode-logstash-conf-formatter/2021-10-25-092426.jpg"><br><img src="/artblog/vscode-logstash-conf-formatter/2021-10-25-092528.jpg"><br><img src="/artblog/vscode-logstash-conf-formatter/2021-10-25-092617.jpg"></p>
+<p><img src="/vscode-logstash-conf-formatter/2021-10-25-092426.jpg"><br><img src="/vscode-logstash-conf-formatter/2021-10-25-092528.jpg"><br><img src="/vscode-logstash-conf-formatter/2021-10-25-092617.jpg"></p>
 <p>接著選擇 Format Document (Alt+Ctrl+F) 就可以使用了</p>
-<p>如果 VSCode 未能正確使用 <code>LogStash Editor</code> 排版，也可以直接透過 <code>Format Document With ...</code>來選擇 Formatter<br><img src="/artblog/vscode-logstash-conf-formatter/2021-10-25-092934.jpg"></p>
+<p>如果 VSCode 未能正確使用 <code>LogStash Editor</code> 排版，也可以直接透過 <code>Format Document With ...</code>來選擇 Formatter<br><img src="/vscode-logstash-conf-formatter/2021-10-25-092934.jpg"></p>
 <p>這個步驟等同於在設定檔加入 Formatter 的設定</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;[logstash]&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;editor.defaultFormatter&quot;</span>: <span class="string">&quot;fbaligand.vscode-logstash-editor&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 

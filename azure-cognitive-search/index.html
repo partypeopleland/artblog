@@ -26,16 +26,16 @@
 <meta property="og:site_name" content="Art的辦公桌">
 <meta property="og:description" content="Azure Search Document 是 Azure Cognitive Search documentation（認知搜尋文件) 這項服務的 Nuget 套件，也就是以前說的 Azure Search，這項服務可以讓使用者的搜尋體驗變得較為友善－透過自動完成、同義字比對、模糊比對、模式比對、篩選和排序 一般情況下大部分我們自己做的搜尋都還在篩選排序等等，要做到同義字比對與模糊比對就比較複雜">
 <meta property="og:locale" content="zh_TW">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/azure-cognitive-search/as01.jpg">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/azure-cognitive-search/as02.jpg">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/azure-cognitive-search/as03.jpg">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/azure-cognitive-search/as04.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/azure-cognitive-search/as01.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/azure-cognitive-search/as02.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/azure-cognitive-search/as03.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/azure-cognitive-search/as04.jpg">
 <meta property="article:published_time" content="2022-01-17T02:13:56.000Z">
 <meta property="article:modified_time" content="2024-02-13T10:30:19.369Z">
 <meta property="article:author" content="art">
 <meta property="article:tag" content="azureSearch">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/azure-cognitive-search/as01.jpg">
+<meta name="twitter:image" content="https://partypeopleland.github.io/azure-cognitive-search/as01.jpg">
 
 
 <link rel="canonical" href="https://partypeopleland.github.io/artblog/azure-cognitive-search/">
@@ -167,12 +167,12 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">分類</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">84</span>
+        <span class="site-state-item-count">83</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -290,14 +290,14 @@
 <span id="more"></span>
 
 <h2 id="intro"><a href="#intro" class="headerlink" title="intro"></a>intro</h2><p>搜尋服務最核心的就是下面的三個東西，我們首先需要先準備資料，放在資料來源當中，並且建立好索引，也就是資料與欄位的對應關係，並確認該欄位的一些屬性，例如是否可搜尋、可排序等等；最後再透過索引子實際執行，將資料來源的資料經過處理後放到索引之內。之後就可以透過 API 去做查詢，也可以透過 <code>Azure Search Document</code>這個 Nuget 套件查詢資料</p>
-<p><img src="/artblog/azure-cognitive-search/as01.jpg"></p>
+<p><img src="/azure-cognitive-search/as01.jpg"></p>
 <ol>
 <li>索引:透過 SDK 或 REST API 發出請求，針對索引欄位作操作</li>
 <li>索引子:索引＆資料來源中間愛的橋樑</li>
 <li>資料來源:支援 Azure Blob、Azure SQL Database…等等</li>
 </ol>
 <p>詳細的設定及文件還是需要參考官方文件比較清楚，這裡只是稍微說明一下</p>
-<h3 id="資料來源"><a href="#資料來源" class="headerlink" title="資料來源"></a>資料來源</h3><p>能夠作為資料來源的有很多，這邊以 Azure Blob 容器為例子，指定好<code>連接字串</code>、<code>容器名稱</code>就可以使用這裡也有很多設定值可以調整，也要考量到自己的規劃來做設定。像是<code>追蹤刪除</code>就會影響到你索引的定義，還有資料來源上傳的檔案 Schema 要怎麼規劃，在我的使用情境下，我是需要追蹤刪除的，所以我採用了使用一個欄位<code>IsDel</code>來做，只要這個欄位是 1 就代表這筆資料需要被刪除<br><img src="/artblog/azure-cognitive-search/as02.jpg"></p>
+<h3 id="資料來源"><a href="#資料來源" class="headerlink" title="資料來源"></a>資料來源</h3><p>能夠作為資料來源的有很多，這邊以 Azure Blob 容器為例子，指定好<code>連接字串</code>、<code>容器名稱</code>就可以使用這裡也有很多設定值可以調整，也要考量到自己的規劃來做設定。像是<code>追蹤刪除</code>就會影響到你索引的定義，還有資料來源上傳的檔案 Schema 要怎麼規劃，在我的使用情境下，我是需要追蹤刪除的，所以我採用了使用一個欄位<code>IsDel</code>來做，只要這個欄位是 1 就代表這筆資料需要被刪除<br><img src="/azure-cognitive-search/as02.jpg"></p>
 <ol>
 <li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/azure/search/search-indexer-tutorial">教學課程：使用 .NET SDK 為 Azure SQL 資料編製索引</a></li>
 <li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/azure/search/tutorial-multiple-data-sources">教學課程：使用 .NET SDK 從多個資料來源編製索引</a></li>
@@ -305,7 +305,7 @@
 <li><a target="_blank" rel="noopener" href="https://github.com/Azure-Samples/azure-search-dotnet-samples/blob/beb243914650fd3eb7355f8a775eb9138df70aa3/tutorial-ai-enrichment/v10/Program.cs">Sample Code - 2</a></li>
 <li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/azure/search/samples-dotnet">適用于 Azure 認知搜尋的 .NET (c # ) 程式碼範例</a></li>
 </ol>
-<h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><p>在這邊設定的就是定義好每一筆資料的欄位，是否可以被搜尋、篩選、取出、排序等等，比較重要的部分就是要定義那個欄位是<code>Key</code>值，當然也要加上一個虛刪除的欄位<br><img src="/artblog/azure-cognitive-search/as03.jpg"></p>
+<h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><p>在這邊設定的就是定義好每一筆資料的欄位，是否可以被搜尋、篩選、取出、排序等等，比較重要的部分就是要定義那個欄位是<code>Key</code>值，當然也要加上一個虛刪除的欄位<br><img src="/azure-cognitive-search/as03.jpg"></p>
 <p>假設我要做一個商品查詢，那索引應該要有哪些欄位呢？</p>
 <ul>
 <li>搜尋結果：前端會用到的欄位，如商品標題，價格等等</li>
@@ -325,7 +325,7 @@
 <blockquote>
 <p>在這裡要注意資料庫的欄位定義與索引的欄位定義資料型態的問題，要看一下是否相容</p>
 </blockquote>
-<h3 id="索引子"><a href="#索引子" class="headerlink" title="索引子"></a>索引子</h3><p><img src="/artblog/azure-cognitive-search/as04.jpg"></p>
+<h3 id="索引子"><a href="#索引子" class="headerlink" title="索引子"></a>索引子</h3><p><img src="/azure-cognitive-search/as04.jpg"></p>
 <p>索引子的設定相對較為單純，這裡因為我採用的是 json 的資料來源，所以<code>parsingMode</code>設定為 <code>jsonArray</code>，代表的是 Json 檔案內是一個 json 物件的集合</p>
 <h3 id="同義詞建立"><a href="#同義詞建立" class="headerlink" title="同義詞建立"></a>同義詞建立</h3><p>建立、更新和刪除同義字地圖永遠是整份檔的作業，這表示您無法以累加方式更新或刪除同義字地圖的部分。 即使只更新單一規則，也需要重載。</p>
 <ol>

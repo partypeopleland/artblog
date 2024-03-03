@@ -26,16 +26,16 @@
 <meta property="og:site_name" content="Art的辦公桌">
 <meta property="og:description" content="需要先弄個 Synology 的 NAS，透過 NAS 本身的介面可以很順利地安裝 Git Server，只是，通常事情沒有憨人想的那麼簡單，裝好了 Git Server 之後，會發現它內建的說明文件簡單的可憐，當然有可能是撰寫文件的人認為這些都是非常基本的事情，不用多做描述，只是從來沒有碰過 Linux 的我，一開始在 SSH 遠端登入到自己的 NAS 主機上就卡關卡很久了，後續又發現無法正確">
 <meta property="og:locale" content="zh_TW">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/Synology-NAS%E6%9E%B6%E8%A8%ADGit/1455358864_09569.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/Synology-NAS%E6%9E%B6%E8%A8%ADGit/1455358922_72569.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/Synology-NAS%E6%9E%B6%E8%A8%ADGit/1455358928_14514.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/Synology-NAS%E6%9E%B6%E8%A8%ADGit/1455359027_77965.png">
+<meta property="og:image" content="https://partypeopleland.github.io/Synology-NAS%E6%9E%B6%E8%A8%ADGit/1455358864_09569.png">
+<meta property="og:image" content="https://partypeopleland.github.io/Synology-NAS%E6%9E%B6%E8%A8%ADGit/1455358922_72569.png">
+<meta property="og:image" content="https://partypeopleland.github.io/Synology-NAS%E6%9E%B6%E8%A8%ADGit/1455358928_14514.png">
+<meta property="og:image" content="https://partypeopleland.github.io/Synology-NAS%E6%9E%B6%E8%A8%ADGit/1455359027_77965.png">
 <meta property="article:published_time" content="2016-02-13T03:32:43.000Z">
 <meta property="article:modified_time" content="2024-02-13T10:30:19.007Z">
 <meta property="article:author" content="art">
 <meta property="article:tag" content="NAS">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/Synology-NAS%E6%9E%B6%E8%A8%ADGit/1455358864_09569.png">
+<meta name="twitter:image" content="https://partypeopleland.github.io/Synology-NAS%E6%9E%B6%E8%A8%ADGit/1455358864_09569.png">
 
 
 <link rel="canonical" href="https://partypeopleland.github.io/artblog/Synology-NAS%E6%9E%B6%E8%A8%ADGit/">
@@ -167,12 +167,12 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">分類</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">84</span>
+        <span class="site-state-item-count">83</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -302,16 +302,16 @@
 <p>加了 bare 的就是把檔案都放在當前目錄下，比較適合在沒有修改、開發的機器上，例如 Git Server，這樣做的好處是不需要將專案資料再複製一份最新的出來，會省一些些空間<br>此時 repo 已被建立，可透過下列指令將 repo 複製回來</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone ssh://[使用者]@[主機位址]:[Port]/volume2/git_repos/BMISample</span><br></pre></td></tr></table></figure>
 
-<p>但是會發現 push 過去的時候會發生錯誤<br><img src="/artblog/Synology-NAS%E6%9E%B6%E8%A8%ADGit/1455358864_09569.png"></p>
+<p>但是會發現 push 過去的時候會發生錯誤<br><img src="/Synology-NAS%E6%9E%B6%E8%A8%ADGit/1455358864_09569.png"></p>
 <p>透過指令變更權限，將整個 repo 權限指定給自己…這個是偷懶的作法，實際上應該要將每個目錄根據使用者逐一給權限，因為我自己用而已，就給他 chown -R 下去了</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chown -R art:users git_repos</span><br></pre></td></tr></table></figure>
 
-<p><img src="/artblog/Synology-NAS%E6%9E%B6%E8%A8%ADGit/1455358922_72569.png"></p>
+<p><img src="/Synology-NAS%E6%9E%B6%E8%A8%ADGit/1455358922_72569.png"></p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod -R 775 git_repos</span><br></pre></td></tr></table></figure>
 
-<p><img src="/artblog/Synology-NAS%E6%9E%B6%E8%A8%ADGit/1455358928_14514.png"></p>
+<p><img src="/Synology-NAS%E6%9E%B6%E8%A8%ADGit/1455358928_14514.png"></p>
 <p>搞定，透過 git push origin master 可成功提交 commit</p>
-<p><img src="/artblog/Synology-NAS%E6%9E%B6%E8%A8%ADGit/1455359027_77965.png"></p>
+<p><img src="/Synology-NAS%E6%9E%B6%E8%A8%ADGit/1455359027_77965.png"></p>
 <p>這樣做比較麻煩的是，如果有新專案要做，就要重頭來一次</p>
 <ol>
 <li>登入 SSH，建立專案目錄</li>

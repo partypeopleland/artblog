@@ -26,18 +26,18 @@
 <meta property="og:site_name" content="Art的辦公桌">
 <meta property="og:description" content="紀錄一下透過Docker練習建立Gitea服務，其實寫這篇文章只是為了記錄windows下怎麼設定volumn而已…">
 <meta property="og:locale" content="zh_TW">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/%E5%9C%A8Windows%E7%B3%BB%E7%B5%B1%E9%80%8F%E9%81%8EDocker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8Gitea%E6%9C%8D%E5%8B%99/1527607805_29369.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/%E5%9C%A8Windows%E7%B3%BB%E7%B5%B1%E9%80%8F%E9%81%8EDocker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8Gitea%E6%9C%8D%E5%8B%99/1527608159_75482.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/%E5%9C%A8Windows%E7%B3%BB%E7%B5%B1%E9%80%8F%E9%81%8EDocker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8Gitea%E6%9C%8D%E5%8B%99/1527608427_50546.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/%E5%9C%A8Windows%E7%B3%BB%E7%B5%B1%E9%80%8F%E9%81%8EDocker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8Gitea%E6%9C%8D%E5%8B%99/1527608501_78478.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/%E5%9C%A8Windows%E7%B3%BB%E7%B5%B1%E9%80%8F%E9%81%8EDocker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8Gitea%E6%9C%8D%E5%8B%99/1527608561_05456.png">
-<meta property="og:image" content="https://partypeopleland.github.io/artblog/%E5%9C%A8Windows%E7%B3%BB%E7%B5%B1%E9%80%8F%E9%81%8EDocker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8Gitea%E6%9C%8D%E5%8B%99/1527608731_0438.png">
+<meta property="og:image" content="https://partypeopleland.github.io/%E5%9C%A8Windows%E7%B3%BB%E7%B5%B1%E9%80%8F%E9%81%8EDocker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8Gitea%E6%9C%8D%E5%8B%99/1527607805_29369.png">
+<meta property="og:image" content="https://partypeopleland.github.io/%E5%9C%A8Windows%E7%B3%BB%E7%B5%B1%E9%80%8F%E9%81%8EDocker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8Gitea%E6%9C%8D%E5%8B%99/1527608159_75482.png">
+<meta property="og:image" content="https://partypeopleland.github.io/%E5%9C%A8Windows%E7%B3%BB%E7%B5%B1%E9%80%8F%E9%81%8EDocker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8Gitea%E6%9C%8D%E5%8B%99/1527608427_50546.png">
+<meta property="og:image" content="https://partypeopleland.github.io/%E5%9C%A8Windows%E7%B3%BB%E7%B5%B1%E9%80%8F%E9%81%8EDocker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8Gitea%E6%9C%8D%E5%8B%99/1527608501_78478.png">
+<meta property="og:image" content="https://partypeopleland.github.io/%E5%9C%A8Windows%E7%B3%BB%E7%B5%B1%E9%80%8F%E9%81%8EDocker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8Gitea%E6%9C%8D%E5%8B%99/1527608561_05456.png">
+<meta property="og:image" content="https://partypeopleland.github.io/%E5%9C%A8Windows%E7%B3%BB%E7%B5%B1%E9%80%8F%E9%81%8EDocker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8Gitea%E6%9C%8D%E5%8B%99/1527608731_0438.png">
 <meta property="article:published_time" content="2018-05-29T21:50:57.000Z">
 <meta property="article:modified_time" content="2024-02-13T10:30:19.048Z">
 <meta property="article:author" content="art">
 <meta property="article:tag" content="gitea">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/%E5%9C%A8Windows%E7%B3%BB%E7%B5%B1%E9%80%8F%E9%81%8EDocker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8Gitea%E6%9C%8D%E5%8B%99/1527607805_29369.png">
+<meta name="twitter:image" content="https://partypeopleland.github.io/%E5%9C%A8Windows%E7%B3%BB%E7%B5%B1%E9%80%8F%E9%81%8EDocker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8Gitea%E6%9C%8D%E5%8B%99/1527607805_29369.png">
 
 
 <link rel="canonical" href="https://partypeopleland.github.io/artblog/%E5%9C%A8Windows%E7%B3%BB%E7%B5%B1%E9%80%8F%E9%81%8EDocker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8Gitea%E6%9C%8D%E5%8B%99/">
@@ -169,12 +169,12 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">分類</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">84</span>
+        <span class="site-state-item-count">83</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -292,7 +292,7 @@
 
 <p>Gitea的網站有提供說明，介紹了各種安裝方法，這一次嘗試一下透過Docker來使用Git服務，原則上也是按照<a target="_blank" rel="noopener" href="https://docs.gitea.io/zh-cn/install-with-docker/">官網</a>的說明Step By Step，所以不會有甚麼難度</p>
 <p>首先安裝一下<a target="_blank" rel="noopener" href="https://store.docker.com/editions/community/docker-ce-desktop-windows">Docker CE for Windows</a>，順利啟動Docker之後，開啟指令列操作</p>
-<h2 id="下載Gitea的Docker-Image"><a href="#下載Gitea的Docker-Image" class="headerlink" title="下載Gitea的Docker Image"></a>下載Gitea的Docker Image</h2><p><img src="/artblog/%E5%9C%A8Windows%E7%B3%BB%E7%B5%B1%E9%80%8F%E9%81%8EDocker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8Gitea%E6%9C%8D%E5%8B%99/1527607805_29369.png"></p>
+<h2 id="下載Gitea的Docker-Image"><a href="#下載Gitea的Docker-Image" class="headerlink" title="下載Gitea的Docker Image"></a>下載Gitea的Docker Image</h2><p><img src="/%E5%9C%A8Windows%E7%B3%BB%E7%B5%B1%E9%80%8F%E9%81%8EDocker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8Gitea%E6%9C%8D%E5%8B%99/1527607805_29369.png"></p>
 <h2 id="準備容器資料存放的目錄對應"><a href="#準備容器資料存放的目錄對應" class="headerlink" title="準備容器資料存放的目錄對應"></a>準備容器資料存放的目錄對應</h2><p>Git當然會有許多的資料要存，而容器又是一個用完就丟掉的概念，如果容器一被刪除了，資料當然也就不見了；所以為了要讓資料可以保留下來，需要在容器之外給他一個空間來存放這些資料，在Gitea介紹文檔內也有範例指令，只不過要用在Windows上面的話，需要再調整一下。</p>
 <p>這邊在設定目錄對應的時候沒能成功，通靈了一下發現<a target="_blank" rel="noopener" href="https://blog.yowko.com/2017/09/windows-dockerfile-volume.html">這篇文章</a>，順利設定完成，各位可以的話最好順便詳細閱讀一下。</p>
 <blockquote>
@@ -302,12 +302,12 @@
 
 <p>-v的參數後面接的那一串東西，白話文就是：我要掛載一個目錄給這個容器使用，這個目錄C:&#x2F;DockerVolumn&#x2F;Gitea就相當於容器裡面的&#x2F;data目錄唷~ </p>
 <p>輸入指令之後，沒意外的話系統會詢問你是否要共用這個磁碟讓Docker使用，我想大家應該都是點確定吧</p>
-<p>接著透過docker ps確認容器已經走起來了~<br><img src="/artblog/%E5%9C%A8Windows%E7%B3%BB%E7%B5%B1%E9%80%8F%E9%81%8EDocker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8Gitea%E6%9C%8D%E5%8B%99/1527608159_75482.png"></p>
+<p>接著透過docker ps確認容器已經走起來了~<br><img src="/%E5%9C%A8Windows%E7%B3%BB%E7%B5%B1%E9%80%8F%E9%81%8EDocker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8Gitea%E6%9C%8D%E5%8B%99/1527608159_75482.png"></p>
 <h2 id="Gitea安裝設定"><a href="#Gitea安裝設定" class="headerlink" title="Gitea安裝設定"></a>Gitea安裝設定</h2><p>透過瀏覽器訪問localhost:10080就會看到畫面了，選擇註冊，因為是第一次使用，系統會跳到初始設定頁面</p>
 <p>這個頁面不外乎就是選擇一些資料庫類型阿，檔案放哪阿，還有這台電腦的domain阿，要用的port之類的設定，因為Gitea我自己也只是初學，沒有辦法介紹的很詳細，只能說請各位自行嘗試囉。這邊可以設定一下admin帳號。</p>
-<p><img src="/artblog/%E5%9C%A8Windows%E7%B3%BB%E7%B5%B1%E9%80%8F%E9%81%8EDocker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8Gitea%E6%9C%8D%E5%8B%99/1527608427_50546.png"><br>點選立即安裝之後，就會幫你安裝好Gitea，直接就可以順利使用了。有沒有很讚!</p>
-<p><img src="/artblog/%E5%9C%A8Windows%E7%B3%BB%E7%B5%B1%E9%80%8F%E9%81%8EDocker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8Gitea%E6%9C%8D%E5%8B%99/1527608501_78478.png"><br>剛才提到的volumn，這個時候可以去看一下，以後Gitea的東西就都放在這邊囉，所以要備份，就直接備這個目錄吧</p>
-<p><img src="/artblog/%E5%9C%A8Windows%E7%B3%BB%E7%B5%B1%E9%80%8F%E9%81%8EDocker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8Gitea%E6%9C%8D%E5%8B%99/1527608561_05456.png"><br>剛才在安裝設定的選項，其實會被存在這裡，所以之後可能可以自己來改 XD (改壞不要說我說的)<br><img src="/artblog/%E5%9C%A8Windows%E7%B3%BB%E7%B5%B1%E9%80%8F%E9%81%8EDocker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8Gitea%E6%9C%8D%E5%8B%99/1527608731_0438.png"></p>
+<p><img src="/%E5%9C%A8Windows%E7%B3%BB%E7%B5%B1%E9%80%8F%E9%81%8EDocker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8Gitea%E6%9C%8D%E5%8B%99/1527608427_50546.png"><br>點選立即安裝之後，就會幫你安裝好Gitea，直接就可以順利使用了。有沒有很讚!</p>
+<p><img src="/%E5%9C%A8Windows%E7%B3%BB%E7%B5%B1%E9%80%8F%E9%81%8EDocker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8Gitea%E6%9C%8D%E5%8B%99/1527608501_78478.png"><br>剛才提到的volumn，這個時候可以去看一下，以後Gitea的東西就都放在這邊囉，所以要備份，就直接備這個目錄吧</p>
+<p><img src="/%E5%9C%A8Windows%E7%B3%BB%E7%B5%B1%E9%80%8F%E9%81%8EDocker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8Gitea%E6%9C%8D%E5%8B%99/1527608561_05456.png"><br>剛才在安裝設定的選項，其實會被存在這裡，所以之後可能可以自己來改 XD (改壞不要說我說的)<br><img src="/%E5%9C%A8Windows%E7%B3%BB%E7%B5%B1%E9%80%8F%E9%81%8EDocker%E5%AE%B9%E5%99%A8%E4%BD%BF%E7%94%A8Gitea%E6%9C%8D%E5%8B%99/1527608731_0438.png"></p>
 
     </div>
 
