@@ -19,15 +19,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
 
-    <meta name="description" content="紀錄使用 xUnit 測試的一些筆記 準備單元測試環境123456789# 查看專案安裝的 nuget 套件dotnet list package# 安裝 xunit 核心套件dotnet add package xunit# Visual Studio 及 dotnet 需要安裝下面兩個套件才能執行測試dotnet add package Microsoft.NET.Test.Sdkdotnet">
+    <meta name="description" content="紀錄使用 xUnit 測試的一些筆記">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用 xUnit 測試">
 <meta property="og:url" content="https://partypeopleland.github.io/artblog/use-xunit-for-dotnet/index.html">
 <meta property="og:site_name" content="Art的辦公桌">
-<meta property="og:description" content="紀錄使用 xUnit 測試的一些筆記 準備單元測試環境123456789# 查看專案安裝的 nuget 套件dotnet list package# 安裝 xunit 核心套件dotnet add package xunit# Visual Studio 及 dotnet 需要安裝下面兩個套件才能執行測試dotnet add package Microsoft.NET.Test.Sdkdotnet">
+<meta property="og:description" content="紀錄使用 xUnit 測試的一些筆記">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2024-03-14T03:27:34.000Z">
-<meta property="article:modified_time" content="2024-03-14T03:30:30.838Z">
+<meta property="article:modified_time" content="2024-03-14T03:34:01.387Z">
 <meta property="article:author" content="art">
 <meta name="twitter:card" content="summary">
 
@@ -231,7 +231,7 @@
       <span class="post-meta-item-text">發表於</span>
       
 
-      <time title="創建時間：2024-03-14 11:27:34 / 修改時間：11:30:30" itemprop="dateCreated datePublished" datetime="2024-03-14T11:27:34+08:00">2024-03-14</time>
+      <time title="創建時間：2024-03-14 11:27:34 / 修改時間：11:34:01" itemprop="dateCreated datePublished" datetime="2024-03-14T11:27:34+08:00">2024-03-14</time>
     </span>
 
   
@@ -265,6 +265,8 @@
     
     
     <div class="post-body" itemprop="articleBody"><p>紀錄使用 xUnit 測試的一些筆記</p>
+<span id="more"></span>
+
 <h2 id="準備單元測試環境"><a href="#準備單元測試環境" class="headerlink" title="準備單元測試環境"></a>準備單元測試環境</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看專案安裝的 nuget 套件</span></span><br><span class="line">dotnet list package</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安裝 xunit 核心套件</span></span><br><span class="line">dotnet add package xunit</span><br><span class="line"><span class="comment"># Visual Studio 及 dotnet 需要安裝下面兩個套件才能執行測試</span></span><br><span class="line">dotnet add package Microsoft.NET.Test.Sdk</span><br><span class="line">dotnet add package xunit.runner.visualstudio</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <h2 id="單元測試範例、測試框架是否正確工作"><a href="#單元測試範例、測試框架是否正確工作" class="headerlink" title="單元測試範例、測試框架是否正確工作"></a>單元測試範例、測試框架是否正確工作</h2><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> Xunit;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">UnitTestDemo</span></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    [<span class="meta">Fact</span>]</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestSuccess</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        Assert.True(<span class="literal">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    [<span class="meta">Fact</span>]</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestFail</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        Assert.True(<span class="literal">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
