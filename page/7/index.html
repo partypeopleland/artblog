@@ -152,7 +152,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/artblog/archives/">
-          <span class="site-state-item-count">142</span>
+          <span class="site-state-item-count">144</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -188,6 +188,232 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/%E5%A6%82%E4%BD%95%E5%9C%A8IDE%E4%B8%AD%E4%BD%BF%E7%94%A8ESLint%E8%87%AA%E5%8B%95%E6%A0%BC%E5%BC%8F%E5%8C%96%E6%96%87%E4%BB%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/artblog/%E5%A6%82%E4%BD%95%E5%9C%A8IDE%E4%B8%AD%E4%BD%BF%E7%94%A8ESLint%E8%87%AA%E5%8B%95%E6%A0%BC%E5%BC%8F%E5%8C%96%E6%96%87%E4%BB%B6/" class="post-title-link" itemprop="url">如何在IDE中使用ESLint自動格式化文件</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2020-04-16 17:49:23" itemprop="dateCreated datePublished" datetime="2020-04-16T17:49:23+08:00">2020-04-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2024-02-15 10:17:47" itemprop="dateModified" datetime="2024-02-15T10:17:47+08:00">2024-02-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">工具</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/%E5%A6%82%E4%BD%95%E5%9C%A8IDE%E4%B8%AD%E4%BD%BF%E7%94%A8ESLint%E8%87%AA%E5%8B%95%E6%A0%BC%E5%BC%8F%E5%8C%96%E6%96%87%E4%BB%B6/" class="post-meta-item leancloud_visitors" data-flag-title="如何在IDE中使用ESLint自動格式化文件" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/%E5%A6%82%E4%BD%95%E5%9C%A8IDE%E4%B8%AD%E4%BD%BF%E7%94%A8ESLint%E8%87%AA%E5%8B%95%E6%A0%BC%E5%BC%8F%E5%8C%96%E6%96%87%E4%BB%B6/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/如何在IDE中使用ESLint自動格式化文件/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>這一篇主要在示範如何在 整合開發環境(Integrated Development Environment) 中，依據 ESLint 的規則設定，自動修復及格式化文件；並且於簽入 Git 版控之前，預先檢查 ESLINT 規則</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/artblog/%E5%A6%82%E4%BD%95%E5%9C%A8IDE%E4%B8%AD%E4%BD%BF%E7%94%A8ESLint%E8%87%AA%E5%8B%95%E6%A0%BC%E5%BC%8F%E5%8C%96%E6%96%87%E4%BB%B6/#more" rel="contents">
+                閱讀全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8B%E8%87%AA%E5%B7%B1%E7%9A%84-docker-registry/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/artblog/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8B%E8%87%AA%E5%B7%B1%E7%9A%84-docker-registry/" class="post-title-link" itemprop="url">如何建立自己的 docker registry</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2020-04-08 10:47:46" itemprop="dateCreated datePublished" datetime="2020-04-08T10:47:46+08:00">2020-04-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2024-02-15 10:17:47" itemprop="dateModified" datetime="2024-02-15T10:17:47+08:00">2024-02-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/devOps/" itemprop="url" rel="index"><span itemprop="name">devOps</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8B%E8%87%AA%E5%B7%B1%E7%9A%84-docker-registry/" class="post-meta-item leancloud_visitors" data-flag-title="如何建立自己的 docker registry" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8B%E8%87%AA%E5%B7%B1%E7%9A%84-docker-registry/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/如何建立自己的-docker-registry/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>要自己建立一個 private 的 docker registry，只需要從<a target="_blank" rel="noopener" href="https://hub.docker.com/_/registry">官方</a>下載已經做好的 image，掛載起來即可</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/artblog/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8B%E8%87%AA%E5%B7%B1%E7%9A%84-docker-registry/#more" rel="contents">
+                閱讀全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1072,232 +1298,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/artblog/Jenkins%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE%E8%88%87%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88/#more" rel="contents">
-                閱讀全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/%E5%A6%82%E4%BD%95%E6%96%BCJenkins-Pipeline%E5%B0%88%E6%A1%88%E6%95%B4%E5%90%88sonarQube/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/artblog/images/avatar.gif">
-      <meta itemprop="name" content="art">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Art的辦公桌">
-      <meta itemprop="description" content="日常工作、學習隨筆">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Art的辦公桌">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/artblog/%E5%A6%82%E4%BD%95%E6%96%BCJenkins-Pipeline%E5%B0%88%E6%A1%88%E6%95%B4%E5%90%88sonarQube/" class="post-title-link" itemprop="url">如何於Jenkins Pipeline專案整合sonarQube</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-
-      <time title="創建時間：2020-01-15 14:12:36" itemprop="dateCreated datePublished" datetime="2020-01-15T14:12:36+08:00">2020-01-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新於</span>
-      <time title="修改時間：2024-02-15 10:17:47" itemprop="dateModified" datetime="2024-02-15T10:17:47+08:00">2024-02-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/artblog/categories/devOps/" itemprop="url" rel="index"><span itemprop="name">devOps</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/artblog/%E5%A6%82%E4%BD%95%E6%96%BCJenkins-Pipeline%E5%B0%88%E6%A1%88%E6%95%B4%E5%90%88sonarQube/" class="post-meta-item leancloud_visitors" data-flag-title="如何於Jenkins Pipeline專案整合sonarQube" title="閱讀次數">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">閱讀次數：</span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/artblog/%E5%A6%82%E4%BD%95%E6%96%BCJenkins-Pipeline%E5%B0%88%E6%A1%88%E6%95%B4%E5%90%88sonarQube/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/如何於Jenkins-Pipeline專案整合sonarQube/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>繼上一篇文章:<a href="https://partypeopleland.github.io/artblog/2020/01/14/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline-%E5%B0%88%E6%A1%88/">如何建立 Jenkins Pipeline 專案 </a>，於 Jenkins Pipeline 專案內，加入 sonarQube 程式碼分析</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/artblog/%E5%A6%82%E4%BD%95%E6%96%BCJenkins-Pipeline%E5%B0%88%E6%A1%88%E6%95%B4%E5%90%88sonarQube/#more" rel="contents">
-                閱讀全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/artblog/images/avatar.gif">
-      <meta itemprop="name" content="art">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Art的辦公桌">
-      <meta itemprop="description" content="日常工作、學習隨筆">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Art的辦公桌">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/artblog/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/" class="post-title-link" itemprop="url">如何建立Jenkins Pipeline 專案</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-
-      <time title="創建時間：2020-01-14 17:53:47" itemprop="dateCreated datePublished" datetime="2020-01-14T17:53:47+08:00">2020-01-14</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新於</span>
-      <time title="修改時間：2024-02-15 10:17:47" itemprop="dateModified" datetime="2024-02-15T10:17:47+08:00">2024-02-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/artblog/categories/devOps/" itemprop="url" rel="index"><span itemprop="name">devOps</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/artblog/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/" class="post-meta-item leancloud_visitors" data-flag-title="如何建立Jenkins Pipeline 專案" title="閱讀次數">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">閱讀次數：</span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/artblog/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/如何建立Jenkins-Pipeline 專案/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>這次想要練習的是 Jenkins 的 Pipeline 專案，所以就先在 local 裝 jenkins windows 版本囉，安裝過程很簡單就不贅述</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/artblog/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline%20%E5%B0%88%E6%A1%88/#more" rel="contents">
                 閱讀全文 &raquo;
               </a>
             </div>
