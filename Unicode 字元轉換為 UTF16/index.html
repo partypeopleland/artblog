@@ -19,25 +19,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
 
-    <meta name="description" content="日常工作、學習隨筆">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Art的辦公桌">
-<meta property="og:url" content="https://partypeopleland.github.io/artblog/archives/2022/09/index.html">
+    <meta name="description" content="因為一個很簡單的 kibana 錯誤，導致我 mysql 寫入中文又有問題了，解決了之後，剛好最近都在看編碼的東西，順便整理一下 UTF8UTF8 是一種編碼的方式，長度並不一定，可以用一到四組 byte 表示一個字元，因為一般常用字的點位都比較低，所以 UTF8 可以用三個 byte 的範圍處理大多數的常用字包含  128 個 US-ASCII 字元只需一個位元組編碼（Unicode 範圍由 U">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unicode 字元轉換為 UTF16">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/Unicode%20%E5%AD%97%E5%85%83%E8%BD%89%E6%8F%9B%E7%82%BA%20UTF16/index.html">
 <meta property="og:site_name" content="Art的辦公桌">
-<meta property="og:description" content="日常工作、學習隨筆">
+<meta property="og:description" content="因為一個很簡單的 kibana 錯誤，導致我 mysql 寫入中文又有問題了，解決了之後，剛好最近都在看編碼的東西，順便整理一下 UTF8UTF8 是一種編碼的方式，長度並不一定，可以用一到四組 byte 表示一個字元，因為一般常用字的點位都比較低，所以 UTF8 可以用三個 byte 的範圍處理大多數的常用字包含  128 個 US-ASCII 字元只需一個位元組編碼（Unicode 範圍由 U">
 <meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2024-04-10T09:48:09.000Z">
+<meta property="article:modified_time" content="2024-04-10T09:52:48.450Z">
 <meta property="article:author" content="art">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://partypeopleland.github.io/artblog/archives/2022/09/">
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/Unicode%20%E5%AD%97%E5%85%83%E8%BD%89%E6%8F%9B%E7%82%BA%20UTF16/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-TW","comments":"","permalink":"","path":"archives/2022/09/index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/Unicode%20%E5%AD%97%E5%85%83%E8%BD%89%E6%8F%9B%E7%82%BA%20UTF16/","path":"/Unicode 字元轉換為 UTF16/","title":"Unicode 字元轉換為 UTF16"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>歸檔 | Art的辦公桌</title>
+<title>Unicode 字元轉換為 UTF16 | Art的辦公桌</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
   <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
@@ -73,7 +75,7 @@
 
     <a href="/artblog/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">Art的辦公桌</h1>
+      <p class="site-title">Art的辦公桌</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
@@ -127,7 +129,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目錄
@@ -140,6 +142,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#UTF8"><span class="nav-number">1.</span> <span class="nav-text">UTF8</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unicode-%E9%BB%9E%E4%BD%8D%E8%BD%89-UTF16-%E7%9A%84%E8%A8%88%E7%AE%97%E9%81%8E%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">Unicode 點位轉 UTF16 的計算過程</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -187,51 +190,139 @@
 
     </div>
 
-    <div class="main-inner archive posts-collapse">
+    <div class="main-inner post posts-expand">
 
 
   
+
+
+<div class="post-block">
   
   
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/Unicode%20%E5%AD%97%E5%85%83%E8%BD%89%E6%8F%9B%E7%82%BA%20UTF16/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Unicode 字元轉換為 UTF16 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Unicode 字元轉換為 UTF16
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+      
+
+      <time title="創建時間：2024-04-10 17:48:09 / 修改時間：17:52:48" itemprop="dateCreated datePublished" datetime="2024-04-10T17:48:09+08:00">2024-04-10</time>
+    </span>
+
+  
+    <span id="/artblog/Unicode%20%E5%AD%97%E5%85%83%E8%BD%89%E6%8F%9B%E7%82%BA%20UTF16/" class="post-meta-item leancloud_visitors" data-flag-title="Unicode 字元轉換為 UTF16" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/Unicode%20%E5%AD%97%E5%85%83%E8%BD%89%E6%8F%9B%E7%82%BA%20UTF16/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/Unicode 字元轉換為 UTF16/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>因為一個很簡單的 kibana 錯誤，導致我 mysql 寫入中文又有問題了，解決了之後，剛好最近都在看編碼的東西，順便整理一下</p>
+<h2 id="UTF8"><a href="#UTF8" class="headerlink" title="UTF8"></a>UTF8</h2><p>UTF8 是一種編碼的方式，長度並不一定，可以用一到四組 byte 表示一個字元，因為一般常用字的點位都比較低，所以 UTF8 可以用三個 byte 的範圍處理大多數的常用字<br>包含</p>
+<ol>
+<li>128 個 US-ASCII 字元只需一個位元組編碼（Unicode 範圍由 U+0000 至 U+007F）</li>
+<li>其他西歐國家的會用到的一些字元，少部分則需要用到兩個位元組（Unicode 範圍由 U+0080 至 U+07FF）</li>
+<li>其他大部分的常用字元，包含中文、日文、韓文等，則需要用到三個位元組（Unicode 範圍由 U+0800 至 U+FFFF）</li>
+<li>其他極少使用的 Unicode 輔助平面的字元使用四至六位元組編碼（Unicode 範圍由 U+10000 至 U+1FFFFF 使用四位元組，Unicode 範圍由 U+200000 至 U+3FFFFFF 使用五位元組，Unicode 範圍由 U+4000000 至 U+7FFFFFFF 使用六位元組）。</li>
+</ol>
+<blockquote>
+<p>上述資料來源: <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/UTF-8">維基百科</a></p>
+</blockquote>
+<h2 id="Unicode-點位轉-UTF16-的計算過程"><a href="#Unicode-點位轉-UTF16-的計算過程" class="headerlink" title="Unicode 點位轉 UTF16 的計算過程"></a>Unicode 點位轉 UTF16 的計算過程</h2><p><code>𠎀</code>這個字的 Unicode 點位: 0x20380</p>
+<p>首先需要將其扣除 0x10000，因為該點位超過了 0xFFFF，並不屬於前面提到的三個位元組的範圍，所以需要轉換為 UTF16，扣除掉 0x10000 後，剩下的點位就是該字的 UTF16 編碼</p>
+<p>該字的 Unicode 點位為: 0x20380 - 0x10000 &#x3D; 0x10380，也就是二進位 <code>0001000000 1110000000</code> 將其切割為兩部分，先拿低點位的 10 碼，剩下高點位不足的部分補 0，如此一來就會得到兩個 10 位元組的碼位，</p>
+<ul>
+<li>高點位:<code>0001000000</code></li>
+<li>低點位:<code>1110000000</code></li>
+</ul>
+<p>輔助平面的高低點位初始值為 <code>0xD800</code> 與 <code>0xDC00</code>，所以將剛剛的計算出來的點位加上這兩個值就是該字的 UTF16 編碼</p>
+<blockquote>
+<p>這個初始值，轉為二進位後有 6 碼，再加上切割出來的 10 碼，剛好就是一個 16 位元組的字元</p>
+</blockquote>
+<p>高點位的計算為 0xD800，也就是 <code>110110 0000000000</code>，加上剛剛切割出來的高位十碼 &#x3D; <code>110110 0001000000</code> &#x3D; <code>0xD840</code><br>低點位的計算為 0xDC00，也就是 <code>110111 0000000000</code>，加上剛剛切割出來的低位十碼 &#x3D; <code>110111 1110000000</code> &#x3D; <code>0xDF80</code></p>
+<p>為了要表示這一個字將其轉為二進位後，總共使用了 4 個 byte，也就是 16 個位元組 <code>11011000 01000000 11011111 10000000</code><br>所以 <code>𠎀</code> 的 UTF16 編碼為 <code>0xD840 0xDF80</code></p>
+<p>一般來說瞭解這種東西也沒有甚麼用，但如果有機會接觸到編碼問題，多知道一些細節對於偵錯會有幫助</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
         
-        <span class="collection-header">非常好! 目前共有 148 篇文章。 繼續努力。</span>
-      </div>
 
-      
-    <div class="collection-year">
-      <span class="collection-header">2022</span>
-    </div>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2022-09-05T12:06:06+08:00"
-              content="2022-09-05">
-          09-05
-        </time>
-      </div>
-
-      <div class="post-title">
-        <a class="post-title-link" href="/artblog/Selenium-FullPage-ScreenShot/" itemprop="url">
-          <span itemprop="name">Selenium - FullPage ScreenShot</span>
-        </a>
-      </div>
-
-      
-    </header>
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/what-is-ansi-save-as-in-notepad/" rel="prev" title="記事本的ANSI另存新檔是什麼？">
+                  <i class="fa fa-angle-left"></i> 記事本的ANSI另存新檔是什麼？
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
   </article>
+</div>
 
 
-    </div>
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
   </div>
   
-  
-  
-
 </div>
   </main>
 
