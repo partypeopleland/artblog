@@ -152,7 +152,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/artblog/archives/">
-          <span class="site-state-item-count">149</span>
+          <span class="site-state-item-count">150</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -163,7 +163,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/artblog/tags/">
-        <span class="site-state-item-count">84</span>
+        <span class="site-state-item-count">85</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -188,6 +188,112 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/NET6-Core-distributed-tracing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/artblog/NET6-Core-distributed-tracing/" class="post-title-link" itemprop="url">NET6 Core distributed tracing</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2022-04-15 16:51:27" itemprop="dateCreated datePublished" datetime="2022-04-15T16:51:27+08:00">2022-04-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2024-02-15 10:17:47" itemprop="dateModified" datetime="2024-02-15T10:17:47+08:00">2024-02-15</time>
+    </span>
+
+  
+    <span id="/artblog/NET6-Core-distributed-tracing/" class="post-meta-item leancloud_visitors" data-flag-title="NET6 Core distributed tracing" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/NET6-Core-distributed-tracing/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/NET6-Core-distributed-tracing/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><strong>分散式追蹤系統</strong></p>
+<p>系統架構從單體轉變成微服務之後，使用者發出的單次請求往往會涉及到多個服務之間的呼叫，以往採用的日誌服務也較難以窺見全貌，當我們需要追蹤某一次請求中間發生了那些事情，我們期望能獲取的資訊不外乎是這次的請求，總共經過哪些服務，每個服務花費了多久的時間，呼叫的順序等等，這就是分散式追蹤系統能夠幫我們做到的事情。只不過每一家系統的 API 都不太一樣，所以 <code>W3C</code> 也有提供一份<a target="_blank" rel="noopener" href="https://www.w3.org/TR/trace-context/">Trace Context - W3C</a>，讓大家都用同一個標準來實現分散式追蹤。</p>
+<p>在這之前看到一堆像是 <code>RequestId</code>, <code>TraceId</code>, <code>SpanId</code>, <code>ParentId</code>, <code>ActionId</code>，可能還有很多我沒有列出來的名詞，真的是有看沒有懂，現在至少可以從 W3C 的建議中明確知道一些名詞與他們的用途，其他的應該就是各家廠商自己的定義了，那就有用到再說囉</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/artblog/NET6-Core-distributed-tracing/#more" rel="contents">
+                閱讀全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1170,119 +1276,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/artblog/axios-error-handle/#more" rel="contents">
-                閱讀全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/Classic-TDD-by-Examples-Refactor-to-Design/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/artblog/images/avatar.gif">
-      <meta itemprop="name" content="art">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Art的辦公桌">
-      <meta itemprop="description" content="日常工作、學習隨筆">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | Art的辦公桌">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/artblog/Classic-TDD-by-Examples-Refactor-to-Design/" class="post-title-link" itemprop="url">心得 - Classic TDD by Examples Refactor to Design</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">發表於</span>
-
-      <time title="創建時間：2021-07-20 11:19:09" itemprop="dateCreated datePublished" datetime="2021-07-20T11:19:09+08:00">2021-07-20</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新於</span>
-      <time title="修改時間：2024-07-09 16:14:20" itemprop="dateModified" datetime="2024-07-09T16:14:20+08:00">2024-07-09</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分類於</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/artblog/categories/%E5%BF%83%E5%BE%97/" itemprop="url" rel="index"><span itemprop="name">心得</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/artblog/Classic-TDD-by-Examples-Refactor-to-Design/" class="post-meta-item leancloud_visitors" data-flag-title="心得 - Classic TDD by Examples Refactor to Design" title="閱讀次數">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">閱讀次數：</span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/artblog/Classic-TDD-by-Examples-Refactor-to-Design/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/Classic-TDD-by-Examples-Refactor-to-Design/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>這幾天的碎片時間幾乎都在看 <code>ClassicTDD</code> 課程影片，每一個段落每一個章節都能夠給我觀念上的糾正與實際的解決思路，我越來越覺得其實我根本就不會寫 Code…..<br>其實收穫最大的除了這個以外，我常常就是想到一句話，學習從模仿開始，問題是，你要能夠找的到<strong>對</strong>的模仿對象</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/artblog/Classic-TDD-by-Examples-Refactor-to-Design/#more" rel="contents">
                 閱讀全文 &raquo;
               </a>
             </div>
