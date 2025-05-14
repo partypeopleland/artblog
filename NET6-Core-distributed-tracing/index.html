@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="分散式追蹤系統 系統架構從單體轉變成微服務之後，使用者發出的單次請求往往會涉及到多個服務之間的呼叫，以往採用的日誌服務也較難以窺見全貌，當我們需要追蹤某一次請求中間發生了那些事情，我們期望能獲取的資訊不外乎是這次的請求，總共經過哪些服務，每個服務花費了多久的時間，呼叫的順序等等，這就是分散式追蹤系統能夠幫我們做到的事情。只不過每一家系統的 API 都不太一樣，所以 W3C 也有提供一份Trace">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NET6 Core distributed tracing">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/NET6-Core-distributed-tracing/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="分散式追蹤系統 系統架構從單體轉變成微服務之後，使用者發出的單次請求往往會涉及到多個服務之間的呼叫，以往採用的日誌服務也較難以窺見全貌，當我們需要追蹤某一次請求中間發生了那些事情，我們期望能獲取的資訊不外乎是這次的請求，總共經過哪些服務，每個服務花費了多久的時間，呼叫的順序等等，這就是分散式追蹤系統能夠幫我們做到的事情。只不過每一家系統的 API 都不太一樣，所以 W3C 也有提供一份Trace">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/NET6-Core-distributed-tracing/propagation-fields.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/NET6-Core-distributed-tracing/header-init-frontapp.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/NET6-Core-distributed-tracing/header-init-backend.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/NET6-Core-distributed-tracing/header-trace-backend.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/NET6-Core-distributed-tracing/seq-trace-backend.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/NET6-Core-distributed-tracing/seq-trace-all.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/NET6-Core-distributed-tracing/zipkin.jpg">
+<meta property="article:published_time" content="2022-04-15T08:51:27.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.408Z">
+<meta property="article:author" content="art">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/NET6-Core-distributed-tracing/propagation-fields.jpg">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/NET6-Core-distributed-tracing/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/NET6-Core-distributed-tracing/","path":"/NET6-Core-distributed-tracing/","title":"NET6 Core distributed tracing"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>NET6 Core distributed tracing | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AA%AA%E6%98%8E"><span class="nav-number">1.</span> <span class="nav-text">說明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E5%89%8D%E6%BA%96%E5%82%99"><span class="nav-number">2.</span> <span class="nav-text">事前準備</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A5%E8%AA%8C%E6%9C%8D%E5%8B%99-Seq"><span class="nav-number">2.1.</span> <span class="nav-text">日誌服務:Seq</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E4%BD%88%E5%BC%8F%E8%BF%BD%E8%B8%AA%E7%B3%BB%E7%B5%B1-zipkin"><span class="nav-number">2.2.</span> <span class="nav-text">分佈式追踪系統:zipkin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%AC%E8%A9%A6%E5%B0%88%E6%A1%88"><span class="nav-number">2.3.</span> <span class="nav-text">測試專案</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%A6%E4%BD%9C%E5%88%86%E4%BD%88%E5%BC%8F%E8%B7%9F%E8%B8%AA"><span class="nav-number">3.</span> <span class="nav-text">實作分佈式跟踪</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%A6%E4%BD%9C%E6%97%A5%E8%AA%8C%E7%B4%80%E9%8C%84"><span class="nav-number">3.1.</span> <span class="nav-text">實作日誌紀錄</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A2%BA%E8%AA%8D-Seq-%E6%98%AF%E5%90%A6%E6%9C%89%E7%B4%80%E9%8C%84%E5%88%B0%E6%AD%A3%E7%A2%BA%E8%B3%87%E8%A8%8A"><span class="nav-number">3.2.</span> <span class="nav-text">確認 Seq 是否有紀錄到正確資訊</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-zipkin-%E6%AA%A2%E8%A6%96-tracing-%E7%B4%80%E9%8C%84"><span class="nav-number">3.3.</span> <span class="nav-text">使用 zipkin 檢視 tracing 紀錄</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#REF"><span class="nav-number">4.</span> <span class="nav-text">REF</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/NET6-Core-distributed-tracing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="NET6 Core distributed tracing | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          NET6 Core distributed tracing
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2022-04-15 16:51:27" itemprop="dateCreated datePublished" datetime="2022-04-15T16:51:27+08:00">2022-04-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+
+  
+    <span id="/artblog/NET6-Core-distributed-tracing/" class="post-meta-item leancloud_visitors" data-flag-title="NET6 Core distributed tracing" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/NET6-Core-distributed-tracing/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/NET6-Core-distributed-tracing/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><strong>分散式追蹤系統</strong></p>
+<p>系統架構從單體轉變成微服務之後，使用者發出的單次請求往往會涉及到多個服務之間的呼叫，以往採用的日誌服務也較難以窺見全貌，當我們需要追蹤某一次請求中間發生了那些事情，我們期望能獲取的資訊不外乎是這次的請求，總共經過哪些服務，每個服務花費了多久的時間，呼叫的順序等等，這就是分散式追蹤系統能夠幫我們做到的事情。只不過每一家系統的 API 都不太一樣，所以 <code>W3C</code> 也有提供一份<a target="_blank" rel="noopener" href="https://www.w3.org/TR/trace-context/">Trace Context - W3C</a>，讓大家都用同一個標準來實現分散式追蹤。</p>
+<p>在這之前看到一堆像是 <code>RequestId</code>, <code>TraceId</code>, <code>SpanId</code>, <code>ParentId</code>, <code>ActionId</code>，可能還有很多我沒有列出來的名詞，真的是有看沒有懂，現在至少可以從 W3C 的建議中明確知道一些名詞與他們的用途，其他的應該就是各家廠商自己的定義了，那就有用到再說囉</p>
+<span id="more"></span>
+
+<h2 id="說明"><a href="#說明" class="headerlink" title="說明"></a>說明</h2><p>依據 <a target="_blank" rel="noopener" href="https://www.w3.org/TR/trace-context/">Trace Context - W3C</a>。這份建議提供了一個標準的定義，讓各家廠商可以遵循，使得各家的追蹤系統可以不在各自為政。所以在<code>version</code>為<code>00</code>的情況下，<code>traceparent</code>的格式就是下面這四個東西的組成</p>
+<ol>
+<li>version</li>
+<li>trace-id</li>
+<li>parent-id&#x2F;span-id</li>
+<li>trace-flags</li>
+</ol>
+<p>所以整個概念就像是下面這張圖一樣</p>
+<p><img src="/artblog/NET6-Core-distributed-tracing/propagation-fields.jpg"></p>
+<blockquote>
+<p>圖片取自<a target="_blank" rel="noopener" href="https://dev.to/luizhlelis/using-w3c-trace-context-standard-in-distributed-tracing-3743">Using W3C Trace Context standard in distributed tracing</a></p>
+</blockquote>
+<p>這條呼叫鍊上，則是共用同一個 <code>traceId</code>，每一個應用程式自己的 <code>scope</code> 就是用相同的 <code>spanId</code>，在這條呼叫鍊的下一個應用程式則會是另外一個 <code>spanId</code>，前一個應用程式需要將 <code>traceparent</code>、<code>tracestate</code> 這兩個 header 資訊正確的傳遞給下一個應用程式。</p>
+<h2 id="事前準備"><a href="#事前準備" class="headerlink" title="事前準備"></a>事前準備</h2><h3 id="日誌服務-Seq"><a href="#日誌服務-Seq" class="headerlink" title="日誌服務:Seq"></a><a target="_blank" rel="noopener" href="https://datalust.co/seq">日誌服務:Seq</a></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># create volume folder</span><br><span class="line">mkdir -p D:\docker-volumes\seq</span><br><span class="line"></span><br><span class="line"># docker-cli</span><br><span class="line">docker run --name seq -d --restart unless-stopped -e ACCEPT_EULA=Y -v D:\docker-volumes\seq:/data -p 8090:80 -p 5341:5341 datalust/seq</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>REF:<a href="https://partypeopleland.github.io/artblog/2022/03/23/logging-using-serilog-and-seq/">使用 Serilog 和 Seq 紀錄 Log</a></p>
+</blockquote>
+<h3 id="分佈式追踪系統-zipkin"><a href="#分佈式追踪系統-zipkin" class="headerlink" title="分佈式追踪系統:zipkin"></a><a target="_blank" rel="noopener" href="https://zipkin.io/">分佈式追踪系統:zipkin</a></h3><p>直接使用下列指令可以透過 docker 執行 zipkin，資料則是暫時儲存於記憶體中不保留，若需要保留資料，<code>zipkin</code>也支援<code>elasticSearch</code>、<code>mySql</code>、<code>cassandra</code></p>
+<blockquote>
+<p>REF:<a target="_blank" rel="noopener" href="https://github.com/openzipkin/zipkin/blob/master/zipkin-server/README.md#storage">Storage - zipkin Github</a></p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 9411:9411 openzipkin/zipkin-slim:2</span><br></pre></td></tr></table></figure>
+
+<h3 id="測試專案"><a href="#測試專案" class="headerlink" title="測試專案"></a>測試專案</h3><p><strong>測試目標</strong><br>確認當前 .NET6 Web 網站是否有遵循 W3C 的 <a target="_blank" rel="noopener" href="https://www.w3.org/TR/trace-context/">traceparent context</a></p>
+<p><strong>測試情境</strong></p>
+<p>測試環境由三個應用程式構成</p>
+<p><code>Web(clientApp) -&gt; Proxy(FrontEndApp) -&gt; WebAPI(BackEndApp)</code></p>
+<p>範例程式碼:<a target="_blank" rel="noopener" href="https://github.com/partypeopleland/distributed-tracing-demo">Github:distributed-tracing-demo</a></p>
+<p>使用者透過瀏覽器開啟網頁，<code>Web</code> 從後端呼叫 <code>Proxy</code>，而 <code>Proxy</code> 則轉發請求給 <code>WebAPI</code> 查詢取得資料後回應給使用者</p>
+<p><strong>測試步驟</strong></p>
+<p>開啟 <code>clientApp</code> 之後，透過中斷點檢視 <code>FrontEndApp</code> 跟 <code>BackEndApp</code> 的 request Header</p>
+<p><strong>frontEnd Header</strong></p>
+<p><img src="/artblog/NET6-Core-distributed-tracing/header-init-frontapp.jpg"></p>
+<p><strong>backEnd Header</strong></p>
+<p><img src="/artblog/NET6-Core-distributed-tracing/header-init-backend.jpg"></p>
+<p>可以注意到 header 裡面的 keyValuePair 有一組是<code>traceparent</code> , <code>00-6ef05abe949ce579cc110ab5b289df14-be6d36f4ecc27214-00</code></p>
+<blockquote>
+<p><code>traceparent</code>的格式為 <code>version &quot;-&quot; version-format</code>，而<code>version-format</code>在<code>version</code>為<code>00</code>的定義，又由三個部分組成<code>trace-id &quot;-&quot; parent-id &quot;-&quot; trace-flags</code></p>
+</blockquote>
+<h2 id="實作分佈式跟踪"><a href="#實作分佈式跟踪" class="headerlink" title="實作分佈式跟踪"></a>實作分佈式跟踪</h2><h3 id="實作日誌紀錄"><a href="#實作日誌紀錄" class="headerlink" title="實作日誌紀錄"></a>實作日誌紀錄</h3><p>接下來的就是要將這些資訊放到日誌服務 <code>Seq</code> 之內，此處選擇使用 <code>Serilog</code> 套件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># dotnet Core Serilog 套件</span><br><span class="line">dotnet add package Serilog.AspNetCore</span><br><span class="line"># 讓 Log 可以在 Console 顯示</span><br><span class="line">dotnet add package Serilog.Sinks.Console</span><br><span class="line"># 讓 Log 可以送到 Seq</span><br><span class="line">dotnet add package Serilog.Sinks.Seq</span><br><span class="line"># 使其支援 W3C traceparent</span><br><span class="line">dotnet add package Serilog.Enrichers.Span</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// program.cs</span></span><br><span class="line"><span class="keyword">using</span> Serilog;</span><br><span class="line"></span><br><span class="line">Log.Logger = <span class="keyword">new</span> LoggerConfiguration()</span><br><span class="line">    .MinimumLevel.Debug()</span><br><span class="line">    .MinimumLevel.Override(<span class="string">&quot;Microsoft&quot;</span>, LogEventLevel.Information)</span><br><span class="line">    <span class="comment">// .MinimumLevel.Override(&quot;Microsoft.AspNetCore&quot;, LogEventLevel.Warning)</span></span><br><span class="line">    .Enrich.WithSpan()</span><br><span class="line">    .WriteTo.Console()</span><br><span class="line">    .WriteTo.Seq(<span class="string">&quot;http://localhost:5341&quot;</span>)</span><br><span class="line">    .CreateLogger();</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 原先內容</span></span><br><span class="line">    <span class="comment">// ... 略</span></span><br><span class="line">    builder.Host.UseSerilog();</span><br><span class="line">    <span class="comment">// ... 略</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span> (Exception ex)</span><br><span class="line">&#123;</span><br><span class="line">    Log.Fatal(ex, <span class="string">&quot;Host terminated unexpectedly&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">finally</span></span><br><span class="line">&#123;</span><br><span class="line">    Log.CloseAndFlush();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="確認-Seq-是否有紀錄到正確資訊"><a href="#確認-Seq-是否有紀錄到正確資訊" class="headerlink" title="確認 Seq 是否有紀錄到正確資訊"></a>確認 Seq 是否有紀錄到正確資訊</h3><p>開啟 frontEndApp 跟 backendApp，並透過中斷點檢視 <code>backendApp</code>所接收到的 <code>traceparent</code><br><img src="/artblog/NET6-Core-distributed-tracing/header-trace-backend.jpg"></p>
+<p>接著到 <code>seq</code> 查看是否有紀錄<code>TraceId</code>及<code>SpanId</code><br><img src="/artblog/NET6-Core-distributed-tracing/seq-trace-backend.jpg"></p>
+<p><img src="/artblog/NET6-Core-distributed-tracing/seq-trace-all.jpg"></p>
+<h3 id="使用-zipkin-檢視-tracing-紀錄"><a href="#使用-zipkin-檢視-tracing-紀錄" class="headerlink" title="使用 zipkin 檢視 tracing 紀錄"></a>使用 zipkin 檢視 tracing 紀錄</h3><p>安裝 nuget 套件(照著套件名稱搜尋，並勾選 <code>prerelease</code>)</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">PackageReference</span> <span class="attr">Include</span>=<span class="string">&quot;OpenTelemetry.Exporter.OpenTelemetryProtocol&quot;</span> <span class="attr">Version</span>=<span class="string">&quot;1.2.0-rc5&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">PackageReference</span> <span class="attr">Include</span>=<span class="string">&quot;OpenTelemetry.Exporter.OpenTelemetryProtocol.Logs&quot;</span> <span class="attr">Version</span>=<span class="string">&quot;1.0.0-rc9.2&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">PackageReference</span> <span class="attr">Include</span>=<span class="string">&quot;OpenTelemetry.Exporter.Zipkin&quot;</span> <span class="attr">Version</span>=<span class="string">&quot;1.2.0-rc5&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">PackageReference</span> <span class="attr">Include</span>=<span class="string">&quot;OpenTelemetry.Extensions.Hosting&quot;</span> <span class="attr">Version</span>=<span class="string">&quot;1.0.0-rc9.2&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">PackageReference</span> <span class="attr">Include</span>=<span class="string">&quot;OpenTelemetry.Instrumentation.AspNetCore&quot;</span> <span class="attr">Version</span>=<span class="string">&quot;1.0.0-rc9.2&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">PackageReference</span> <span class="attr">Include</span>=<span class="string">&quot;OpenTelemetry.Instrumentation.Http&quot;</span> <span class="attr">Version</span>=<span class="string">&quot;1.0.0-rc9.2&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>將應用程式的資料直接透過 exporter 傳遞給 zipkin</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// program.cs</span></span><br><span class="line">    <span class="comment">// .略.</span></span><br><span class="line">    builder.Services.AddControllersWithViews();</span><br><span class="line">    builder.Services.AddOpenTelemetryTracing(b =&gt; b</span><br><span class="line">        .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(builder.Configuration.GetValue&lt;<span class="built_in">string</span>&gt;(<span class="string">&quot;Zipkin:ServiceName&quot;</span>)))</span><br><span class="line">        .AddAspNetCoreInstrumentation()</span><br><span class="line">        .AddZipkinExporter());</span><br></pre></td></tr></table></figure>
+
+<p><code>appsetting.json</code>裡面的<code>ServiceName</code>是提供給 zipkin 顯示的服務名稱</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//appsetting.json</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="comment">// .略.</span></span><br><span class="line">  <span class="attr">&quot;Zipkin&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;ServiceName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;frontendApp&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;Endpoint&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://localhost:9411/api/v2/spans&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/NET6-Core-distributed-tracing/zipkin.jpg"></p>
+<h2 id="REF"><a href="#REF" class="headerlink" title="REF"></a>REF</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://www.w3.org/TR/trace-context/#traceparent-header">3.2 Traceparent Header - W3C</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/RehanSaeed/Serilog.Enrichers.Span">Serilog.Enrichers.Span - Github</a></li>
+<li><a target="_blank" rel="noopener" href="https://dev.to/luizhlelis/using-w3c-trace-context-standard-in-distributed-tracing-3743">Using W3C Trace Context standard in distributed tracing</a></li>
+<li><a target="_blank" rel="noopener" href="https://devblogs.microsoft.com/dotnet/improvements-in-net-core-3-0-for-troubleshooting-and-monitoring-distributed-apps/">Improvements in .NET Core 3.0 for troubleshooting and monitoring distributed apps</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/openzipkin/zipkin/tree/master/docker">zipkin Docker images - Github</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.yowko.com/aspdotnet-core-opentelemetry-zipkin/">使用 OpenTelemetry 來追蹤 ASP.NET Core</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/logging-using-serilog-and-seq/" rel="prev" title="使用Serilog和Seq紀錄Log">
+                  <i class="fa fa-angle-left"></i> 使用Serilog和Seq紀錄Log
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/polly-library-circuit-breaker/" rel="next" title="polly - 熔斷機制">
+                  polly - 熔斷機制 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="透過 SignalR 製作一個可以即時通知給 Web 的練習專案，並且讓 Winform 也可以用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[SignalR] 01 - WebSite And WinForm">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/signalr-01-website-and-winform/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="透過 SignalR 製作一個可以即時通知給 Web 的練習專案，並且讓 Winform 也可以用">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/signalr-01-website-and-winform/1540887249_10832.png">
+<meta property="article:published_time" content="2018-11-22T01:24:04.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.172Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="signalR">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/signalr-01-website-and-winform/1540887249_10832.png">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/signalr-01-website-and-winform/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/signalr-01-website-and-winform/","path":"/signalr-01-website-and-winform/","title":"[SignalR] 01 - WebSite And WinForm"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>[SignalR] 01 - WebSite And WinForm | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#nuget-%E5%AE%89%E8%A3%9D-SignalR-%E5%A5%97%E4%BB%B6"><span class="nav-number">1.</span> <span class="nav-text">nuget 安裝 SignalR 套件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A8%AD%E5%AE%9A-OWIN%EF%BC%8C%E5%BB%BA%E7%AB%8B-OWIN-%E5%95%9F%E5%8B%95%E9%A1%9E%E5%88%A5"><span class="nav-number">2.</span> <span class="nav-text">設定 OWIN，建立 OWIN 啟動類別</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B-server-%E7%AB%AF%E7%9A%84-Hub"><span class="nav-number">3.</span> <span class="nav-text">建立 server 端的 Hub</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Client-%E7%AB%AF%E9%A0%81%E9%9D%A2-javascript-%E7%A8%8B%E5%BC%8F"><span class="nav-number">4.</span> <span class="nav-text">Client 端頁面 javascript 程式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WinForm-%E4%B9%9F%E5%8A%A0%E5%85%A5%E8%81%8A%E5%A4%A9%E5%AE%A4"><span class="nav-number">5.</span> <span class="nav-text">WinForm 也加入聊天室</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hub-%E5%82%B3%E9%81%9E%E7%9A%84-Json-%E6%A0%BC%E5%BC%8F"><span class="nav-number">6.</span> <span class="nav-text">Hub 傳遞的 Json 格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99"><span class="nav-number">7.</span> <span class="nav-text">參考資料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/signalr-01-website-and-winform/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="[SignalR] 01 - WebSite And WinForm | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          [SignalR] 01 - WebSite And WinForm
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2018-11-22 09:24:04" itemprop="dateCreated datePublished" datetime="2018-11-22T09:24:04+08:00">2018-11-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+
+  
+    <span id="/artblog/signalr-01-website-and-winform/" class="post-meta-item leancloud_visitors" data-flag-title="[SignalR] 01 - WebSite And WinForm" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/signalr-01-website-and-winform/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/signalr-01-website-and-winform/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>透過 SignalR 製作一個可以即時通知給 Web 的練習專案，並且讓 Winform 也可以用</p>
+<span id="more"></span>
+
+<p>透過網頁聊天室的範例練習 SignalR，<a target="_blank" rel="noopener" href="https://github.com/partypeopleland/SignalRDemo">GitHub Sample</a></p>
+<p><img src="/artblog/signalr-01-website-and-winform/1540887249_10832.png"></p>
+<h2 id="nuget-安裝-SignalR-套件"><a href="#nuget-安裝-SignalR-套件" class="headerlink" title="nuget 安裝 SignalR 套件"></a>nuget 安裝 SignalR 套件</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">install-package Microsoft.AspNet.SignalR</span><br></pre></td></tr></table></figure>
+
+<h2 id="設定-OWIN，建立-OWIN-啟動類別"><a href="#設定-OWIN，建立-OWIN-啟動類別" class="headerlink" title="設定 OWIN，建立 OWIN 啟動類別"></a>設定 OWIN，建立 OWIN 啟動類別</h2><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">assembly: OwinStartup(typeof(SingalRDemo.Startup))</span>]</span><br><span class="line"><span class="keyword">namespace</span> <span class="title">SingalRDemo</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Startup</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Configuration</span>(<span class="params">IAppBuilder app</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            app.MapSignalR();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="建立-server-端的-Hub"><a href="#建立-server-端的-Hub" class="headerlink" title="建立 server 端的 Hub"></a>建立 server 端的 Hub</h2><p>繼承 <code>Microsoft.AspNet.SignalR.Hub</code>，並建立自訂的方法，例如當 Client 端發送資料給 Server 端，Server 端應如何處理</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">ChatHub</span> : <span class="title">Microsoft.AspNet.SignalR.Hub</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 傳遞訊息給所有client</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name=&quot;msg&quot;&gt;</span>聊天訊息<span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SendMessage</span>(<span class="params"><span class="built_in">string</span> msg</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Clients.All.addMessage(msg);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Client-端頁面-javascript-程式"><a href="#Client-端頁面-javascript-程式" class="headerlink" title="Client 端頁面 javascript 程式"></a>Client 端頁面 javascript 程式</h2><p>範例採用聊天室，送出訊息給 Hub 再由 Hub 傳遞給每一個 Client，而其他的 Client 接到資料後要可以將訊息呈現出來</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">&quot;msg&quot;</span> <span class="attr">value</span>=<span class="string">&quot;&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">&quot;send&quot;</span> <span class="attr">type</span>=<span class="string">&quot;button&quot;</span> <span class="attr">value</span>=<span class="string">&quot;Send&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">hr</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">h3</span>&gt;</span>Chat Message<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">ul</span> <span class="attr">id</span>=<span class="string">&quot;room&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--需要先載入jQuery--&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://cdnjs.cloudflare.com/ajax/libs/signalr.js/2.3.0/jquery.signalR.min.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;/signalr/hubs&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--指向根目錄的/signalr/hubs--&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;chat.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// chat.js</span></span><br><span class="line"><span class="keyword">let</span> chat = $.connection.<span class="property">chatHub</span></span><br><span class="line"><span class="keyword">let</span> $sendBtn = $(<span class="string">&#x27;#send&#x27;</span>)</span><br><span class="line"><span class="keyword">let</span> $msgDom = $(<span class="string">&#x27;#msg&#x27;</span>)</span><br><span class="line"><span class="keyword">let</span> $room = \$(<span class="string">&#x27;#room&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 提供給 Hub 呼叫，將傳來的文字顯示在畫面上</span></span><br><span class="line">chat.<span class="property">client</span>.<span class="property">addMessage</span> = <span class="function"><span class="params">msg</span> =&gt;</span> \$room.<span class="title function_">append</span>(<span class="string">`&lt;li&gt;<span class="subst">$&#123;msg&#125;</span>&lt;/li&gt;`</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定義 Client 端送出訊息事件，呼叫 Hub 的 sendMessage 方法</span></span><br><span class="line"><span class="keyword">let</span> <span class="title function_">sendMsgHandler</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">chat.<span class="property">server</span>.<span class="title function_">sendMessage</span>($msgDom.<span class="title function_">val</span>())</span><br><span class="line">  $msgDom.<span class="title function_">val</span>(<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 與 Hub 的連線完成之後，才綁定送出按鈕的事件</span></span><br><span class="line">$.connection.<span class="property">hub</span>.<span class="title function_">start</span>().<span class="title function_">done</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">  $sendBtn.<span class="title function_">on</span>(<span class="string">&#x27;click&#x27;</span>, sendMsgHandler)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="WinForm-也加入聊天室"><a href="#WinForm-也加入聊天室" class="headerlink" title="WinForm 也加入聊天室"></a>WinForm 也加入聊天室</h2><p>需要指定 Winform 要跟哪個 Hub 互動，這個部分就在 form 一開始的時候先指定，所以先宣告兩個 private 變數存放 <code>HubConnection</code> 以及 <code>IHubProxy</code>，連線開始需要指定 SignalR 的網址，另外我們也會希望再連線收到資料的時候進行處理，因此在 HubConnection 的 Received 加入委派來處理</p>
+<p>先將收到的字串轉為 dynamic 物件，範例如下，在依據呼叫的 Hub 名稱、方法名稱或內容來做其他處理</p>
+<h2 id="Hub-傳遞的-Json-格式"><a href="#Hub-傳遞的-Json-格式" class="headerlink" title="Hub 傳遞的 Json 格式"></a>Hub 傳遞的 Json 格式</h2><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;H&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ChatHub&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;M&quot;</span><span class="punctuation">:</span> <span class="string">&quot;addMessage&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;A&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;小叮噹加入了聊天室&quot;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h2><ol>
+<li><a target="_blank" rel="noopener" href="http://weisnote.blogspot.com/2012/08/signalr-webform-winform.html">http://weisnote.blogspot.com/2012/08/signalr-webform-winform.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/aspnet/signalr/overview/getting-started/tutorial-getting-started-with-signalr">https://docs.microsoft.com/zh-tw/aspnet/signalr/overview/getting-started/tutorial-getting-started-with-signalr</a></li>
+<li><a target="_blank" rel="noopener" href="https://code.msdn.microsoft.com/SignalR-Getting-Started-b9d18aa9">https://code.msdn.microsoft.com/SignalR-Getting-Started-b9d18aa9</a></li>
+<li><a target="_blank" rel="noopener" href="https://dotblogs.com.tw/hatelove/archive/2012/07/01/signalr-introduction-about-realtime-website.aspx">https://dotblogs.com.tw/hatelove/archive/2012/07/01/signalr-introduction-about-realtime-website.aspx</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/signalR/" rel="tag"># signalR</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/clean-code-architect/" rel="prev" title="讀書心得-無暇的程式碼-整潔的軟體設計與架構篇">
+                  <i class="fa fa-angle-left"></i> 讀書心得-無暇的程式碼-整潔的軟體設計與架構篇
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/signalr-02-multi-hubs/" rel="next" title="[SignalR] 02 - Multi Hubs">
+                  [SignalR] 02 - Multi Hubs <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

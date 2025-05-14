@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="之前曾經有個案例是要將使用者輸入的文案轉存成 EMAIL 的格式，下載後可以讓他們自行編輯再轉發出去，這邊就記錄一下重點">
+<meta property="og:type" content="article">
+<meta property="og:title" content="將資料存成eml格式下載-使用裝飾模式">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/eml-format-download-with-decorator-pattern/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="之前曾經有個案例是要將使用者輸入的文案轉存成 EMAIL 的格式，下載後可以讓他們自行編輯再轉發出去，這邊就記錄一下重點">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2023-07-24T02:35:28.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.548Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="decorator">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/eml-format-download-with-decorator-pattern/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/eml-format-download-with-decorator-pattern/","path":"/eml-format-download-with-decorator-pattern/","title":"將資料存成eml格式下載-使用裝飾模式"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>將資料存成eml格式下載-使用裝飾模式 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E7%95%A5%E8%AA%AA%E6%98%8E"><span class="nav-number">1.</span> <span class="nav-text">概略說明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E8%BC%89%E6%AA%94%E6%A1%88"><span class="nav-number">2.</span> <span class="nav-text">下載檔案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%89%E5%AD%98%E6%88%90-eml-%E6%A0%BC%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text">轉存成 eml 格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A3%9D%E9%A3%BE%E6%A8%A1%E5%BC%8F"><span class="nav-number">4.</span> <span class="nav-text">裝飾模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%A6%E9%9A%9B%E7%AF%84%E4%BE%8B"><span class="nav-number">5.</span> <span class="nav-text">實際範例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">6.</span> <span class="nav-text">結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/eml-format-download-with-decorator-pattern/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="將資料存成eml格式下載-使用裝飾模式 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          將資料存成eml格式下載-使用裝飾模式
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2023-07-24 10:35:28" itemprop="dateCreated datePublished" datetime="2023-07-24T10:35:28+08:00">2023-07-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/pattern/" itemprop="url" rel="index"><span itemprop="name">pattern</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/eml-format-download-with-decorator-pattern/" class="post-meta-item leancloud_visitors" data-flag-title="將資料存成eml格式下載-使用裝飾模式" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/eml-format-download-with-decorator-pattern/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/eml-format-download-with-decorator-pattern/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>之前曾經有個案例是要將使用者輸入的文案轉存成 EMAIL 的格式，下載後可以讓他們自行編輯再轉發出去，這邊就記錄一下重點</p>
+<span id="more"></span>
+
+<h2 id="概略說明"><a href="#概略說明" class="headerlink" title="概略說明"></a>概略說明</h2><p>因為先前採用的輸入介面是 CKEditor , 然後使用者如果在裡面編輯的話，實際上是存成 HTML，但如果它們又想要轉寄這些信件，CKEditor 的所見即所得就會造成很大的困擾。因為並不是每一家的 EMAIL 服務都能夠支援這些 HTML 語法與 CSS，大都是只有支援一部分，有許多新的語法並不支援。但是使用者又希望它們能夠在網站上直接將這些東西轉寄出去，當然如果直接這樣幹的話會有很多繞不過去的問題。</p>
+<p>最終的解決方案就是將這些東西轉存成 eml 格式，然後讓使用者下載下來，讓它們自己編輯後再轉寄出去<br>附件的部分直接在編輯時附加在信件內；圖片則是轉 base64 後就可以直接顯示</p>
+<ol>
+<li>前端就是點擊後呼叫後端並下載存成 EML 檔案</li>
+<li>後端就是負責提供某個文章的 EMAIL 格式資料給前端</li>
+</ol>
+<h2 id="下載檔案"><a href="#下載檔案" class="headerlink" title="下載檔案"></a>下載檔案</h2><p>前端的部分比較單純，呼叫後端後將內容存檔即可</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="title function_">mailDownload</span>(<span class="params">id</span>) &#123;</span><br><span class="line">    <span class="comment">// 向後端發出請求取得檔案內容</span></span><br><span class="line">    <span class="keyword">let</span> response = <span class="keyword">await</span> <span class="title class_">ArticleModule</span>.<span class="title function_">downloadEmail</span>(id)</span><br><span class="line">    <span class="comment">// 檔案下載</span></span><br><span class="line">    <span class="keyword">const</span> $a = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&quot;a&quot;</span>)</span><br><span class="line">    <span class="keyword">const</span> url = <span class="variable constant_">URL</span>.<span class="title function_">createObjectURL</span>(response.<span class="property">data</span>)</span><br><span class="line">    <span class="keyword">const</span> fileName = response.<span class="property">headers</span>[<span class="string">&quot;content-disposition&quot;</span>].<span class="title function_">split</span>(<span class="string">&quot;=&quot;</span>)[<span class="number">1</span>]</span><br><span class="line">    <span class="keyword">const</span> currentFileName = fileName.<span class="title function_">replace</span>(<span class="regexp">/&quot;(.*)&quot;/</span>, <span class="string">&quot;$1&quot;</span>).<span class="title function_">replace</span>(<span class="string">&quot;UTF-8&#x27;&#x27;&quot;</span>, <span class="string">&quot;&quot;</span>)</span><br><span class="line">    $a.<span class="property">download</span> = <span class="built_in">decodeURIComponent</span>(currentFileName)</span><br><span class="line">    $a.<span class="property">href</span> = url</span><br><span class="line">    $a.<span class="title function_">click</span>()</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> <span class="variable constant_">URL</span>.<span class="title function_">revokeObjectURL</span>(url), <span class="number">5000</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="轉存成-eml-格式"><a href="#轉存成-eml-格式" class="headerlink" title="轉存成 eml 格式"></a>轉存成 eml 格式</h2><p>透過<a target="_blank" rel="noopener" href="https://jsfiddle.net/seanodotcom/yd1n8Lfh/">.EML - Email Generation in JS</a>範例，可以知道核心的解決方案就是像範例中一樣，把一些郵件的資訊放在最前面，指定好收件人、信件主旨，接著就是準備 HTML 的信件內容</p>
+<p>又因為這邊要做兩三件事情，都是針對信件內容作加工處理，我覺得還蠻適合用裝飾模式，就順便練習一下</p>
+<ol>
+<li>針對信件內容的圖片網址，轉 base64 編碼</li>
+<li>針對信件內容，最前面加上一些信件的資訊，例如收件人、寄件人、信件主旨等等</li>
+<li>針對信件內容的部分，將 CKEditor 的 CSS 附加上去</li>
+</ol>
+<h2 id="裝飾模式"><a href="#裝飾模式" class="headerlink" title="裝飾模式"></a>裝飾模式</h2><p>大概就跟穿衣服一樣，所有穿衣服的動作都是圍繞著人這個主體，概念就是這樣而已，穿衣服的行為就是在人的身上穿衣服、穿褲子、穿內衣、戴手錶、穿襪子、穿鞋子這些事情而已，所以就是用下面的介面來表示這個行為</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">IPeopleDecorator</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">Decorate</span>(<span class="params"><span class="built_in">string</span> people</span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>用這個例子來說的話，裝飾前是：<code>人</code>，裝飾後就會是:<code>穿著運動上衣的人</code>，其他的裝飾也是一樣的概念</p>
+</blockquote>
+<p>出門運動跑步，大概就會知道你要在你的身上弄好：衣服、褲子、鞋子，最後可能就會<code>穿著運動上衣、運動褲、運動鞋的人</code><br>出門上班上課，大概就會知道你在身上要弄好的是：衣服、褲子、鞋子、背包，最後可能就會<code>穿著襯衫、西裝褲、皮鞋、還拿個公事包的人</code></p>
+<blockquote>
+<p>這只是個例子，不要太認真要帶什麼東西</p>
+</blockquote>
+<p>所以用上面的概念，你就會知道有一個 人的裝飾工廠，可能有兩個方法，一個是準備出門運動的行頭 method、另外一個是準備出門上班上課的行頭 method</p>
+<p>like this</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">PeopleDecoratorFactory</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> IPeopleDecorator <span class="title">Sport</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 運動上衣</span></span><br><span class="line">        <span class="comment">// 運動褲</span></span><br><span class="line">        <span class="comment">// 運動鞋</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> PeopleDecorator(運動上衣,運動褲,運動鞋);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> IPeopleDecorator <span class="title">Work</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 襯衫</span></span><br><span class="line">        <span class="comment">// 西裝褲</span></span><br><span class="line">        <span class="comment">// 皮鞋</span></span><br><span class="line">        <span class="comment">// 公事包</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> PeopleDecorator(襯衫,西裝褲,皮鞋,公事包);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">```</span><br><span class="line">`PeopleDecorator`就是實際上穿衣服的行為，用程式碼的概念就是下面這樣</span><br><span class="line"></span><br><span class="line">```cs</span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">PeopleDecorator</span> : <span class="title">IPeopleDecorator</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> List&lt;IPeopleDecorator&gt; _decorators;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ContentDecorator</span>(<span class="params"><span class="keyword">params</span> IPeopleDecorator[] decorators</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 透過建構式把剛剛要準備裝飾的東西都放進來</span></span><br><span class="line">        _decorators = decorators.ToList();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 好吧，下面這段我覺得如果改成中文的人，反而更難懂</span></span><br><span class="line">    <span class="comment">// 反正概念就是把剛剛準備要裝飾的東西，一個一個的裝飾在人的身上</span></span><br><span class="line">    <span class="comment">// 就等同於我們把要裝飾的項目，一個一個的在內容上加工是一樣的道理</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">Decorate</span>(<span class="params"><span class="built_in">string</span> content</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">string</span> decoratedContent = content;</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">var</span> decorator <span class="keyword">in</span> _decorators)</span><br><span class="line">        &#123;</span><br><span class="line">            decoratedContent = decorator.Decorate(decoratedContent);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> decoratedContent;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最終要使用的時候就是向下面這樣呼叫就可以了</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">GoToPark</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> people = <span class="string">&quot;art&quot;</span>;</span><br><span class="line">    <span class="keyword">var</span> decorator = PeopleDecoratorFactory.Sport();</span><br><span class="line">    <span class="keyword">var</span> result = decorator.Decorate(people);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">GoToWork</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> people = <span class="string">&quot;art&quot;</span>;</span><br><span class="line">    <span class="keyword">var</span> decorator = PeopleDecoratorFactory.Work();</span><br><span class="line">    <span class="keyword">var</span> result = decorator.Decorate(people);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>整體的概念及程式碼就是這樣了，下面用實際的範例來感覺一下</p>
+<h2 id="實際範例"><a href="#實際範例" class="headerlink" title="實際範例"></a>實際範例</h2><p>輸入驗證的部分以及例外處理的部分因為不是本文重點，直接略過，若實際要用的話記得補上</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Controller</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> FileResult <span class="title">DownloadEmail</span>(<span class="params"><span class="built_in">int</span> id</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 取得文章內容</span></span><br><span class="line">    <span class="keyword">var</span> article = ArticleModule.Get(id);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 準備好裝飾者</span></span><br><span class="line">    <span class="keyword">var</span> decorator = ContentDecoratorFactory.CreateDecorator(article);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 將裝飾者加工後的內容以UTF8編碼轉成byte陣列</span></span><br><span class="line">    <span class="keyword">var</span> emailContent = decorator.Decorate(article.Content);</span><br><span class="line">    <span class="keyword">var</span> fileBytes = Encoding.UTF8.GetBytes(emailContent);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 指定檔案名稱並回傳</span></span><br><span class="line">    <span class="keyword">var</span> fileName = <span class="string">$&quot;[<span class="subst">&#123;article.Type.GetDescription()&#125;</span>] <span class="subst">&#123;article.Subject&#125;</span>.eml&quot;</span>;</span><br><span class="line">    <span class="keyword">return</span> File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">ContentDecoratorFactory</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 規定好的圖片網址格式</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">const</span> <span class="built_in">string</span> ImageUrlPattern = <span class="string">@&quot;\/Common\/ArticleImage\/[a-zA-Z0-9]&#123;32&#125;&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> IContentDecorator <span class="title">CreateDecorator</span>(<span class="params">ArticleEntity article</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> pattern = <span class="keyword">new</span> Regex(ImageUrlPattern);</span><br><span class="line">        <span class="keyword">var</span> imageUrlDecorator = <span class="keyword">new</span> ArticleImageDecorator(pattern);</span><br><span class="line">        <span class="keyword">var</span> styleDecorator = <span class="keyword">new</span> CkeditorStyleDecorator();</span><br><span class="line">        <span class="keyword">var</span> htmlDecorator = <span class="keyword">new</span> HtmlTagDecorator(article.Subject);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ContentDecorator(imageUrlDecorator, styleDecorator, htmlDecorator);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">articleImageDecorator</span> : <span class="title">IContentDecorator</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> Regex _pattern;</span><br><span class="line">    <span class="keyword">private</span> IarticleFileInfoDao _articleFileInfoDao;</span><br><span class="line">    <span class="keyword">private</span> IarticleFileInfoDao articleFileInfoDao =&gt; _articleFileInfoDao ?? (_articleFileInfoDao = DataFactory.GetarticleImageInfoDAO());</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">articleImageDecorator</span>(<span class="params">Regex pattern</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        _pattern = pattern;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">Decorate</span>(<span class="params"><span class="built_in">string</span> content</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> _pattern.Replace(content, match =&gt;</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 取得圖片的 GUID</span></span><br><span class="line">            <span class="keyword">var</span> guid = match.Value.Split(<span class="string">&#x27;/&#x27;</span>).Last();</span><br><span class="line">            <span class="comment">// 依據 GUID 找實體檔案資料</span></span><br><span class="line">            articleFileInfo fileInfo = articleFileInfoDao.GetFileInfoByGuid(guid);</span><br><span class="line">            <span class="keyword">if</span> (fileInfo == <span class="literal">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> MyException(ExceptionCode.NotFound, <span class="string">$&quot;cannot found fileInfo by Guid:<span class="subst">&#123;match.Value&#125;</span>&quot;</span>);</span><br><span class="line">            <span class="comment">// 檔案實際儲存的路徑</span></span><br><span class="line">            <span class="keyword">var</span> baseFolder = <span class="string">&quot;D:\\article\\&quot;</span></span><br><span class="line">            <span class="comment">// 讀取檔案</span></span><br><span class="line">            <span class="keyword">var</span> filePath = <span class="built_in">string</span>.Concat(<span class="string">$@&quot;<span class="subst">&#123;baseFolder&#125;</span><span class="subst">&#123;fileInfo.articleId&#125;</span>\&quot;</span>, <span class="string">$&quot;<span class="subst">&#123;guid&#125;</span>.jpg&quot;</span>);</span><br><span class="line">            <span class="built_in">byte</span>[] imageBytes = File.ReadAllBytes(filePath);</span><br><span class="line">            <span class="built_in">string</span> base64String = Convert.ToBase64String(imageBytes);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> <span class="string">$&quot;data:image/jpeg;base64,<span class="subst">&#123;base64String&#125;</span>&quot;</span>;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">CkeditorStyleDecorator</span> : <span class="title">IContentDecorator</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">Decorate</span>(<span class="params"><span class="built_in">string</span> content</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        sb.AppendLine(<span class="string">&quot;&lt;style&gt;&quot;</span>);</span><br><span class="line">        <span class="comment">// 把 CKEditor CSS 放在這邊，當然也可以選擇不要做這件事情，這邊只是範例</span></span><br><span class="line">        <span class="comment">// sb.AppendLine(&quot;@&quot;.ck.ck-placeholder:before,.ck .ck......&quot;)</span></span><br><span class="line">        sb.AppendLine(<span class="string">&quot;&lt;/style&gt;&quot;</span>);</span><br><span class="line">        sb.AppendLine(content);</span><br><span class="line">        <span class="keyword">return</span> sb.ToString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">HtmlTagDecorator</span> : <span class="title">IContentDecorator</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="built_in">string</span> _subject;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">HtmlTagDecorator</span>(<span class="params"><span class="built_in">string</span> subject</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        _subject = subject;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">Decorate</span>(<span class="params"><span class="built_in">string</span> content</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        sb.AppendLine(<span class="string">&quot;To:&quot;</span>);</span><br><span class="line">        sb.AppendLine(<span class="string">&quot;Subject: &quot;</span> + _subject);</span><br><span class="line">        sb.AppendLine(<span class="string">&quot;X-Unsent: 1&quot;</span>);</span><br><span class="line">        sb.AppendLine(<span class="string">&quot;Content-Type: text/html; charset=utf-8&quot;</span>);</span><br><span class="line">        sb.AppendLine(<span class="string">&quot;&quot;</span>);</span><br><span class="line">        sb.AppendLine(<span class="string">@&quot;&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&quot;</span>);</span><br><span class="line">        sb.AppendLine(content);</span><br><span class="line">        sb.AppendLine(<span class="string">&quot;&lt;/body&gt;&lt;/html&gt;&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> sb.ToString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>整體上就是這樣子，看程式碼可能會有點難理解，不過如果概念懂了之後，用什麼辦法都沒關係，程式碼只是輔助而已，重點是能不能做到你想要的事情，這才是重點。關於裝飾模式有很多介紹的文章跟書籍都有談到，我也看了好多個，以前還寫了個 js 版本的<a href="https://partypeopleland.github.io/artblog/2018/06/19/JavaScript-Decorator-Pattern/">JavaScript Decorator Pattern</a>，最後還是因為這個工作上實際應用上了，才比較有感覺，所以這邊就記錄一下，希望也對別人有幫助。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/decorator/" rel="tag"># decorator</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/aspnet-core-publish-and-environment/" rel="prev" title="aspnet core publish and environment">
+                  <i class="fa fa-angle-left"></i> aspnet core publish and environment
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/sentry-self-hosted-by-docker-compose/" rel="next" title="使用 sentry 追蹤前端錯誤">
+                  使用 sentry 追蹤前端錯誤 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

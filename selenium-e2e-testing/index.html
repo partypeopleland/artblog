@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="本篇記錄透過 CSharp，使用 selenium 進行 e2e 測試的一些心得，因此會比較雜亂，未來可能會、也可能不會再整理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="selenium-E2E測試">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/selenium-e2e-testing/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="本篇記錄透過 CSharp，使用 selenium 進行 e2e 測試的一些心得，因此會比較雜亂，未來可能會、也可能不會再整理">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/selenium-e2e-testing/2020-09-30_100453.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/selenium-e2e-testing/2020-09-30_100630.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/selenium-e2e-testing/2020-09-30_100850.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/selenium-e2e-testing/trxerFix.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/selenium-e2e-testing/feature.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/selenium-e2e-testing/specflow.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/selenium-e2e-testing/featureFile.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/selenium-e2e-testing/2020-09-30_143144.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/selenium-e2e-testing/2020-09-30_143316.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/selenium-e2e-testing/2020-09-30_143642.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/selenium-e2e-testing/2020-09-30_144828.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/selenium-e2e-testing/tools.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/selenium-e2e-testing/calltools.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/selenium-e2e-testing/report.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/selenium-e2e-testing/notice.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/selenium-e2e-testing/regok.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/selenium-e2e-testing/autoretry.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/selenium-e2e-testing/2020-10-05_093104.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/selenium-e2e-testing/2020-10-05_111702.png">
+<meta property="article:published_time" content="2020-09-30T01:27:44.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.312Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="e2e">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/selenium-e2e-testing/2020-09-30_100453.png">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/selenium-e2e-testing/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/selenium-e2e-testing/","path":"/selenium-e2e-testing/","title":"selenium-E2E測試"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>selenium-E2E測試 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-selenium-2-%E9%80%B2%E8%A1%8C-e2e-%E6%B8%AC%E8%A9%A6"><span class="nav-number">1.</span> <span class="nav-text">使用 selenium 2 進行 e2e 測試</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Selenium-WebDriver-for-Chrome-%E9%81%8E%E6%99%82%E7%9A%84%E4%BD%9C%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">Selenium WebDriver for Chrome , 過時的作法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Sample-Code-for-Create-ChromeDriver"><span class="nav-number">2.1.</span> <span class="nav-text">Sample Code for Create ChromeDriver</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#app-config"><span class="nav-number">2.2.</span> <span class="nav-text">app.config</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%9C%E6%96%BC-Selenium-WebDriver-for-Chrome-%E7%9B%AE%E5%89%8D%E7%9A%84%E4%BD%9C%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">關於 Selenium WebDriver for Chrome , 目前的作法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-nuGet-%E5%A5%97%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text">安裝 nuGet 套件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A5%BD%E7%94%A8%E7%9A%84%E8%BC%94%E5%8A%A9%E9%96%8B%E7%99%BC%E5%B7%A5%E5%85%B7-XPath-Helper"><span class="nav-number">5.</span> <span class="nav-text">好用的輔助開發工具 XPath Helper</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A2%E7%94%9F%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E5%A0%B1%E5%91%8A"><span class="nav-number">6.</span> <span class="nav-text">產生單元測試報告</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#0-%E4%BA%8B%E5%89%8D%E6%BA%96%E5%82%99"><span class="nav-number">6.1.</span> <span class="nav-text">0. 事前準備</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%94%A2%E7%94%9F-dll-%E6%AA%94%E6%A1%88"><span class="nav-number">6.2.</span> <span class="nav-text">1. 產生 dll 檔案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%94%A2%E7%94%9F-trx-%E5%A0%B1%E5%91%8A"><span class="nav-number">6.3.</span> <span class="nav-text">2. 產生 trx 報告</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E7%94%A2%E7%94%9F-html-%E5%A0%B1%E5%91%8A"><span class="nav-number">6.4.</span> <span class="nav-text">3. 產生 html 報告</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E6%AA%A2%E8%A6%96%E5%A0%B1%E5%91%8A%E5%85%A7%E5%AE%B9"><span class="nav-number">6.5.</span> <span class="nav-text">4. 檢視報告內容</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-specflow-%E5%A5%97%E4%BB%B6%E6%92%B0%E5%AF%AB-BDD-%E9%A2%A8%E6%A0%BC%E7%9A%84-cucumber-%E6%B8%AC%E8%A9%A6%E6%96%87%E4%BB%B6"><span class="nav-number">7.</span> <span class="nav-text">使用 specflow 套件撰寫 BDD 風格的 cucumber 測試文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%96%8B%E5%A7%8B%E8%87%AA%E5%8B%95%E7%94%A2%E7%94%9F%E6%AD%A5%E9%A9%9F%E5%AE%9A%E7%BE%A9"><span class="nav-number">7.1.</span> <span class="nav-text">如何開始自動產生步驟定義</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E5%85%A5-ScenarioContext"><span class="nav-number">7.2.</span> <span class="nav-text">注入 ScenarioContext</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%8F%E9%81%8E-page-object-model-%E6%92%B0%E5%AF%AB%E6%B8%AC%E8%A9%A6"><span class="nav-number">7.3.</span> <span class="nav-text">透過 page object model 撰寫測試</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A2%E7%94%9F-cucumber-%E7%9A%84%E6%B8%AC%E8%A9%A6%E5%A0%B1%E5%91%8A"><span class="nav-number">8.</span> <span class="nav-text">產生 cucumber 的測試報告</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#LivingDoc"><span class="nav-number">8.1.</span> <span class="nav-text">LivingDoc</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0-Specflow-%E5%A5%97%E4%BB%B6%E8%87%B3-3-4-3-%E4%BB%A5%E4%B8%8A"><span class="nav-number">8.1.1.</span> <span class="nav-text">更新 Specflow 套件至 3.4.3 以上</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-SpecFlow-Plus-LivingDoc-CLI"><span class="nav-number">8.1.2.</span> <span class="nav-text">安裝 SpecFlow.Plus.LivingDoc.CLI</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A8%AD%E5%AE%9A-Visual-Studio-2019-%E5%A4%96%E9%83%A8%E5%B7%A5%E5%85%B7%E5%9F%B7%E8%A1%8C%E7%94%A2%E7%94%9F%E5%A0%B1%E5%91%8A"><span class="nav-number">8.1.3.</span> <span class="nav-text">設定 Visual Studio 2019 外部工具執行產生報告</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ExtentReport"><span class="nav-number">8.2.</span> <span class="nav-text">ExtentReport</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SpecRun-Report"><span class="nav-number">8.3.</span> <span class="nav-text">SpecRun Report</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%A8%AD%E5%AE%9A%E6%B8%AC%E8%A9%A6"><span class="nav-number">8.3.1.</span> <span class="nav-text">如何設定測試</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E8%A1%8C%E7%B7%A8%E8%BC%AF%E5%A0%B1%E5%91%8A-Template"><span class="nav-number">8.3.2.</span> <span class="nav-text">自行編輯報告 Template</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/selenium-e2e-testing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="selenium-E2E測試 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          selenium-E2E測試
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2020-09-30 09:27:44" itemprop="dateCreated datePublished" datetime="2020-09-30T09:27:44+08:00">2020-09-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/selenium/" itemprop="url" rel="index"><span itemprop="name">selenium</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/selenium-e2e-testing/" class="post-meta-item leancloud_visitors" data-flag-title="selenium-E2E測試" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/selenium-e2e-testing/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/selenium-e2e-testing/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>本篇記錄透過 CSharp，使用 selenium 進行 e2e 測試的一些心得，因此會比較雜亂，未來可能會、也可能不會再整理</p>
+<span id="more"></span>
+
+<h2 id="使用-selenium-2-進行-e2e-測試"><a href="#使用-selenium-2-進行-e2e-測試" class="headerlink" title="使用 selenium 2 進行 e2e 測試"></a>使用 selenium 2 進行 e2e 測試</h2><p>主要是基於 selenium 2 進行自動化測試；關於 selenium 1、selenium 2，這兩種都可以拿來寫自動化測試；他們的差別最簡單的就是 selenium 1 主要是提供一堆 API 讓你去操作；而 selenium 2 則是提供物件，讓你用物件的方法去撰寫測試。</p>
+<h2 id="Selenium-WebDriver-for-Chrome-過時的作法"><a href="#Selenium-WebDriver-for-Chrome-過時的作法" class="headerlink" title="Selenium WebDriver for Chrome , 過時的作法"></a>Selenium WebDriver for Chrome , 過時的作法</h2><p>先到<a target="_blank" rel="noopener" href="https://chromedriver.chromium.org/downloads">ChromeDriver - WebDriver for Chrome</a>下載跟你電腦上版本一樣的 Driver，下載後解壓縮到自訂目錄，最好該目錄有設定進去<code>path</code>環境變數</p>
+<p>然後在專案內初始化 webDriver 的時候就可以用</p>
+<h3 id="Sample-Code-for-Create-ChromeDriver"><a href="#Sample-Code-for-Create-ChromeDriver" class="headerlink" title="Sample Code for Create ChromeDriver"></a>Sample Code for Create ChromeDriver</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">string</span> seleniumExePath = ConfigurationManager.AppSettings[<span class="string">&quot;SeleniumExePath&quot;</span>];</span><br><span class="line"><span class="built_in">int</span> waitSec = ConfigurationManager.AppSettings[<span class="string">&quot;SeleniumWaitSec&quot;</span>].ToInt();</span><br><span class="line"></span><br><span class="line">_driver = <span class="keyword">new</span> ChromeDriver(ChromeDriverService.CreateDefaultService(seleniumExePath));</span><br><span class="line"><span class="comment">// 全螢幕</span></span><br><span class="line">_driver.Manage().Window.Maximize();</span><br><span class="line"><span class="comment">// 等待秒數</span></span><br><span class="line">_driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(waitSec);</span><br></pre></td></tr></table></figure>
+
+<h3 id="app-config"><a href="#app-config" class="headerlink" title="app.config"></a>app.config</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">appSettings</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">add</span> <span class="attr">key</span>=<span class="string">&quot;SeleniumWaitSec&quot;</span> <span class="attr">value</span>=<span class="string">&quot;20&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">add</span> <span class="attr">key</span>=<span class="string">&quot;SeleniumExePath&quot;</span> <span class="attr">value</span>=<span class="string">&quot;c:\Tools&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">appSettings</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="關於-Selenium-WebDriver-for-Chrome-目前的作法"><a href="#關於-Selenium-WebDriver-for-Chrome-目前的作法" class="headerlink" title="關於 Selenium WebDriver for Chrome , 目前的作法"></a>關於 Selenium WebDriver for Chrome , 目前的作法</h2><p>後來才發現原來可以用<code>nuget</code>套件去安裝<code>chromedriver</code>就夠了，且初始化 Driver 的部分也很簡單，所以特別在這邊補充一下，先貼給大家看我目前使用的<code>nuget</code>套件</p>
+<p>一切直接都用 nuget 安裝就搞定，不需要在自己下載 exe 執行，方便許多</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;utf-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">packages</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">package</span> <span class="attr">id</span>=<span class="string">&quot;DotNetSeleniumExtras.PageObjects&quot;</span> <span class="attr">version</span>=<span class="string">&quot;3.11.0&quot;</span> <span class="attr">targetFramework</span>=<span class="string">&quot;net452&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">package</span> <span class="attr">id</span>=<span class="string">&quot;DotNetSeleniumExtras.PageObjects.Core&quot;</span> <span class="attr">version</span>=<span class="string">&quot;3.12.0&quot;</span> <span class="attr">targetFramework</span>=<span class="string">&quot;net452&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">package</span> <span class="attr">id</span>=<span class="string">&quot;DotNetSeleniumExtras.WaitHelpers&quot;</span> <span class="attr">version</span>=<span class="string">&quot;3.11.0&quot;</span> <span class="attr">targetFramework</span>=<span class="string">&quot;net452&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">package</span> <span class="attr">id</span>=<span class="string">&quot;Selenium.Support&quot;</span> <span class="attr">version</span>=<span class="string">&quot;3.141.0&quot;</span> <span class="attr">targetFramework</span>=<span class="string">&quot;net452&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">package</span> <span class="attr">id</span>=<span class="string">&quot;Selenium.WebDriver&quot;</span> <span class="attr">version</span>=<span class="string">&quot;3.141.0&quot;</span> <span class="attr">targetFramework</span>=<span class="string">&quot;net452&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">package</span> <span class="attr">id</span>=<span class="string">&quot;Selenium.WebDriver.ChromeDriver&quot;</span> <span class="attr">version</span>=<span class="string">&quot;86.0.4240.2200&quot;</span> <span class="attr">targetFramework</span>=<span class="string">&quot;net452&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">packages</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>如此一來，初始化 webDriver 就只需要<code>using OpenQA.Selenium.Chrome;</code>，然後<code>new ChromeDriver();</code>就好了</p>
+<h2 id="安裝-nuGet-套件"><a href="#安裝-nuGet-套件" class="headerlink" title="安裝 nuGet 套件"></a>安裝 nuGet 套件</h2><ol>
+<li><code>Selenium.Support</code></li>
+<li><code>Selenium.WebDriver</code></li>
+</ol>
+<p>第一個套件是因為有用到<code>SelectElement</code>這個類別所以安裝；主要是第二個套件</p>
+<p>使用上也很簡單，下面的例子就是一個抓頁面 DOM 然後輸入帳號密碼並送出的範例</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Driver.FindElement(By.Id(<span class="string">&quot;account&quot;</span>)).SendKeys(account);</span><br><span class="line">Driver.FindElement(By.Id(<span class="string">&quot;password&quot;</span>)).SendKeys(password);</span><br><span class="line">Driver.FindElement(By.Id(<span class="string">&quot;submit&quot;</span>)).Click();</span><br></pre></td></tr></table></figure>
+
+<p>語法應該不難理解，細節就請自行查閱 API 語法囉</p>
+<h2 id="好用的輔助開發工具-XPath-Helper"><a href="#好用的輔助開發工具-XPath-Helper" class="headerlink" title="好用的輔助開發工具 XPath Helper"></a>好用的輔助開發工具 XPath Helper</h2><p>既然是 e2e 測試，選取畫面上的元素是很重要的事情，相信沒有多少人會去自己寫<code>xpath</code>這種東西<br>大部分的人應該都是透過開發者工具(F12)叫出來，然後透過<code>Ctrl+Shift+C</code>選取畫面上的元素<br><img src="/artblog/selenium-e2e-testing/2020-09-30_100453.png"></p>
+<p>選取後在開發者工具上會反白出來，再將滑鼠移過去，右鍵選擇複製 XPATH<br><img src="/artblog/selenium-e2e-testing/2020-09-30_100630.png"></p>
+<p>但是，要如何驗證呢？</p>
+<p>安裝這一套<a target="_blank" rel="noopener" href="https://chrome.google.com/webstore/detail/xpath-helper/hgimnogjllphhhkhlmebbmlgjoejdpjl">XPath Helper</a>就可以了，裝好後點 ICON 會出現一個半透明的輸入框，將 XPATH 於此處貼上，符合的元素在畫面上會顯著的顯示出來<br><img src="/artblog/selenium-e2e-testing/2020-09-30_100850.png"></p>
+<h2 id="產生單元測試報告"><a href="#產生單元測試報告" class="headerlink" title="產生單元測試報告"></a>產生單元測試報告</h2><h3 id="0-事前準備"><a href="#0-事前準備" class="headerlink" title="0. 事前準備"></a>0. 事前準備</h3><p>設定環境變數 Path，方便在指令列直接打指令，可參考：<a target="_blank" rel="noopener" href="https://www.google.com/search?q=%E8%A8%AD%E5%AE%9A%E7%92%B0%E5%A2%83%E8%AE%8A%E6%95%B8">設定環境變數</a></p>
+<table>
+<thead>
+<tr>
+<th>執行檔案</th>
+<th>實際路徑</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>msbuild.exe</td>
+<td>C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe</td>
+</tr>
+<tr>
+<td>vstest.console.exe</td>
+<td>C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe</td>
+</tr>
+<tr>
+<td>TrxerConsole.exe</td>
+<td>自行 <a target="_blank" rel="noopener" href="https://github.com/NivNavick/trxer/releases">下載</a> 後找地方放</td>
+</tr>
+</tbody></table>
+<p><code>trxerConsole.exe</code>執行若有錯誤，需要下載原始碼自己修改，如下圖的地方，將它替換掉，重新編譯後即可</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">RemoveAssemblyName</span>(<span class="params"><span class="built_in">string</span> asm</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(asm.IndexOf(<span class="string">&#x27;,&#x27;</span>)&gt;<span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> asm.Substring(<span class="number">0</span>,asm.IndexOf(<span class="string">&#x27;,&#x27;</span>));</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> asm;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/selenium-e2e-testing/trxerFix.png"></p>
+<p>REF:<a target="_blank" rel="noopener" href="https://github.com/NivNavick/trxer/issues/11">Unhandled Exception: System.ArgumentOutOfRangeException: Length cannot be less than zero</a></p>
+<h3 id="1-產生-dll-檔案"><a href="#1-產生-dll-檔案" class="headerlink" title="1. 產生 dll 檔案"></a>1. 產生 dll 檔案</h3><p>測試專案先建置，產生測試的 dll 檔案</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## 進入專案目錄</span></span><br><span class="line"><span class="built_in">cd</span> D:\code\Github\Repos\SeleniumSpecflow\SeleniumSpecflow</span><br><span class="line"><span class="comment">## 重新建置測試專案</span></span><br><span class="line">msbuild /p:Configuration=Debug /t:Rebuild SeleniumSpecflow.csproj</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-產生-trx-報告"><a href="#2-產生-trx-報告" class="headerlink" title="2. 產生 trx 報告"></a>2. 產生 trx 報告</h3><p>使用<code>vstest.console.exe</code>執行測試並產生<code>trx</code>格式的報告檔案，產生路徑在專案根目錄下<code>TestResults</code>的這個子目錄內</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## 進入專案目錄</span></span><br><span class="line"><span class="built_in">cd</span> D:\code\Github\Repos\SeleniumSpecflow</span><br><span class="line"><span class="comment">## 執行測試</span></span><br><span class="line">vstest.console.exe /Logger:trx;LogFileName=e2e.trx <span class="string">&quot;SeleniumSpecflow\bin\Debug\SeleniumSpecflow.dll&quot;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>因為希望測試目錄的階層是在專案根目錄下，因此在這個目錄下執行測試，它會自動建立一個子目錄<code>TestResults</code>用來存放測試結果<code>trx</code>檔案</p>
+</blockquote>
+<h3 id="3-產生-html-報告"><a href="#3-產生-html-報告" class="headerlink" title="3. 產生 html 報告"></a>3. 產生 html 報告</h3><p>使用<code>TrxerConsole.exe</code>將測試報告轉為<code>html</code>格式</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">trxerConsole.exe D:\code\Github\Repos\SeleniumSpecflow\TestResults\e2e.trx</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-檢視報告內容"><a href="#4-檢視報告內容" class="headerlink" title="4. 檢視報告內容"></a>4. 檢視報告內容</h3><p>透過指令列自動開啟<code>html</code>報告</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">start</span> chrome.exe  D:\code\Github\Repos\SeleniumSpecflow\TestResults\E2E.trx.html</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用-specflow-套件撰寫-BDD-風格的-cucumber-測試文件"><a href="#使用-specflow-套件撰寫-BDD-風格的-cucumber-測試文件" class="headerlink" title="使用 specflow 套件撰寫 BDD 風格的 cucumber 測試文件"></a>使用 specflow 套件撰寫 BDD 風格的 cucumber 測試文件</h2><p><img src="/artblog/selenium-e2e-testing/feature.png"></p>
+<p>像上面這樣的測試案例，是可以直接被執行的，首先需要安裝 VS2019 支援的 SpecFlow 擴充套件，可以從這邊<a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=TechTalkSpecFlowTeam.SpecFlowForVisualStudio">SpecFlow for Visual Studio 2019</a>下載；另外，在專案內也需要安裝<code>SpecFlow</code>套件，最好是裝新版本；在 IDE 的部分因為在 Rider 內還沒有支援 C# 的 SpecFlow，所以比較友善的開發環境還是在 Visual Studio 2019 之內</p>
+<p>在 VS2019 內若採用<code>MSTEST</code>的測試框架，那麼最好還是安裝一下</p>
+<ol>
+<li><code>SpecFlow.MsTest</code></li>
+<li><code>SpecFlow.Tools.MsBuild.Generation</code></li>
+</ol>
+<p><img src="/artblog/selenium-e2e-testing/specflow.png"></p>
+<p>specFlow 的 Feature 檔其實只是一個純文字的格式，透過套件當你在 Build 的時候，自動產生一個對應的 cs 檔，自動產生出來的檔案不需要加入專案，在測試總管可以看到產生出來的測試案例<br><img src="/artblog/selenium-e2e-testing/featureFile.png"></p>
+<h3 id="如何開始自動產生步驟定義"><a href="#如何開始自動產生步驟定義" class="headerlink" title="如何開始自動產生步驟定義"></a>如何開始自動產生步驟定義</h3><p><img src="/artblog/selenium-e2e-testing/2020-09-30_143144.png"><br>直接開啟<code>feature</code>檔，無法找到定義的部分會以紫色顯示，可以右鍵選單執行<code>Generate Step Definitions</code></p>
+<p><img src="/artblog/selenium-e2e-testing/2020-09-30_143316.png"><br>如果是第一次執行，可以選擇<code>Generate</code>之後會產生一個檔案存放相關的定義，需要你自行選擇儲存位置；若是補足案例的定義，建議是選擇旁邊的複製到剪貼簿，自己找到程式碼的地方貼上修改</p>
+<p>如果沒有步驟定義的產生選項可以選，應該就是專案沒有參考到正確的<code>dll</code>檔案<br><img src="/artblog/selenium-e2e-testing/2020-09-30_143642.png"><br>自行手動加入參考之後，應該可以看到右鍵選單出現產生定義的指令可用了</p>
+<blockquote>
+<p>在.netFramework 4.6.1 上面是這個樣子，更高的版本似乎不會在專案目錄下有<code>packages</code>，而是在使用者目錄下面共用，這部分就沒有再去研究</p>
+</blockquote>
+<h3 id="注入-ScenarioContext"><a href="#注入-ScenarioContext" class="headerlink" title="注入 ScenarioContext"></a>注入 ScenarioContext</h3><p>使用新版本的<code>SpecFlow</code>需要用注入的方式取得<code>ScenarioContext</code>，但是透過產生的語法是直接給<code>ScenarioContext.Current.Pending()</code>類似這樣的方式。其實就只需要在 Steps 定義檔案的建構式，直接注入<code>ScenarioContext</code>即可<br><img src="/artblog/selenium-e2e-testing/2020-09-30_144828.png"></p>
+<h3 id="透過-page-object-model-撰寫測試"><a href="#透過-page-object-model-撰寫測試" class="headerlink" title="透過 page object model 撰寫測試"></a>透過 page object model 撰寫測試</h3><p>我們為頁面新增加一個 model，稱之為 page object，在這個物件內新增一些屬性，讓我們可以直接呼叫使用，而不必每一次都重新抓，當然也可以將一些頁面的操作行為封裝起來，讓我們在使用上更加方便、直觀</p>
+<p>安裝這四個 nuget 套件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Install-Package DotNetSeleniumExtras</span><br><span class="line">Install-Package DotNetSeleniumExtras.PageObjects</span><br><span class="line">Install-Package DotNetSeleniumExtras.PageObjects.Core</span><br><span class="line">Install-Package DotNetSeleniumExtras.WaitHelpers</span><br></pre></td></tr></table></figure>
+
+<p>在程式內 using 正確的命名空間</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// For supporting Page Object Model</span></span><br><span class="line"><span class="comment">// Obsolete - using OpenQA.Selenium.Support.PageObjects;</span></span><br><span class="line"><span class="keyword">using</span> SeleniumExtras.PageObjects;</span><br></pre></td></tr></table></figure>
+
+<p>在物件內就可以這樣宣告，意思是透過 By.Id 的方式去尋找”loginID”，找到的東西放到 TxtAccount 內</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">FindsBy(How = How.Id, Using = <span class="string">&quot;loginID&quot;</span>)</span>]</span><br><span class="line"><span class="keyword">public</span> IWebElement TxtAccount &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br></pre></td></tr></table></figure>
+
+<p>當然也可以將 Login 行為封裝在 pageObj 裡面的方法，在這裡會造成頁面切換跳轉的部分，則是返回另外一個<code>pageObj</code></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> HomePage <span class="title">Login</span>(<span class="params"><span class="built_in">string</span> account, <span class="built_in">string</span> password</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    TxtAccount.SendKeys(account);</span><br><span class="line">    TxtPassword.SendKeys(password);</span><br><span class="line">    BtnSubmit.Submit();</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> HomePage();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是在使用這樣的方法之前必須要先經過 Init 的步驟，否則所有去抓頁面的東西都會是 null<br>在這裡我採用的方式是在 Base 的建構式內初始化</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">PropertiesCollection</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> IWebDriver Driver &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title">PageBase</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="title">PageBase</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        PageFactory.InitElements(PropertiesCollection.Driver, <span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">LoginPage</span> : <span class="title">PageBase</span></span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">FindsBy(How = How.Id, Using = <span class="string">&quot;loginID&quot;</span>)</span>]</span><br><span class="line">    <span class="keyword">public</span> IWebElement TxtAccount &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line">    [<span class="meta">FindsBy(How = How.Id, Using = <span class="string">&quot;password&quot;</span>)</span>]</span><br><span class="line">    <span class="keyword">public</span> IWebElement TxtPassword &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line">    [<span class="meta">FindsBy(How = How.Id, Using = <span class="string">&quot;login&quot;</span>)</span>]</span><br><span class="line">    <span class="keyword">public</span> IWebElement BtnSubmit &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> HomePage <span class="title">Login</span>(<span class="params"><span class="built_in">string</span> account, <span class="built_in">string</span> password</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        TxtAccount.SendKeys(account);</span><br><span class="line">        TxtPassword.SendKeys(password);</span><br><span class="line">        BtnSubmit.Submit();</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> HomePage();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>而 <code>PropertiesCollection.Driver</code>這個東西則是在 Hook 內測試開始後初始化</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Hooks.cs</span></span><br><span class="line">[<span class="meta">BeforeScenario</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Initialize</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    PropertiesCollection.Driver = <span class="keyword">new</span> ChromeDriver();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>REF</strong></p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://www.lambdatest.com/blog/page-object-model-tutorial-selenium-csharp/">Selenium C#: Page Object Model Tutorial With Examples</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=mluLgBywW0Y&list=PL6tu16kXT9PqKSouJUV6sRVgmcKs-VCqo">Execute Automation - Selenium with C# - Youtube</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/SeleniumHQ/selenium/wiki/PageFactory">Selenium: PageFactory - Github</a></li>
+</ol>
+<h2 id="產生-cucumber-的測試報告"><a href="#產生-cucumber-的測試報告" class="headerlink" title="產生 cucumber 的測試報告"></a>產生 cucumber 的測試報告</h2><h3 id="LivingDoc"><a href="#LivingDoc" class="headerlink" title="LivingDoc"></a>LivingDoc</h3><p>專案如果有安裝了<code>SpecFlow.Plus.LivingDocPlugin</code>，會在 Bin 目錄下產生一個測試結果的 json 檔案，所以我們只要透過官方提供的另外一個工具<code>livingdoc.exe</code>，將 json 轉為 Html 報告即可</p>
+<h4 id="更新-Specflow-套件至-3-4-3-以上"><a href="#更新-Specflow-套件至-3-4-3-以上" class="headerlink" title="更新 Specflow 套件至 3.4.3 以上"></a>更新 Specflow 套件至 3.4.3 以上</h4><h4 id="安裝-SpecFlow-Plus-LivingDoc-CLI"><a href="#安裝-SpecFlow-Plus-LivingDoc-CLI" class="headerlink" title="安裝 SpecFlow.Plus.LivingDoc.CLI"></a>安裝 SpecFlow.Plus.LivingDoc.CLI</h4><p><code>SpecFlow.Plus.LivingDoc.CLI</code>需要安裝<code>.NET Core SDK 3.1</code>或更高版本。可以在 Microsoft 官方指南中找到有關設置.NET Core SDK 的信息。雖然產生報告是透過 dotnet core 的工具，但是這個工具只是為了將 json 檔案轉為 html，實際上跟你專案採用.netFramework 或是.net core 無關</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dotnet tool install <span class="literal">--global</span> SpecFlow.Plus.LivingDoc.CLI</span><br></pre></td></tr></table></figure>
+
+<p>REF:<a target="_blank" rel="noopener" href="https://docs.specflow.org/projects/specflow-livingdoc/en/latest/LivingDocGenerator/Installing-the-command-line-tool.html">Installing the command line tool</a></p>
+<p>在安裝了套件之後，執行測試也會一併產生<code>FeatureData.json</code>供後續產生報告使用，如此一來，就可以直接輸入 <code>livingdoc &lt;Path to FeatureData.json&gt;</code>這樣的指令在執行目錄下產生報告</p>
+<h4 id="設定-Visual-Studio-2019-外部工具執行產生報告"><a href="#設定-Visual-Studio-2019-外部工具執行產生報告" class="headerlink" title="設定 Visual Studio 2019 外部工具執行產生報告"></a>設定 Visual Studio 2019 外部工具執行產生報告</h4><p>使用<code>TrxerConsole.exe</code>將測試報告轉為<code>html</code>格式</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">livingdoc D:\code\Github\Repos\SeleniumSpecflow\SeleniumSpecflow\bin\Debug\FeatureData.json</span><br></pre></td></tr></table></figure>
+
+<p>為了方便使用，將產生報告的指令撰寫成批次檔案，存放在某個路徑下，並透過 VS2019 的<code>外部工具</code>去呼叫該批次檔，同時傳入參數</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">livingdoc.exe %1</span><br><span class="line">START Chrome LivingDoc.html</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/selenium-e2e-testing/tools.png"></p>
+<p>如此一來就可以直接在 Menu 選擇外部工具，並產生報告觀看了</p>
+<p><img src="/artblog/selenium-e2e-testing/calltools.png"></p>
+<p><img src="/artblog/selenium-e2e-testing/report.png"></p>
+<p>REF:<a target="_blank" rel="noopener" href="https://specflow.org/blog/introducing-the-specflow-plus-livingdoc-generator/">Introducing the SpecFlow+ LivingDoc Generator</a></p>
+<h3 id="ExtentReport"><a href="#ExtentReport" class="headerlink" title="ExtentReport"></a>ExtentReport</h3><p>雖然比較好看，但是實際用了之後感覺好像沒有比較好，有興趣的人還是可以自行比較看看，我覺得優點的部分也是缺點，他的報告內容其實是需要自己去建立的，所以喜歡客製的人或許可以塞很多自己要看的內容？不過我沒有那麼勤勞，報告有看到我要看到的指標就好了；另外這個方法需要用到<code>mongoDB</code>，所以再測試的時候也是自己先把它用 docker 建起來；這個報告我沒有花很多時間查，主要是看人家的 sample code 直接抓來用，所以也不會特別說甚麼，直接貼相關 Code 就好了；有興趣的人再自行研究囉</p>
+<p>REF:<a target="_blank" rel="noopener" href="https://github.com/executeautomation/SeleniumWithSpecflow">SeleniumWithSpecflow</a></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Configuration;</span><br><span class="line"><span class="keyword">using</span> System.Globalization;</span><br><span class="line"><span class="keyword">using</span> System.IO;</span><br><span class="line"><span class="keyword">using</span> AventStack.ExtentReports;</span><br><span class="line"><span class="keyword">using</span> AventStack.ExtentReports.Gherkin.Model;</span><br><span class="line"><span class="keyword">using</span> AventStack.ExtentReports.Reporter;</span><br><span class="line"><span class="keyword">using</span> BoDi;</span><br><span class="line"><span class="keyword">using</span> OpenQA.Selenium;</span><br><span class="line"><span class="keyword">using</span> OpenQA.Selenium.Chrome;</span><br><span class="line"><span class="keyword">using</span> OpenQA.Selenium.Remote;</span><br><span class="line"><span class="keyword">using</span> TechTalk.SpecFlow;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">SeleniumSpecflow</span></span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">Binding</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Hooks</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//Global Variable for Extend report</span></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> ExtentTest _featureName;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> ExtentTest _scenario;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> ExtentReports _extent;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> KlovReporter _klov;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> RemoteWebDriver _driver;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">readonly</span> IObjectContainer _objectContainer;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Hooks</span>(<span class="params">IObjectContainer objectContainer</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            _objectContainer = objectContainer;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        [<span class="meta">BeforeTestRun</span>]</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">InitializeReport</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">string</span> reportPath = GetReportPath();</span><br><span class="line">            <span class="comment">//Initialize Extent report before test starts</span></span><br><span class="line">            <span class="keyword">var</span> htmlReporter = <span class="keyword">new</span> ExtentHtmlReporter(reportPath);</span><br><span class="line">            htmlReporter.Configuration().Theme = AventStack.ExtentReports.Reporter.Configuration.Theme.Dark;</span><br><span class="line"></span><br><span class="line">            <span class="comment">//Attach report to reporter</span></span><br><span class="line">            _extent = <span class="keyword">new</span> ExtentReports();</span><br><span class="line">            _klov = <span class="keyword">new</span> KlovReporter();</span><br><span class="line"></span><br><span class="line">            _klov.InitMongoDbConnection(<span class="string">&quot;localhost&quot;</span>, <span class="number">27017</span>);</span><br><span class="line">            _klov.ProjectName = <span class="string">&quot;ExecuteAutomation Test&quot;</span>;</span><br><span class="line">            <span class="comment">// URL of the KLOV server</span></span><br><span class="line">            _klov.KlovUrl = <span class="string">&quot;http://localhost:5689&quot;</span>;</span><br><span class="line">            _klov.ReportName = <span class="string">&quot;Karthik KK&quot;</span> + DateTime.Now.ToString(CultureInfo.InvariantCulture);</span><br><span class="line"></span><br><span class="line">            _extent.AttachReporter(htmlReporter, _klov);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="built_in">string</span> <span class="title">GetReportPath</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// project/bin/debug</span></span><br><span class="line">            <span class="built_in">string</span> binDir = Directory.GetCurrentDirectory();</span><br><span class="line">            <span class="comment">// project</span></span><br><span class="line">            <span class="built_in">string</span> projectDirectory = Directory.GetParent(binDir).Parent?.Parent?.FullName;</span><br><span class="line">            <span class="comment">// project/ExtentReport.html</span></span><br><span class="line">            <span class="keyword">return</span> Path.Combine(projectDirectory, <span class="string">&quot;ExtentReport.html&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        [<span class="meta">AfterTestRun</span>]</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">TearDownReport</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//Flush report once test completes</span></span><br><span class="line">            _extent.Flush();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        [<span class="meta">BeforeFeature</span>]</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">BeforeFeature</span>(<span class="params">FeatureContext featureContext</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//Create dynamic feature name</span></span><br><span class="line">            _featureName = _extent.CreateTest&lt;Feature&gt;(featureContext.FeatureInfo.Title);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        [<span class="meta">AfterStep</span>]</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">InsertReportingSteps</span>(<span class="params">ScenarioContext context</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//Pending Status</span></span><br><span class="line">            <span class="keyword">if</span> (context.ScenarioExecutionStatus == ScenarioExecutionStatus.StepDefinitionPending)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">switch</span> (context.CurrentScenarioBlock)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="keyword">case</span> ScenarioBlock.Given:</span><br><span class="line">                        _scenario.CreateNode&lt;Given&gt;(ScenarioStepContext.Current.StepInfo.Text).Skip(<span class="string">&quot;Step Definition Pending&quot;</span>);</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    <span class="keyword">case</span> ScenarioBlock.When:</span><br><span class="line">                        _scenario.CreateNode&lt;When&gt;(ScenarioStepContext.Current.StepInfo.Text).Skip(<span class="string">&quot;Step Definition Pending&quot;</span>);</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    <span class="keyword">case</span> ScenarioBlock.Then:</span><br><span class="line">                        _scenario.CreateNode&lt;Then&gt;(ScenarioStepContext.Current.StepInfo.Text).Skip(<span class="string">&quot;Step Definition Pending&quot;</span>);</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// step success</span></span><br><span class="line">            <span class="keyword">if</span> (context.TestError == <span class="literal">null</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">switch</span> (context.CurrentScenarioBlock)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="keyword">case</span> ScenarioBlock.None:</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    <span class="keyword">case</span> ScenarioBlock.Given:</span><br><span class="line">                        _scenario.CreateNode&lt;Given&gt;(ScenarioStepContext.Current.StepInfo.Text);</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    <span class="keyword">case</span> ScenarioBlock.When:</span><br><span class="line">                        _scenario.CreateNode&lt;When&gt;(ScenarioStepContext.Current.StepInfo.Text);</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    <span class="keyword">case</span> ScenarioBlock.Then:</span><br><span class="line">                        _scenario.CreateNode&lt;Then&gt;(ScenarioStepContext.Current.StepInfo.Text);</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// step fail</span></span><br><span class="line">            <span class="keyword">switch</span> (context.CurrentScenarioBlock)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">case</span> ScenarioBlock.Given:</span><br><span class="line">                    _scenario.CreateNode&lt;Given&gt;(ScenarioStepContext.Current.StepInfo.Text).Fail(context.TestError.InnerException);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> ScenarioBlock.When:</span><br><span class="line">                    _scenario.CreateNode&lt;When&gt;(ScenarioStepContext.Current.StepInfo.Text).Fail(context.TestError.InnerException);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> ScenarioBlock.Then:</span><br><span class="line">                    _scenario.CreateNode&lt;Then&gt;(ScenarioStepContext.Current.StepInfo.Text).Fail(context.TestError.Message);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        [<span class="meta">BeforeScenario(Order = 0)</span>]</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Initialize</span>(<span class="params">ScenarioContext context</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            InitBrowser();</span><br><span class="line">            <span class="comment">//Create dynamic scenario name</span></span><br><span class="line">            _scenario = _featureName.CreateNode&lt;Scenario&gt;(context.ScenarioInfo.Title);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        [<span class="meta">AfterScenario(Order = 1000)</span>]</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">CleanUp</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            _driver.Quit();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">internal</span> <span class="keyword">void</span> <span class="title">InitBrowser</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">string</span> seleniumExePath = ConfigurationManager.AppSettings[<span class="string">&quot;SeleniumExePath&quot;</span>];</span><br><span class="line">            <span class="built_in">int</span> waitSec = ConfigurationManager.AppSettings[<span class="string">&quot;SeleniumWaitSec&quot;</span>];</span><br><span class="line"></span><br><span class="line">            _driver = <span class="keyword">new</span> ChromeDriver(ChromeDriverService.CreateDefaultService(seleniumExePath));</span><br><span class="line">            _driver.Manage().Window.Maximize();</span><br><span class="line">            _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(waitSec);</span><br><span class="line"></span><br><span class="line">            _objectContainer.RegisterInstanceAs&lt;IWebDriver&gt;(_driver);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="SpecRun-Report"><a href="#SpecRun-Report" class="headerlink" title="SpecRun Report"></a>SpecRun Report</h3><p>更新到 SpecFlow + Runner</p>
+<ol>
+<li>Remove the SpecFlow.MsTest NuGet package from your project</li>
+<li>Add the SpecRun.SpecFlow NuGet package to your project</li>
+<li>Build your project</li>
+</ol>
+<p>REF:<a target="_blank" rel="noopener" href="https://docs.specflow.org/projects/specflow-runner/en/latest/Installation/Migrating-to-SpecFlow-Runner.html">Migration to SpecFlow+ Runner</a></p>
+<p>做完上面的步驟你在 IDE 裏面是看不到任何測試的，也不知道怎麼一回事，後來到【輸出】視窗去看才知道必須要先註冊免費的帳號<br><img src="/artblog/selenium-e2e-testing/notice.png"></p>
+<p>點連結，透過 Microsoft 登入並註冊 specflow 帳號，完畢之後會說可以用了<br><img src="/artblog/selenium-e2e-testing/regok.png"></p>
+<p>不得不提，他的報告真的很醜，但是資訊跟功能著實讓我驚豔，原本的測試失敗了就是失敗了，我需要手動執行，但是他居然會失敗後幫你 retry<br><img src="/artblog/selenium-e2e-testing/autoretry.png"></p>
+<p>做完這些動作後我的測試總管似乎壞掉了，經由 StackOverFlow 的<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/35103781/why-is-the-visual-studio-2015-2017-2019-test-runner-not-discovering-my-xunit-v2?page=1&tab=oldest#tab-top">這篇討論</a>，我想嘗試照著做，發現沒有該暫存目錄，最後我關閉 VS2019 所有實體後，重新開啟專案，重新建置後順利看到所有測試案例</p>
+<p>它會在專案的目錄下建立一個<code>runtests.cmd</code>，需要測試的時候直接跑這個 command 就可以了，報告會在跑完測試的時候一併產生，連結可以從 VS2019 的輸出視窗看到，直接點擊就可以看到<br><img src="/artblog/selenium-e2e-testing/2020-10-05_093104.png"></p>
+<h4 id="如何設定測試"><a href="#如何設定測試" class="headerlink" title="如何設定測試"></a>如何設定測試</h4><p>參閱<a target="_blank" rel="noopener" href="https://docs.specflow.org/projects/specflow-runner/en/latest/Profile/Profiles.html">官方網站的說明</a>，在使用 SpecFlow + Runner version 3.0.284 以後的版本，預設如下</p>
+<ol>
+<li>Search for tests in the base folder (i.e. <code>bin/Debug</code> or <code>bin/Debug/&lt;Framework&gt;</code>) when using SpecRun.exe for test execution</li>
+<li>Execution configuration element:<ul>
+<li>testThreadCount is 1</li>
+<li>stopAfterFailures is 3</li>
+<li>testSchedulingMode is Sequential</li>
+</ul>
+</li>
+</ol>
+<p>如果要變更設定，需要新增<code>.srprofile</code>設定檔進行設置</p>
+<h4 id="自行編輯報告-Template"><a href="#自行編輯報告-Template" class="headerlink" title="自行編輯報告 Template"></a>自行編輯報告 Template</h4><p>請參閱官方的<a target="_blank" rel="noopener" href="https://docs.specflow.org/projects/specflow-runner/en/latest/Usage/Tutorial-Customising-Reports.html">Tutorial: Customizing Reports</a>文件</p>
+<p>要使用自訂的 Template，必須要先將報告的 template cshtml 文件，從 nuget 目錄下面 copy 到專案目錄並加入專案，然後在專案的屬性視窗，選擇一律複製<br><img src="/artblog/selenium-e2e-testing/2020-10-05_111702.png"></p>
+<p>接著依照官網的建議設定，如果只需要產一份報告的，就利用<a target="_blank" rel="noopener" href="https://docs.specflow.org/projects/specflow-runner/en/latest/Profile/Settings.html">Setting</a>提到的<code>reportTemplate</code>；如果要產多份報告的，就利用<a target="_blank" rel="noopener" href="https://docs.specflow.org/projects/specflow-runner/en/latest/Profile/Report.html">Report</a>裡面的<code>Template</code>標籤，文件內都有範例可參考</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/e2e/" rel="tag"># e2e</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/webpack-compile-vue-single-file-component/" rel="prev" title="webpack-編譯vue single file component">
+                  <i class="fa fa-angle-left"></i> webpack-編譯vue single file component
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/ELK-stack-with-filebeat/" rel="next" title="ELK stack with filebeat">
+                  ELK stack with filebeat <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

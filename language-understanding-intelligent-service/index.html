@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="LUIS 是自然語言的語意分析服務，接下來的文章會用官方文件為基底，開始學習如何建立屬於自己的 LUIS 服務，過程中我會將這些步驟記錄下來，希望也能對別人有所助益">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LUIS - 自然語言語意分析初學入門">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/language-understanding-intelligent-service/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="LUIS 是自然語言的語意分析服務，接下來的文章會用官方文件為基底，開始學習如何建立屬於自己的 LUIS 服務，過程中我會將這些步驟記錄下來，希望也能對別人有所助益">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/language-understanding-intelligent-service/2021-03-30_095508.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/language-understanding-intelligent-service/2021-03-30_095603.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/language-understanding-intelligent-service/2021-03-30_095310.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/language-understanding-intelligent-service/2021-03-30_095812.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/language-understanding-intelligent-service/2021-03-30_100550.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/language-understanding-intelligent-service/2021-03-30_101117.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/language-understanding-intelligent-service/2021-03-30_101743.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/language-understanding-intelligent-service/2021-03-30_102435.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/language-understanding-intelligent-service/2021-03-30_102910.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/language-understanding-intelligent-service/2021-03-30_103109.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/language-understanding-intelligent-service/2021-03-30_103207.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/language-understanding-intelligent-service/2021-03-30_103346.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/language-understanding-intelligent-service/2021-03-30_103605.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/language-understanding-intelligent-service/2021-03-30_103803.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/language-understanding-intelligent-service/2021-04-01_152532.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/language-understanding-intelligent-service/2021-04-01_152702.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/language-understanding-intelligent-service/2021-03-30_120343.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/language-understanding-intelligent-service/2021-03-30_120705.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/language-understanding-intelligent-service/2021-03-30_121249.jpg">
+<meta property="article:published_time" content="2021-03-30T01:30:38.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.356Z">
+<meta property="article:author" content="art">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/language-understanding-intelligent-service/2021-03-30_095508.jpg">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/language-understanding-intelligent-service/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/language-understanding-intelligent-service/","path":"/language-understanding-intelligent-service/","title":"LUIS - 自然語言語意分析初學入門"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>LUIS - 自然語言語意分析初學入門 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E9%BA%BC%E6%98%AF-Language-Understanding-Intelligent-Service-LUIS-%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">什麼是 Language Understanding Intelligent Service (LUIS)？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E5%89%8D%E6%BA%96%E5%82%99"><span class="nav-number">2.</span> <span class="nav-text">事前準備</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">建立模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%99%BC%E5%B8%83"><span class="nav-number">4.</span> <span class="nav-text">發布</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/language-understanding-intelligent-service/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="LUIS - 自然語言語意分析初學入門 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LUIS - 自然語言語意分析初學入門
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2021-03-30 09:30:38" itemprop="dateCreated datePublished" datetime="2021-03-30T09:30:38+08:00">2021-03-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/LUIS/" itemprop="url" rel="index"><span itemprop="name">LUIS</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/language-understanding-intelligent-service/" class="post-meta-item leancloud_visitors" data-flag-title="LUIS - 自然語言語意分析初學入門" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/language-understanding-intelligent-service/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/language-understanding-intelligent-service/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>LUIS 是自然語言的語意分析服務，接下來的文章會用官方文件為基底，開始學習如何建立屬於自己的 LUIS 服務，過程中我會將這些步驟記錄下來，希望也能對別人有所助益</p>
+<span id="more"></span>
+
+<p>參考文件：<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/azure/cognitive-services/luis/luis-container-howto?tabs=v3">安裝和執行適用于 LUIS 的 Docker 容器</a></p>
+<h2 id="什麼是-Language-Understanding-Intelligent-Service-LUIS-？"><a href="#什麼是-Language-Understanding-Intelligent-Service-LUIS-？" class="headerlink" title="什麼是 Language Understanding Intelligent Service (LUIS)？"></a>什麼是 Language Understanding Intelligent Service (LUIS)？</h2><p>在<code>LUIS</code>文件<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/azure/cognitive-services/luis/">首頁</a>的地方我看到這句話，真的是很精簡：<code>了解 Language Understanding 如何讓應用程式了解人在文字中所表達的意思</code></p>
+<p>我們可以從<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/azure/cognitive-services/luis/what-is-luis">概觀頁面</a>中看到定義</p>
+<blockquote>
+<p><code>Language Understanding</code> (LUIS) 是一種雲端式交談式 AI 服務，可將自訂機器學習智慧套用至使用者的對話、自然語言文字中，以預測整體意義，並找出相關的詳細資訊。<br>LUIS 的用戶端應用程式是任何對話應用程式，可與使用者透過自然語言溝通以完成工作。 用戶端應用程式的例子包括社群媒體應用程式、AI 聊天機器人，以及啟用語音功能的桌面應用程式。</p>
+</blockquote>
+<p>從上面這簡短的介紹當中可以發現 LUIS 能被廣泛的應用到很多的情境中，相信能夠為我們實務上的問題帶來一些嶄新的解決方案，我是還蠻期待的，至於有沒有用，那就之後慢慢看下去吧</p>
+<h2 id="事前準備"><a href="#事前準備" class="headerlink" title="事前準備"></a>事前準備</h2><p>因為<code>LUIS</code>需要在<code>Azure</code>裡面先建立起服務，所以可想而知的也必須要先有個<code>Azure</code>帳號才能夠使用，但我們可以使用免費的額度來進行測試開發使用，所以不用太擔心費用的問題</p>
+<p>申請完畢之後，登入<code>Azure</code></p>
+<p><img src="/artblog/language-understanding-intelligent-service/2021-03-30_095508.jpg"><br>左側選單找到<code>建立資源</code></p>
+<p><img src="/artblog/language-understanding-intelligent-service/2021-03-30_095603.jpg"><br>輸入<code>luis</code>可看到<code>language understanding</code></p>
+<p><img src="/artblog/language-understanding-intelligent-service/2021-03-30_095310.jpg"><br>此處選擇建立</p>
+<p><img src="/artblog/language-understanding-intelligent-service/2021-03-30_095812.jpg"><br>在這邊就可以依據需要選擇然後建立資源了，因為我們會建立<code>LUIS</code>，稍後也會將它發布出去測試，所以選擇<code>兩者</code>，如果想了解細節的人，可以看看<a target="_blank" rel="noopener" href="https://azure.microsoft.com/zh-tw/pricing/details/cognitive-services/language-understanding-intelligent-services/">定價</a></p>
+<p><img src="/artblog/language-understanding-intelligent-service/2021-03-30_100550.jpg"><br>仔細看看下面的認知服務計價原則，會發現傳送的每個文字片語都會被視為一筆交易計價，雖然我看不是很懂，但我突然明白了為什麼我只有測幾次請求，交易卻是將近 100 筆的紀錄，一直以來讓我很驚恐的部分就是 Azure 的計價…實在是太難了</p>
+<p><img src="/artblog/language-understanding-intelligent-service/2021-03-30_101117.jpg"><br>反正記得選取計價層的時候，要挑有<code>F0</code>免費的來測試</p>
+<p>建立完畢 LUIS 服務後，接著到<a target="_blank" rel="noopener" href="https://www.luis.ai/">LUIS 網站</a>去建立 luis 應用程式</p>
+<p><img src="/artblog/language-understanding-intelligent-service/2021-03-30_101743.jpg"><br>因為我先前已經有建立過，所以我這裡直接可以點<code>New App</code>，他會跳出一個燈箱讓我填寫新的 App 資料；如果是第一次進入，印象是會要你選擇剛剛在<code>Azure</code>建立的資源，才可以繼續使用</p>
+<h2 id="建立模型"><a href="#建立模型" class="headerlink" title="建立模型"></a>建立模型</h2><p>首先需要先知道一下整個 LUIS 的概念，我們以點餐為例，在<code>Intents</code>裡面新增一個點餐行為<br><img src="/artblog/language-understanding-intelligent-service/2021-03-30_102435.jpg"></p>
+<p>然後輸入幾個口語化的訂單範例給他，注意要不同的句型喔</p>
+<p><img src="/artblog/language-understanding-intelligent-service/2021-03-30_102910.jpg"><br>像這樣，接著就可以把文字標記起來，並選擇實體…這邊還沒有建立，所以我們先回到<code>Entities</code>去建立</p>
+<p><img src="/artblog/language-understanding-intelligent-service/2021-03-30_103109.jpg"></p>
+<p>再次回到<code>Intents</code>就可以將剛剛的點餐範例，標記上哪個東西代表的是餐點名稱了<br><img src="/artblog/language-understanding-intelligent-service/2021-03-30_103207.jpg"></p>
+<p>當我們都設定完畢後，就可以點右上角的<code>Train</code>去訓練我們的模型了<br><img src="/artblog/language-understanding-intelligent-service/2021-03-30_103346.jpg"></p>
+<p>訓練完畢之後我們可以在<code>Test</code>測試我們的模型<br><img src="/artblog/language-understanding-intelligent-service/2021-03-30_103605.jpg"></p>
+<p>可以看到他預測這個輸入的文字，意圖是點餐行為，但是他沒有抓到正確的 Entities</p>
+<p><img src="/artblog/language-understanding-intelligent-service/2021-03-30_103803.jpg"><br>上面的這個就有抓到</p>
+<p>接下來我們講講複雜一點的實體，再剛剛操作的是機器學習的 Entity，稱之為 ML Entity，那這個東西他是可以做階層的，再這邊我另外做了一個小吃攤的點餐行為，先建立一個叫做<code>餐食</code>的 entity，並且加上幾個子實體，分別是餐點的份量、麵條種類以及主菜</p>
+<p><img src="/artblog/language-understanding-intelligent-service/2021-04-01_152532.jpg"></p>
+<p>這樣的話，測試的結果會在餐食底下看到各個子實體<br><img src="/artblog/language-understanding-intelligent-service/2021-04-01_152702.jpg"></p>
+<p>細節的部分請參照<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/azure/cognitive-services/luis/luis-concept-feature">說明文件</a></p>
+<h2 id="發布"><a href="#發布" class="headerlink" title="發布"></a>發布</h2><p>右上角的<code>Publish</code>按鈕點下去後他會問說要發佈到哪裡去，我們因為只是測試練習，所以就直接發到<code>production</code>去<br><img src="/artblog/language-understanding-intelligent-service/2021-03-30_120343.jpg"></p>
+<p><img src="/artblog/language-understanding-intelligent-service/2021-03-30_120705.jpg"><br>上面這個地方可以看到 (上面這張我截錯 app，不過沒關係，都是一樣的)</p>
+<ol>
+<li>APIkey</li>
+<li>EndPoints</li>
+<li>測試用的網址</li>
+</ol>
+<p>我們可以直接用測試網址後面帶 QueryString 去測試語句，測試結果會回應 Json 資料格式<br><img src="/artblog/language-understanding-intelligent-service/2021-03-30_121249.jpg"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/testing-vue-js-applications/" rel="prev" title="讀書心得-Vue.js應用測試">
+                  <i class="fa fa-angle-left"></i> 讀書心得-Vue.js應用測試
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/Jenkins-pipeline-unittest-report/" rel="next" title="Jenkins-pipeline-加入單元測試報告">
+                  Jenkins-pipeline-加入單元測試報告 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

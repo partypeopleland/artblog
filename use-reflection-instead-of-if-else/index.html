@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="日常開發很常碰到一個情況，就是需要依據傳入的參數，決定 new 不一樣的 instance 出來，所以在數量少的時候，我們可以透過if...else...的方式直衝，再多一些些，可以用switch...case...的方式來做，但如果這個分支已經有 5~7 個以上，再接著用上述的兩種做法就有點bad smell的感覺了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用反射取代if判斷">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/use-reflection-instead-of-if-else/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="日常開發很常碰到一個情況，就是需要依據傳入的參數，決定 new 不一樣的 instance 出來，所以在數量少的時候，我們可以透過if...else...的方式直衝，再多一些些，可以用switch...case...的方式來做，但如果這個分支已經有 5~7 個以上，再接著用上述的兩種做法就有點bad smell的感覺了">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2020-11-24T01:50:03.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.328Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="refactor">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/use-reflection-instead-of-if-else/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/use-reflection-instead-of-if-else/","path":"/use-reflection-instead-of-if-else/","title":"利用反射取代if判斷"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>利用反射取代if判斷 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%83%85%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">情境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8D%E5%B0%84%E8%88%87-Attribute"><span class="nav-number">2.</span> <span class="nav-text">反射與 Attribute</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-Dictionary"><span class="nav-number">3.</span> <span class="nav-text">使用 Dictionary</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/use-reflection-instead-of-if-else/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="利用反射取代if判斷 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          利用反射取代if判斷
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2020-11-24 09:50:03" itemprop="dateCreated datePublished" datetime="2020-11-24T09:50:03+08:00">2020-11-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/csharp/" itemprop="url" rel="index"><span itemprop="name">csharp</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/use-reflection-instead-of-if-else/" class="post-meta-item leancloud_visitors" data-flag-title="利用反射取代if判斷" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/use-reflection-instead-of-if-else/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/use-reflection-instead-of-if-else/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>日常開發很常碰到一個情況，就是需要依據傳入的參數，決定 new 不一樣的 instance 出來，所以在數量少的時候，我們可以透過<code>if...else...</code>的方式直衝，再多一些些，可以用<code>switch...case...</code>的方式來做，但如果這個分支已經有 5~7 個以上，再接著用上述的兩種做法就有點<code>bad smell</code>的感覺了</p>
+<span id="more"></span>
+
+<p>這裡用反射+<code>Attribute</code>的方式來解這個問題，其實並不算完美的作法，因為相對的<code>best practice</code>可能每個人的觀念及想法都不同，我只是將我覺得好維護的方法紀錄一下，底下的 Code 都是先 Copy 過來後手打編輯，刪掉很多不能出現的東西，所以不要直接拿去用喔</p>
+<h2 id="情境"><a href="#情境" class="headerlink" title="情境"></a>情境</h2><p>假設現在的情況是做一個搜尋引擎，前端傳來的部分包含了實際搜尋的 keyword，還有搜尋類型 type，前端透過下拉選單去變更這個搜尋類型，希望後端可以依據不同的搜尋類型，有不一樣的邏輯。<br>case 大概就是這樣，初版的 Code，在後端是直接用<code>if...else...</code>去處理的 legacy code，我的目標是重構這一段程式碼，希望達到幾個目的</p>
+<ol>
+<li>我希望各種邏輯可以各自獨立維護</li>
+<li>我不喜歡程式複雜度太高</li>
+<li>我希望以後如果下拉選單又多了一個新的類別，可以很容易添加新邏輯</li>
+</ol>
+<h2 id="反射與-Attribute"><a href="#反射與-Attribute" class="headerlink" title="反射與 Attribute"></a>反射與 Attribute</h2><p>在這之前，當然要先將各種搜尋類型的邏輯，拆分到各自的類別，並且給它們一個共同的抽象介面，後續的操作就都是針對介面來設計</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">ISearch</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function">List&lt;SearchResult&gt; <span class="title">Search</span>(<span class="params">SearchRequest request</span>)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>這裡的 Search 就是我們要暴露出去的搜尋 Method，裡面的邏輯直接先取得 Instance 後，再透過約定好的介面 Search 方法來搜尋資料</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> List&lt;SearchResult&gt; <span class="title">Search</span>(<span class="params">SearchRequest request, SearchType type</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    ISearch instance = SearchFactory.GetInstance(type);</span><br><span class="line">    <span class="keyword">return</span> instance.Search(request).ToList();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>GetInstance 原本是一個依據傳入的列舉透過 switch case 的方式取得 Instance，就像這樣</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> IOrderQASearchModule <span class="title">GetInstance</span>(<span class="params">SearchType type</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">switch</span> (type)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">case</span> SearchType.Id:</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> SearchIdModule();</span><br><span class="line">        <span class="keyword">case</span> SearchType.Name:</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> SearchNameModule();</span><br><span class="line">        <span class="keyword">case</span> SearchType.Age:</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> SearchAgeModule();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>實際上搜尋的類別長這樣，這邊要稍微說的是，SearchRequest 是所有 Search 方法的傳入參數，實際上要使用，會再 new 自己的 DTO，這裡我想要改善，但暫時沒想到好的法子</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">SearchIdModule</span> : <span class="title">ISearch</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> ISearchDAO _searchDAO_;</span><br><span class="line">    <span class="keyword">protected</span> ISearchDAO SearchDAO</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span> =&gt; <span class="keyword">this</span>._searchDAO_ ?? (<span class="keyword">this</span>._searchDAO_ = Factory.GetSearchDAO());</span><br><span class="line">        <span class="keyword">set</span> =&gt; <span class="keyword">this</span>._searchDAO_ = <span class="keyword">value</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;SearchResult&gt; <span class="title">Search</span>(<span class="params">SearchRequest request</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> SearchDAO.SearchById(<span class="keyword">new</span> SearchByIdRequest()</span><br><span class="line">        &#123;</span><br><span class="line">            Page = request.Page,</span><br><span class="line">            Limit = request.Limit,</span><br><span class="line">            Id = request.Id,</span><br><span class="line">        &#125;).ToList();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>資料到了 DAO 之後，接著就是 adapter 去呼叫資料庫預儲程序，每一種 type 都有自己的 sp，這裡不是今天的重點，略過不提</p>
+<p>我希望列舉可以直接與<code>instance</code>類別關聯起來，這樣就不需要<code>switch case</code>，而反射可以給予類別產生實體，兩個兜起來就是我要的</p>
+<p>所以先弄一個 Attribute</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">SearchModuleAttribute</span> : <span class="title">Attribute</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">internal</span> Type SearchModuleType &#123; <span class="keyword">get</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SearchModuleAttribute</span>(<span class="params">Type searchModuleType</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        SearchModuleType = searchModuleType;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Enum 這邊就可以掛上屬性</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="built_in">enum</span> SearchType</span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">SearchModule(typeof(SearchIdModule))</span>]</span><br><span class="line">    Id,</span><br><span class="line"></span><br><span class="line">    [<span class="meta">SearchModule(typeof(SearchNameModule))</span>]</span><br><span class="line">    Name,</span><br><span class="line"></span><br><span class="line">    [<span class="meta">SearchModule(typeof(SearchAgeModule))</span>]</span><br><span class="line">    Age</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>最後改寫原先的 GetInstance 方法，從 Enum 取得對應的 Attriubte，接著拿到我們設定好的 Type，然後用<code>Activator.CreateInstance(type)</code>去產生 Instance</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> IOrderQASearchModule <span class="title">GetInstance</span>(<span class="params">SearchType searchType</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    SearchModuleAttribute valueattribute = GetSearchModuleAttribute(searchType);</span><br><span class="line">    Type type = valueattribute.SearchModuleType;</span><br><span class="line"></span><br><span class="line">    IOrderQASearchModule searchModule = (IOrderQASearchModule) Activator.CreateInstance(type);</span><br><span class="line">    <span class="keyword">return</span> searchModule;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">internal</span> <span class="keyword">static</span> SearchModuleAttribute <span class="title">GetSearchModuleAttribute</span>(<span class="params">SearchType searchType</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    FieldInfo data = <span class="keyword">typeof</span>(SearchType).GetField(searchType.ToString());</span><br><span class="line">    Attribute attribute = Attribute.GetCustomAttribute(data, <span class="keyword">typeof</span>(SearchModuleAttribute));</span><br><span class="line">    SearchModuleAttribute valueattribute = (SearchModuleAttribute) attribute;</span><br><span class="line">    <span class="keyword">return</span> valueattribute;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="使用-Dictionary"><a href="#使用-Dictionary" class="headerlink" title="使用 Dictionary"></a>使用 Dictionary</h2><p>上一個方法是把類別的關係放在 Enum 上面，實際上動作是有比較繁瑣一點點，新手一點的可能會比較喜歡這個方法，也就是把這個關係，放在我們自己建立的<code>Dictionary</code>裡面</p>
+<p>要把這個關係自己獨立一個類別，叫做<code>Resource</code>也可以，或者是要直接放在<code>Factory</code>裡面也可以，就是看自己怎樣比較好理解，好維護，下面這個是一個範例，程式碼不算太難，感受一下就行了</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> 解決方案列舉</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="keyword">public</span> <span class="built_in">enum</span> SolutionType</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 第一種解決方案</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    First,</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 第二種解決方案</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    Second,</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 第三種解決方案</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    Third,</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 未實作的解決方案</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    NotExist</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">SolutionFactory</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> Dictionary&lt;SolutionType, Type&gt; _resources;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> Dictionary&lt;SolutionType, Type&gt; Resources</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">get</span> =&gt; _resources ?? GetResources();</span><br><span class="line">            <span class="keyword">set</span> =&gt; _resources = <span class="keyword">value</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Dictionary&lt;SolutionType, Type&gt; <span class="title">GetResources</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> Dictionary&lt;SolutionType, Type&gt;</span><br><span class="line">            &#123;</span><br><span class="line">                [<span class="meta">SolutionType.First</span>] = <span class="keyword">typeof</span>(SolutionOne),</span><br><span class="line">                [<span class="meta">SolutionType.Second</span>] = <span class="keyword">typeof</span>(SolutionTwo),</span><br><span class="line">                [<span class="meta">SolutionType.Third</span>] = <span class="keyword">typeof</span>(SolutionThree)</span><br><span class="line">            &#125;;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Type <span class="title">GetInstanceType</span>(<span class="params">SolutionType type</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (Resources.ContainsKey(type)) <span class="keyword">return</span> Resources[type];</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> ArgumentException(<span class="string">&quot;No Solution&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> 取得解決方案實體</span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name=&quot;type&quot;&gt;</span>The type.<span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;returns&gt;</span><span class="doctag">&lt;/returns&gt;</span></span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> IHammingSolution <span class="title">GetInstance</span>(<span class="params">SolutionType type</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            Type tp = GetInstanceType(type);</span><br><span class="line">            <span class="keyword">return</span> (IHammingSolution) Activator.CreateInstance(tp);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>我覺得實務上我會比較想要用第一種，因為在使用上畢竟比較直覺，但是在程式碼那邊，可能就要多一些理解；但如果對這個還不是很熟悉，那就還是用第二種會比較容易理解</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/refactor/" rel="tag"># refactor</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/ELK-stack-with-filebeat/" rel="prev" title="ELK stack with filebeat">
+                  <i class="fa fa-angle-left"></i> ELK stack with filebeat
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/unittest-with-jest-and-wallabyjs/" rel="next" title="使用 jest 及 wallaby.js  撰寫測試">
+                  使用 jest 及 wallaby.js  撰寫測試 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

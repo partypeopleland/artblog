@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="在 Windows 環境使用 GitLab Docker 安裝的備份、還原過程記錄">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何備份還原 GitLab 服務">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/backup-restore-gitlab-service/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="在 Windows 環境使用 GitLab Docker 安裝的備份、還原過程記錄">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/backup-restore-gitlab-service/1538623309_28718.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/backup-restore-gitlab-service/1538623349_82977.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/backup-restore-gitlab-service/1538623421_9695.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/backup-restore-gitlab-service/1538625250_65939.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/backup-restore-gitlab-service/1538627037_69723.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/backup-restore-gitlab-service/1538627061_37794.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/backup-restore-gitlab-service/1538627344_89651.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/backup-restore-gitlab-service/1538641158_57214.png">
+<meta property="article:published_time" content="2018-10-04T00:28:41.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.191Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="gitLab">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/backup-restore-gitlab-service/1538623309_28718.png">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/backup-restore-gitlab-service/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/backup-restore-gitlab-service/","path":"/backup-restore-gitlab-service/","title":"如何備份還原 GitLab 服務"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>如何備份還原 GitLab 服務 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E5%82%99%E4%BB%BD%E6%89%80%E9%9C%80%E7%9A%84-Docker-Volume"><span class="nav-number">1.</span> <span class="nav-text">建立備份所需的 Docker Volume</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%82%99%E4%BB%BD-GitLab"><span class="nav-number">2.</span> <span class="nav-text">備份 GitLab</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%82%99%E4%BB%BD%E7%82%BA%E5%AF%A6%E9%AB%94%E6%AA%94%E6%A1%88"><span class="nav-number">3.</span> <span class="nav-text">備份為實體檔案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%AC%E8%A9%A6%E9%82%84%E5%8E%9F-GitLab-%E6%9C%8D%E5%8B%99"><span class="nav-number">4.</span> <span class="nav-text">測試還原 GitLab 服務</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%82%84%E5%8E%9F-GitLab-%E6%9C%8D%E5%8B%99"><span class="nav-number">5.</span> <span class="nav-text">還原 GitLab 服務</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A0%E7%A2%BC-GitLab-Runner"><span class="nav-number">6.</span> <span class="nav-text">加碼 GitLab Runner</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%96%B1%E8%AE%80%E5%AE%98%E6%96%B9%E6%96%87%E4%BB%B6-Install-GitLab-Runner-on-Windows"><span class="nav-number">6.1.</span> <span class="nav-text">閱讀官方文件 Install GitLab Runner on Windows</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A8%AD%E5%AE%9A-GitLab-Runner"><span class="nav-number">6.2.</span> <span class="nav-text">設定 GitLab Runner</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/backup-restore-gitlab-service/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="如何備份還原 GitLab 服務 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何備份還原 GitLab 服務
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2018-10-04 08:28:41" itemprop="dateCreated datePublished" datetime="2018-10-04T08:28:41+08:00">2018-10-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/docker/" itemprop="url" rel="index"><span itemprop="name">docker</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/backup-restore-gitlab-service/" class="post-meta-item leancloud_visitors" data-flag-title="如何備份還原 GitLab 服務" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/backup-restore-gitlab-service/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/backup-restore-gitlab-service/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在 Windows 環境使用 GitLab Docker 安裝的備份、還原過程記錄</p>
+<span id="more"></span>
+
+<p>上次的 docker volume 備份、還原，其實就是為了要將 local 建立起來的 GitLab 服務做備份，我採用的 GitLab Images 是<a target="_blank" rel="noopener" href="http://blog.chengweichen.com/2016/04/docker-gitlab-cigitlab-runner.html">這篇文章</a>中介紹的 <a target="_blank" rel="noopener" href="https://github.com/sameersbn/docker-gitlab">sameersbn</a> 所製作的 docker image，實際用了之後，真的非常的簡易就能夠建好自己的 GitLab，而且真的更新很快，文件也詳細，推薦給還不熟悉的人參考參考，那就直接進入主題吧</p>
+<p>先送上文章內用到的 docker-compose.yml。傳送門：<a target="_blank" rel="noopener" href="https://github.com/partypeopleland/docker-gitlab">GitHub</a></p>
+<h2 id="建立備份所需的-Docker-Volume"><a href="#建立備份所需的-Docker-Volume" class="headerlink" title="建立備份所需的 Docker Volume"></a>建立備份所需的 Docker Volume</h2><p>首先，我參考文件另外建立了一個 Docker Volume 用來將未來產生的備份檔案儲存起來，並且透過文件中提到的指定備份路徑設定 Docker Volume</p>
+<p><img src="/artblog/backup-restore-gitlab-service/1538623309_28718.png"><br><img src="/artblog/backup-restore-gitlab-service/1538623349_82977.png"><br><img src="/artblog/backup-restore-gitlab-service/1538623421_9695.png"><br>接著直接透過指令將 GitLab 架起來</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">建立 Volume</span></span><br><span class="line">docker volume create gitlab_data</span><br><span class="line">docker volume create gitlab_backup</span><br><span class="line">docker volume create postgres_data</span><br><span class="line">docker volume create redis_data</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">建立 Gitlab 服務</span></span><br><span class="line">docker-compose up</span><br></pre></td></tr></table></figure>
+
+<h2 id="備份-GitLab"><a href="#備份-GitLab" class="headerlink" title="備份 GitLab"></a>備份 GitLab</h2><p>文件中有提到備份的部分，需要先將 Gitlab 的 Container 給 stop、rm 掉，接著執行 GitLab 提供的備份指令，但是在我的電腦備份時每次連線到 Repository 的時候都會出現 Connect Error 導致備份失敗，測試結果是只要有 Repository 就會失敗，如果我使用 GitLab 服務先註冊使用者在來備份就沒事情，真奇怪，後來有在<a target="_blank" rel="noopener" href="https://github.com/sameersbn/docker-gitlab/issues/1576">這邊</a>找到解決方案，直接貼指令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">失敗的備份指令</span></span><br><span class="line">docker-compose run --rm gitlab app:rake gitlab:backup:create</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">-----------------------------------------------------------</span></span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Create Backup</span></span><br><span class="line">docker-compose exec gitlab su -c &quot;bundle exec rake gitlab:backup:create&quot; git</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Restore Backup</span></span><br><span class="line">docker-compose exec gitlab supervisorctl stop unicorn</span><br><span class="line">docker-compose exec gitlab supervisorctl stop sidekiq</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">列出有哪些備份可還原</span></span><br><span class="line">docker-compose exec gitlab su -c &quot;bundle exec rake gitlab:backup:restore&quot; git</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">指定 TimeStamp 還原</span></span><br><span class="line">docker-compose exec gitlab su -c &quot;bundle exec rake gitlab:backup:restore BACKUP=1538620541_2018_10_04_11.3.0&quot; git</span><br><span class="line"></span><br><span class="line">docker-compose exec gitlab supervisorctl start sidekiq</span><br><span class="line">docker-compose exec gitlab supervisorctl start unicorn</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>因為我的環境是 windows，所以用雙引號將指令包住</p>
+</blockquote>
+<p>喔，有一點要特別提醒一下，用哪一版本做的備份檔案，就只能還原在該版本的 Container 底下</p>
+<h2 id="備份為實體檔案"><a href="#備份為實體檔案" class="headerlink" title="備份為實體檔案"></a>備份為實體檔案</h2><p>配合上一篇的如何備份還原 Docker Volume，終於可以將備份檔案收去別的地方放了。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">建立 container 用來取得 gitlab_backup volume 的備份檔案</span></span><br><span class="line">docker run -d --name mybackup -v gitlab_backup:/volume alpine ping 127.0.0.1</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用 tar 壓縮整個 volume 目錄</span></span><br><span class="line">docker exec -it mybackup tar -cjf /data.tar.bz2 -C /volume ./</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">用 docker inspect或者是 docker ps 查詢目前 container 的 Id</span></span><br><span class="line">docker inspect --format=&quot;&#123;&#123;.Id&#125;&#125;&quot; mybackup</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">透過 container Id 將 container 打包成一個新的images：my-volume-backup</span></span><br><span class="line">docker commit -p e0a4366ae143 my-volume-backup</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">將images導出為實體檔案</span></span><br><span class="line">docker save -o my-volume-backup.tar my-volume-backup</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/backup-restore-gitlab-service/1538625250_65939.png"></p>
+<h2 id="測試還原-GitLab-服務"><a href="#測試還原-GitLab-服務" class="headerlink" title="測試還原 GitLab 服務"></a>測試還原 GitLab 服務</h2><p>為了測試需要，所以我把 GitLab Container 、Volume 砍掉，全部重來再重新建立一次服務</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">建立 Volume</span></span><br><span class="line">docker volume create gitlab_data</span><br><span class="line">docker volume create gitlab_backup</span><br><span class="line">docker volume create postgres_data</span><br><span class="line">docker volume create redis_data</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">將 Gitlab 服務架起來</span></span><br><span class="line">docker-compose up</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">將實體檔案還原為 Image</span></span><br><span class="line">docker load -i my-volume-backup.tar</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">將 Image 裡面的檔案解壓縮到 Docker Volume</span></span><br><span class="line">docker run  --rm  -v gitlab_backup:/volume my-volume-backup sh -c &quot;rm -rf /volume/* /volume/..?* /volume/.[!.]* ; tar -C /volume/ -xjf  /data.tar.bz2 ;&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="還原-GitLab-服務"><a href="#還原-GitLab-服務" class="headerlink" title="還原 GitLab 服務"></a>還原 GitLab 服務</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">把腳本建立的 GitLab 名稱改名為 gitlab (這一步省略的話接下來要自己替換掉 container name)</span></span><br><span class="line">docker rename docker-gitlab_gitlab_1 gitlab</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">記得這個時候要確認 GitLab 是 start 的，否則會出現錯誤訊息說找不到 container</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">先確認有哪些備份檔可還原</span></span><br><span class="line">docker-compose exec gitlab su -c &quot;bundle exec rake gitlab:backup:restore&quot; git</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">指定 TimeStamp 還原</span></span><br><span class="line">docker-compose exec gitlab supervisorctl stop unicorn</span><br><span class="line">docker-compose exec gitlab supervisorctl stop sidekiq</span><br><span class="line">docker-compose exec gitlab su -c &quot;bundle exec rake gitlab:backup:restore BACKUP=1538620541_2018_10_04_11.3.0&quot; git</span><br><span class="line">docker-compose exec gitlab supervisorctl start sidekiq</span><br><span class="line">docker-compose exec gitlab supervisorctl start unicorn</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/backup-restore-gitlab-service/1538627037_69723.png"></p>
+<p>還原過程會再要你確認是不是真的要還原<br><img src="/artblog/backup-restore-gitlab-service/1538627061_37794.png"></p>
+<p>這邊如果選擇 no，那就不會幫你清掉 authorized_keys file，選擇 yes 就清掉而已，後面就是清除一些暫存檔案、目錄而已</p>
+<blockquote>
+<p>還原完畢記得要把 unicorn、sidekiq 重新 start</p>
+</blockquote>
+<p><img src="/artblog/backup-restore-gitlab-service/1538627344_89651.png"></p>
+<p>我的 GitLab 又回來囉~~</p>
+<h2 id="加碼-GitLab-Runner"><a href="#加碼-GitLab-Runner" class="headerlink" title="加碼 GitLab Runner"></a>加碼 GitLab Runner</h2><p>都裝了 GitLab 不接著裝 Runner 始終是覺得少了一塊拼圖，那就寫一下重點吧。</p>
+<h3 id="閱讀官方文件-Install-GitLab-Runner-on-Windows"><a href="#閱讀官方文件-Install-GitLab-Runner-on-Windows" class="headerlink" title="閱讀官方文件 Install GitLab Runner on Windows"></a>閱讀官方文件 <a target="_blank" rel="noopener" href="https://docs.gitlab.com/runner/install/windows.html">Install GitLab Runner on Windows</a></h3><ol>
+<li>建立一個目錄用來存放 Runner 的檔案，如<code>C:\GitLab-Runner</code></li>
+<li>依據作業系統環境下載 <a target="_blank" rel="noopener" href="https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-windows-386.exe">x86</a> 或<a target="_blank" rel="noopener" href="https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-windows-amd64.exe">amd64</a> 版本的 Runner 檔案，放置於剛才的目錄中，並重新命名為<code>gitlab-runner.exe</code></li>
+<li>使用管理員權限執行 command line，並輸入指令<code>gitlab-runner.exe register</code>註冊 Runner</li>
+<li>依照畫面指示，順序輸入自己架設的 GitLab 網址及後台取得的 Token，註冊部分的細節請參考<a target="_blank" rel="noopener" href="https://docs.gitlab.com/runner/register/index.html">官方文件</a></li>
+<li>安裝服務並啟動<code>gitlab-runner install</code>、<code>gitlab-runner start</code></li>
+</ol>
+<h3 id="設定-GitLab-Runner"><a href="#設定-GitLab-Runner" class="headerlink" title="設定 GitLab Runner"></a>設定 GitLab Runner</h3><ol>
+<li>進入 GitLab 後台管理 Runner，若成功建立 Runner，用管理員帳號登入後可以在後台看到適才註冊的 Runner 已經出現在這邊，記得將 Runner 的狀態設置好<br><img src="/artblog/backup-restore-gitlab-service/1538641158_57214.png"></li>
+<li>專案設置加入 Gitlab CI 設定檔，於專案根目錄下新增<code>.gitlab-ci.yml</code>檔案，內容請參考下列範例自行修改調整，第二行請<strong>自行調整專案名稱</strong></li>
+</ol>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">variables:</span></span><br><span class="line">    <span class="attr">PROJECT_NAME:</span> <span class="string">&quot;TaskProject&quot;</span></span><br><span class="line"><span class="attr">before_script:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">echo</span> <span class="string">&quot;starting build for %PROJECT_NAME%&quot;</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">echo</span> <span class="string">&quot;Restoring NuGet Packages...&quot;</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">nuget</span> <span class="string">restore</span> <span class="string">&quot;%PROJECT_NAME%.sln&quot;</span></span><br><span class="line"><span class="attr">stages:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">build</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">test</span></span><br><span class="line"><span class="attr">build:</span></span><br><span class="line">    <span class="attr">stage:</span> <span class="string">build</span></span><br><span class="line">    <span class="attr">script:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">echo</span> <span class="string">&quot;Release build...&quot;</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">msbuild</span> <span class="string">/consoleloggerparameters:ErrorsOnly</span> <span class="string">/maxcpucount</span> <span class="string">/nologo</span> <span class="string">/property:Configuration=Release</span> <span class="string">/verbosity:quiet</span> <span class="string">%PROJECT_NAME%.sln</span></span><br><span class="line">    <span class="attr">artifacts:</span></span><br><span class="line">        <span class="attr">untracked:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">test:</span></span><br><span class="line">    <span class="attr">stage:</span> <span class="string">test</span></span><br><span class="line">    <span class="attr">script:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">echo</span> <span class="string">&quot;starting tests&quot;</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">cd</span> <span class="string">%PROJECT_NAME%Tests/bin/Release</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">vstest.console</span> <span class="string">%PROJECT_NAME%Tests.dll</span></span><br><span class="line">    <span class="attr">dependencies:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">build</span></span><br></pre></td></tr></table></figure>
+
+<p>這邊示範的只是最簡單基礎的 Runner 設定，所以關於 Runner 服務的執行權限設定、自動化腳本內使用到的 MSBuild、VSTest.Console、Nuget 都要先自行安裝，此處就不細談。</p>
+<p>關於 GitLab 與 Runner 之間的關係其實就跟一般的 Git 服務配上 Jenkins 概念一樣，所以要配置 Runner 當然也有很多方法，因為要滿足不同的專案建置需求，跑 CSharp、Java、Andriod、iOS 等等，都有可能有不同的建置環境跟需求需要配置、甚至是專門用來半夜跑整合測試的也許要用比較好的機器……之類的，這部分就等用到的時後再研究囉</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/gitLab/" rel="tag"># gitLab</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/backup-restore-docker-volume/" rel="prev" title="如何備份還原 Docker Volume">
+                  <i class="fa fa-angle-left"></i> 如何備份還原 Docker Volume
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/observer-mode/" rel="next" title="ObServer Mode 觀察者模式">
+                  ObServer Mode 觀察者模式 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

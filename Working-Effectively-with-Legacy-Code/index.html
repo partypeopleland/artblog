@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="這一本書原本已經絕版了，最近才又由出版社拿到版權，很多人評價這本書是非常值得閱讀的，趁這次機會買下來好好用功一下，寫個讀書心得">
+<meta property="og:type" content="article">
+<meta property="og:title" content="讀書心得 Working Effectively with Legacy Code">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/Working-Effectively-with-Legacy-Code/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="這一本書原本已經絕版了，最近才又由出版社拿到版權，很多人評價這本書是非常值得閱讀的，趁這次機會買下來好好用功一下，寫個讀書心得">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2019-09-01T10:36:54.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.242Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="待補">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/Working-Effectively-with-Legacy-Code/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/Working-Effectively-with-Legacy-Code/","path":"/Working-Effectively-with-Legacy-Code/","title":"讀書心得 Working Effectively with Legacy Code"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>讀書心得 Working Effectively with Legacy Code | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#part-1-%E4%BF%AE%E6%94%B9%E6%A9%9F%E5%88%B6"><span class="nav-number">1.</span> <span class="nav-text">part 1 修改機制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CH1-%E4%BF%AE%E6%94%B9%E8%BB%9F%E9%AB%94"><span class="nav-number">1.1.</span> <span class="nav-text">CH1 修改軟體</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CH2-%E5%B8%B6%E8%91%97%E5%9B%9E%E9%A5%8B%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.2.</span> <span class="nav-text">CH2 帶著回饋工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CH3-%E6%84%9F%E6%B8%AC%E5%92%8C%E5%88%86%E9%9B%A2"><span class="nav-number">1.3.</span> <span class="nav-text">CH3 感測和分離</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CH4-%E6%8E%A5%E7%B8%AB%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.4.</span> <span class="nav-text">CH4 接縫模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CH5-%E5%B7%A5%E5%85%B7"><span class="nav-number">1.5.</span> <span class="nav-text">CH5 工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#part-2-%E4%BF%AE%E6%94%B9%E7%A8%8B%E5%BC%8F%E7%A2%BC%E7%9A%84%E6%8A%80%E8%A1%93"><span class="nav-number">2.</span> <span class="nav-text">part 2 修改程式碼的技術</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CH-6-%E6%99%82%E9%96%93%E7%B7%8A%E8%BF%AB%EF%BC%8C%E4%BD%86%E5%BF%85%E9%A0%88%E4%BF%AE%E6%94%B9"><span class="nav-number">2.1.</span> <span class="nav-text">CH 6 時間緊迫，但必須修改</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CH-7-%E6%BC%AB%E9%95%B7%E7%9A%84%E4%BF%AE%E6%94%B9"><span class="nav-number">2.2.</span> <span class="nav-text">CH 7 漫長的修改</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CH-8-%E6%B7%BB%E5%8A%A0%E7%89%B9%E6%80%A7"><span class="nav-number">2.3.</span> <span class="nav-text">CH 8 添加特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CH-9-%E7%84%A1%E6%B3%95%E5%B0%87%E9%A1%9E%E5%88%A5%E6%94%BE%E5%85%A5%E6%B8%AC%E8%A9%A6%E6%8E%A7%E5%88%B6%E5%B7%A5%E5%85%B7%E4%B9%8B%E4%B8%AD"><span class="nav-number">2.4.</span> <span class="nav-text">CH 9 無法將類別放入測試控制工具之中</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CH-10-%E7%84%A1%E6%B3%95%E5%9C%A8%E6%B8%AC%E8%A9%A6%E6%8E%A7%E5%88%B6%E5%B7%A5%E5%85%B7%E4%B8%AD%E5%9F%B7%E8%A1%8C%E6%96%B9%E6%B3%95"><span class="nav-number">2.5.</span> <span class="nav-text">CH 10 無法在測試控制工具中執行方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CH-11-%E4%BF%AE%E6%94%B9%E6%99%82%E6%87%89%E7%95%B6%E6%B8%AC%E8%A9%A6%E5%93%AA%E4%BA%9B%E6%96%B9%E6%B3%95"><span class="nav-number">2.6.</span> <span class="nav-text">CH 11 修改時應當測試哪些方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CH-12-%E5%9C%A8%E5%90%8C%E4%B8%80%E5%80%8B%E5%9C%B0%E6%96%B9%E9%80%B2%E8%A1%8C%E5%A4%9A%E8%99%95%E4%BF%AE%E6%94%B9%EF%BC%8C%E6%98%AF%E5%90%A6%E6%87%89%E8%A9%B2%E5%B0%87%E6%89%80%E6%9C%89%E7%9B%B8%E9%97%9C%E7%9A%84%E9%A1%9E%E5%88%A5%E9%83%BD%E8%A7%A3%E4%BE%9D%E8%B3%B4"><span class="nav-number">2.7.</span> <span class="nav-text">CH 12 在同一個地方進行多處修改，是否應該將所有相關的類別都解依賴</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CH-13-%E4%BF%AE%E6%94%B9%E6%99%82%E6%87%89%E8%A9%B2%E6%80%8E%E6%A8%A3%E5%AF%AB%E6%B8%AC%E8%A9%A6"><span class="nav-number">2.8.</span> <span class="nav-text">CH 13 修改時應該怎樣寫測試</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CH-14-%E6%A3%98%E6%89%8B%E7%9A%84%E5%87%BD%E5%BC%8F%E5%BA%AB%E4%BE%9D%E8%B3%B4%E5%95%8F%E9%A1%8C"><span class="nav-number">2.9.</span> <span class="nav-text">CH 14 棘手的函式庫依賴問題</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CH-15-%E5%88%B0%E8%99%95%E9%83%BD%E6%98%AF-API-%E5%91%BC%E5%8F%AB"><span class="nav-number">2.10.</span> <span class="nav-text">CH 15 到處都是 API 呼叫</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CH-16-%E5%B0%8D%E7%A8%8B%E5%BC%8F%E7%A2%BC%E7%9A%84%E7%90%86%E8%A7%A3%E4%B8%8D%E8%B6%B3"><span class="nav-number">2.11.</span> <span class="nav-text">CH 16 對程式碼的理解不足</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CH-17-%E7%A8%8B%E5%BC%8F%E6%AF%AB%E7%84%A1%E7%B5%90%E6%A7%8B%E5%8F%AF%E8%A8%80"><span class="nav-number">2.12.</span> <span class="nav-text">CH 17 程式毫無結構可言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CH-18-%E6%B8%AC%E8%A9%A6%E7%A8%8B%E5%BC%8F%E7%A2%BC%E7%A4%99%E6%89%8B%E7%A4%99%E8%85%B3"><span class="nav-number">2.13.</span> <span class="nav-text">CH 18 測試程式碼礙手礙腳</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CH-19-%E5%B0%8D%E9%9D%9E%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91%E7%9A%84%E5%B0%88%E6%A1%88%EF%BC%8C%E5%A6%82%E4%BD%95%E5%AE%89%E5%85%A8%E5%9C%B0%E5%B0%8D%E5%AE%83%E9%80%B2%E8%A1%8C%E4%BF%AE%E6%94%B9"><span class="nav-number">2.14.</span> <span class="nav-text">CH 19 對非物件導向的專案，如何安全地對它進行修改</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CH-20-%E8%99%95%E7%90%86%E5%A4%A7%E9%A1%9E%E5%88%A5"><span class="nav-number">2.15.</span> <span class="nav-text">CH 20 處理大類別</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CH-21-%E9%9C%80%E8%A6%81%E4%BF%AE%E6%94%B9%E5%A4%A7%E9%87%8F%E7%9B%B8%E5%90%8C%E7%9A%84%E7%A8%8B%E5%BC%8F%E7%A2%BC"><span class="nav-number">2.16.</span> <span class="nav-text">CH 21 需要修改大量相同的程式碼</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CH-22-%E8%A6%81%E4%BF%AE%E6%94%B9%E4%B8%80%E5%80%8B%E5%B7%A8%E5%9E%8B%E6%96%B9%E6%B3%95%EF%BC%8C%E5%8D%BB%E6%B2%92%E8%BE%A6%E6%B3%95%E7%82%BA%E5%AE%83%E7%B7%A8%E5%AF%AB%E6%B8%AC%E8%A9%A6"><span class="nav-number">2.17.</span> <span class="nav-text">CH 22 要修改一個巨型方法，卻沒辦法為它編寫測試</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CH-23-%E9%99%8D%E4%BD%8E%E4%BF%AE%E6%94%B9%E7%9A%84%E9%A2%A8%E9%9A%AA"><span class="nav-number">2.18.</span> <span class="nav-text">CH 23 降低修改的風險</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CH-24-%E7%95%B6%E4%BD%A0%E6%84%9F%E5%88%B0%E7%B5%95%E6%9C%9B%E6%99%82"><span class="nav-number">2.19.</span> <span class="nav-text">CH 24 當你感到絕望時</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#part-3-%E8%A7%A3%E4%BE%9D%E8%B3%B4%E6%8A%80%E8%A1%93"><span class="nav-number">3.</span> <span class="nav-text">part 3 解依賴技術</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CH-25-%E8%A7%A3%E4%BE%9D%E8%B3%B4%E6%8A%80%E8%A1%93"><span class="nav-number">3.1.</span> <span class="nav-text">CH 25 解依賴技術</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E5%B0%BE"><span class="nav-number">4.</span> <span class="nav-text">結尾</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/Working-Effectively-with-Legacy-Code/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="讀書心得 Working Effectively with Legacy Code | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          讀書心得 Working Effectively with Legacy Code
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2019-09-01 18:36:54" itemprop="dateCreated datePublished" datetime="2019-09-01T18:36:54+08:00">2019-09-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/%E5%BF%83%E5%BE%97/" itemprop="url" rel="index"><span itemprop="name">心得</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/Working-Effectively-with-Legacy-Code/" class="post-meta-item leancloud_visitors" data-flag-title="讀書心得 Working Effectively with Legacy Code" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/Working-Effectively-with-Legacy-Code/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/Working-Effectively-with-Legacy-Code/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>這一本書原本已經絕版了，最近才又由出版社拿到版權，很多人評價這本書是非常值得閱讀的，趁這次機會買下來好好用功一下，寫個讀書心得</p>
+<span id="more"></span>
+
+<h2 id="part-1-修改機制"><a href="#part-1-修改機制" class="headerlink" title="part 1 修改機制"></a>part 1 修改機制</h2><h3 id="CH1-修改軟體"><a href="#CH1-修改軟體" class="headerlink" title="CH1 修改軟體"></a>CH1 修改軟體</h3><p>這一篇比較枯燥，大概就是講一些理論，定義了何謂添加新功能、修改 Bug；從這一章可以知道軟體開發大部分的情況下，我們是不會去針對已經存在的功能做出改變，除了修 Bug 之外。<br>不論是重構、加新功能、還是進行最佳化，都不會(也不應該)影響到既有的功能，這個概念是一切的基礎。</p>
+<h3 id="CH2-帶著回饋工作"><a href="#CH2-帶著回饋工作" class="headerlink" title="CH2 帶著回饋工作"></a>CH2 帶著回饋工作</h3><p>開頭利用情境來闡述目前業界普遍針對修改系統的工作方式：Edit and Pray；然後再換另一個情境來比較。緊接著開始探討甚麼是單元測試，並且單元測試應該具備的元素。<br>在這一篇我覺得比較需要記得的就是單元測試應該要能夠幫助你將錯誤定位出來。這個是很重要的。<br>不論是以往大神授課，還是自己在單元測試，都會提到一個單元測試最好只測試一件事情。</p>
+<blockquote>
+<p>當這個單元測試失敗的時候，你應該要知道去哪裡修正它</p>
+</blockquote>
+<p>在後續的文章也提供了一個簡單的情境範例，說明在單元測試中，相依類別如何進行測試，解依賴的過程。在這一篇我覺得譯者說的很棒，有關於樸素化的解釋，雖然翻譯的還是有點怪怪的，但是在譯者的說明中，我能夠完全理解樸素化的意思，在透過建構式注入相依類別的時候，這就會讓類別相依另外一個類別，如果我們只是需要其中的某個資料，那就直接傳入該資料就好了。</p>
+<blockquote>
+<p>並不是將傳入參數簡化為基本類型，而是要用多少就給多少</p>
+</blockquote>
+<p>所以其實這一章的重點就是在告訴我們，怎麼樣帶著回饋工作 (feedback)：透過單元測試<br>如何針對遺留代碼進行單元測試，書中給出一個流程：</p>
+<ol>
+<li>確定變動點</li>
+<li>找出測試點</li>
+<li>解依賴</li>
+<li>邊寫測試</li>
+<li>修改、重構</li>
+</ol>
+<p>至於細節、技巧，如何達成，則是在後續的章節說明</p>
+<h3 id="CH3-感測和分離"><a href="#CH3-感測和分離" class="headerlink" title="CH3 感測和分離"></a>CH3 感測和分離</h3><p>我想這一章節的重點應該是用範例來解釋假物件以及如何驗證這件事情，書中的範例我其實有點難理解，但是其實因為對單元測試也摸了一陣子，大概是能夠接收到書中的範例，期望用一個情境來帶出來測試的困難，然後利用相依於介面及職責分離這些 OOP 原則，透過注入的方式將控制反轉，這樣，我們就可以做一個假物件來繼承介面，從而驗證原本難以測試的功能</p>
+<p>我猜，這些範例最重要的事情就是提供一個 Stub 與 Mock 的範例及思路，這對於測試是非常重要的</p>
+<h3 id="CH4-接縫模型"><a href="#CH4-接縫模型" class="headerlink" title="CH4 接縫模型"></a>CH4 接縫模型</h3><p>這一章有一個很精采的重點，在 Production Code 需要執行，但測試時卻不希望因為執行某行程式而帶來副作用，書中直接使用了繼承+複寫的技巧，這一招適用的情境可不少。</p>
+<blockquote>
+<p><code>接縫(Seam)</code>這一個名詞。在程式中某一些特殊的點，無需做任何修改就可以達到變動程式行為的目的。</p>
+</blockquote>
+<p>有點饒舌，但是大概的意思就是可以針對軟體的行為進行變動，且不需要異動到 Production Code，這是解除依賴關係的一個很重要的技巧。</p>
+<p>因為這個是非常重要的技能(就像是電玩遊戲的【弱點識破】這種感覺)，只要找出來這個點，就可以針對這一份 code 進行測試的一些動作，所以書中也針對這個舉出一些範例供參考</p>
+<h3 id="CH5-工具"><a href="#CH5-工具" class="headerlink" title="CH5 工具"></a>CH5 工具</h3><p>在實際針對 legacy code 進行重構之前，我們應該要先準備一些工具幫助我們，目前很多主流語言應該都有一些配套的方案可以用，據我所知，在 C#的部分就有 rider 與 VS 系列 IDE 可用，這些 IDE 最大的作用就是讓你改完 Code，可以 Build，然後可以採用喜歡的測試框架，撰寫測試。如果是像我一樣的入門者，應該就是直接使用 Visual Studio 2019 搭配 MsTest 來做了吧。</p>
+<p>手動重構是沒問題的，但是總是效率較低下，且可能失誤；VS 也有內建一些簡單的重構功能，像是 Rename 等等，但是 Resharper 這套來做重構，在重構工具的這部分就不多著墨。但是書中有特別給了一個範例，稍微說明了一下重構工具或許也會改變軟體的行為，雖然我不知道現在的工具會不會這樣(這本書有點年代了)，但是重構前後的程式碼當然還是要看過一次，知道工具幫你做了哪些事情是很必要的，而不是像施展了軟體黑魔法一下，只看結果不看過程。</p>
+<h2 id="part-2-修改程式碼的技術"><a href="#part-2-修改程式碼的技術" class="headerlink" title="part 2 修改程式碼的技術"></a>part 2 修改程式碼的技術</h2><h3 id="CH-6-時間緊迫，但必須修改"><a href="#CH-6-時間緊迫，但必須修改" class="headerlink" title="CH 6 時間緊迫，但必須修改"></a>CH 6 時間緊迫，但必須修改</h3><p>在 real world 的情況下，常常會碰到的情況就是這樣，這一章節介紹了幾種對既有系統影響最少的方法來進行程式碼的調整，其重點就在於盡量不要對既有程式碼做太多的變動，而是撰寫新的程式碼來達成需求，文中介紹的<code>新生方法</code>、<code>新生類別</code>；<code>外覆方法</code>、<code>外覆類別</code>都有詳細的介紹及範例，如果還不熟悉的話，可以研讀一下範例，並了解一下各種方式的優缺點，其實這一段如果是熟悉設計模式的人，應該會很容易理解；因此也可以視為物件導向的一些 pattern 應用範例來看。</p>
+<blockquote>
+<p>盡量將新撰寫的程式碼與舊的程式碼區別開來之外，很重要的一點是替新撰寫的部份加上測試保護，逐漸將整個系統納入受保護的範圍之內。</p>
+</blockquote>
+<h3 id="CH-7-漫長的修改"><a href="#CH-7-漫長的修改" class="headerlink" title="CH 7 漫長的修改"></a>CH 7 漫長的修改</h3><p>維護 legacy code 的時候，往往需要先對程式碼進行理解後，才能開始著手修改，而從程式碼反推回去 knowhow 的部分，總是最困擾我的，如果再加上獲取回饋的時間太久，開發會變得異常困難。所以在開發過程，如果能夠即時得到代碼的回饋，能夠快速地知道修改代碼之後的結果，無疑是非常有幫助的。</p>
+<p>若是需要快速得到程式碼的回饋，當然最好是能夠針對類別來單獨做測試，所以這個章節著重在解依賴這一部分，如果需要針對某個類別進行測試，而該類別又相依於其他實體類別，通常可以將相依的實體類別抽象介面，而被測試類別就可以改為相依於介面而非實作，在測試中就可以針對介面新建一個假的物件，並注入給被測試類別，就能夠解開依賴關係。</p>
+<p>後續可以在針對這些類別作重構，將這些類別分在不同的專案，彼此間的關係都利用介面來隔開，對於系統的穩定是有很大的幫助，雖然代價是複雜度會上升，找東西會花比較久，但通常找到之後，調整會變得更加順利，要比較有感覺的話，應該就是專案分層的概念，將系統的實作切成<code>module</code>、<code>DAO</code>、<code>DTO</code>、<code>DAC</code>、<code>adapter</code>幾個部份，當今天需要切換某個搜尋引擎的資料來源，僅需要新增加一個實作該搜尋引擎介面的類別，並將<code>factory</code>指向該類別，或是由設定檔來做切換，程式的修改點就只會有<code>factory</code>，既有的程式就不會動到，而新撰寫的搜尋類別也可以撰寫新的測試。</p>
+<blockquote>
+<p>前提是要先學好物件導向</p>
+</blockquote>
+<h3 id="CH-8-添加特性"><a href="#CH-8-添加特性" class="headerlink" title="CH 8 添加特性"></a>CH 8 添加特性</h3><p>添加新功能，在這個章節著重介紹了 TDD 技術，這個章節將 TDD 的步驟用範例的方式說明，對於初學者來說是一個很棒的例子。</p>
+<p>除了耳熟能詳的 TDD 循環之外，也提到了差異式程式設計，而這種方法透過繼承的方式來處理需求，這樣的開發方式經過時間的驗證，是很容易造成過度複雜的繼承關係與爆炸的子類別，對於理解系統的困難度也會增加。</p>
+<p>不過甚麼技術其實都是一體兩面，有好也有壞處，好處是能夠讓你非常快速的通過測試，並且未來可以再透過別的方式進行重構；在實務上，其實也有很多不得已的因素，也許當下就真的只能用繼承來完成需求</p>
+<blockquote>
+<p>老話再說一次：每一種技術都有它適用的情境，也許今天來看是很糟糕的程式，在當時的時空背景就是最佳解。</p>
+</blockquote>
+<h3 id="CH-9-無法將類別放入測試控制工具之中"><a href="#CH-9-無法將類別放入測試控制工具之中" class="headerlink" title="CH 9 無法將類別放入測試控制工具之中"></a>CH 9 無法將類別放入測試控制工具之中</h3><p>這一章提到一個觀念與一般開發的習慣有些衝突，其實在一般開發與測試程式之間，他們的一些標準是不同的，文中舉例，以假的 Connection 物件來說明，該物件是為了讓被測試類別能夠順利執行才建立的，這個假的 Connection 物件並不會出現在 Production Code，其實這也是之前上課常常被提醒到的觀念之一</p>
+<p>另外，也建議了一個方式，如果被測試類別需要一些物件才能夠運作，可以考慮先丟個 null 進去吧，等到執行時如果真的需要該物件，程式會報錯，屆時再去處理也不遲，這不就是<strong>撞到有聲</strong>的概念嗎？挺好笑的但也很實在。這是一個值得記住的小技巧</p>
+<blockquote>
+<p>這樣的技巧僅適用於 Java 與 C#這類，在 RUNTIME 時期會針對 null 參照拋出例外的語言，所以最好別用在 C 與 C++中</p>
+</blockquote>
+<p>但是正確的觀念是，在 Production code 的部分，盡量不要將 null 值傳來傳去，如果真有必要，請考慮改用 Null Object Pattern</p>
+<p>接著再次介紹了一下<strong>繼承與複寫</strong>這個技巧，這真的是一個很有效的解依賴手段</p>
+<p>然後就是一連串的舉例與觀念介紹，說實在的，一堆名詞看得頭昏眼花，例子從 C 語言到 java 都有，大概看一下就略過細節，總結重點就是舉了一些 legacy code 的例子，說明應該要怎麼設計，從可能存在於系統的各種依賴、建構式、全域變數、包含依賴，然後接著又是舉例 legacy code 中可能存在的物件包物件的參數，稱之為洋蔥參數。</p>
+<p>大致上的解依賴手法都是繼承、複寫、提取介面等等，相信有過一些物件導向開發經驗的人都能夠有所體悟</p>
+<p>包含依賴的感覺就像是 asp 常常會用到的#include 語法，如果一個檔案前面給你#include 了 100 行，然後存在一個 class，要如何將該 class 抓出來單獨寫測試，這無疑是一個很具備挑戰性的事情，因為現在主要開發的語言都沒有這個包含依賴的用法，這一節我直接略過。</p>
+<p>過去的 asp 時代就給他過去吧</p>
+<p>總結，這章超級硬，如果要仔細看，請確保是在精神良好睡眠充足的情況下閱讀</p>
+<h3 id="CH-10-無法在測試控制工具中執行方法"><a href="#CH-10-無法在測試控制工具中執行方法" class="headerlink" title="CH 10 無法在測試控制工具中執行方法"></a>CH 10 無法在測試控制工具中執行方法</h3><p>其實意思就是說如果你的方法無法順利地在測試中呼叫的話該怎麼辦？</p>
+<p>看到這邊我想大家應該都清楚了，這本書的標題是拿來做甚麼用的？沒錯，他就是給你拿來當作參考書用的</p>
+<p>當你發現撰寫測試卡住的時候，搜尋一下標題，接著找到該章節，進去看看文章的解說，查查看有沒有你可以用得上的建議。這個章節列出了一些可能讓你無法順利測試的原因，並且如這本書的風格一樣，告訴你應該怎麼做的同時，也告訴你為甚麼應該這樣做。</p>
+<p>當然，有些地方翻譯的還不是很通順，需要多看幾次才能夠理解。</p>
+<h3 id="CH-11-修改時應當測試哪些方法"><a href="#CH-11-修改時應當測試哪些方法" class="headerlink" title="CH 11 修改時應當測試哪些方法"></a>CH 11 修改時應當測試哪些方法</h3><p>當修改程式的時候，你修改的地方很有可能會連帶影響到其他地方的程式碼造成連鎖影響，書中花了不少篇幅在解釋這件事情，其實就是<code>蝴蝶效應</code>四個字而已。<br>書籍中介紹了一種<code>影響草圖</code>的東西(或稱影響結構圖)，不過我覺得現代的 IDE 已經很進步了，雖說無法完全的呈現修改影響到的地方，但是其實在<code>Rider</code>或是<code>VisualStudio2019</code>都有快捷鍵可以知道某個方法被哪裡呼叫、某個方法的定義在哪，這些其實都已經很方便了，配合全專案字串搜尋的方式更是可以找到不少相關的資訊，用習慣了也很快速，所以其實我沒有很在意影響草圖，知道有這麼一件事情就好了。</p>
+<p>不過將草圖畫完整的話，可以直觀的看到彼此間的關係，也不錯，至少可以很快速地看到哪一個東西被很多線連到，那在修改他的時候就要很小心；但是實務上應該沒啥機會用到，有那時間畫圖、事情都不知道做多少去了…</p>
+<p>這一章節用 Java 的例子來解釋要怎麼查某個變數的值從哪裡來，在我看來是有點浪費篇幅，感覺就是想要模擬一段程式去追 Code，但是我很難從模擬的情境中感同身受，可能對從來沒有寫過程式的人會有效吧，但是曾經動手寫過 Code 的人應該都不太需要看他怎麼追 Code……</p>
+<p>好吧，至少我個人而言，第一個小節我只需要看標題就夠了：<strong>推測程式碼修改所產生的影響</strong>，請與 CH11 的章節名稱一起搭配服用，效果更佳</p>
+<p>第二個小節叫做：<strong>前向推測</strong>，模擬了一個暫存類別，給出程式碼並告訴我們需求：類別<code>InMemoryDirectory</code>可以添加元素，產生索引，並存取其中的元素。接著就是解釋調整需求，然後就是程式碼細節還有影響草圖的繪製過程 blah~ blah~ blah~</p>
+<p>好了，最後就是重點，草圖畫了那麼多，那到底要在哪寫測試？其實就是從這些地方去自行選擇。</p>
+<p>我覺得這一章節理論性質比較重，除了解釋<code>影響草圖</code>這件事情；還花很多篇幅告訴你怎麼從程式碼跟需求，畫出<code>影響草圖</code>；而<code>影響草圖</code>範圍的多寡，很大一部分取決於開發人員的物件導向觀念、以及是否有良好的開發習慣、或者說是團隊開發規範。</p>
+<blockquote>
+<p>最終還是你自己要決定哪一個東西該測</p>
+</blockquote>
+<h3 id="CH-12-在同一個地方進行多處修改，是否應該將所有相關的類別都解依賴"><a href="#CH-12-在同一個地方進行多處修改，是否應該將所有相關的類別都解依賴" class="headerlink" title="CH 12 在同一個地方進行多處修改，是否應該將所有相關的類別都解依賴"></a>CH 12 在同一個地方進行多處修改，是否應該將所有相關的類別都解依賴</h3><p>這個標題實在是有點難懂，仔細看看章節一開頭的說明，感覺大概就是：如果你要測試卻發現有很多地方都要調整，而且要花很久的時間，那是不是一定要照著之前教的，一步步解開依賴才能將測試安置到位呢？不是的，這裡有偷吃步告訴你；就像是不鼓勵直接針對 private 測試一樣，如果你很想測試 prviate 方法，會往後退一層，找到呼叫該 private 方法的 public 方法進行測試，這樣一來，我們只需要測試公開方法，就會覆蓋到私有方法了，這邊是一樣的道理，你可以用這樣的概念，去測試那些很難直接拉出來做單元測試的東西</p>
+<p>其實這也就是一個測試覆蓋的概念，說穿了沒甚麼，但是這邊要特別注意的一個觀念是，這樣的方式當然還是不能夠作為真正的解決方案，在有空閒的時候，你還是需要按部就班地完成單元測試；這裡的偷吃步只是一個鋪墊，一個讓你可以先建構測試保護，有了安全網之後，就可以大刀闊斧地調整程式碼了。這章節主要的概念是這樣，接下來談的都是細節，如何做，這裡的解釋我實在是沒耐心看，因為它用了很理論、文言的方式去說，我嘗試著去理解他的說明，但我真的沒有辦法很順利地明白理解他要說的東西，可能要等到二刷、三刷這本書的時候才能較好的理解吧，這邊的實際步驟，細節我還沒法內化，這裡的核心就是透過理論，建議你這個攔截點應該怎麼決定比較好，這幾個名詞可能要先看一下</p>
+<ol>
+<li>修改點</li>
+<li>攔截點</li>
+<li>匯點</li>
+</ol>
+<p>對於這些名詞我雖然有自己的想法，但自認沒有很理解這一章節，所以保守一點不發表心得，有興趣的人再自己看書吧，如果跟我一樣沒有很在乎實作細節的人，我們吸收觀念就好，那麼重點就在於這一章節的最一開頭，以及最後的兩頁結尾的部分，就像我上面說的，這邊就是先做個測試保護，然後再有時間的時候，換成單元測試</p>
+<h3 id="CH-13-修改時應該怎樣寫測試"><a href="#CH-13-修改時應該怎樣寫測試" class="headerlink" title="CH 13 修改時應該怎樣寫測試"></a>CH 13 修改時應該怎樣寫測試</h3><p>我們撰寫測試的時候，通常都是為了要確認我們的程式應該要有的行為。</p>
+<p>TDD 方法是先預期，然後去滿足，所以開發途徑是很有目標性的；而開發完畢後，這些測試就等於保護網，因為它確保了我們軟體應該要做到的事情；但是在遺留程式碼撰寫測試的時候，我們首先要搞清楚的事情是，我們的程式碼<code>目前</code>能做到什麼？</p>
+<p>作者將保持這些行為的測試稱之為<code>特徵測試</code>，這些測試主要的目的是為了明確的描述系統目前的實際行為是甚麼，而不是<code>我猜測結果應該會是怎樣怎樣</code>，簡單的來說，就是你先寫一個測試，看看實際的執行結果是甚麼，然後把結果填寫回去 expected，這樣測試通過之後，這個測試就是一個安全防護，在你之後針對 production code 的修改，它都可以維持程式碼先前的特徵，確保你的修改不會改變程式碼的行為</p>
+<p>那這樣子要寫多少測試呢？當然就是去看你的 production code，想辦法理解程式碼的行為，並嘗試幫這些行為的特徵撰寫測試</p>
+<h3 id="CH-14-棘手的函式庫依賴問題"><a href="#CH-14-棘手的函式庫依賴問題" class="headerlink" title="CH 14 棘手的函式庫依賴問題"></a>CH 14 棘手的函式庫依賴問題</h3><p>這章節開頭給的模擬情境是假設你的專案依賴外部套件，而這些套件的授權費用一年比一年高，的確是噩夢啊；先不要講版稅，對於外部套件依賴程度過高，如果套件還是非開源的，那的確是很危險的事情，這邊書裡面給了一個建議，避免直接對這些東西直接呼叫，很重要，切記，請遵循<code>針對介面設計軟體</code>這句話</p>
+<p>這一章節很短，就只有兩頁，說真的我不是很清楚這個章節的用意，在遺留程式碼中的外部依賴函式庫？我幹嘛要針對他們做測試呢？如果有必要，我就用 mock 來模擬它們的回傳值就好了啊；但我想這章節應該重點在提醒我們，如果遇上了外部函式庫，我們有甚麼可以做的，有提供介面最好，沒提供，就是裝飾模式了：這裡有提到如果外部函式庫把具體的類別設定為<code>final</code>、<code>sealed</code>，讓我們無法去 mock，所以我們能做的也只能寫一個對應的外覆類別，如果忘記了什麼是外覆類別，回去參考一下<code>CH6</code>，簡單說就是裝飾模式。</p>
+<p>對於外部函式庫，我的想法就是拿來用就好了，有問題的話我就換一個，沒得換就是裝飾模式或自己硬幹，實務上我不曾碰到這樣的情境，因此也沒甚麼特殊的感想</p>
+<h3 id="CH-15-到處都是-API-呼叫"><a href="#CH-15-到處都是-API-呼叫" class="headerlink" title="CH 15 到處都是 API 呼叫"></a>CH 15 到處都是 API 呼叫</h3><p>這章節一開始先點出了很多系統面臨的情境，並且實際上給出了一段很糟糕的程式碼，然後後面就是對這段程式的重構思路及步驟</p>
+<ol>
+<li>了解這段程式碼在幹嘛</li>
+<li>職責分離</li>
+<li>設計介面、方法</li>
+</ol>
+<blockquote>
+<p>書中的範例程式碼這段不用自己看 Code，因為在後面有整理了說明，但如果你想，也可以自己對照程式碼瀏覽，但我基本上略過不看，有很大的原因是因為我懶，其次是因為它是 Java 的 Code</p>
+</blockquote>
+<p>那接下來要怎麼樣把我們的設計，重構<code>legacy code</code>呢？</p>
+<ol>
+<li>剝離並外覆 API</li>
+<li>根據職責提取</li>
+</ol>
+<p>這一章節我覺得主要是在教怎麼重構有外部函式庫的程式碼，我有些能看懂也有些看得很糊塗，但我不擔心最後該怎麼重構，因為書中的建議也都是基於物件導向，設計模式給出的建議，大家就活學活用吧</p>
+<h3 id="CH-16-對程式碼的理解不足"><a href="#CH-16-對程式碼的理解不足" class="headerlink" title="CH 16 對程式碼的理解不足"></a>CH 16 對程式碼的理解不足</h3><p>這章節介紹了一些簡單的方法，讓你在理解程式碼的路上有一些幫助，經歷前面兩三個章節，這一章應該算是中場休息一下</p>
+<ol>
+<li>畫草圖：說真的光看這圖我還真看不懂，但其實只要討論的人能看懂大概的思路就行了，我自己的經驗是前公司有一位同事，他在說明、討論的時候往往會利用白板，隨手畫出某些主體，然後程式碼在這幾個主體當中是怎麼流動、運作的，那些草圖換個時空背景應該就沒人懂了，但當下對於溝通的確是很有幫助</li>
+<li>清單標註：<ul>
+<li><strong>職責分離</strong>：在程式碼可以用不同的顏色標記起來，這個我覺得有點扯，因為現在大家應該都是在編輯器、IDE 裡面看 Code，我沒看到有哪款軟體提供這個功能，只是為了標記程式碼的顏色，但其實他的用意只是在程式碼當中區分那些是相關職責的，通常我在重構的時候會把相同的東西放在一起，然後前面打上一個簡單的註解，中間再多空幾行來隔開</li>
+<li><strong>理解方法結構</strong>：快速讓人理解程式碼的結構，其實就是<code>縮排</code>，但是現在的工具其實都有自動格式化，如<code>eslint + vscode</code>的組合可以處理<code>javascript</code>；Intellij 系列的工具與微軟 Visual Studio 2019 也都有這些功能；所以應該很少見了，當然書裡面給的建議還是有用的，因為以往我開發好幾年的 <code>asp</code>就曾因為排版這件事情，好幾次在調整程式碼之前，先將整份 asp 程式碼花幾個小時整理好縮排。</li>
+<li><strong>方法提取</strong>：其實我想將這一點改為<code>善用重構技巧</code>，理解某段職責後將其抽取方法出來，弄成一段一段的小函式，細節就去看其他的重構書吧，這個要說說不完</li>
+<li><strong>理解你的修改所產生的影響</strong>：簡單說就是像標題這樣，你需要知道你的調整會影響那些東西，相關的方法書裡面有說，但我覺得我不會用他</li>
+</ul>
+</li>
+<li>草稿式重構：我覺得這個很有趣，也就是先從版控抓出程式，然後大刀闊斧地動手重構，但是不要儲存結果；在這樣的過程當中，可以加深對於程式碼的理解，從而為下一次的重構打好基礎</li>
+<li>刪除不用的程式碼：這個也是很重要的一件事情，有的時候因為種種原因，會有一些用不到的程式遺留下來，可能是錯誤的註解；可能是沒有上線的功能；不論是怎樣的原因，他現在沒有用，那就刪除吧，如果你要說那個程式碼未來有可能會用到，那就從之前的版控紀錄去查看就好了</li>
+</ol>
+<h3 id="CH-17-程式毫無結構可言"><a href="#CH-17-程式毫無結構可言" class="headerlink" title="CH 17 程式毫無結構可言"></a>CH 17 程式毫無結構可言</h3><p>通常程式的結構在初期都是設計良好的，但隨時間經過，可能因為種種因素導致專案日漸複雜，在不同的時空背景下，可能礙於時間、團隊成員技術能力而被迫讓程式碼產生了更多的<code>bad smell</code></p>
+<p>這章節我覺得要畫重點的就是<strong>講解系統的故事</strong>。這節用了<code>Junit的架構</code>來做為範例，用好幾頁的篇幅來列出<code>簡略版的描述</code>，然後把一些細節在下面列出，作為描述的<code>隱瞞的事實</code>，這樣的手法其實只是為了讓架構經由簡略的述說，強迫你抽象出來，省略掉細節，這有個好處，是能讓你更了解系統，但是好處不僅僅是這樣；在需要修改系統的時候，可以先嘗試著修改剛剛的<code>簡略描述</code>，並思考若是修改點放在這個地方是否比較合適，書裡面講的有點難懂，但是意義有表達到，相信不明白的人多看幾次也能看懂；這的確是一個不錯的方法，而且我相信大多數的工程師其實歷練兩三年後，也能自動獲得這項技能</p>
+<p>至於其他的，<strong>Naked CRC</strong>有點像是<code>CH16</code>的<code>畫草圖</code>；而<strong>反省你們的交流或討論</strong>其實意義就是字面上的那樣，要三思而後行</p>
+<h3 id="CH-18-測試程式碼礙手礙腳"><a href="#CH-18-測試程式碼礙手礙腳" class="headerlink" title="CH 18 測試程式碼礙手礙腳"></a>CH 18 測試程式碼礙手礙腳</h3><p>看這章的時候很自然的聯想到小朋友的童書，說的內容是小朋友玩具亂丟，讓爸爸踩到，所以我們東西要收好喔~作者在這章節就是在幹一樣的事情，跟我們說程式碼要分門別類放好，否則會很容易踩到喔(笑)。這章節說的都是管理測試程式碼的東西，作者給出了他自己的建議與習慣供參考，當然這些東西都是可以改的，純粹是看人</p>
+<ol>
+<li>類別的測試程式碼，加上<code>Test</code>後綴</li>
+<li>測試程式用到的偽類別使用<code>Fake</code>開頭</li>
+<li>測式子類別加上前綴<code>Testing</code></li>
+</ol>
+<p>在提到程式碼應該放哪裡時，也提到了佈署的問題，我是看不太懂這一段的意義，因為我覺得佈署只有 production code，測試程式不需要佈署才是，正確的做法應該是在 CI 上面跑完測試無誤，由 CI deploy 出去 production code 的專案就好；在開發的時候習慣上就是很自然地另外開一個專案來做測試專案，deploy 出去的時候根本不會有測試檔案的問題，而日常開發撰寫也已經習慣了這樣的模式，可能別的語言會有差異吧，那就見仁見智了</p>
+<h3 id="CH-19-對非物件導向的專案，如何安全地對它進行修改"><a href="#CH-19-對非物件導向的專案，如何安全地對它進行修改" class="headerlink" title="CH 19 對非物件導向的專案，如何安全地對它進行修改"></a>CH 19 對非物件導向的專案，如何安全地對它進行修改</h3><p>基本上我略過了此一章節，我曾經嘗試努力地看懂，但卻發現我看不懂前幾節那些範例，因為那些範例都不是 csharp，甚至也不是 java，而那些情境，我也似乎不會碰到，而後面的小節，提到的重構技巧及手法，其實在別的書也有提到，所以我直接放生了此一章節，並感謝還好我現在都寫 OOP</p>
+<p>這一章節可能對於 C 語言的開發者比較有用吧，辛苦了</p>
+<h3 id="CH-20-處理大類別"><a href="#CH-20-處理大類別" class="headerlink" title="CH 20 處理大類別"></a>CH 20 處理大類別</h3><p>這個章節感覺核心也是在重構，當一個類別已經成長得很龐大，是時候將他的職責更細分，拆成更小的類別。這一章節給出範例，讓不熟悉這類型<code>bad smell</code>的人也可以很直觀的感受，在優化設計的部分，先是依據職責畫出設計，但是這樣的東西是否過度設計了呢？</p>
+<p>於是又延伸出了職責識別這件事情的幾種技巧</p>
+<ol>
+<li><strong>方法分組</strong>：尋找類似的方法名稱，將它們列出來，找出那一些看起來就像是應該在一起的</li>
+<li><strong>觀察隱藏方法</strong>：若類別內充斥著大量的<code>private</code>或<code>protected</code>，那是否代表有一個<code>class</code>應該要被抽象出來？</li>
+<li><strong>尋找可以更改的決定</strong>：我的理解是，程式碼裡面可能有一些東西是我們寫死固定的，像是<code>var dbConn = xxxxxxxxxx</code>，這樣子取得資料庫連線的部分，或許可以抽象出來，變成<code>var dbConn = GetConnection()</code>將這些東西抽象出來，甚至是抽象到另外一個類別去。這個解釋真的很困難，如果還不懂的話我放棄，有興趣的還是看看書籍說明吧</li>
+<li><strong>尋找內部關係</strong>：簡單說就是看看這個大類別裡面的關係，變數阿、方法阿，看看能不能將某一些東西抽象到另外一個類別去，將類別所有成員畫出來，然後相關聯的就畫一條線，看看它們之間的關係，決定應該要怎麼拆類別</li>
+<li><strong>尋找主要職責</strong>：這個部分可以從兩部份去看，<code>從介面層級</code>或<code>從實作層級</code>違反了 SRP，這裡要注意的應該是實作層級的部分，但如果實作內容是呼叫別的類別來處理，那麼這個類別就不算是<code>大類別</code>，它是<code>facade</code></li>
+<li><strong>草稿式重構</strong>：有一句話可以解釋這個名詞，那就是<code>坐而言不如起而行</code>，通俗一點就是<code>拿起鍵盤，正面上它</code>，前面提到草稿式重構式作為理解程式碼的一個好手段，用意是為了讓你了解實際上的程式碼職責到底是甚麼，是為了之後的重構鋪路，所以在這個階段的成果都是暫時的，是假的，終究是要拋棄掉的(海浪法師上身的感覺)</li>
+<li><strong>關注目前工作</strong>：這個解釋只有三行，我真心看不懂，似乎是你可以將目前編寫的新程式碼，視為一個獨立的職責…所以咧？放生大類別不去管它，然後新寫一個類別？嗯，這個好像也是一個重構技巧，不影響舊有程式碼，我們為新寫的程式碼撰寫測試保護，應該概念有點像是之前看過的概念，在一團泥沼之中開闢一個處女地出來做保護，就是用的這樣的手法</li>
+</ol>
+<p>不論如何，上面的這些技巧其實都是很不錯的方法</p>
+<h3 id="CH-21-需要修改大量相同的程式碼"><a href="#CH-21-需要修改大量相同的程式碼" class="headerlink" title="CH 21 需要修改大量相同的程式碼"></a>CH 21 需要修改大量相同的程式碼</h3><p>這一章節的實際範例是常常碰到的情境，我們有兩個類別，其中有一些東西都長得很像，根據書裡面的建議，我們覺得好像可以做一些消除重複程式碼的動作，但又不知道好不好，那麼最好的辦法就是實際動手做做看，感覺一下刪除重複片段後，程式碼變得怎麼樣了</p>
+<p>具體的步驟在書裏面有步驟照著做，重構前後的程式碼可讀性差很多，這個應該算是比較基礎的重構範例，難度不高，但很有用。最後面有個很精華的提醒：既然我們都已經將大部分重複的程式碼都提取到父類別了，那麼延伸類別裡面其實也只剩下一點點程式碼，那我們是否需要將延伸出來的兩個類別拿掉？</p>
+<p>拿掉延伸類別，並於父類別加入一個靜態方法，差異的部分改成用參數傳入就好；或者是改成兩個靜態方法呼叫？前者在呼叫端變得不友善，由使用者去控制傳入參數我覺得沒有很好；後者書裡面給出了一個答案，這樣做的話你所有原先呼叫這一段程式碼的地方都需要做調整。至於要做到甚麼程度，那就見仁見智囉</p>
+<p>這裡提到一個名詞：正交性(orthogonality)，他的解釋我理解成：修改某個程式影響到範圍極其有限，不會影響到其他的地方，調整是很容易、直覺，就像是傳統工廠的機台，一個旋轉按鈕就只對應一個地方。</p>
+<blockquote>
+<p>書裡面有很棒的一段話：<code>將重複的程式碼都消除之後，設計會自己浮現出來</code>。</p>
+</blockquote>
+<h3 id="CH-22-要修改一個巨型方法，卻沒辦法為它編寫測試"><a href="#CH-22-要修改一個巨型方法，卻沒辦法為它編寫測試" class="headerlink" title="CH 22 要修改一個巨型方法，卻沒辦法為它編寫測試"></a>CH 22 要修改一個巨型方法，卻沒辦法為它編寫測試</h3><p>我們都知道程式碼最好是短一些好，最好是方法名稱跟內容很直覺，一看就對得上的那一種，但想像總是有差距。書裡面列出幾個範例，每一種看了真的都會心一笑，心理 OS 都會說：嘿<del>我都見過</del></p>
+<p>在這邊我有幸體驗了書裡面所說的，如果你沒有工具能夠支援<code>提取方法</code>、<code>自動排版</code>，那麼光是這兩件事情就能夠耗掉你絕大部分的熱情，我當時是幫一隻約 3 千多行的<code>asp</code>程式碼每一行重新排版，因為只有先做到這一件事情，我才能開始嘗試理解這一支程式，我記得那一個下午我花了 3 個小時做這件事情，而類似的程式碼還有幾萬支…</p>
+<p>離題了，現在不管是<code>Rider</code>或是<code>Resharper</code>還是<code>VS 2019</code>都提供了提取方法，至於其他的語言應該也有支援的工具可用，所以依靠工具來做這件事情，基本上可以省去很多測試的時間，這章節也是秉持著先前的風格，一步步的教你如何處理巨型方法的重構，此處要注意的幾個重點</p>
+<ol>
+<li>請使用工具幫你提取方法來重構</li>
+<li>重構出來的方法名稱，應該是從一個更高層面來傳達語意</li>
+<li>提取出來的這些接縫之後可以利用來解依賴</li>
+</ol>
+<p>如果你選擇手動重構的話，該如何測試書裡面也有提供建議，第一個就是<code>引入感測變數</code>，有點難以理解的名詞，其實說穿了就是在你的程式碼裡面埋變數，然後在執行的時候，把變數秀出來看看是否如預期；第二個方法就是<code>只提取你所了解的</code>程式碼，我覺得這個意思就是只提取你能夠理解的、簡短的程式碼。再往後還有一些建議跟技巧，不過我想我不用全部列出來了，這一章針對的是巨大方法的重構實務，從實務技巧與重構的策略都給予一些建議</p>
+<h3 id="CH-23-降低修改的風險"><a href="#CH-23-降低修改的風險" class="headerlink" title="CH 23 降低修改的風險"></a>CH 23 降低修改的風險</h3><p>這一章有點哲學，但我們抓著小標題來看，其實脈絡就很明顯，要降低修改的風險第一個小節就是在講取得即時回饋，很棒的是現在有很多語言都有很棒的工具可以幫我們做到這件事情，VS2013 時代的<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=8wrVbxp3Ikc">Alive 套件 (joey demo TDD with Alive - Youtube )</a>，一直到<code>VS2019</code> 的<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/visualstudio/test/live-unit-testing?view=vs-2019">Live unit testing</a>，在<code>JavaScript</code>的部分，也有<a target="_blank" rel="noopener" href="https://quokkajs.com/">Quokka.js</a>與<a target="_blank" rel="noopener" href="https://wallabyjs.com/">Wallaby.js</a>可以用；<code>Python</code>也有<a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=almenon.arepl">AREPL for python</a>、<a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter">Jupyter</a>，這些工具都可以幫助你即時取得回饋</p>
+<blockquote>
+<p>我之所以會開始喜歡寫<code>javascript</code>，很大一部分原因是因為有<code>quokka</code>跟<code>wallaby</code>可用</p>
+</blockquote>
+<p>第二個部分就是確保你當前的目標，換句話來說，就等於 TDD 的重構帽子，當你戴上了重構帽子，你就只做重構這件事情；當你戴上了添加新功能帽子，那就只做開發的行為；第三個部分就是保持簽章方法在修改前後一致，這個就真的是良心建議了，照著做，會有好處的。另外這裡還有一個方法是<code>依靠編譯器</code>，這個手法如果我沒有理解錯的話，是故意讓它錯誤，然後編譯器會告訴你這東西還有哪裡有在用，接著再去修改就好，我不清楚別的語言，但起碼在<code>csharp</code>，IDE 都能夠很好的幫你找出某個變數有哪些地方在用，似乎是不需要用到這樣的手段。</p>
+<p>其他還有<code>pair programming</code>，但我想在實務上的工作環境中，這應該有點天方夜譚了，而如果在實務中可以做到<code>pair programming</code>，我想也沒必要聽我說<code>pair programming</code>的好處了</p>
+<h3 id="CH-24-當你感到絕望時"><a href="#CH-24-當你感到絕望時" class="headerlink" title="CH 24 當你感到絕望時"></a>CH 24 當你感到絕望時</h3><p>最後這章節我沒有細看，因為這章節屬於心靈雞湯的範圍，如果你感到氣餒、對重構事業感到無力，來喝點心靈雞湯吧。</p>
+<h2 id="part-3-解依賴技術"><a href="#part-3-解依賴技術" class="headerlink" title="part 3 解依賴技術"></a>part 3 解依賴技術</h2><h3 id="CH-25-解依賴技術"><a href="#CH-25-解依賴技術" class="headerlink" title="CH 25 解依賴技術"></a>CH 25 解依賴技術</h3><p>這本書的最後一章羅列出了很多解依賴的技術，可以將這個章節視作操作手冊吧</p>
+<ol>
+<li>參數適配</li>
+<li>分解出方法物件</li>
+<li>定義補全</li>
+<li>封裝全域參照</li>
+<li>暴露靜態方法</li>
+<li>提取並覆寫呼叫</li>
+<li>提取並覆寫工廠方法</li>
+<li>提取並覆寫獲取方法</li>
+<li>實作提取</li>
+<li>介面提取</li>
+<li>引入實例委託</li>
+<li>引入靜態設置方法</li>
+<li>連接替換</li>
+<li>參數化建構子</li>
+<li>參數化方法</li>
+<li>樸素化參數</li>
+<li>特性提升</li>
+<li>依賴下推</li>
+<li>換函數為函數指標</li>
+<li>以獲取方法替換全域參照</li>
+<li>子子類別化並覆寫方法</li>
+<li>替換實例變數</li>
+<li>模板重定義</li>
+<li>文字重定義</li>
+</ol>
+<p>上面這一大堆方法裡面，有一些並不適用於<code>csharp</code>，有一些解釋的可能我很難理解，但大致上都會提供一個範例並告訴你 SOP 怎麼去做這項重構，我覺得如果真的對於實務上的重構有困惑，那麼<code>Martin Fowler</code>的<a target="_blank" rel="noopener" href="https://martinfowler.com/books/refactoring.html">refactor</a>應該是必讀的</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://www.tenlong.com.tw/products/9789865021832?list_name=srh">重構｜改善既有程式的設計, 2&#x2F;e (繁中平裝版)(Refactoring: Improving The Design of Existing Code, 2&#x2F;e)</a>，這本書是 2019 年重新用 javascript 作為範例的版本，如果要看 2008 年版本，印象中是用 java 作為範例的</li>
+<li><a target="_blank" rel="noopener" href="https://www.tenlong.com.tw/products/9789861814025">重構－向範式前進 (Refactoring to Patterns)</a>適合對<code>refactor</code>與<code>design pattern</code>有興趣的人閱讀，比較困難一些；這本書也有簡體中文版本：<a target="_blank" rel="noopener" href="https://www.tenlong.com.tw/products/9787115297259">重構與模式 (Refactoring to Patterns)</a></li>
+</ol>
+<h2 id="結尾"><a href="#結尾" class="headerlink" title="結尾"></a>結尾</h2><p>真是難得，一本書從開始到結束時間跨度一年以上也真沒誰了，很高興我又寫完了一本書的心得，真的不用這種方式我每一本都念不完</p>
+<p>我的閱讀方式是掃過一次，有印象後，之後打算當工具書一樣，有需要的話翻閱標題，再回去看細節，所以心得也是提醒我自己，這一章節我能夠獲得甚麼東西，或者是我的感受怎樣，當然這些東西肯定每個人都不同，也許都會有自己的解讀，如果有甚麼想法、意見想要討論的，歡迎留言</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/%E5%BE%85%E8%A3%9C/" rel="tag"># 待補</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/LeetCode-Sum-of-Two-Integers/" rel="prev" title="LeetCode-Sum of Two Integers">
+                  <i class="fa fa-angle-left"></i> LeetCode-Sum of Two Integers
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/LeetCode-FindTheDifference/" rel="next" title="LeetCode-FindTheDifference">
+                  LeetCode-FindTheDifference <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

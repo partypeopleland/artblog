@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="大概說明一下甚麼是單元測試">
+<meta property="og:type" content="article">
+<meta property="og:title" content="什麼是單元測試">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/what-is-unit-test/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="大概說明一下甚麼是單元測試">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/what-is-unit-test/a6pswtfcuai7n-5.jpg">
+<meta property="article:published_time" content="2018-09-23T10:01:05.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.186Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="unittest">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/what-is-unit-test/a6pswtfcuai7n-5.jpg">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/what-is-unit-test/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/what-is-unit-test/","path":"/what-is-unit-test/","title":"什麼是單元測試"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>什麼是單元測試 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%82%BA%E7%94%9A%E9%BA%BC%E6%88%91%E5%80%91%E9%9C%80%E8%A6%81%E5%AF%AB%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">為甚麼我們需要寫單元測試？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9A%E9%BA%BC%E6%98%AF%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">甚麼是單元測試？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%96%8B%E5%A7%8B%E6%92%B0%E5%AF%AB%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">如何開始撰寫單元測試？</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/what-is-unit-test/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="什麼是單元測試 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          什麼是單元測試
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2018-09-23 18:01:05" itemprop="dateCreated datePublished" datetime="2018-09-23T18:01:05+08:00">2018-09-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/%E5%BF%83%E5%BE%97/" itemprop="url" rel="index"><span itemprop="name">心得</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/what-is-unit-test/" class="post-meta-item leancloud_visitors" data-flag-title="什麼是單元測試" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/what-is-unit-test/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/what-is-unit-test/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>大概說明一下甚麼是單元測試</p>
+<span id="more"></span>
+
+
+<h2 id="為甚麼我們需要寫單元測試？"><a href="#為甚麼我們需要寫單元測試？" class="headerlink" title="為甚麼我們需要寫單元測試？"></a>為甚麼我們需要寫單元測試？</h2><p>相信有很多人一開始接觸程式的時候都會去驗證自己寫的功能是否能如預期般執行，其實這個行為就是測試你自己的程式，從人工測試去驗證你所撰寫的程式，變成讓程式自己去驗證，不僅可以省去人工作業可能犯下的錯誤、遺漏，更可以節省你自己的時間成本，將時間花在更有意義的事情上面，不管是開發新功能，喝杯咖啡，早點下班陪家人，都比反覆的手動測試你自己的程式要來的好</p>
+<h2 id="甚麼是單元測試？"><a href="#甚麼是單元測試？" class="headerlink" title="甚麼是單元測試？"></a>甚麼是單元測試？</h2><p>所謂的單元測試其實有幾個特點，像是常常聽到的<strong>一次只測一件事情</strong>，<strong>隔離外部相依性</strong>，這些原則都只是為了要確保單元測試是<strong>最小的測試單元</strong>。為什麼呢？因為只有這樣子才足夠單純，單純到一出問題，就會明白到底是哪裡出錯了，進而快速的找到問題點儘速修復，當明白了單元測試的一些撰寫原則之後，就可以動手開始撰寫測試程式，讓測試程式來驗證你所撰寫的 Production Code 是否如你預期般的運作</p>
+<p>有一個笑話應該很多人都聽過：<strong>My Code Doesn’t Work and I Don’t Know Why and Now Its Working and I Don’t Know Why</strong></p>
+<p><img src="/artblog/what-is-unit-test/a6pswtfcuai7n-5.jpg"><br>圖片來源：<a target="_blank" rel="noopener" href="https://teacherlearnstocode.com/2014/11/05/embracing-my-beginners-mindset-avoiding-overthinking/">https://teacherlearnstocode.com/2014/11/05/embracing-my-beginners-mindset-avoiding-overthinking/</a></p>
+<blockquote>
+<p>因為程式是照你寫的跑，不是照你想的跑 – 91</p>
+</blockquote>
+<blockquote>
+<p>你相信誰寫的程式碼？你應該相信的是測試過的程式碼。 - Ruddy Lee</p>
+</blockquote>
+<blockquote>
+<p>不寫測試的代碼就是耍流氓 – 對岸某大牛</p>
+</blockquote>
+<blockquote>
+<p>單元測試還有一個很重要的功能。對 Develop 來說應該是最主要的功能：讓你對於自己所撰寫的程式碼有信心。</p>
+</blockquote>
+<h2 id="如何開始撰寫單元測試？"><a href="#如何開始撰寫單元測試？" class="headerlink" title="如何開始撰寫單元測試？"></a>如何開始撰寫單元測試？</h2><p>撰寫單元測試大致上都會遵循著 <strong>3A 原則</strong></p>
+<ol>
+<li>Arrange：測試程式內初始化的部分都放在這裡，包含了預期執行的結果，建立待測試目標類別，準備簽章方法的各項輸入參數等等</li>
+<li>Act：實際呼叫被測試方法的部分</li>
+<li>Assert：呼叫方法之後的驗證部分<br>單元測試必須具備<strong>自我驗證</strong>的功能，也就是 Assertion 這件事情，透過各式各樣的驗證語句或套件，讓程式能夠顯示測試結果是成功或失敗</li>
+</ol>
+<p>驗證分為三個類型</p>
+<ol>
+<li>驗證回傳值：呼叫待測試類別的某個方法，驗證該方法的回傳結果，最常見的範例就是計算機類別，輸入兩個數字進行運算，驗證回傳的值</li>
+<li>驗證狀態：當呼叫待測試類別的某個方法後，驗證該類別的某個屬性</li>
+<li>驗證互動行為：當呼叫待測試類別的某個方法後，該方法內部會與其他物件互動。</li>
+</ol>
+<p>例如系統有一個存檔功能，而存檔需要寫系統LOG、也要寫使用者歷程記錄。所以內部實作呼叫了Log 類別，也呼叫了 UserHistroy 類別，而我們需要驗證他與其他物件的互動行為是否如我們預期，撰寫測試時需要注意<strong>一個測試程式只測試一件事情</strong>。因此這一個例子，請拆成兩個測試案例來做。</p>
+<blockquote>
+<p>習慣上會將待測試目標類別變數設為 <code>target</code>，或者是 sut–—<code>System Under Test</code>，如果團隊有共識，用甚麼變數名稱其實都無所謂。</p>
+</blockquote>
+<p>單元測試具備的特性</p>
+<ol>
+<li>Fast：因為開發過程中你會非常頻繁的執行測試</li>
+<li>Indepentent：隔離外部，所以會有幾個好處：執行速度快、關注點分離、單一職責</li>
+<li>Repeatable：在測試、正式環境底下都是一樣結果；不同日期、隨機函數也不會影響</li>
+<li>Self-checking：記得寫 assert，不需要再去檢查DB、UI看結果</li>
+<li>Timely：盡早交付測試程式</li>
+</ol>
+<blockquote>
+<p>導入 TDD ，在團隊不熟悉的狀況下，最起碼 commit 的時候同時交付測試程式及 Production Code</p>
+</blockquote>
+<p>如果想系統的了解一下相關知識，可以參考一下 91 的 <a target="_blank" rel="noopener" href="https://dotblogs.com.tw/hatelove/2013/01/11/learning-tdd-in-30-days-catalog-and-reference">[30天快速上手TDD]目錄與附錄</a>。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/unittest/" rel="tag"># unittest</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/nuget-server-and-package/" rel="prev" title="如何建立自己的 nuget server 及套件">
+                  <i class="fa fa-angle-left"></i> 如何建立自己的 nuget server 及套件
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/about-tdd-atdd/" rel="next" title="甚麼是 TDD、ATDD">
+                  甚麼是 TDD、ATDD <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

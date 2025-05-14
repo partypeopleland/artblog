@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="這一篇專門講一下如何在cypress.io的測試程式裡面，撰寫登入系統的部分，之後如果有機會會慢慢更新">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cypress.io 登入的測試案例">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/cypress-io-login-test-case/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="這一篇專門講一下如何在cypress.io的測試程式裡面，撰寫登入系統的部分，之後如果有機會會慢慢更新">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-login-test-case/2020-05-15_15-32-49.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-login-test-case/2020-07-09_16-05-26.png">
+<meta property="article:published_time" content="2020-07-09T08:23:43.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.261Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="cypress">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/cypress-io-login-test-case/2020-05-15_15-32-49.png">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/cypress-io-login-test-case/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/cypress-io-login-test-case/","path":"/cypress-io-login-test-case/","title":"Cypress.io 登入的測試案例"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Cypress.io 登入的測試案例 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Logging-in"><span class="nav-number">1.</span> <span class="nav-text">Logging in</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Login-with-CSRFTOken"><span class="nav-number">2.</span> <span class="nav-text">Login with CSRFTOken</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E6%A7%8B%E7%99%BB%E5%85%A5"><span class="nav-number">3.</span> <span class="nav-text">重構登入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A3%9C%E5%85%85-20220714"><span class="nav-number">4.</span> <span class="nav-text">補充 - 20220714</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%BB%E9%99%A4%E5%A4%9A%E9%A4%98%E7%9A%84%E7%B5%90%E6%A7%8B"><span class="nav-number">4.1.</span> <span class="nav-text">去除多餘的結構</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/cypress-io-login-test-case/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Cypress.io 登入的測試案例 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Cypress.io 登入的測試案例
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2020-07-09 16:23:43" itemprop="dateCreated datePublished" datetime="2020-07-09T16:23:43+08:00">2020-07-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/e2e/" itemprop="url" rel="index"><span itemprop="name">e2e</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/cypress-io-login-test-case/" class="post-meta-item leancloud_visitors" data-flag-title="Cypress.io 登入的測試案例" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/cypress-io-login-test-case/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/cypress-io-login-test-case/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>這一篇專門講一下如何在<code>cypress.io</code>的測試程式裡面，撰寫登入系統的部分，之後如果有機會會慢慢更新</p>
+<span id="more"></span>
+
+<h2 id="Logging-in"><a href="#Logging-in" class="headerlink" title="Logging in"></a>Logging in</h2><p>這一段的目的是將測試行為中常常重複的登入動作，希望用一行指令就可以解決掉登入這件事情，很多功能都需要識別使用者身份，底下的程式是直接打後端 API 去做登入，略過了模擬頁面輸入帳密的行為，利用<code>cy.request()</code>來向後端實際發出請求登入</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">describe</span>(<span class="string">&quot;前台&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title function_">it</span>(<span class="string">&quot;進入member頁面&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    cy.<span class="title function_">request</span>(<span class="string">&quot;POST&quot;</span>, <span class="string">&quot;Account/SignIn&quot;</span>, &#123;</span><br><span class="line">      <span class="attr">loginId</span>: <span class="string">&quot;real@user.com&quot;</span>,</span><br><span class="line">      <span class="attr">password</span>: <span class="string">&quot;realPassword&quot;</span>,</span><br><span class="line">    &#125;);</span><br><span class="line">    cy.<span class="title function_">visit</span>(<span class="string">&quot;/member&quot;</span>);</span><br><span class="line">    cy.<span class="title function_">url</span>().<span class="title function_">should</span>(<span class="string">&quot;contain&quot;</span>, <span class="string">&quot;/member&quot;</span>);</span><br><span class="line">    cy.<span class="title function_">getCookie</span>(<span class="string">&quot;.AspNetCore.Cookies&quot;</span>).<span class="title function_">should</span>(<span class="string">&quot;exist&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>上面的測試中，我們採用了<code>cy.request()</code>實際向後端登入送出帳密，之後則是瀏覽頁面，在官網的範例中，利用<code>set up</code>的方式去建立假資料<br>這樣做的好處是，確保測試程式沒有相依資料庫，因為他的準備工作都在執行測試之前用<code>set up</code>做掉了</p>
+<p>但是因為每個人的情境不一樣，工作、開發流程、團隊文化、甚至是機器配置都不一樣，實際上你也可以選擇在開發環境的資料庫中使用已存在的帳號進行測試登入行為，只要你的團隊有共識即可</p>
+<p><img src="/artblog/cypress-io-login-test-case/2020-05-15_15-32-49.png"></p>
+<h2 id="Login-with-CSRFTOken"><a href="#Login-with-CSRFTOken" class="headerlink" title="Login with CSRFTOken"></a>Login with CSRFTOken</h2><p>真實世界裡面，網站為了避免資安攻擊，大部分都會加上一些防護措施，尤其是登入頁面，開發 <code>ASP.NET MVC</code>網站，也通常會利用在頁面埋上一個 token 的方式來判斷這個請求是否是從正確頁面過來的，通常後端會做這樣的事情</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// AccountController.cs</span></span><br><span class="line">[<span class="meta">HttpPost</span>]</span><br><span class="line">[<span class="meta">ValidateAntiForgeryToken</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> ActionResult <span class="title">Login</span>(<span class="params">LoginForm loginForm</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">//...some code</span></span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">this</span>.View(loginForm);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>還有這樣的事情</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// login.cshtml</span></span><br><span class="line">@using (Html.BeginForm(<span class="string">&quot;Login&quot;</span>, <span class="string">&quot;Account&quot;</span>, FormMethod.Post))</span><br><span class="line">&#123;</span><br><span class="line">	@Html.AntiForgeryToken()</span><br><span class="line">	@* 帳號 *@</span><br><span class="line">	&lt;div <span class="keyword">class</span>=<span class="string">&quot;form-group&quot;</span>&gt;</span><br><span class="line">		@Html.LabelFor(model =&gt; model.Account)</span><br><span class="line">		@Html.EditorFor(model =&gt; model.Account, <span class="keyword">new</span> &#123; htmlAttributes = <span class="keyword">new</span> &#123; @class = <span class="string">&quot;form-control&quot;</span>, placeholder = <span class="string">&quot;請輸入帳號&quot;</span> &#125; &#125;)</span><br><span class="line">		@Html.ValidationMessageFor(model =&gt; model.Account, <span class="string">&quot;&quot;</span>, <span class="keyword">new</span> &#123; @class = <span class="string">&quot;text-danger&quot;</span> &#125;)</span><br><span class="line">	&lt;/div&gt;</span><br><span class="line">	@*....略 ....*@</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果是這樣子的登入頁面，就沒辦法用先前的方式背景登入，所以我們要透過一些小技巧來做</p>
+<p>增加一個 cypress 的指令，叫做<code>loginByCSRF</code>，這個指令接收 token 參數後，背景發出一個請求給後端登入頁面，傳送帳號、密碼及 token</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> account = <span class="string">&quot;fakeUser&quot;</span>;</span><br><span class="line"><span class="keyword">let</span> password = <span class="string">&quot;fakePassword&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="title class_">Cypress</span>.<span class="property">Commands</span>.<span class="title function_">add</span>(<span class="string">&quot;loginByCSRF&quot;</span>, <span class="function">(<span class="params">csrfToken</span>) =&gt;</span> &#123;</span><br><span class="line">  cy.<span class="title function_">request</span>(&#123;</span><br><span class="line">    <span class="attr">method</span>: <span class="string">&quot;POST&quot;</span>,</span><br><span class="line">    <span class="attr">url</span>: <span class="string">&quot;/Account/Login&quot;</span>,</span><br><span class="line">    <span class="attr">failOnStatusCode</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">form</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">body</span>: &#123;</span><br><span class="line">      account,</span><br><span class="line">      password,</span><br><span class="line">      <span class="attr">__RequestVerificationToken</span>: csrfToken,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>在測試程式中，需要做登入的地方</p>
+<ol>
+<li>利用<code>request</code>取得登入頁面 Html，從中取得 token</li>
+<li>再次發出<code>request</code>，這一次將帳密跟 token 一起送給後端登入判斷</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> account = <span class="string">&quot;fakeUser&quot;</span>;</span><br><span class="line"><span class="keyword">let</span> password = <span class="string">&quot;fakePassword&quot;</span>;</span><br><span class="line"></span><br><span class="line">cy.<span class="title function_">request</span>(<span class="string">&quot;/Account/Login&quot;</span>)</span><br><span class="line">  .<span class="title function_">its</span>(<span class="string">&quot;body&quot;</span>)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">(<span class="params">body</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> $html = <span class="title class_">Cypress</span>.$(body);</span><br><span class="line">    <span class="keyword">const</span> csrf = $html.<span class="title function_">find</span>(<span class="string">&quot;input[name=__RequestVerificationToken]&quot;</span>).<span class="title function_">val</span>();</span><br><span class="line"></span><br><span class="line">    cy.<span class="title function_">loginByCSRF</span>(csrf).<span class="title function_">then</span>(<span class="function">(<span class="params">resp</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// assert 登入是否成功</span></span><br><span class="line">      <span class="title function_">expect</span>(resp.<span class="property">status</span>).<span class="property">to</span>.<span class="title function_">eq</span>(<span class="number">200</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>這個範例是從<a target="_blank" rel="noopener" href="https://docs.cypress.io/examples/examples/recipes.html">官方文件:Recipes</a>看到的，還有很多範例可以參考</p>
+<p>完整的範例如下</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">describe</span>(<span class="string">&quot;頁面測試&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> account = <span class="string">&quot;testuser&quot;</span>;</span><br><span class="line">  <span class="keyword">const</span> password = <span class="string">&quot;testpass&quot;</span>;</span><br><span class="line"></span><br><span class="line">  <span class="title class_">Cypress</span>.<span class="property">Commands</span>.<span class="title function_">add</span>(<span class="string">&quot;loginByCSRF&quot;</span>, <span class="function">(<span class="params">csrfToken</span>) =&gt;</span> &#123;</span><br><span class="line">    cy.<span class="title function_">request</span>(&#123;</span><br><span class="line">      <span class="attr">method</span>: <span class="string">&quot;POST&quot;</span>,</span><br><span class="line">      <span class="attr">url</span>: <span class="string">&quot;/Account/Login&quot;</span>,</span><br><span class="line">      <span class="attr">failOnStatusCode</span>: <span class="literal">false</span>,</span><br><span class="line">      <span class="attr">form</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="attr">body</span>: &#123;</span><br><span class="line">        account,</span><br><span class="line">        password,</span><br><span class="line">        <span class="attr">__RequestVerificationToken</span>: csrfToken,</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="title function_">beforeEach</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    cy.<span class="title function_">request</span>(<span class="string">&quot;/Account/Login&quot;</span>)</span><br><span class="line">      .<span class="title function_">its</span>(<span class="string">&quot;body&quot;</span>)</span><br><span class="line">      .<span class="title function_">then</span>(<span class="function">(<span class="params">body</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> $html = <span class="title class_">Cypress</span>.$(body);</span><br><span class="line">        <span class="keyword">const</span> csrf = $html.<span class="title function_">find</span>(<span class="string">&quot;input[name=__RequestVerificationToken]&quot;</span>).<span class="title function_">val</span>();</span><br><span class="line"></span><br><span class="line">        cy.<span class="title function_">loginByCSRF</span>(csrf).<span class="title function_">then</span>(<span class="function">(<span class="params">resp</span>) =&gt;</span> &#123;</span><br><span class="line">          <span class="title function_">expect</span>(resp.<span class="property">status</span>).<span class="property">to</span>.<span class="title function_">eq</span>(<span class="number">200</span>);</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="title function_">it</span>(<span class="string">&quot;會員專區&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    cy.<span class="title function_">visit</span>(<span class="string">&quot;/Member&quot;</span>);</span><br><span class="line">    cy.<span class="title function_">url</span>().<span class="title function_">should</span>(<span class="string">&quot;contain&quot;</span>, <span class="string">&quot;/Member&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="重構登入"><a href="#重構登入" class="headerlink" title="重構登入"></a>重構登入</h2><p><img src="/artblog/cypress-io-login-test-case/2020-07-09_16-05-26.png"></p>
+<p>我們將原本的程式碼進行重構，將一些可能重複利用的程式碼抽離出來放到其他地方去，盡量讓測試程式乾淨一點</p>
+<p>將會員登入的部分放到會員的<code>helper</code>裡面，之後需要登入就直接呼叫此方法</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// helper/memberHelper.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="attr">signIn</span>: <span class="function">(<span class="params">user</span>) =&gt;</span> &#123;</span><br><span class="line">    cy.<span class="title function_">request</span>(<span class="string">&quot;/Account/Login&quot;</span>)</span><br><span class="line">      .<span class="title function_">its</span>(<span class="string">&quot;body&quot;</span>)</span><br><span class="line">      .<span class="title function_">then</span>(<span class="function">(<span class="params">body</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> $html = <span class="title class_">Cypress</span>.$(body);</span><br><span class="line">        <span class="keyword">const</span> csrf = $html.<span class="title function_">find</span>(<span class="string">&quot;input[name=__RequestVerificationToken]&quot;</span>).<span class="title function_">val</span>();</span><br><span class="line"></span><br><span class="line">        cy.<span class="title function_">loginByCSRF</span>(user, csrf).<span class="title function_">then</span>(<span class="function">(<span class="params">resp</span>) =&gt;</span> &#123;</span><br><span class="line">          <span class="title function_">expect</span>(resp.<span class="property">status</span>).<span class="property">to</span>.<span class="title function_">eq</span>(<span class="number">200</span>);</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>一些測試的會員登入帳號就放在這邊</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// helper/user.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="attr">art</span>: &#123; <span class="attr">account</span>: <span class="string">&quot;art&quot;</span>, <span class="attr">password</span>: <span class="string">&quot;111&quot;</span> &#125;,</span><br><span class="line">  <span class="attr">bob</span>: &#123; <span class="attr">account</span>: <span class="string">&quot;bob&quot;</span>, <span class="attr">password</span>: <span class="string">&quot;222&quot;</span> &#125;,</span><br><span class="line">  <span class="attr">cat</span>: &#123; <span class="attr">account</span>: <span class="string">&quot;cat&quot;</span>, <span class="attr">password</span>: <span class="string">&quot;333&quot;</span> &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>將新增的指令放在這個檔案內，就可以於 cypress 內重複使用</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// cypress/support/commands.js</span></span><br><span class="line"><span class="title class_">Cypress</span>.<span class="property">Commands</span>.<span class="title function_">add</span>(<span class="string">&quot;loginByCSRF&quot;</span>, <span class="function">(<span class="params">user, token</span>) =&gt;</span> &#123;</span><br><span class="line">  cy.<span class="title function_">request</span>(&#123;</span><br><span class="line">    <span class="attr">method</span>: <span class="string">&quot;POST&quot;</span>,</span><br><span class="line">    <span class="attr">url</span>: <span class="string">&quot;/Account/Login&quot;</span>,</span><br><span class="line">    <span class="attr">failOnStatusCode</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">form</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">body</span>: &#123;</span><br><span class="line">      <span class="attr">account</span>: user.<span class="property">account</span>,</span><br><span class="line">      <span class="attr">password</span>: user.<span class="property">password</span>,</span><br><span class="line">      <span class="attr">__RequestVerificationToken</span>: token,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>測試程式中引用檔案後，直接改寫如下，相較於先前版本，更容易理解，不過如果想要省略掉 user.js，其實也可以讓自訂指令從接收<code>user</code>物件，改為直接接收帳號密碼參數，這個就看個人選擇了</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// /cypress/integration/MyTest/my.spec.js</span></span><br><span class="line"><span class="keyword">import</span> member <span class="keyword">from</span> <span class="string">&quot;../../../helper/memberHelper&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> users <span class="keyword">from</span> <span class="string">&quot;../../../helper/user&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="title function_">describe</span>(<span class="string">&quot;頁面測試&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="title function_">beforeEach</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    member.<span class="title function_">signIn</span>(users.<span class="property">art</span>);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="title function_">it</span>(<span class="string">&quot;會員專區&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    cy.<span class="title function_">visit</span>(<span class="string">&quot;/Member&quot;</span>);</span><br><span class="line">    cy.<span class="title function_">url</span>().<span class="title function_">should</span>(<span class="string">&quot;contain&quot;</span>, <span class="string">&quot;/Member&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="補充-20220714"><a href="#補充-20220714" class="headerlink" title="補充 - 20220714"></a>補充 - 20220714</h2><p>因為先前的文章作法現在看來有很多改進空間，不調整原先的文章，直接補充在這邊</p>
+<h3 id="去除多餘的結構"><a href="#去除多餘的結構" class="headerlink" title="去除多餘的結構"></a>去除多餘的結構</h3><p>原先的登入方式將登入行為與取得 token 的部分拆成兩個部分，應該可以放在一起，讓邏輯維持在同一個地方，而不是分散兩地，現在我會把它寫成下面這樣</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// cypress/support/commands.js</span></span><br><span class="line"><span class="title class_">Cypress</span>.<span class="property">Commands</span>.<span class="title function_">add</span>(<span class="string">&quot;login&quot;</span>, <span class="function">(<span class="params">&#123; account, password &#125;</span>) =&gt;</span> &#123;</span><br><span class="line">  cy.<span class="title function_">request</span>(<span class="string">&quot;/Account/Login&quot;</span>)</span><br><span class="line">    .<span class="title function_">its</span>(<span class="string">&quot;body&quot;</span>)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function">(<span class="params">body</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> $html = <span class="title class_">Cypress</span>.$(body);</span><br><span class="line">      <span class="keyword">const</span> csrf = $html.<span class="title function_">find</span>(<span class="string">&quot;input[name=__RequestVerificationToken]&quot;</span>).<span class="title function_">val</span>();</span><br><span class="line"></span><br><span class="line">      cy.<span class="title function_">request</span>(&#123;</span><br><span class="line">        <span class="attr">method</span>: <span class="string">&quot;POST&quot;</span>,</span><br><span class="line">        <span class="attr">url</span>: <span class="string">&quot;/Account/Login&quot;</span>,</span><br><span class="line">        <span class="attr">failOnStatusCode</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">form</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="attr">body</span>: &#123;</span><br><span class="line">          account,</span><br><span class="line">          password,</span><br><span class="line">          <span class="attr">__RequestVerificationToken</span>: csrf,</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//sample.spec.js</span></span><br><span class="line"><span class="title function_">describe</span>(<span class="string">&quot;頁面測試&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="title function_">beforeEach</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    cy.<span class="title function_">login</span>(&#123; <span class="attr">account</span>: <span class="string">&quot;guest&quot;</span>, <span class="attr">password</span>: <span class="string">&quot;guest&quot;</span> &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="title function_">it</span>(<span class="string">&quot;檢視會員專區頁面&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    cy.<span class="title function_">visit</span>(<span class="string">&quot;/Member&quot;</span>);</span><br><span class="line">    cy.<span class="title function_">url</span>().<span class="title function_">should</span>(<span class="string">&quot;contain&quot;</span>, <span class="string">&quot;/Member&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>因為自訂指令希望是通用，所以將它與原先版本的 user, memberHelper 解耦合，上面的做法是用<code>request</code>去做，我想應該也可以做成直接透過<code>cy.visit()</code>,然後用<code>cy.get()</code>然後再 type()去實際操作登入，坦白說我對於這個有點困惑，但至少兩種方法我都能夠做的出來。等我要用的時候也有辦法做到；但目前的想法是，希望測試案例聚焦在我想要測試的東西上面，如果是想要驗證登入後的行為，我會選擇讓登入的動作在背景就做掉，而不是完全百分百的模擬登入操作的這件事情</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/cypress/" rel="tag"># cypress</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/vscode-useful-extensions/" rel="prev" title="VSCode 好用套件">
+                  <i class="fa fa-angle-left"></i> VSCode 好用套件
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/rider-file-watchers-for-scss/" rel="next" title="Rider-利用檔案監控來編譯scss">
+                  Rider-利用檔案監控來編譯scss <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

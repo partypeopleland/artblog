@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="本來是打算寫一下物件導向，寫著寫著就覺得應該先寫一下軟體開發，可是我又不是理論派，所以只好分享一下自己的經驗了。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="軟體開發這件事">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/about-software-development/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="本來是打算寫一下物件導向，寫著寫著就覺得應該先寫一下軟體開發，可是我又不是理論派，所以只好分享一下自己的經驗了。">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2018-07-08T00:18:09.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.201Z">
+<meta property="article:author" content="art">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/about-software-development/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/about-software-development/","path":"/about-software-development/","title":"軟體開發這件事"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>軟體開發這件事 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91%E9%80%99%E4%B8%80%E4%BB%B6%E4%BA%8B%E6%83%85"><span class="nav-number">1.</span> <span class="nav-text">物件導向這一件事情</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/about-software-development/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="軟體開發這件事 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          軟體開發這件事
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2018-07-08 08:18:09" itemprop="dateCreated datePublished" datetime="2018-07-08T08:18:09+08:00">2018-07-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/%E5%BF%83%E5%BE%97/" itemprop="url" rel="index"><span itemprop="name">心得</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/about-software-development/" class="post-meta-item leancloud_visitors" data-flag-title="軟體開發這件事" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/about-software-development/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/about-software-development/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>本來是打算寫一下物件導向，寫著寫著就覺得應該先寫一下軟體開發，可是我又不是理論派，所以只好分享一下自己的經驗了。</p>
+<span id="more"></span>
+
+<blockquote>
+<p>底下所有內容皆屬於個人看法，如果有錯誤，請砲小力一點~謝謝</p>
+</blockquote>
+<h2 id="物件導向這一件事情"><a href="#物件導向這一件事情" class="headerlink" title="物件導向這一件事情"></a>物件導向這一件事情</h2><p>物件導向是一種抽象性的概念，將真實世界的需求，轉變成一個一個的物件，而這些物件又有自己的屬性及方法。透過這樣的方式彼此互動，達到模擬真實世界的需求。</p>
+<p>當然這樣的模擬不可能會是無窮無盡的，不然你程式就寫不完了。所以我們在透過程式語言都是為了要解決某一個問題，要達成這個目標所使用的工具、方法。比如，要讓客戶的產品能夠直接在網路上賣出去，因此替客戶架設一個電子商務網站就是一個達成目標的方式之一。</p>
+<blockquote>
+<p>客戶是為了要讓它們的產品能夠透過網路觸及到更多潛在的消費者，網站是一個解決方案；但這個目標不會只有一個解決方案，在本文僅以網站作為範例說明。</p>
+</blockquote>
+<p>而這個電子商務網站並不一定只能用特定的技術來實作，可以用 php、asp.net、node.js 當然也包括了很久、很久、很久以前的技術：asp。</p>
+<p>一般來說，在傳統的方式及學校裡面學到的知識，都會提到一個專有名詞：<a target="_blank" rel="noopener" href="http://wiki.mbalib.com/zh-tw/%E7%80%91%E5%B8%83%E6%A8%A1%E5%9E%8B">瀑布開發模式</a>，記得是在學校的專案管理這門課裡面學到的。大致上的意思我們也不是專攻理論派的，就直接口語化的解釋一下：在軟體開發的過程當中會有許多腳色，分別處理不同的事情，其中最重要的是【確認客戶需求】，這件事情，我們交給一個叫做 PM 的人去負責</p>
+<p>PM 可以是專案經理 ( Project Manager )，或是產品經理 ( Product Manager )，依據開發團隊的性質來決定，例如這一家公司是專門接案子進來做，我會認為他的這個腳色是專案經理；如果是自己公司有自身產品，那麼我會認為應該是產品經理。這兩者做的事情有很多都一樣，但是卻又有很多不同。學問很大，細節很多，我們就略過不表</p>
+<p>而當需求已經被確定了，那麼就會交由系統分析師 ( System Analysis )，將需求分析出來，這個腳色我覺得最重要的事情是：確認什麼事情要做；而那些東西又是不用去做的。最終產出一份規格書，爾後，所有程式開發的部分都將以這份規格書當作依據。</p>
+<blockquote>
+<p>好吧，上面那一段是理論上的，實務上我從來沒有看過能夠跟規格書對的上的程式碼，所以你們也就參考就好。</p>
+</blockquote>
+<p>而在這個環節，還有一個部分叫做系統設計 ( System Design )，因為 SA 的部分做的事情是比較抽象一點的，而落在實務設計上，會經由 SD 這個腳色，將理論與實務合而為一，從而開出一份真正能夠實作出來的文件，在這個階段， SD 主要的工作項目就會是比較偏程式語言出身的人能看懂的東西，也就是建構出一個又一個的類別，寫一下這個類別有甚麼屬性阿、方法阿，之類的。請原諒我這一段沒有辦法給出太多經驗，因為在我的職涯中，沒看過 SD 這號人物。</p>
+<blockquote>
+<p>這也是很多小公司的通病， SD 這個職務常常是不存在的</p>
+</blockquote>
+<p>直接是由 SA 開規格給程式設計師，所以常常很多 SD 的工作，都落在了所謂資深程式設計師身上；或者是由 SA 順便做掉了這一部份的工作；或者是在認知不足的情況下；這部分工作就直接被忽略掉了。</p>
+<p>甚麼？你說不可能忽略？怎麼不可能。你以為動輒數千行的 Legacy Code 一開始是怎麼來的呢？把一份規格書交給一個新人 PG 就出來了。在沒有資深工程師的帶領之下，新手 PG 一個人開副本打怪的結果就是只會用最原始的方式，一刀一槍的打拼，你說他不認真嗎？不一定。但是那份程式碼可能會有許多維護上的困難，而這些，是開發團隊成員的其他腳色感受不到、也不會理解的。出錢的那一位也不一定會理解，老闆都是看結果的，程式能不能跑？能跑。程式對不對？是對的。那就行了。誰還管 SD 這件事情？</p>
+<blockquote>
+<p>這邊定義的新手PG屬於程式設計新人，沒有物件導向概念及程式開發背景</p>
+</blockquote>
+<p>好吧，終於輪到 Programmer 了，說到這個腳色需要會的東西真的很多，但是，都不會好像也沒有關係，因為老闆不會知道。只有技術人懂技術人啊。</p>
+<p>所以老板不會清楚軟體開發流程中，一個資深的程式設計師能夠起到的作用，絕大多數都是在看不見的地方。一樣是接收到規格書，資淺的程式設計師當然就是按照規格書一步一腳印的實作出來。而資深的程式設計師，還會考量很多事情，我們講最簡單的：以後好不好維護就是一個例子。</p>
+<p>PG 其實就是將需求，用程式碼一行一行的處理掉，如果是不懂物件導向概念的人，很有可能會寫出難以維護的程式碼，而有概念的人，會將這些完成需求的程式碼，思考如何抽象出來共用。以後再添加新需求，或者是需求異動的時候，維護成本就看的出來了。</p>
+<p>我就曾經看過好幾個例子，一樣是加一個需求，某位程式設計師的手法是複製貼上，然後前面加個判斷，原程式從三千行直接翻倍成長變成六千行。而另外一個的手法是先重構，然後抽象出來，接著才去改程式碼。前者工時花費一小時，眾人好評不斷；後者工時花費一天，承受抨擊無數。</p>
+<p>去除掉政治因素的考量，我們純粹以程式設計師的角度來看這一件事情。你願意日常維護哪一份程式碼呢？</p>
+<blockquote>
+<p>在這邊還是要呼籲一下，拜託不要別人的孩子死不完，你搞的不是公司，是接手你工作的其他同事。這個世界很小，遇得到的。<br>在軟體功能開發完成之後，通常會有人來複測這份程式碼功能對不對，這個腳色通常我會用 QC ( Quality Control ) 來稱呼。在其他公司可能會有其他的稱呼，對於這一點我有看到一篇文章寫得還蠻不錯的，提供給各位參考一下：<a target="_blank" rel="noopener" href="https://www.ithome.com.tw/voice/85554">QA、QC、傻傻分不清楚</a>。</p>
+</blockquote>
+<p>測試如果通過了，通常會交由另外一個腳色開始做產品發布的動作。這一段因為我涉獵不多就略過了。但是軟體從無到有，大概就是經過了這樣的流程來開發、產生出來的。</p>
+<p>以上說得通通是屬於古早年代的作法。</p>
+<p>以上說得通通是屬於古早年代的作法。</p>
+<p>以上說得通通是屬於古早年代的作法。</p>
+<p>是的。很悲哀的是，軟體產業在今天，還是有許多公司、企業，仍然奉行這一套軟體開發模式。在變動較少的產業、需求中，如果還在使用瀑布開發模式，那沒有問題。</p>
+<p>但是在資訊變遷非常快速的現代社會中，這一套軟體開發方式無疑是被擊中了弱點。因為這一套走下來，往往耗時費工，當你發現了一個能夠賺錢的商業模式希望要趕快上線的時候，卻發現打完這一套組合拳，人家葉師傅已經打十個了。</p>
+<blockquote>
+<p>怎麼那麼帥 怎麼那麼屌 怎麼那麼有腦袋<br>怎麼那麼罩 這麼多的才華 這麼少時間 怎麼做的到 - 熊仔 【凶宅】</p>
+</blockquote>
+<p>我不禁想到背景音樂的這首歌，對阿，這麼少的時間，別的競爭對手怎麼做的到？？</p>
+<p>其實就是另外一套模式：<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%95%8F%E6%8D%B7%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91">敏捷軟體開發</a></p>
+<p>敏捷開發打破了先前瀑布模式的許多觀念，核心就是一個快速反應、持續交付的概念。而要達到這個目標，從骨子裡都與傳統的瀑布開發有著本質上的不同。</p>
+<p>最淺顯易見的就是常常聽到的，敏捷樂於擁抱變化；而傳統的規格書你動他一個需求試試看，跟你說啦，會議就開不完了。</p>
+<p>要Run敏捷也有很多限制，最大的一個限制當然就是老闆要支持。而 PG 成員可能自己本身的底子也要夠，因為要做到持續交付，單元測試是少不了的，這裡頭太多學問，等以後我有了解再分享給各位。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/Facade-Pattern/" rel="prev" title="Facade Pattern">
+                  <i class="fa fa-angle-left"></i> Facade Pattern
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/asp-unit-test/" rel="next" title="ASP單元測試">
+                  ASP單元測試 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

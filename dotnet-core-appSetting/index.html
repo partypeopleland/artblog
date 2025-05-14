@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="在程式裡面調用應用程式設定值的方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dotnet core appSetting">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/dotnet-core-appSetting/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="在程式裡面調用應用程式設定值的方法">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2020-04-06T03:20:45.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.302Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="appSetting">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/dotnet-core-appSetting/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/dotnet-core-appSetting/","path":"/dotnet-core-appSetting/","title":"dotnet core appSetting"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>dotnet core appSetting | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%8F%E9%81%8E-POCO-%E9%A1%9E%E5%88%A5%E8%AA%BF%E7%94%A8%E8%A8%AD%E5%AE%9A%E5%80%BC"><span class="nav-number">1.</span> <span class="nav-text">透過 POCO 類別調用設定值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IOptions"><span class="nav-number">2.</span> <span class="nav-text">IOptions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IOptionMonitor"><span class="nav-number">3.</span> <span class="nav-text">IOptionMonitor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%BC-Controller-%E7%9B%B4%E6%8E%A5%E6%B3%A8%E5%85%A5-POCO"><span class="nav-number">4.</span> <span class="nav-text">於 Controller 直接注入 POCO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8F%BE%E5%9C%A8%E5%AF%A6%E5%8B%99%E4%B8%8A%E7%9A%84%E7%94%A8%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">現在實務上的用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#appSetting-json"><span class="nav-number">5.1.</span> <span class="nav-text">appSetting.json</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AppSettingConfig-cs"><span class="nav-number">5.2.</span> <span class="nav-text">AppSettingConfig.cs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#startup-cs"><span class="nav-number">5.3.</span> <span class="nav-text">startup.cs</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E4%BA%BA%E7%9A%84%E4%BD%9C%E6%B3%95"><span class="nav-number">6.</span> <span class="nav-text">其他人的作法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%83%E8%80%83%E9%80%A3%E7%B5%90"><span class="nav-number">7.</span> <span class="nav-text">參考連結</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/dotnet-core-appSetting/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="dotnet core appSetting | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          dotnet core appSetting
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2020-04-06 11:20:45" itemprop="dateCreated datePublished" datetime="2020-04-06T11:20:45+08:00">2020-04-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/dotnet/" itemprop="url" rel="index"><span itemprop="name">dotnet</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/dotnet-core-appSetting/" class="post-meta-item leancloud_visitors" data-flag-title="dotnet core appSetting" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/dotnet-core-appSetting/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/dotnet-core-appSetting/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在程式裡面調用應用程式設定值的方法</p>
+<span id="more"></span>
+
+<h2 id="透過-POCO-類別調用設定值"><a href="#透過-POCO-類別調用設定值" class="headerlink" title="透過 POCO 類別調用設定值"></a>透過 POCO 類別調用設定值</h2><p>一般來說我們的應用程式設定值都放在<code>appsettings.json</code>，這支 Json 檔案還可以利用<a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=GolanAvraham.ConfigurationTransform">Configuration Transform</a>這一套工具，在 Visual Studio IDE 裡面直接設定各種環境的設定檔，這一個部分就不在這次討論之中，有興趣的自行再研究</p>
+<p>為了要能夠在程式中強型別的使用設定，通常會透過建立一個 POCO 類別，假設有兩個設定值 A 跟 B，則類別可以這樣撰寫</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">AppSettingConfig</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> A &#123;<span class="keyword">get</span>; <span class="keyword">set</span>;&#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> B &#123;<span class="keyword">get</span>; <span class="keyword">set</span>;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>將應用程式設定值檔案，從預設的<code>appsettings.json</code>，調整為<code>_config/app.config.json</code></p>
+<blockquote>
+<p>要不要變更應用程式設定值的 json 檔案路徑，看個人習慣，也可直接使用預設即可</p>
+</blockquote>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Program.cs</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> IWebHostBuilder <span class="title">CreateWebHostBuilder</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span> =&gt;</span><br><span class="line">    WebHost.CreateDefaultBuilder(args)</span><br><span class="line">        .ConfigureAppConfiguration((hostContext, config) =&gt;</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">var</span> env = hostContext.HostingEnvironment;</span><br><span class="line">            config.SetBasePath(Path.Combine(env.ContentRootPath, <span class="string">&quot;_config&quot;</span>))</span><br><span class="line">                .AddJsonFile(path: <span class="string">&quot;app.config.json&quot;</span>, optional: <span class="literal">true</span>, reloadOnChange: <span class="literal">true</span>);</span><br><span class="line">        &#125;)</span><br><span class="line">        .UseStartup&lt;Startup&gt;();</span><br><span class="line"></span><br><span class="line"><span class="comment">// StartUp.cs</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ConfigureServices</span>(<span class="params">IServiceCollection services</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 將設定值與POCO類別mapping</span></span><br><span class="line">    services.Configure&lt;AppSettingConfig&gt;(Configuration);</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="IOptions"><a href="#IOptions" class="headerlink" title="IOptions"></a>IOptions</h2><p>接下來就是在 Controller 的建構式中注入並使用</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">DemoController</span> : <span class="title">Controller</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> AppSettingConfig _config;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DemoController</span>(<span class="params">IOptions&lt;AppSettingConfig&gt; config</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        _config = config.Value;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> IActionResult <span class="title">Index</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        ViewBag.A = _config.A;</span><br><span class="line">        <span class="keyword">return</span> View();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="IOptionMonitor"><a href="#IOptionMonitor" class="headerlink" title="IOptionMonitor"></a>IOptionMonitor</h2><p>改用 IOptionMonitor 的話，建構式注入的方法如下，跟 IOption 的差別就在於，重新讀取頁面的時候，設定值有沒有跟著實際設定改動</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">DemoController</span>(<span class="params">IOptionsMonitor&lt;AppSettingConfig&gt; config</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    _config = config.CurrentValue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可是一般應用程式設定值比較不常變動吧，常常會變動的話我們應該都是會放在資料庫裏面，而不是透過實際的文字檔案更動</p>
+<h2 id="於-Controller-直接注入-POCO"><a href="#於-Controller-直接注入-POCO" class="headerlink" title="於 Controller 直接注入 POCO"></a>於 Controller 直接注入 POCO</h2><p>在上面的兩種方式，POCO 始終都透過 IOption 一起使用，POCO 都不 POCO 了，所以就有人希望直接在 Controller 裡面注入 POCO 類別，而不需要在 using 額外的命名空間來使用 IOptions</p>
+<p>所以為 ServiceCollection 加上擴充方法，就可以直接注入了，<a target="_blank" rel="noopener" href="https://www.strathweb.com/2016/09/strongly-typed-configuration-in-asp-net-core-without-ioptionst/">原文</a>在此，程式碼如下</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">ServiceCollectionExtensions</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> TConfig <span class="title">ConfigurePOCO</span>&lt;<span class="title">TConfig</span>&gt;(<span class="params"><span class="keyword">this</span> IServiceCollection services, IConfiguration configuration</span>) <span class="keyword">where</span> TConfig : <span class="keyword">class</span>, <span class="keyword">new</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (services == <span class="literal">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> ArgumentNullException(<span class="keyword">nameof</span>(services));</span><br><span class="line">        <span class="keyword">if</span> (configuration == <span class="literal">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> ArgumentNullException(<span class="keyword">nameof</span>(configuration));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> config = <span class="keyword">new</span> TConfig();</span><br><span class="line">        configuration.Bind(config);</span><br><span class="line">        services.AddSingleton(config);</span><br><span class="line">        <span class="keyword">return</span> config;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>這樣的話，在<code>StartUp.cs</code>也就只需要加入下面這行</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ConfigureServices</span>(<span class="params">IServiceCollection services</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    services.ConfigurePOCO&lt;AppSettingConfig&gt;(Configuration);</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>就可以直接在 <code>Controller</code> 使用</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">DemoController</span> : <span class="title">Controller</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> AppSettingConfig _config;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DemoController</span>(<span class="params">AppSettingConfig config</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        _config = config;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> IActionResult <span class="title">Index</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        ViewBag.A = _config.A;</span><br><span class="line">        <span class="keyword">return</span> View();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="現在實務上的用法"><a href="#現在實務上的用法" class="headerlink" title="現在實務上的用法"></a>現在實務上的用法</h2><p>因為上面的方法，如果在很多地方都需要用，不可避免的就是每個地方都要給它注入一下，用起來感覺就不是那麼的方便。</p>
+<h3 id="appSetting-json"><a href="#appSetting-json" class="headerlink" title="appSetting.json"></a>appSetting.json</h3><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;MyCompanyName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;我的公司名稱&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="AppSettingConfig-cs"><a href="#AppSettingConfig-cs" class="headerlink" title="AppSettingConfig.cs"></a>AppSettingConfig.cs</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">AppSettingConfig</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">AppSettingConfig</span>()</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">readonly</span> Lazy&lt;AppSettingConfig&gt; _instance = <span class="keyword">new</span> Lazy&lt;AppSettingConfig&gt;(<span class="keyword">new</span> AppSettingConfig());</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> AppSettingConfig Instance =&gt; _instance.Value;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> IConfiguration _config;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Init</span>(<span class="params">IConfiguration config</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        _config = config;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="built_in">string</span> <span class="title">GetValue</span>(<span class="params"><span class="built_in">string</span> key, <span class="built_in">string</span> defaultValue = <span class="string">&quot;&quot;</span></span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> _config.GetSection(key).Value ?? defaultValue;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 公司名稱</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> MyCompanyName =&gt; GetValue(<span class="string">&quot;MyCompanyName&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//...略...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="startup-cs"><a href="#startup-cs" class="headerlink" title="startup.cs"></a>startup.cs</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Startup</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Startup</span>(<span class="params">Iconfiguration configuration</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Configuration = configuration;</span><br><span class="line">        AppSettingConfig.Instance.Init(configuration);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//...略</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="其他人的作法"><a href="#其他人的作法" class="headerlink" title="其他人的作法"></a>其他人的作法</h2><p>目前專案上的用法是這樣的，一樣的用法可以參考這一篇<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/45885615/asp-net-core-access-configuration-from-static-class">ASP.NET Core—access Configuration from static class</a>，這篇文章中很多回答都很棒，包含了他們回答的評論，我沒有辦法一一舉例說明，有興趣的可以去閱讀一下</p>
+<h2 id="參考連結"><a href="#參考連結" class="headerlink" title="參考連結"></a>參考連結</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/aspnet/core/fundamentals/configuration/options?view=aspnetcore-3.1">ASP.NET Core 中的選項模式</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.strathweb.com/2016/09/strongly-typed-configuration-in-asp-net-core-without-ioptionst/">Strongly typed configuration in ASP.NET Core without IOptions<T></a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/45885615/asp-net-core-access-configuration-from-static-class">ASP.NET Core—access Configuration from static class</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/appSetting/" rel="tag"># appSetting</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/dotnet-core-identity/" rel="prev" title="dotnet core identity">
+                  <i class="fa fa-angle-left"></i> dotnet core identity
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/docker-registry/" rel="next" title="如何建立自己的 docker registry">
+                  如何建立自己的 docker registry <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

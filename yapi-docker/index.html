@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="這幾天在查 testcafe 的東西，不小心看到鐵人賽 30 天文章的介紹，所以才知道這東西，一看之下驚為天人，這東西可以用來做什麼我都還沒清楚的了解，我就光看特色包含了，整合自動化測試、Mock Server，就決定要找時間好好了解一下了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker-yapi初體驗">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/yapi-docker/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="這幾天在查 testcafe 的東西，不小心看到鐵人賽 30 天文章的介紹，所以才知道這東西，一看之下驚為天人，這東西可以用來做什麼我都還沒清楚的了解，我就光看特色包含了，整合自動化測試、Mock Server，就決定要找時間好好了解一下了">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://github.com/YMFE/yapi/raw/master/yapi-base-flow.jpg">
+<meta property="article:published_time" content="2019-10-13T02:07:53.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.222Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="docker">
+<meta property="article:tag" content="yApi">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/YMFE/yapi/raw/master/yapi-base-flow.jpg">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/yapi-docker/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/yapi-docker/","path":"/yapi-docker/","title":"docker-yapi初體驗"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>docker-yapi初體驗 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#yapi-%E6%98%AF%E7%94%9A%E9%BA%BC%E6%9D%B1%E8%A5%BF%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">yapi 是甚麼東西？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6"><span class="nav-number">1.1.</span> <span class="nav-text">文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%9D-yapi"><span class="nav-number">2.</span> <span class="nav-text">如何安裝 yapi</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#docler-Yapi-by-fjc0k"><span class="nav-number">2.1.</span> <span class="nav-text">docler-Yapi by fjc0k</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%9C%A8-win10-%E5%AE%89%E8%A3%9D-mongo-db"><span class="nav-number">2.2.</span> <span class="nav-text">如何在 win10 安裝 mongo db</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/yapi-docker/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="docker-yapi初體驗 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          docker-yapi初體驗
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2019-10-13 10:07:53" itemprop="dateCreated datePublished" datetime="2019-10-13T10:07:53+08:00">2019-10-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/%E6%B8%AC%E8%A9%A6/" itemprop="url" rel="index"><span itemprop="name">測試</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/yapi-docker/" class="post-meta-item leancloud_visitors" data-flag-title="docker-yapi初體驗" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/yapi-docker/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/yapi-docker/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>這幾天在查 testcafe 的東西，不小心看到鐵人賽 30 天文章的介紹，所以才知道這東西，一看之下驚為天人，這東西可以用來做什麼我都還沒清楚的了解，我就光看特色包含了，整合自動化測試、Mock Server，就決定要找時間好好了解一下了</p>
+<span id="more"></span>
+
+<p>當然當初逛到的那系列鐵人賽文章也是必須要拜讀一下的，尤其 PO 文大大還同時放上了 Youtube 錄影，實在太感謝了<br><a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/users/20120775/ironman/2653?page=1">持續測試 30 天</a></p>
+<h2 id="yapi-是甚麼東西？"><a href="#yapi-是甚麼東西？" class="headerlink" title="yapi 是甚麼東西？"></a>yapi 是甚麼東西？</h2><p><img src="https://github.com/YMFE/yapi/raw/master/yapi-base-flow.jpg"><br>YApi 是高效、易用、功能強大的 api 管理平台，旨在為開發、產品、測試人員提供更優雅的接口管理服務。可以幫助開發者輕鬆創建、發布、維護 API，YApi 還為用戶提供了優秀的交互體驗，開發人員只需利用平台提供的接口數據寫入工具以及簡單的點擊操作就可以實現接口的管理。</p>
+<p>這邊列出一些 yApi 的特色</p>
+<ol>
+<li>基於 Json5 和 Mockjs 定義接口返回數據的結構和文檔，效率提升多倍</li>
+<li>扁平化權限設計，即保證了大型企業級項目的管理，又保證了易用性</li>
+<li>類似 postman 的接口調試</li>
+<li>自動化測試, 支持對 Response 斷言</li>
+<li>MockServer 除支持普通的隨機 mock 外，還增加了 Mock 期望功能，根據設置的請求過濾規則，返回期望數據</li>
+<li>支持 postman, har, swagger 數據導入</li>
+<li>免費開源，內網部署，信息再也不怕洩露了</li>
+</ol>
+<blockquote>
+<p>好吧，我承認上面那段是從官網抄來的，在我沒有更好的辦法解釋他是個甚麼東西之前，介紹文案用官網的也是一個不錯的選擇</p>
+</blockquote>
+<h3 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h3><p><a target="_blank" rel="noopener" href="https://hellosean1025.github.io/yapi/">yAPI 使用說明</a></p>
+<h2 id="如何安裝-yapi"><a href="#如何安裝-yapi" class="headerlink" title="如何安裝 yapi"></a>如何安裝 yapi</h2><p><a target="_blank" rel="noopener" href="https://github.com/YMFE/yapi">官方 Github</a>有中文說明，挺好的，可以去看看，不過像這種平台式的東西肯定有人弄成 docker，果不其然，搜尋<code>docker-compose yapi</code>，資料還挺多的，不過有的可以更新、有的不行，看來看去好像這個很簡潔，而且 readme 也有提到若官方有更新，他也會盡快跟上，挺好！就用它了</p>
+<blockquote>
+<p>open source 有個很重要的原則，就是用任何東西之前，看看 readme 以及檔案最後更新的時間，很多時候會是決定你要不要採用的關鍵因素</p>
+</blockquote>
+<h3 id="docler-Yapi-by-fjc0k"><a href="#docler-Yapi-by-fjc0k" class="headerlink" title="docler-Yapi by fjc0k"></a>docler-Yapi by fjc0k</h3><p>docker-Yapi:<a target="_blank" rel="noopener" href="https://github.com/fjc0k/docker-YApi">https://github.com/fjc0k/docker-YApi</a></p>
+<ol>
+<li>需要先修改<code>.config.js</code>中的<code>adminAccount</code>管理者登入信箱，密碼預設為<code>ymfe.org</code></li>
+<li>透過<code>docker-compose up -d</code>執行</li>
+<li>瀏覽器開啟<code>localhost:40001</code>即可訪問 yapi 平台</li>
+</ol>
+<blockquote>
+<p>這些在 github readme 也有提及</p>
+</blockquote>
+<p>如果沒有更改其他設定的情況下，預設是禁止註冊新帳號的，所以管理者就是唯一的使用者<br>因為平台沒有資料，都是存放在資料庫內，所以勢必是透過 volume 來處理這一塊，在 windows 平台上使用 mongo db 好像會有些問題，我碰到的是<code>系統權限不足</code>，解決方案如下</p>
+<h3 id="如何在-win10-安裝-mongo-db"><a href="#如何在-win10-安裝-mongo-db" class="headerlink" title="如何在 win10 安裝 mongo db"></a>如何在 win10 安裝 mongo db</h3><p>在 windows 環境下使用 mongo db，需要寫入資料到硬碟，但似乎是與微軟 NTFS 格式有關而發生無法寫入的問題，<a target="_blank" rel="noopener" href="https://github.com/docker-library/mongo/issues/190">這一篇</a>有提到解法，在啟動 docker 的時候利用<code>-g &lt;path&gt;</code>參數，但我啟動 docker 都是滑鼠 double click icon 耶，哈哈，不過既然知道與 volume 有關，那就先建立 docker volume，並且在<code>docker-compose.yml</code>之中調用已建立好的 volume 即可</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker volume create yapi-mongo-db</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;3&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">yapi-web:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">jayfong/yapi:latest</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">yapi-web</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">40001</span><span class="string">:3000</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./config.js:/yapi/config.js</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">yapi-mongo</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">  <span class="attr">yapi-mongo:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mongo:latest</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">yapi-mongo</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">yapi-mongo-db:/data/db</span></span><br><span class="line">    <span class="attr">expose:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">27017</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">yapi-mongo-db:</span></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/docker/" rel="tag"># docker</a>
+              <a href="/artblog/tags/yApi/" rel="tag"># yApi</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/LeetCode-FindTheDifference/" rel="prev" title="LeetCode-FindTheDifference">
+                  <i class="fa fa-angle-left"></i> LeetCode-FindTheDifference
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/docker-management-tool-portainer/" rel="next" title="docker 管理工具 portainer">
+                  docker 管理工具 portainer <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

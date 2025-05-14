@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="剛好最近都在看編碼的東西，順便整理一下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unicode 字元轉換為 UTF16">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/unicode-character-convert-to-utf16/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="剛好最近都在看編碼的東西，順便整理一下">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2024-04-10T09:48:09.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.549Z">
+<meta property="article:author" content="art">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/unicode-character-convert-to-utf16/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/unicode-character-convert-to-utf16/","path":"/unicode-character-convert-to-utf16/","title":"Unicode 字元轉換為 UTF16"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Unicode 字元轉換為 UTF16 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Unicode"><span class="nav-number">1.</span> <span class="nav-text">Unicode</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unicode-%E5%AD%97%E5%85%83%E7%9A%84%E5%B9%B3%E9%9D%A2%E5%B0%8D%E6%87%89"><span class="nav-number">2.</span> <span class="nav-text">Unicode 字元的平面對應</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unicode-%E7%9A%84%E7%B7%A8%E7%A2%BC"><span class="nav-number">3.</span> <span class="nav-text">Unicode 的編碼</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UTF8"><span class="nav-number">4.</span> <span class="nav-text">UTF8</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UTF8-%E8%88%87-UTF16-%E7%9A%84%E6%AF%94%E8%BC%83"><span class="nav-number">5.</span> <span class="nav-text">UTF8 與 UTF16 的比較</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unicode-%E9%BB%9E%E4%BD%8D%E8%BD%89%E6%8F%9B%E7%9A%84%E8%A8%88%E7%AE%97%E9%81%8E%E7%A8%8B-%E8%BC%94%E5%8A%A9%E5%B9%B3%E9%9D%A2%E7%9A%84%E5%AD%97%E5%85%83"><span class="nav-number">6.</span> <span class="nav-text">Unicode 點位轉換的計算過程 (輔助平面的字元)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReCap"><span class="nav-number">7.</span> <span class="nav-text">ReCap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%B6%E4%BC%B8-%E5%AD%97%E5%85%83%E8%A8%88%E7%AE%97"><span class="nav-number">8.</span> <span class="nav-text">延伸:字元計算</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/unicode-character-convert-to-utf16/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Unicode 字元轉換為 UTF16 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Unicode 字元轉換為 UTF16
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2024-04-10 17:48:09" itemprop="dateCreated datePublished" datetime="2024-04-10T17:48:09+08:00">2024-04-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+
+  
+    <span id="/artblog/unicode-character-convert-to-utf16/" class="post-meta-item leancloud_visitors" data-flag-title="Unicode 字元轉換為 UTF16" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/unicode-character-convert-to-utf16/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/unicode-character-convert-to-utf16/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>剛好最近都在看編碼的東西，順便整理一下</p>
+<span id="more"></span>
+
+<h2 id="Unicode"><a href="#Unicode" class="headerlink" title="Unicode"></a>Unicode</h2><p>Unicode 又稱萬國碼，是一種電腦編碼規則，目的是為了解決不同語言之間的文字互通，目前，幾乎所有電腦系統都支援基本拉丁字母，並各自支援不同的其他編碼方式。Unicode 為了和它們相互相容，其首 256 個字元保留給 ISO 8859-1(也就是現在大家所熟知的，以 ASCII 為基礎，再添加附加符號、拉丁字母)所定義的字元</p>
+<h2 id="Unicode-字元的平面對應"><a href="#Unicode-字元的平面對應" class="headerlink" title="Unicode 字元的平面對應"></a>Unicode 字元的平面對應</h2><p>目前 Unicode 分為 17 個平面，每個平面包含 65536 個字元，每個平面的字元都有一個獨一無二的點位，這個點位就是該字元的 Unicode 點位，這個點位是一個十六進位的數字，可以用來表示該字元，目前只用了少數平面，主要的就是前四個平面，其他的平面則是用來存放一些不常用的字元，或是一些特殊的字元</p>
+<table>
+<thead>
+<tr>
+<th>平面</th>
+<th>範圍</th>
+<th>中文名</th>
+<th>英文名</th>
+<th>簡稱</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>U+0000 至 U+FFFF</td>
+<td>基本多文種平面</td>
+<td>Basic Multilingual Plane</td>
+<td>BMP</td>
+</tr>
+<tr>
+<td>1</td>
+<td>U+10000 至 U+1FFFF</td>
+<td>多文種補充平面</td>
+<td>Supplementary Multilingual Plane</td>
+<td>SMP</td>
+</tr>
+<tr>
+<td>2</td>
+<td>U+20000 至 U+2FFFF</td>
+<td>表意文字補充平面</td>
+<td>Supplementary Ideographic Plane</td>
+<td>SIP</td>
+</tr>
+<tr>
+<td>3</td>
+<td>U+30000 至 U+3FFFF</td>
+<td>表意文字第三平面</td>
+<td>Tertiary Ideographic Plane</td>
+<td>TIP</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>ref:<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Unicode%E5%AD%97%E7%AC%A6%E5%B9%B3%E9%9D%A2%E6%98%A0%E5%B0%84#%E5%9F%BA%E6%9C%AC%E5%A4%9A%E6%96%87%E7%A7%8D%E5%B9%B3%E9%9D%A2">Unicode 字元平面對映</a></p>
+</blockquote>
+<h2 id="Unicode-的編碼"><a href="#Unicode-的編碼" class="headerlink" title="Unicode 的編碼"></a>Unicode 的編碼</h2><p>在表示一個 Unicode 字元的時候，會使用 U+4AE0 這樣的格式來表示，其中 U+ 是固定的，後面的數字則是該字元的 Unicode 點位。</p>
+<h2 id="UTF8"><a href="#UTF8" class="headerlink" title="UTF8"></a>UTF8</h2><p>UTF8 的英文是 8-bit Unicode Transformation Format，是一種可以變動長度的字元表示方式</p>
+<ol>
+<li>128 個 ASCII 字元，只需一個位元組編碼（Unicode 範圍由 U+0000 至 U+007F）</li>
+<li>其他西歐國家的會用到的一些字元，少部分則需要用到兩個位元組（Unicode 範圍由 U+0080 至 U+07FF）</li>
+<li>其他大部分的常用字元，包含中文、日文、韓文等，則需要用到三個位元組（Unicode 範圍由 U+0800 至 U+FFFF）</li>
+<li>其他極少使用的 Unicode 輔助平面的字元(也就是 BMP 之外的輔助平面)使用四至六位元組編碼（Unicode 範圍由 U+10000 至 U+1FFFFF 使用四位元組，Unicode 範圍由 U+200000 至 U+3FFFFFF 使用五位元組，Unicode 範圍由 U+4000000 至 U+7FFFFFFF 使用六位元組）。</li>
+</ol>
+<blockquote>
+<p>ref: <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/UTF-8">維基百科 UTF-8</a></p>
+</blockquote>
+<h2 id="UTF8-與-UTF16-的比較"><a href="#UTF8-與-UTF16-的比較" class="headerlink" title="UTF8 與 UTF16 的比較"></a>UTF8 與 UTF16 的比較</h2><p>在輔助平面字元的處理，兩者都需要使用 4 bytes 表示一個字元；但在 BMP 平面的字元處理上，UTF-8 使用 1-3 bytes 表示一個字元，而 UTF-16 則是固定使用 2 bytes 表示一個字元，這也是為什麼 UTF16 在處理 BMP 平面的字元時，會比 UTF8 來的節省空間</p>
+<h2 id="Unicode-點位轉換的計算過程-輔助平面的字元"><a href="#Unicode-點位轉換的計算過程-輔助平面的字元" class="headerlink" title="Unicode 點位轉換的計算過程 (輔助平面的字元)"></a>Unicode 點位轉換的計算過程 (輔助平面的字元)</h2><p><code>𠎀</code>這個字的 Unicode 點位: 0x20380</p>
+<p>首先需要將其扣除 0x10000，因為該點位超過了 0xFFFF，並不屬於 BMP 範圍，所以需要使用 4 個 byte 來表示，扣除掉 0x10000 後，剩下的點位就是該字的編碼</p>
+<p>該字的 Unicode 點位為: 0x20380 - 0x10000 &#x3D; 0x10380，也就是二進位 <code>0001000000 1110000000</code> 將其切割為兩部分，先拿低點位的 10 碼，剩下高點位不足的部分補 0，如此一來就會得到兩個 10 位元組的碼位，</p>
+<ul>
+<li>高點位:<code>0001000000</code></li>
+<li>低點位:<code>1110000000</code></li>
+</ul>
+<p>輔助平面的高低點位初始值為 <code>0xD800</code> 與 <code>0xDC00</code>，所以將剛剛的計算出來的點位加上這兩個值就是該字的編碼</p>
+<blockquote>
+<p>這個初始值，轉為二進位後有 6 碼，再加上切割出來的 10 碼，剛好就是一個 16 位元組的字元</p>
+</blockquote>
+<p>高點位的計算為 0xD800，也就是 <code>110110 0000000000</code>，加上剛剛切割出來的高位十碼 &#x3D; <code>110110 0001000000</code> &#x3D; <code>0xD840</code><br>低點位的計算為 0xDC00，也就是 <code>110111 0000000000</code>，加上剛剛切割出來的低位十碼 &#x3D; <code>110111 1110000000</code> &#x3D; <code>0xDF80</code></p>
+<p>為了要表示這一個字將其轉為二進位後，總共使用了 4 個 byte，也就是 16 個位元組 <code>11011000 01000000 11011111 10000000</code><br>所以 <code>𠎀</code> 的編碼為 <code>0xD840 0xDF80</code></p>
+<p>一般來說瞭解這種東西也沒有甚麼用，但如果有機會接觸到編碼問題，多知道一些細節對於偵錯會有幫助</p>
+<h2 id="ReCap"><a href="#ReCap" class="headerlink" title="ReCap"></a>ReCap</h2><ol>
+<li>Unicode 是把所有的字元都統一編碼，目的是為了解決不同語言之間的文字互通</li>
+<li>在電腦上要處理文字，通常都採用 UTF8，因為更省空間</li>
+<li>UTF16 並沒有比 UTF8 更好，兩者差異只在於如何編碼 BMP 平面的字元，對輔助平面的字元，兩者都需要使用 4 bytes 來表示</li>
+<li>中文難字、EMOJI 等字元，通常都是在輔助平面，所以需要使用 4 bytes 來表示，計算過程可參考上述的範例</li>
+</ol>
+<h2 id="延伸-字元計算"><a href="#延伸-字元計算" class="headerlink" title="延伸:字元計算"></a>延伸:字元計算</h2><p>有的時候會需要限制使用者的輸入字元數，可能是因為 SMS 的字元限制，也可能是因為要開資料庫欄位長度的限制，都會需要計算字元數、或者是 byte 數，這時候就可以使用 JavaScript 的 TextEncoder 來計算字元所佔用的 byte 數</p>
+<p>下列範例，取自<a target="_blank" rel="noopener" href="https://github.com/CorentinTh/it-tools/blob/main/src/tools/text-statistics/text-statistics.vue">IT Tools</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">c-card</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">c-input-text</span> <span class="attr">v-model:value</span>=<span class="string">&quot;text&quot;</span> <span class="attr">multiline</span> <span class="attr">placeholder</span>=<span class="string">&quot;Your text...&quot;</span> <span class="attr">rows</span>=<span class="string">&quot;5&quot;</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml"></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">mt-5</span> <span class="attr">flex</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">n-statistic</span> <span class="attr">label</span>=<span class="string">&quot;Character count&quot;</span> <span class="attr">:value</span>=<span class="string">&quot;text.length&quot;</span> <span class="attr">flex-1</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">n-statistic</span> <span class="attr">label</span>=<span class="string">&quot;Word count&quot;</span> <span class="attr">:value</span>=<span class="string">&quot;text === &#x27;&#x27; ? 0 : text.split(/\s+/).length&quot;</span> <span class="attr">flex-1</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">n-statistic</span> <span class="attr">label</span>=<span class="string">&quot;Line count&quot;</span> <span class="attr">:value</span>=<span class="string">&quot;text === &#x27;&#x27; ? 0 : text.split(/\r\n|\r|\n/).length&quot;</span> <span class="attr">flex-1</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">n-statistic</span> <span class="attr">label</span>=<span class="string">&quot;Byte size&quot;</span> <span class="attr">:value</span>=<span class="string">&quot;formatBytes(getStringSizeInBytes(text))&quot;</span> <span class="attr">flex-1</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">c-card</span>&gt;</span></span></span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
+
+<p>當中的 Character count 就是使用者輸入的字元長度，直接使用 text.length 即可；Byte size 經由<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/TextEncoder">TextEncoder</a>計算，就算使用者輸入了 emoji 也可以正確的計算使用的 byte 數</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">getStringSizeInBytes</span>(<span class="params">text: string</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">TextEncoder</span>().<span class="title function_">encode</span>(text).<span class="property">buffer</span>.<span class="property">byteLength</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">formatBytes</span>(<span class="params">bytes: number, decimals = <span class="number">2</span></span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (bytes === <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;0 Bytes&quot;</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> k = <span class="number">1024</span>;</span><br><span class="line">  <span class="keyword">const</span> sizes = [<span class="string">&quot;Bytes&quot;</span>, <span class="string">&quot;KB&quot;</span>, <span class="string">&quot;MB&quot;</span>, <span class="string">&quot;GB&quot;</span>, <span class="string">&quot;TB&quot;</span>, <span class="string">&quot;PB&quot;</span>, <span class="string">&quot;EB&quot;</span>, <span class="string">&quot;ZB&quot;</span>, <span class="string">&quot;YB&quot;</span>];</span><br><span class="line">  <span class="keyword">const</span> i = <span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Math</span>.<span class="title function_">log</span>(bytes) / <span class="title class_">Math</span>.<span class="title function_">log</span>(k));</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;<span class="built_in">Number</span>.<span class="built_in">parseFloat</span>((bytes / k ** i).toFixed(decimals))&#125;</span> <span class="subst">$&#123;sizes[i]&#125;</span>`</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/what-is-ansi-save-as-in-notepad/" rel="prev" title="記事本的ANSI另存新檔是什麼？">
+                  <i class="fa fa-angle-left"></i> 記事本的ANSI另存新檔是什麼？
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/experience-with-github-copilot/" rel="next" title="使用 github copilot 心得">
+                  使用 github copilot 心得 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

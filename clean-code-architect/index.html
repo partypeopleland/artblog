@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="純粹記錄個人的讀書心得，很有可能有謬誤的部分，還請不吝指正">
+<meta property="og:type" content="article">
+<meta property="og:title" content="讀書心得-無暇的程式碼-整潔的軟體設計與架構篇">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/clean-code-architect/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="純粹記錄個人的讀書心得，很有可能有謬誤的部分，還請不吝指正">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2018-10-27T10:02:57.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.201Z">
+<meta property="article:author" content="art">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/clean-code-architect/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/clean-code-architect/","path":"/clean-code-architect/","title":"讀書心得-無暇的程式碼-整潔的軟體設計與架構篇"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>讀書心得-無暇的程式碼-整潔的軟體設計與架構篇 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CH1-%E7%94%9A%E9%BA%BC%E6%98%AF%E8%A8%AD%E8%A8%88%E8%88%87%E7%B5%90%E6%A7%8B"><span class="nav-number">1.</span> <span class="nav-text">CH1 甚麼是設計與結構</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CH2-%E5%85%A9%E7%A8%AE%E5%83%B9%E5%80%BC%E8%A7%80%E7%9A%84%E6%95%85%E4%BA%8B"><span class="nav-number">2.</span> <span class="nav-text">CH2 兩種價值觀的故事</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CH3-%E7%AF%84%E5%BC%8F%E6%A6%82%E8%BF%B0"><span class="nav-number">3.</span> <span class="nav-text">CH3 範式概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CH4-%E7%B5%90%E6%A7%8B%E5%8C%96%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88"><span class="nav-number">4.</span> <span class="nav-text">CH4 結構化程式設計</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CH5-%E7%89%A9%E4%BB%B6%E5%B0%8E%E5%90%91%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88"><span class="nav-number">5.</span> <span class="nav-text">CH5 物件導向程式設計</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CH6-%E5%87%BD%E6%95%B8%E5%BC%8F%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88"><span class="nav-number">6.</span> <span class="nav-text">CH6 函數式程式設計</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CH7-Single-Responsibility-Principle-%E5%96%AE%E4%B8%80%E8%81%B7%E8%B2%AC%E5%8E%9F%E5%89%87"><span class="nav-number">7.</span> <span class="nav-text">CH7 Single Responsibility Principle 單一職責原則</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CH8-Open-Closed-Principle-%E9%96%8B%E6%94%BE-%E5%B0%81%E9%96%89%E5%8E%9F%E5%89%87"><span class="nav-number">8.</span> <span class="nav-text">CH8 Open-Closed Principle 開放-封閉原則</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CH9-Liskov-Substitution-Principle-%E9%87%8C%E5%BC%8F%E6%9B%BF%E6%8F%9B%E5%8E%9F%E5%89%87"><span class="nav-number">9.</span> <span class="nav-text">CH9 Liskov Substitution Principle 里式替換原則</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CH10-Interface-Segregation-Principle-%E4%BB%8B%E9%9D%A2%E9%9A%94%E9%9B%A2%E5%8E%9F%E5%89%87"><span class="nav-number">10.</span> <span class="nav-text">CH10 Interface Segregation Principle 介面隔離原則</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CH11-Dependency-Inversion-Principle-%E4%BE%9D%E8%B3%B4%E5%8F%8D%E5%90%91%E5%8E%9F%E5%89%87"><span class="nav-number">11.</span> <span class="nav-text">CH11 Dependency Inversion Principle 依賴反向原則</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/clean-code-architect/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="讀書心得-無暇的程式碼-整潔的軟體設計與架構篇 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          讀書心得-無暇的程式碼-整潔的軟體設計與架構篇
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2018-10-27 18:02:57" itemprop="dateCreated datePublished" datetime="2018-10-27T18:02:57+08:00">2018-10-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/%E5%BF%83%E5%BE%97/" itemprop="url" rel="index"><span itemprop="name">心得</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/clean-code-architect/" class="post-meta-item leancloud_visitors" data-flag-title="讀書心得-無暇的程式碼-整潔的軟體設計與架構篇" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/clean-code-architect/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/clean-code-architect/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>純粹記錄個人的讀書心得，很有可能有謬誤的部分，還請不吝指正</p>
+<span id="more"></span>
+
+<h2 id="CH1-甚麼是設計與結構"><a href="#CH1-甚麼是設計與結構" class="headerlink" title="CH1 甚麼是設計與結構"></a>CH1 甚麼是設計與結構</h2><p>一開始提到的是軟體的架構其實也像是蓋房子一樣，類似的論調其實在許多設計模式都出現了不只一次，一開始的確是有點難以理解，但其實從建築的角度看，要蓋好房子是需要先有規劃，畫設計圖，算比例，會這些東西只是基本，你還需要依據需求來蓋房子，蓋住宅與商業大樓的格局，基礎設施，配線、管路、配電盤、變壓機房、空調都會有不同。所有的事情都是為了支持最終的目的，把房子蓋好，讓客戶滿意。</p>
+<p>這其實就像是軟體開發的客戶需求一樣，我們需要針對各式各樣的需求，去開發軟體以滿足客戶所需。從這個角度看是類似的。</p>
+<p>而軟體架構，書中給出的解釋是最小化建置、維護系統所需要的人力；轉念來想，其實建築內也有許多東西需要保養維護、蓄水池、空調箱濾網、線路老舊抽換，其實都很像，我就親身經歷過配電盤的入口居然在半空中的建築，用來對比難以維護的軟體系統是格外有感。</p>
+<p>這邊有一段很寫實，大意是進入市場，網站上線之後就表示後面已經有一堆競爭對手，因此必須要盡可能保持領先的優勢，在這個情況下開發人員往往都是一個功能一個功能接續開發，回頭清理技術債的可能性少之又少。<br>也因此，TDD 開發方法中有一個環節是重構，不斷的循環迭代中，持續地將你目前的程式碼做局部性的優化重構而非全盤打掉重來，公司應該也很難接受你提出一個重構計畫，然後重構之前跟重構之後的功能都一樣，外部使用者是感覺不到的。(這邊的說的重構並非針對效能的優化重構)</p>
+<h2 id="CH2-兩種價值觀的故事"><a href="#CH2-兩種價值觀的故事" class="headerlink" title="CH2 兩種價值觀的故事"></a>CH2 兩種價值觀的故事</h2><p>用行為與架構來解釋軟體開發工程師的工作內容。大部分人都會先 focus 在第一個東西上，因為這東西 End User 是有感的，當行為不對時，我們會需要 Debug。但是有經驗一點的工程師，會注意到後者，因為軟體開發總是會需求變更、追加功能，若架構難以維護，這些程式碼的價值就只是這樣，無法再增加了</p>
+<p>如果市場變動更快，程式碼的價值很可能瞬間就會跌落谷底。但是有的時候其實不是難以維護，而是一些老舊系統採用的語言，已經沒有人願意學習，或者是作業系統不再支援了。例如 vb6、powerBuilder、asp。在這個情況下，軟體工程師的價值有可能因為只有你會這些東西，而變得奇貨可居，但我想大多數的時候是，公司會決定將這些老舊系統重新改寫。</p>
+<p>我覺得這一段用意在於喚醒程式設計師的良知。因為你的專業，所以就必須要有所堅持，不懂程式設計的人不明白架構這件事情的重要性。但不重視他，終將自食苦果。HitCon Allen Own 在 webconf 2013 的議程中，有一個梗蠻寫實的，講的是網站資安管理者的事情</p>
+<ol>
+<li>無知：需要學習</li>
+<li>無能：需要修練</li>
+<li>無恥：需要悔改</li>
+</ol>
+<p>但是我覺得套用在這邊也很適用，不懂架構這件事情所以寫出難以維護的程式碼，需要學習；懂了卻又生搬硬套，需要多多練習從中獲得經驗；明明知道有地雷卻又繼續埋下去，這種人就真的需要悔改了</p>
+<p>最後總結一下這一章內容：軟體架構需要你去捍衛，這是公司請你來的原因，也是你的價值所在，別自己放棄</p>
+<h2 id="CH3-範式概述"><a href="#CH3-範式概述" class="headerlink" title="CH3 範式概述"></a>CH3 範式概述</h2><p>簡略的說明了一下結構化程式設計、物件導向程式設計與函數式程式設計，並嘗試總結。</p>
+<p>因為傳統的程式撰寫是透過行號，依照順序執行，又因為 GOTO 語句的存在，如果程式大一點，是非常難以維護的。也因此針對這件事情加以限制，透過我們熟悉的 if&#x2F;else 等等判斷語法來建構程式，取代掉原先的 GOTO</p>
+<p>也就是他的總結：結構化程式設計在直接的控制移轉上加上規範</p>
+<p>後面兩種就難以理解，稍微看過一次他的總結有點印象就好<br>物件導向程式設計是在間接地控制移轉上加上規範；函數式程式設計則是在賦值上加上規範</p>
+<p>這一章大概是為了後面章節準備的一個概述，所以也不會太深入，或許看完之後的章節再回來會有其他的心得</p>
+<h2 id="CH4-結構化程式設計"><a href="#CH4-結構化程式設計" class="headerlink" title="CH4 結構化程式設計"></a>CH4 結構化程式設計</h2><p>如概述中所提到的，這個章節先介紹了某位很厲害的人，證明了所有的程式都可以用三種結構來建構，分別是循序、選擇、迭代。所以結構化程式設計就這樣誕生了。對於這種考究我沒甚麼興趣，但是在測試這個標題之下的內容，有一段話很重要：一個程式可以用測試來證明他是不正確的……再經過充分的測試後，這些測試可以讓我們認為程式對我們來說式足夠正確的</p>
+<p>有沒有馬上聯想到 TDD 與使用案例？當程式上線之後爆掉，線上爆掉的那個情境就是你最新的測試案例，當這些測試案例足夠多，你的程式就相對地足夠健壯</p>
+<p>當 Bug 修得夠快，那就不叫作 Bug，叫作迭代，這當然是開玩笑的，但也有幾分真實。<br>或許這一章的內容，是我們實作單元測試的支撐原因之一？要不然為甚麼我們寫完很多單元測試，我們就會相信程式的功能是 OK 的呢？</p>
+<h2 id="CH5-物件導向程式設計"><a href="#CH5-物件導向程式設計" class="headerlink" title="CH5 物件導向程式設計"></a>CH5 物件導向程式設計</h2><p>總算講到物件導向，應該會比較容易理解了，這裡開始探討定義，但定義這件事情真的沒那麼容易闡述，因為我覺得他是一個比較概念性的東西，就像有人問你甚麼是愛一樣，可以給出很抽象的定義，我們也很難去明白、反駁；所以這邊嘗試用了具體一點的東西來解釋物件導向這件事情，也就是封裝、多型、繼承</p>
+<p>但是再一個又一個的解釋當中，透過眾多物件導向語言，來論述封裝、繼承、多型這三件事情，最終發現只有多型威力強大</p>
+<p>書中給的範例是倚賴介面這件事情，而非倚賴實體。這也是物件導向程式設計中很重要的概念之一，這個概念來自於硬體界，所有的廠商都針對相同的介面做硬體的規格設計，也因此只要符合介面規範，是可以被隨意替換的。這個概念被軟體開發藉鑑使用，就能夠做到針對介面設計、細節則透過各類別去實做</p>
+<p>關於書中提到的解釋因為不是寫 java 的不是很懂他的解釋，但關於依賴反向 (DI) 這件事情，或許可以參考一下</p>
+<p>然後我把他的總結當中提到的允許架構師建立一個 plugin 架構，…… 獨立於包含高層及策略的模組來進行佈署與開發，這一段換成 client code 與 lib dll 之間的關係，我覺得似乎就是這個意思。</p>
+<h2 id="CH6-函數式程式設計"><a href="#CH6-函數式程式設計" class="headerlink" title="CH6 函數式程式設計"></a>CH6 函數式程式設計</h2><p>一開始透過兩種語言的對比，帶出一個結論：函數式語言中的變數不會改變</p>
+<p>為什麼這個很重要，因為有一些麻煩的問題，原因就在於變數改變。給的解釋也很有趣：你沒有可以變動的 lock，你就不會遇到 deadlock。</p>
+<p>你沒有女朋友就不會遇到兵變，相同概念。</p>
+<p>光看到平行處理與多執行緒、多處理器，然後再加一個 deadlock，應該會很想哭</p>
+<p>後面的一些論述老實說有些懂也有些不懂，甚至我覺得這個應該是某些公司內以有限的資源要去做某項功能，而受限於硬體資源，不得不在半夜跑排程，然後需要資料的時候就從 Temp Table 與當日 Table 來計算資料，提到的概念的確是有點誇張。我覺得不太可能實現。因為不需要變數就意味著你要花大量的資源來計算，以網站開發後端的部分來說應該是不可能實現的。或許這也是前端會有函數式編程的關係，不過因為我不是很明白，大概也是看結論就好</p>
+<p>他的結論很妙，我們在這三種程式設計範式中，學到的事情是了解到那些是不該做的。<br>我能夠理解在結構化程式設計中，我們捨棄了無限制的 GOTO 對我們帶來的影響。讓我們難以理解程式的運作流程，甚至是難以維護、擴充新功能</p>
+<p>我能夠理解在函數式程式設計中，捨棄掉對於變數賦值這件事情，或許在某些情況下可以讓程式更加穩定；在做出如書中範例的折衷，也能夠為網站開發帶來些好處。</p>
+<p>不過我還是沒懂在物件導向中，那些關於間接控制移轉加上規範的部分，有哪些是不該做的。</p>
+<p>先前所探討的範疇都還是屬於整體性的東西，現在將範圍縮小一點點，蓋房子總有基礎的材料像是磚塊等等，接下來要講的設計原則，就大概是隸屬於這個範疇的，否則就算外部架構在怎麼好，結果一看材料居然是海砂屋，那就可以 GG 了。</p>
+<p>這裡的設計原則一共有五項，分別是</p>
+<p>SRP：單一職責<br>OCP：開閉原則<br>LSP：里式替換原則<br>ISP：介面隔離原則<br>DIP：依賴反向原則<br>這些本來就已經是縮寫的東西，其實一開始我有點記不太起來，也沒怎麼特別記，只是日復一日的聽，久而久之莫名其妙的腦海中就會浮現 SOLID，然後就可以一條一條列出來。至於 SOLID 是什麼意思？我剛剛查了一下 google，說是實心的意思，管他呢。</p>
+<h2 id="CH7-Single-Responsibility-Principle-單一職責原則"><a href="#CH7-Single-Responsibility-Principle-單一職責原則" class="headerlink" title="CH7 Single Responsibility Principle 單一職責原則"></a>CH7 Single Responsibility Principle 單一職責原則</h2><p>一開始我的認識也是很膚淺，以往聽人說好的物件導向設計要遵循單一職責，甚麼是單一職責呢？因為我們已經用抽象的概念將現實的事物轉變為一個個的類別，這些類別通常我們都會用名詞去命名，類別內的方法用動詞去命名，這樣就會很好理解物件的概念。對於以前初學的我這樣的方式的確是比較好理解的，然後我就誤以為單一職責就是一次只做一件事情。這句話是沒有錯的。錯的是我沒有搞清楚他的但書：一個模組應該只對唯一的一個角色負責</p>
+<p>這一段我覺得很棒，用一個實際的簡單例子清楚的解釋 SRP，很淺顯易懂。解決方案也是很直覺的，將資料與邏輯分離，數個不同的角色的邏輯則被放置於各自的類別。其實這件事情寫程式寫久了你就會這樣做，但很有可能你說不出來原因，只說得出來：因為不這樣做，某幾個類別一改，就會連帶影響到其他類別出錯誤。</p>
+<p>我覺得看完這一段就會把經驗跟理論實際融合在一起，然後就會：啊哈，原來這個就是 SRP。</p>
+<h2 id="CH8-Open-Closed-Principle-開放-封閉原則"><a href="#CH8-Open-Closed-Principle-開放-封閉原則" class="headerlink" title="CH8 Open-Closed Principle 開放-封閉原則"></a>CH8 Open-Closed Principle 開放-封閉原則</h2><p>對修改封閉、對擴充開放，書中給的是比較偏向整體架構的例子，先分析一下然後有了初步的職責，這邊也用了 SRP 的概念，將網頁呈現報告與報表列印分成了兩個類別來處理，而範例裡面當然也用了其他的設計原則，所以我覺得其實要比較好理解這個例子，<strong>最好是把它放在最後一個看</strong></p>
+<p>幾個重點紀錄一下</p>
+<p>一開始先分析解決方案，決定有哪些類別、劃分到那些元件，並檢視彼此的依賴關係 (SRP)<br>將資料與邏輯分離，邏輯依賴介面 (ISP)<br>元件與元件之間相互溝通都是倚賴介面 (DIP)</p>
+<h2 id="CH9-Liskov-Substitution-Principle-里式替換原則"><a href="#CH9-Liskov-Substitution-Principle-里式替換原則" class="headerlink" title="CH9 Liskov Substitution Principle 里式替換原則"></a>CH9 Liskov Substitution Principle 里式替換原則</h2><p>這應該是最容易上手的一個原則了，以前聽過的解釋是說：古時候爸爸被官府叫去當兵，爸爸可以叫兒子去。通常的解釋應該是：在程式碼用到父類別的地方，都可以把父類別改為子類別。</p>
+<p>例如：小狗繼承了動物，所以我們會說小狗是動物，但不會說動物都是小狗</p>
+<p>書裡面還是不厭其煩、很認真地介紹了這個章節，然後我也很認真地看完了但是沒有甚麼其他特殊的心得，因為大概就是這樣了</p>
+<h2 id="CH10-Interface-Segregation-Principle-介面隔離原則"><a href="#CH10-Interface-Segregation-Principle-介面隔離原則" class="headerlink" title="CH10 Interface Segregation Principle 介面隔離原則"></a>CH10 Interface Segregation Principle 介面隔離原則</h2><p>一開始先用視野比較小的類別當範例，如果違反了介面隔離原則會怎樣，以及如何解決這個問題。接著視野放大一點到系統架構層級。如果系統A依賴系統B，系統 B 又依賴系統 C，那麼當系統 C 有異動，需要重新佈署，那麼連帶的也會影響到 A</p>
+<p>如果跟一開始的類別範例一起看，有可能就會發生：我的系統依賴 Framework，而 Framework 又依賴某個 Lib 的 A 功能，但是因為沒有用介面隔離，所以當 Lib 的 B 功能有更新，我卻需要為了我沒有去用到的 B 功能，將我的 Framework 更新，更慘的是，因為我的系統倚賴 Framework，所以也要一起更新</p>
+<p>應該只有WTF可以說了</p>
+<h2 id="CH11-Dependency-Inversion-Principle-依賴反向原則"><a href="#CH11-Dependency-Inversion-Principle-依賴反向原則" class="headerlink" title="CH11 Dependency Inversion Principle 依賴反向原則"></a>CH11 Dependency Inversion Principle 依賴反向原則</h2><p>簡單的說這個原則就是將原本建立實體類別的地方，改成相依於介面，這樣子程式依賴的就不是某一個特定的類別，而是依賴於介面</p>
+<p>類別是容易異動的，所以不是很穩定，如果程式倚賴實體類別，可以想見的是也會時常異動，而介面因為不牽涉具體實作，他是比較抽象的，相比於實體類別而言，除非是需求異動，要不然他是較不容易改變的，相對地程式就會比較穩定。所以我們撰寫程式應該相依於介面</p>
+<p>但是最終還是有實例需要被建立，書中順便介紹了一下抽象工廠設計模式，讓應用程式需要使用到實體類別的地方，都透過工廠來建立，但是這個工廠也不是一個實體類別，而是一個介面，這樣就可以透過依賴注入的方式，讓程式依賴外部傳進來的工廠實體，而不是自己本身應用程式內的某個實體類別了</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/observer-mode/" rel="prev" title="ObServer Mode 觀察者模式">
+                  <i class="fa fa-angle-left"></i> ObServer Mode 觀察者模式
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/signalr-01-website-and-winform/" rel="next" title="[SignalR] 01 - WebSite And WinForm">
+                  [SignalR] 01 - WebSite And WinForm <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

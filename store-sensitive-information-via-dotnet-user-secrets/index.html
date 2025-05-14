@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="紀錄一下如何透過 dotnet user-secret 儲存敏感資訊">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 dotnet user-secrets 儲存敏感資訊">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/store-sensitive-information-via-dotnet-user-secrets/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="紀錄一下如何透過 dotnet user-secret 儲存敏感資訊">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/store-sensitive-information-via-dotnet-user-secrets/20230308-1.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/store-sensitive-information-via-dotnet-user-secrets/20230308-2.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/store-sensitive-information-via-dotnet-user-secrets/20230308-3.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/store-sensitive-information-via-dotnet-user-secrets/20230308-4.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/store-sensitive-information-via-dotnet-user-secrets/20230308-5.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/store-sensitive-information-via-dotnet-user-secrets/20230308-6.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/store-sensitive-information-via-dotnet-user-secrets/20230308-7.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/store-sensitive-information-via-dotnet-user-secrets/20230308-8.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/store-sensitive-information-via-dotnet-user-secrets/20230308-9.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/store-sensitive-information-via-dotnet-user-secrets/20230308-10.jpg">
+<meta property="article:published_time" content="2023-03-08T06:37:47.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.527Z">
+<meta property="article:author" content="art">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/store-sensitive-information-via-dotnet-user-secrets/20230308-1.jpg">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/store-sensitive-information-via-dotnet-user-secrets/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/store-sensitive-information-via-dotnet-user-secrets/","path":"/store-sensitive-information-via-dotnet-user-secrets/","title":"使用 dotnet user-secrets 儲存敏感資訊"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>使用 dotnet user-secrets 儲存敏感資訊 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Intro"><span class="nav-number">1.</span> <span class="nav-text">Intro</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#How-To-Start"><span class="nav-number">2.</span> <span class="nav-text">How To Start</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AF%84%E4%BE%8B%E8%A8%AD%E5%AE%9A"><span class="nav-number">3.</span> <span class="nav-text">範例設定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%88%E7%BD%B2%E5%88%B0-Azure"><span class="nav-number">4.</span> <span class="nav-text">佈署到 Azure</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.</span> <span class="nav-text">結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/store-sensitive-information-via-dotnet-user-secrets/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="使用 dotnet user-secrets 儲存敏感資訊 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用 dotnet user-secrets 儲存敏感資訊
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2023-03-08 14:37:47" itemprop="dateCreated datePublished" datetime="2023-03-08T14:37:47+08:00">2023-03-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/dotnet/" itemprop="url" rel="index"><span itemprop="name">dotnet</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/store-sensitive-information-via-dotnet-user-secrets/" class="post-meta-item leancloud_visitors" data-flag-title="使用 dotnet user-secrets 儲存敏感資訊" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/store-sensitive-information-via-dotnet-user-secrets/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/store-sensitive-information-via-dotnet-user-secrets/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>紀錄一下如何透過 dotnet user-secret 儲存敏感資訊</p>
+<span id="more"></span>
+
+<h2 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h2><p>專案通常會有一個配置檔案，在 dotnet 則是儲存於 <code>appSetting.json</code>，這隻檔案應該要進版控，因為有它專案才完整，但如果是ㄧ些比較敏感的資訊就不合適一起進入版控，例如一些 <code>token</code>或者是一些比較敏感的資料，可能是關於安全的，可能是關於錢的，反正這些東西進入版控就會有一些風險。所以我們不會想要這些東西進入版控，在 dotnet 的世界裏面有一個東西可以解決這件事情，就是 <code>user-secret</code></p>
+<p>簡單的來說，既然你不想把這些東西進版控，那就另外放在別的目錄，跟專案隔開來，這些敏感資訊也只會留在你的電腦中，不會進入版控，也不會 deploy 出去。他的概念其實就只是這樣，實際的做法則是在你本機上的目錄做一個 json 檔案，當專案有設定，他會去找這個檔案。如果<code>secret.json</code>與<code>appSetting.json</code>有同樣的設定，則是會以<code>secret.json</code>的設定為準</p>
+<p><img src="/artblog/store-sensitive-information-via-dotnet-user-secrets/20230308-1.jpg"><br><img src="/artblog/store-sensitive-information-via-dotnet-user-secrets/20230308-2.jpg"></p>
+<h2 id="How-To-Start"><a href="#How-To-Start" class="headerlink" title="How To Start"></a>How To Start</h2><p><img src="/artblog/store-sensitive-information-via-dotnet-user-secrets/20230308-3.jpg"></p>
+<p>輸入<code>dotnet user-secrets</code>指令可以看到說明，所以使用方法就是在沒有用 <code>user secret</code>的專案，先透過 <code>init</code>來初始化</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">產生 secret 的 guid</span></span><br><span class="line">dotnet user-secrets init</span><br></pre></td></tr></table></figure>
+
+<p>做完這件事情之後，專案檔會被加入一段 XML Tag，用來記錄所產生的 Guid，接著可以透過 <code>clear</code>、<code>list</code>、<code>set</code>、<code>remove</code>來管理，這個應該就不用多講了，不過如果是在本機開發，我會建議還是直接開啟 json 檔編輯比較直接。 cli 指令可以等到需要自動化作業的時候再研究語法即可。</p>
+<blockquote>
+<p>VisualStudio 2022 似乎可以在專案右鍵從跳出來的選單中找到使用者秘密的選項，點選後會直接幫你把 json 檔開起來，Rider 則需要安裝外掛<a target="_blank" rel="noopener" href="https://plugins.jetbrains.com/plugin/10183--net-core-user-secrets">.​NET Core User Secrets</a>，然後 <strong>RightClick Solution</strong> -&gt; <strong>Tools</strong> -&gt; <strong>Open Project User Secrets</strong> 開啟檔案</p>
+</blockquote>
+<h2 id="範例設定"><a href="#範例設定" class="headerlink" title="範例設定"></a>範例設定</h2><p><strong>appSetting.json</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;Logging&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;LogLevel&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;Default&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Information&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;Microsoft.AspNetCore&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Warning&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;LineBot&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;channelAccessToken&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&lt;your-channel-access-token&gt;&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;adminUserId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&lt;your-line-user-id&gt;&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;AllowedHosts&quot;</span><span class="punctuation">:</span> <span class="string">&quot;*&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>secrets.json</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;LineBot&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;channelAccessToken&quot;</span><span class="punctuation">:</span> <span class="string">&quot;I am real channel access token&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;adminUserId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;I am admin user id&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="佈署到-Azure"><a href="#佈署到-Azure" class="headerlink" title="佈署到 Azure"></a>佈署到 Azure</h2><p>佈署到 Azure 則是需要在應用程式設定中自己新增<br><img src="/artblog/store-sensitive-information-via-dotnet-user-secrets/20230308-4.jpg"></p>
+<p>假設以這樣的結構來說，我在 azure 的設定就是<br><img src="/artblog/store-sensitive-information-via-dotnet-user-secrets/20230308-5.jpg"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LineBot:adminUserId</span><br></pre></td></tr></table></figure>
+
+<p>驗證一下 azure 設定是不是真的有吃到，我做了一個簡單的 Controller 去抓設定值並顯示，並且改了一個設定，測試是否會出現在 azure 網站上</p>
+<p><img src="/artblog/store-sensitive-information-via-dotnet-user-secrets/20230308-6.jpg"><br><img src="/artblog/store-sensitive-information-via-dotnet-user-secrets/20230308-7.jpg"></p>
+<p>應用程式設定修改之後記得按下儲存，他會重新啟動網站</p>
+<p><img src="/artblog/store-sensitive-information-via-dotnet-user-secrets/20230308-8.jpg"><br><img src="/artblog/store-sensitive-information-via-dotnet-user-secrets/20230308-9.jpg"><br><img src="/artblog/store-sensitive-information-via-dotnet-user-secrets/20230308-10.jpg"></p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>設定值如果要往下一個節點，就用冒號隔開，這個東西很簡單，但是也很容易忘記細節，主要是怕自己忘記在 azure 要怎麼設定，剛好有機會就隨手紀錄一下</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/vue3-SPA-sample/" rel="prev" title="vue3-SPA sample">
+                  <i class="fa fa-angle-left"></i> vue3-SPA sample
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/sonarqube-jenkins-pipeline-get-metrics-then-send-mail/" rel="next" title="SonarQube-Jenkins執行分析後取得報告並寄送通知信件">
+                  SonarQube-Jenkins執行分析後取得報告並寄送通知信件 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

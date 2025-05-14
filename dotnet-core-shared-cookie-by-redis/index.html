@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="此範例是為了練習透過 docker 佈署，並於更版當下，利用 shared-cookie 避免網站的使用者被登出系統">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dotnet core shared cookie by redis">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/dotnet-core-shared-cookie-by-redis/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="此範例是為了練習透過 docker 佈署，並於更版當下，利用 shared-cookie 避免網站的使用者被登出系統">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/dotnet-core-shared-cookie-by-redis/2020-05-29_10-27-05.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/dotnet-core-shared-cookie-by-redis/2020-05-29_10-30-32.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/dotnet-core-shared-cookie-by-redis/2020-05-29_10-33-39.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/dotnet-core-shared-cookie-by-redis/2020-05-29_10-44-00.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/dotnet-core-shared-cookie-by-redis/2020-05-29_10-43-29.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/dotnet-core-shared-cookie-by-redis/2020-05-29_10-44-50.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/dotnet-core-shared-cookie-by-redis/2020-05-29_11-35-30.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/dotnet-core-shared-cookie-by-redis/2020-05-29_11-40-51.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/dotnet-core-shared-cookie-by-redis/2020-05-29_11-56-03.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/dotnet-core-shared-cookie-by-redis/2020-05-29_11-57-20.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/dotnet-core-shared-cookie-by-redis/2020-05-29_11-57-53.png">
+<meta property="article:published_time" content="2020-05-29T02:08:10.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.304Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="docker">
+<meta property="article:tag" content="identity">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/dotnet-core-shared-cookie-by-redis/2020-05-29_10-27-05.png">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/dotnet-core-shared-cookie-by-redis/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/dotnet-core-shared-cookie-by-redis/","path":"/dotnet-core-shared-cookie-by-redis/","title":"dotnet core shared cookie by redis"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>dotnet core shared cookie by redis | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A0%E5%85%A5-identity"><span class="nav-number">1.</span> <span class="nav-text">加入 identity</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AccountController-cs"><span class="nav-number">1.1.</span> <span class="nav-text">AccountController.cs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AuthorizeManagement-cs"><span class="nav-number">1.2.</span> <span class="nav-text">AuthorizeManagement.cs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#startup-cs"><span class="nav-number">1.3.</span> <span class="nav-text">startup.cs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#other-files"><span class="nav-number">1.4.</span> <span class="nav-text">other files</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%AC%E8%A9%A6%E7%B6%B2%E7%AB%99"><span class="nav-number">2.</span> <span class="nav-text">測試網站</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%AC%E8%A9%A6-docker-images-%E4%BD%88%E7%BD%B2"><span class="nav-number">3.</span> <span class="nav-text">測試 docker images 佈署</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dockerfile"><span class="nav-number">3.1.</span> <span class="nav-text">dockerfile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B-docker-image"><span class="nav-number">3.2.</span> <span class="nav-text">建立 docker image</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B-container"><span class="nav-number">3.3.</span> <span class="nav-text">建立 container</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%AC%E8%A9%A6%E6%AD%A5%E9%A9%9F"><span class="nav-number">3.4.</span> <span class="nav-text">測試步驟</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A8%AD%E5%AE%9A-asp-net-core-%E8%B3%87%E6%96%99%E4%BF%9D%E8%AD%B7"><span class="nav-number">4.</span> <span class="nav-text">設定 asp.net core 資料保護</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-Redis-%E7%9B%B8%E9%97%9C%E5%A5%97%E4%BB%B6"><span class="nav-number">4.1.</span> <span class="nav-text">安裝 Redis 相關套件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E6%96%B0%E6%89%93%E5%8C%85-image"><span class="nav-number">4.2.</span> <span class="nav-text">重新打包 image</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">4.3.</span> <span class="nav-text">總結</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/dotnet-core-shared-cookie-by-redis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="dotnet core shared cookie by redis | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          dotnet core shared cookie by redis
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2020-05-29 10:08:10" itemprop="dateCreated datePublished" datetime="2020-05-29T10:08:10+08:00">2020-05-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/dotnet/" itemprop="url" rel="index"><span itemprop="name">dotnet</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/dotnet-core-shared-cookie-by-redis/" class="post-meta-item leancloud_visitors" data-flag-title="dotnet core shared cookie by redis" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/dotnet-core-shared-cookie-by-redis/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/dotnet-core-shared-cookie-by-redis/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>此範例是為了練習透過 docker 佈署，並於更版當下，利用 shared-cookie 避免網站的使用者被登出系統</p>
+<span id="more"></span>
+
+<p>首先我們先建立一個新的 demo 專案，環境為.netCore 2.1，為了方便示範，使用了預設的 MVC 範本，這邊我是透過 visual Studio 2019 建立的，似乎透過 cli 建立的範本會有點不同，但不影響示範</p>
+<h2 id="加入-identity"><a href="#加入-identity" class="headerlink" title="加入 identity"></a>加入 identity</h2><p>第一件事情就是將網站的登入機制建立起來</p>
+<p>正常來說我們會讓使用者輸入帳號、密碼，並且經過後端驗證，一般會去資料庫查詢並回傳結果，如果沒問題的話，我們就會從資料庫中取得該會員的資料並設定在身份聲明中，這些聲明在網站的程式碼中可以隨時被調用</p>
+<h3 id="AccountController-cs"><a href="#AccountController-cs" class="headerlink" title="AccountController.cs"></a>AccountController.cs</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// LoginRequest 只是一個單純的 DTO 物件，只有 LoginId 與 Password 兩個屬性</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">async</span> Task&lt;JsonResult&gt; <span class="title">Login</span>(<span class="params">LoginRequest form</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 一開始都先將使用者登出系統</span></span><br><span class="line">    <span class="keyword">await</span> AuthorizeManagement.SignOutAsync();</span><br><span class="line">    <span class="comment">// 如果帳號密碼不符合，回傳前端 json 為 false</span></span><br><span class="line">    <span class="keyword">if</span> (form.LoginId != <span class="string">&quot;test&quot;</span> || form.Password != <span class="string">&quot;1234&quot;</span>) <span class="keyword">return</span> Json(<span class="keyword">new</span> &#123;result = <span class="literal">false</span>&#125;);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 符合的話就進行登入系統的行為，此處由我們自己撰寫的類別來處理登入這件事情</span></span><br><span class="line">    <span class="keyword">await</span> AuthorizeManagement.SignInAsync(form.LoginId);</span><br><span class="line">    <span class="keyword">return</span> Json(<span class="keyword">new</span> &#123;result = <span class="literal">true</span>&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="AuthorizeManagement-cs"><a href="#AuthorizeManagement-cs" class="headerlink" title="AuthorizeManagement.cs"></a>AuthorizeManagement.cs</h3><blockquote>
+<p>HttpContext 透過建構式注入取得，於 startup.cs 中設定</p>
+</blockquote>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">async</span> Task <span class="title">SignInAsync</span>(<span class="params"><span class="built_in">string</span> loginId</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 身份聲明</span></span><br><span class="line">    ClaimsIdentity identity = <span class="keyword">new</span> ClaimsIdentity(</span><br><span class="line">        <span class="keyword">new</span>[]</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">new</span> Claim(ClaimTypes.NameIdentifier, loginId),</span><br><span class="line">        &#125;,</span><br><span class="line">        CookieAuthenticationDefaults.AuthenticationScheme);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 此處設定大概的意思是，如果15分鐘內使用者沒有跟網站互動的話，時間到就把客戶端的cookie資料清除 (藉由expires由瀏覽器處理)</span></span><br><span class="line">    AuthenticationProperties authProperties = <span class="keyword">new</span> AuthenticationProperties</span><br><span class="line">    &#123;</span><br><span class="line">        AllowRefresh = <span class="literal">true</span>,</span><br><span class="line">        ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(<span class="number">15</span>),</span><br><span class="line">        IsPersistent = <span class="literal">true</span>,</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">await</span> HttpContext.SignInAsync(</span><br><span class="line">        CookieAuthenticationDefaults.AuthenticationScheme,</span><br><span class="line">        <span class="keyword">new</span> ClaimsPrincipal(identity),</span><br><span class="line">        authProperties);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="startup-cs"><a href="#startup-cs" class="headerlink" title="startup.cs"></a>startup.cs</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// startup.cs</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ConfigureServices</span>(<span class="params">IServiceCollection services</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//..略</span></span><br><span class="line">    services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie()</span><br><span class="line"></span><br><span class="line">    services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Configure</span>(<span class="params">IApplicationBuilder app, IHostingEnvironment env</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    AuthorizeManagement.Configure(app.ApplicationServices.GetRequiredService&lt;IHttpContextAccessor&gt;());</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (env.IsDevelopment())</span><br><span class="line">    &#123;</span><br><span class="line">        app.UseDeveloperExceptionPage();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        app.UseExceptionHandler(<span class="string">&quot;/Home/Error&quot;</span>);</span><br><span class="line">        app.UseHsts();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    app.UseHttpsRedirection();</span><br><span class="line">    app.UseStaticFiles();</span><br><span class="line">    app.UseCookiePolicy();</span><br><span class="line">    app.UseAuthentication();    <span class="comment">// 需要加入這一行</span></span><br><span class="line"></span><br><span class="line">    app.UseMvc(routes =&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        routes.MapRoute(</span><br><span class="line">            name: <span class="string">&quot;default&quot;</span>,</span><br><span class="line">            template: <span class="string">&quot;&#123;controller=Account&#125;/&#123;action=Index&#125;/&#123;id?&#125;&quot;</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="other-files"><a href="#other-files" class="headerlink" title="other files"></a>other files</h3><p>其他的檔案細節請自行參考 github</p>
+<h2 id="測試網站"><a href="#測試網站" class="headerlink" title="測試網站"></a>測試網站</h2><p>首頁已經改成<code>/Account/Index</code>，所以一開網站應該就會看到下面這畫面<br><img src="/artblog/dotnet-core-shared-cookie-by-redis/2020-05-29_10-27-05.png"></p>
+<p>將開發者工具開啟，可以看到 cookie 是沒東西的<br><img src="/artblog/dotnet-core-shared-cookie-by-redis/2020-05-29_10-30-32.png"></p>
+<p>點選 Login 之後，看到 Cookie 就產生出來了，注意到 Expires 的時間，正好是我截圖時候再加 15 分鐘</p>
+<blockquote>
+<p>Cookie 的時間是 GMT 時間</p>
+</blockquote>
+<p><img src="/artblog/dotnet-core-shared-cookie-by-redis/2020-05-29_10-33-39.png"></p>
+<h2 id="測試-docker-images-佈署"><a href="#測試-docker-images-佈署" class="headerlink" title="測試 docker images 佈署"></a>測試 docker images 佈署</h2><p>登入機制看起來動作很正常，一般情況下也沒問題，但是 cookie 的產生與 machine key 有關，所以很可能在 load balance 環境、或者是透過 docker 佈署的環境下會有問題，因此我們先來測試一下，若是透過 docker 佈署、更版，網站使用者是否會被登出</p>
+<h3 id="dockerfile"><a href="#dockerfile" class="headerlink" title="dockerfile"></a>dockerfile</h3><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> microsoft/dotnet:<span class="number">2.1</span>-sdk AS build</span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> /src</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> . .</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> dotnet publish -c Release -o /out</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">FROM</span> microsoft/dotnet:<span class="number">2.1</span>-aspnetcore-runtime AS runtime</span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> /app</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> --from=build /out .</span></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="string">&quot;dotnet&quot;</span>, <span class="string">&quot;shared-cookie-redis.dll&quot;</span>]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="建立-docker-image"><a href="#建立-docker-image" class="headerlink" title="建立 docker image"></a>建立 docker image</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t demo .</span><br></pre></td></tr></table></figure>
+
+<h3 id="建立-container"><a href="#建立-container" class="headerlink" title="建立 container"></a>建立 container</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --rm --name=mysite -p 7000:80 demo</span><br></pre></td></tr></table></figure>
+
+<h3 id="測試步驟"><a href="#測試步驟" class="headerlink" title="測試步驟"></a>測試步驟</h3><p>先將網站透過 docker run 起來，並於網站登入，產生 cookie<br><img src="/artblog/dotnet-core-shared-cookie-by-redis/2020-05-29_10-44-00.png"><br>將網站 container 停止，並重新 run 一個新的 container<br><img src="/artblog/dotnet-core-shared-cookie-by-redis/2020-05-29_10-43-29.png"><br>瀏覽器直接重新整理，觀察 cookie 與頁面<br><img src="/artblog/dotnet-core-shared-cookie-by-redis/2020-05-29_10-44-50.png"></p>
+<p>所以我們可以合理的猜測，因為 cookie 加密 base on machine key，但是因為在 container 重新建立的情況下，machine key 不同，所以原先產生的 cookie 也隨著失效了</p>
+<p>那麼，如果 machine key 是一樣的，是否就可以解決這個問題？</p>
+<h2 id="設定-asp-net-core-資料保護"><a href="#設定-asp-net-core-資料保護" class="headerlink" title="設定 asp.net core 資料保護"></a>設定 asp.net core 資料保護</h2><p>最多的資料大概就是<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/aspnet/core/security/data-protection/configuration/overview?view=aspnetcore-3.1">官網</a>了，這裡提到很多種方法，大致上講一下</p>
+<p>就我理解的部分來說，整個 cookie 的產生很大一部分取決 machine key，他是一種資料保護的機制，原本 windows 主機上都會有這東西，時間到了它會自動產生一個，通常的路徑會是在<code>%LOCALAPPDATA%\ASP.NET\DataProtection-Keys</code>，如果我們要變更程式取得 machine key 的位置的話，可以透過<code>PersistKeysToFileSystem</code>來做，而你一但變更了這個位置，這個 key 就會是沒有就會是沒有加密過的，如果你還想要加密，那就要透過<code>ProtectKeysWith</code>，並給予一個符合 x.509 的憑證來加密資料，這裡有一個<a target="_blank" rel="noopener" href="https://github.com/tillig/DataProtection/blob/master/test/DataProtectionExtensions.Test/TestCertificate.cs">範例</a>可以看一下</p>
+<p>如果想要測試的話，可以直接用下面的方式就好，這樣子專案目錄下的 keys 在 runtime 的時候就會產生 key，此處可以將 key 的 expires 時間設置長一點，然後將這個產生出來的 key 加入到專案內，並且設定編譯時候的動作永遠複製，這樣就都會用同一個 key，但是因為我沒辦法驗證 expires 是否真的有效，加上一些因素，最終沒有在朝這個解決方案下去研究</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">services.AddDataProtection().PersistKeysToFileSystem(<span class="keyword">new</span> DirectoryInfo(<span class="string">&quot;keys&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<h3 id="安裝-Redis-相關套件"><a href="#安裝-Redis-相關套件" class="headerlink" title="安裝 Redis 相關套件"></a>安裝 Redis 相關套件</h3><ol>
+<li><code>StackExchange.Redis</code></li>
+<li><code>Microsoft.AspNetCore.DataProtection.Redis</code></li>
+</ol>
+<p>這版本很怪，.netCore 2.2 以上才能裝<code>Microsoft.AspNetCore.DataProtection.StackExchangeRedis</code>，但 2.1 以下的只能裝<code>Microsoft.AspNetCore.DataProtection.Redis</code>，在 Rider 的介面裡我又找不到，最後直接用 cli 下指令安裝</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dotnet add package Microsoft.AspNetCore.DataProtection.Redis --version 0.4.1</span><br></pre></td></tr></table></figure>
+
+<p>接著在<code>startup.cs</code>，設定資料保護，當然 <code>redis</code> 要先啟動起來</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//startup.cs</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ConfigureServices</span>(<span class="params">IServiceCollection services</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// DI</span></span><br><span class="line">    services.AddSingleton&lt;IHttpContextAccessor, HttpContextAccessor&gt;();</span><br><span class="line"></span><br><span class="line">    services.Configure&lt;CookiePolicyOptions&gt;(options =&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// This lambda determines whether user consent for non-essential cookies is needed for a given request.</span></span><br><span class="line">        options.CheckConsentNeeded = context =&gt; <span class="literal">true</span>;</span><br><span class="line">        options.MinimumSameSitePolicy = SameSiteMode.None;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> redisConnStr = <span class="string">&quot;127.0.0.1,abortConnect=false,syncTimeout=10000&quot;</span>;</span><br><span class="line">    <span class="keyword">var</span> redis = ConnectionMultiplexer.Connect(redisConnStr);</span><br><span class="line">    services.AddDataProtection();</span><br><span class="line">    services.Configure&lt;KeyManagementOptions&gt;(o =&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        o.XmlRepository = <span class="keyword">new</span> RedisXmlRepository(() =&gt; redis.GetDatabase(), <span class="string">&quot;DataProtection-Keys&quot;</span>);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        option.ExpireTimeSpan = TimeSpan.FromMinutes(<span class="number">60</span>);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>把網站跑起來，接著再去查詢 Redis 可以看到已經有 key 存入了</p>
+<p><img src="/artblog/dotnet-core-shared-cookie-by-redis/2020-05-29_11-35-30.png"></p>
+<h3 id="重新打包-image"><a href="#重新打包-image" class="headerlink" title="重新打包 image"></a>重新打包 image</h3><p>網站停掉，原先的 image 刪除，重新再做一個 image<br><img src="/artblog/dotnet-core-shared-cookie-by-redis/2020-05-29_11-40-51.png"></p>
+<p>docker run 網站之後，進行登入並觀察 cookie 資訊</p>
+<p><img src="/artblog/dotnet-core-shared-cookie-by-redis/2020-05-29_11-56-03.png"></p>
+<p>將 container 刪除再重新 run 一個<br><img src="/artblog/dotnet-core-shared-cookie-by-redis/2020-05-29_11-57-20.png"></p>
+<p>瀏覽器重新整理，查看是否為登入狀態<br><img src="/artblog/dotnet-core-shared-cookie-by-redis/2020-05-29_11-57-53.png"></p>
+<p>這邊要注意的事情是因為我們用了 redis，原先在程式內寫死<code>127.0.0.1:6379</code>如果包成 docker，會不能用。因為 docker container 要連 redis 應該要連 redis container 的 name，所以這邊為了 redis 的連線字串，將他放在<code>Properties/lanuchSettings.json</code>的<code>environmentVariables</code>區段</p>
+<p>並且在 docker image 打包的時候，透過<code>ENV ASPNETCORE_ENVIRONMENT=&quot;Lab&quot;</code>去指定系統環境變數為<code>Lab</code>，然後，在專案<code>Program.cs</code>加了下面這一段，讓程式在 Lab 環境下可以讀取不同的連線字串供測試使用</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    SetEnvironmentVariable();</span><br><span class="line">    CreateWebHostBuilder(args).Build().Run();</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">SetEnvironmentVariable</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> env = Environment.GetEnvironmentVariable(<span class="string">&quot;ASPNETCORE_ENVIRONMENT&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (env == <span class="string">&quot;Lab&quot;</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        Environment.SetEnvironmentVariable(<span class="string">&quot;redis&quot;</span>, <span class="string">&quot;myredis,abortConnect=false,syncTimeout=10000&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h3><p>至此，整個 POC 已經完成，相關程式碼已放置於 <a target="_blank" rel="noopener" href="https://github.com/art-Blog/SharedCookieRedis">Github</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/docker/" rel="tag"># docker</a>
+              <a href="/artblog/tags/identity/" rel="tag"># identity</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/cypress-io-e2e-testing/" rel="prev" title="Cypress.io E2E測試">
+                  <i class="fa fa-angle-left"></i> Cypress.io E2E測試
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/vscode-useful-extensions/" rel="next" title="VSCode 好用套件">
+                  VSCode 好用套件 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

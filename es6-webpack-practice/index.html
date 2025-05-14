@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="傳統的網頁開發，不外乎就是 HTML + CSS，以這兩者為主體，添加其他功能。乍看之下很簡單，但是需求往往很複雜，需要透過 javascript 完成的事情太多了，有跟 UI 相關的操作、有邏輯的部份，如果再加上引用其他的框架、功能等等，光是前後載入的順序就能搞死一堆人。趁這次休息有點時間，開始動手練習最近接觸到的一些前端工具… …">
+<meta property="og:type" content="article">
+<meta property="og:title" content="es6 + webpack 練習">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/es6-webpack-practice/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="傳統的網頁開發，不外乎就是 HTML + CSS，以這兩者為主體，添加其他功能。乍看之下很簡單，但是需求往往很複雜，需要透過 javascript 完成的事情太多了，有跟 UI 相關的操作、有邏輯的部份，如果再加上引用其他的框架、功能等等，光是前後載入的順序就能搞死一堆人。趁這次休息有點時間，開始動手練習最近接觸到的一些前端工具… …">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/es6-webpack-practice/1523105893_95284.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/es6-webpack-practice/1523107034_33681.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/es6-webpack-practice/1523106928_77832.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/es6-webpack-practice/1523107461_84849.png">
+<meta property="article:published_time" content="2018-04-09T02:26:25.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.185Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="webpack">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/es6-webpack-practice/1523105893_95284.png">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/es6-webpack-practice/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/es6-webpack-practice/","path":"/es6-webpack-practice/","title":"es6 + webpack 練習"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>es6 + webpack 練習 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#babel"><span class="nav-number">1.</span> <span class="nav-text">babel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#webpack"><span class="nav-number">2.</span> <span class="nav-text">webpack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wallaby-js-quokka-js"><span class="nav-number">3.</span> <span class="nav-text">wallaby.js &amp; quokka.js</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mocha"><span class="nav-number">4.</span> <span class="nav-text">mocha</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/es6-webpack-practice/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="es6 + webpack 練習 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          es6 + webpack 練習
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2018-04-09 10:26:25" itemprop="dateCreated datePublished" datetime="2018-04-09T10:26:25+08:00">2018-04-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/javascript/" itemprop="url" rel="index"><span itemprop="name">javascript</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/es6-webpack-practice/" class="post-meta-item leancloud_visitors" data-flag-title="es6 + webpack 練習" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/es6-webpack-practice/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/es6-webpack-practice/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>傳統的網頁開發，不外乎就是 HTML + CSS，以這兩者為主體，添加其他功能。乍看之下很簡單，但是需求往往很複雜，需要透過 javascript 完成的事情太多了，有跟 UI 相關的操作、有邏輯的部份，如果再加上引用其他的框架、功能等等，光是前後載入的順序就能搞死一堆人。趁這次休息有點時間，開始動手練習最近接觸到的一些前端工具… …</p>
+<span id="more"></span>
+
+<p>真男人就是要看 Code：<a target="_blank" rel="noopener" href="https://github.com/art-Blog/es6_webpack">ES6 + Webpack</a></p>
+<p>好像很多前端專案都是區分為 src 目錄與 dist 目錄，所以我也就這樣幹了~~ (大誤)，不是啦，其實是有深意的。source 目錄做為開發使用、編輯、調整都在這邊操作；而 dist 目錄則是產出的結果，中間則是經過自動化的一系列操作(當然要我們自己去設定…)，前端通常會用到的一些處理，大概就是壓縮、打包、混淆之類的吧，現在又因為 ECMAScript 走起來了，有好多好多人性化的功能跟寫法，為了要享受這一切，於是有了轉譯 javascript 這一件事情</p>
+<h2 id="babel"><a href="#babel" class="headerlink" title="babel"></a>babel</h2><p>瀏覽器可以支援的 javascript 不夠新，不能夠支援 ECMAScript 新的標準，在這個過渡期間，開發網頁如果要享受到新語法的好處，勢必要先將新語法轉換成瀏覽器看得懂的語法。前端 javascript 採用 ES6 的語法，將功能模組化，並於頁面的 script 程式中透過 import 載入，感覺好像 C#的 using 喔，然後再把類別給 new 出來，這樣的開發方式好習慣。(大心)</p>
+<p><img src="/artblog/es6-webpack-practice/1523105893_95284.png"></p>
+<p>之後要透過 webpack 的套件<code>HtmlWebpackPlugin</code>，將 Html 檔案從 src 目錄複製到 dist 目錄，所以要先準備好 source 的 HTML 檔案</p>
+<h2 id="webpack"><a href="#webpack" class="headerlink" title="webpack"></a>webpack</h2><p>可以將多個檔案打包在一起，HTML 只需要載入一個檔案，跟相依性造成的 Bug 說 886。</p>
+<p>在開發環境的時候，需要 Source-Map 功能方便 Debug，而且修改了程式碼之後，要能夠立即自動化 babel 轉譯語法，方便前端開啟網頁測試。(好像還有個 Hot Reload 之類的東西，但是我自己應用的環境是 C#處理後端，所以這一塊比較沒需求，因為我都會先在 VS2017 把網站開起來測試)；生產環境就不需要 debug 相關的東西了，但是需要將程式碼壓縮、節省網路傳輸量，參考 webpack 官方文件的設定，將設定檔區分為共用的、開發的、生產的三份檔案，在配置上感覺較有條理，配合 npm 的 script 區塊，將指令都寫在 package.json 那邊。</p>
+<h2 id="wallaby-js-quokka-js"><a href="#wallaby-js-quokka-js" class="headerlink" title="wallaby.js &amp; quokka.js"></a>wallaby.js &amp; quokka.js</h2><p>氪金套件，但是買了絕對不會後悔，wallaby.js 支援 TDD 的開發方式，但是目前並不支援 cucumber；wallaby.js 的設定較為繁瑣，可能是因為功能也很強大，支援了很多很多的東西，這部分有興趣的人請自行前往官網了解喔。(因為我看不懂唷~~)，wallaby.js 的好處除了即時回饋之外 (小綠點) ，啟用之後開啟 localhost:51245 也可以看到測試涵蓋率等等資訊。</p>
+<p><img src="/artblog/es6-webpack-practice/1523107034_33681.png"></p>
+<p>而 quokka.js 有提供社群版本，花錢買的版本能夠讓你 import 自己寫的 js，而 wallaby 及 quokka 氪金版本都能夠透過 <code>//?.</code> 看到執行時間，對於效能調教應該很有幫助。</p>
+<h2 id="mocha"><a href="#mocha" class="headerlink" title="mocha"></a>mocha</h2><p>單元測試套件，我覺得前端已經很複雜了，如果沒有測試保護，很容易自己開發到後面會越來越沒底氣，寫寫測試起碼能知道三個月前的自己原來還寫了個 lib 可以用在新的需求上….反正好處很多啦。如果想嘗試 TDD，但是不想氪金購買 wallaby.js，其實直接用 mocha 也很夠用了。</p>
+<p><img src="/artblog/es6-webpack-practice/1523106928_77832.png"></p>
+<p>最終結果</p>
+<p><img src="/artblog/es6-webpack-practice/1523107461_84849.png"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/webpack/" rel="tag"># webpack</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/Replace-Constructors-with-Creation-Methods/" rel="prev" title="Replace Constructors with Creation Methods">
+                  <i class="fa fa-angle-left"></i> Replace Constructors with Creation Methods
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/vscode-settings-sync-and-snippet/" rel="next" title="VSCode設定同步及程式碼片段">
+                  VSCode設定同步及程式碼片段 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

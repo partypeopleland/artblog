@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="看了好幾篇 hexo 的文章，加上自己也已經很習慣使用 VScode 作為日常開發尤其是 markdown 文件的撰寫便利，想想還是自己架個小小的 blog 紀錄日常心得吧">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 Hexo 建立個人部落格">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/hexo-blog/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="看了好幾篇 hexo 的文章，加上自己也已經很習慣使用 VScode 作為日常開發尤其是 markdown 文件的撰寫便利，想想還是自己架個小小的 blog 紀錄日常心得吧">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/hexo-blog/2020-01-15_11-06-48.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/hexo-blog/2020-08-27_153317.png">
+<meta property="article:published_time" content="2019-04-19T17:00:35.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.225Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="hexo">
+<meta property="article:tag" content="github pages">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/hexo-blog/2020-01-15_11-06-48.png">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/hexo-blog/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/hexo-blog/","path":"/hexo-blog/","title":"使用 Hexo 建立個人部落格"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>使用 Hexo 建立個人部落格 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%82%BA%E7%94%9A%E9%BA%BC%E7%94%A8-Hexo"><span class="nav-number">1.</span> <span class="nav-text">為甚麼用 Hexo</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E6%96%87%E7%AB%A0"><span class="nav-number">2.1.</span> <span class="nav-text">建立文章</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%95%9F%E5%8B%95%E7%B6%B2%E7%AB%99%E9%A0%90%E8%A6%BD"><span class="nav-number">2.2.</span> <span class="nav-text">啟動網站預覽</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B7%A8%E8%AD%AF%E9%83%A8%E8%90%BD%E6%A0%BC%E7%82%BA%E9%9D%9C%E6%85%8B%E7%B6%B2%E9%A0%81"><span class="nav-number">2.3.</span> <span class="nav-text">編譯部落格為靜態網頁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%AA%E9%99%A4%E5%BF%AB%E5%8F%96%E5%8F%8A%E7%94%A2%E7%94%9F%E5%87%BA%E4%BE%86%E7%9A%84%E6%AA%94%E6%A1%88"><span class="nav-number">2.4.</span> <span class="nav-text">刪除快取及產生出來的檔案</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%88%E7%BD%B2%E7%B6%B2%E7%AB%99"><span class="nav-number">3.</span> <span class="nav-text">佈署網站</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#NAS"><span class="nav-number">3.1.</span> <span class="nav-text">NAS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#github-pages"><span class="nav-number">3.2.</span> <span class="nav-text">github pages</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-Next-Theme"><span class="nav-number">4.</span> <span class="nav-text">使用 Next Theme</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A8%AD%E5%AE%9A%E4%B8%BB%E9%A1%8C"><span class="nav-number">4.1.</span> <span class="nav-text">設定主題</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Hexo-%E8%A8%AD%E5%AE%9A%E6%96%87%E4%BB%B6%EF%BC%9A-config-yml"><span class="nav-number">4.1.1.</span> <span class="nav-text">Hexo 設定文件：_config.yml</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E9%A1%8C%E8%A8%AD%E5%AE%9A%E6%96%87%E4%BB%B6%EF%BC%9AThemes-next-config-yml"><span class="nav-number">4.1.2.</span> <span class="nav-text">主題設定文件：Themes&#x2F;next&#x2F;_config.yml</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/hexo-blog/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="使用 Hexo 建立個人部落格 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用 Hexo 建立個人部落格
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2019-04-20 01:00:35" itemprop="dateCreated datePublished" datetime="2019-04-20T01:00:35+08:00">2019-04-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">工具</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/hexo-blog/" class="post-meta-item leancloud_visitors" data-flag-title="使用 Hexo 建立個人部落格" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/hexo-blog/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/hexo-blog/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>看了好幾篇 hexo 的文章，加上自己也已經很習慣使用 VScode 作為日常開發<br>尤其是 markdown 文件的撰寫便利，想想還是自己架個小小的 blog 紀錄日常心得吧</p>
+<span id="more"></span>
+
+<h1 id="為甚麼用-Hexo"><a href="#為甚麼用-Hexo" class="headerlink" title="為甚麼用 Hexo"></a>為甚麼用 Hexo</h1><p>對我而言 hexo 有幾項優點：</p>
+<ol>
+<li>安裝快速</li>
+<li>靜態 HTML：不需後端伺服器，所以可以架在自己的 NAS 上面</li>
+<li>更換佈景主題方便，且資源眾多，雖說重點只是記錄知識，但是偶爾換換主題也是挺賞心悅目的一件事</li>
+<li>採用 markdown 撰寫，而且 VSCode 的支援度頗高</li>
+<li>容易客製調整，基本上就是 HTML 與 JavaScript，如果哪天想要改了也很方便</li>
+<li>有多種佈署外掛，包含 github、heroku 等空間，也有支援 FTP&#x2F;SFTP 的方式來佈署<blockquote>
+<p>佈署相關可參照官方文件：<a target="_blank" rel="noopener" href="https://hexo.io/docs/deployment.html">https://hexo.io/docs/deployment.html</a></p>
+</blockquote>
+</li>
+</ol>
+<h1 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h1><p>當然是先查看一下說明</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo --help</span><br></pre></td></tr></table></figure>
+
+<p>基本的指令及描述如果不太清楚，就直接去<a target="_blank" rel="noopener" href="http://hexo.io/docs/">官方網站</a>看吧</p>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Describe</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>clean</td>
+<td>Remove generated files and cache.</td>
+</tr>
+<tr>
+<td>config</td>
+<td>Get or set configurations.</td>
+</tr>
+<tr>
+<td>deploy</td>
+<td>Deploy your website.</td>
+</tr>
+<tr>
+<td>generate</td>
+<td>Generate static files.</td>
+</tr>
+<tr>
+<td>help</td>
+<td>Get help on a command.</td>
+</tr>
+<tr>
+<td>init</td>
+<td>Create a new Hexo folder.</td>
+</tr>
+<tr>
+<td>list</td>
+<td>List the information of the site</td>
+</tr>
+<tr>
+<td>migrate</td>
+<td>Migrate your site from other system to Hexo.</td>
+</tr>
+<tr>
+<td>new</td>
+<td>Create a new post.</td>
+</tr>
+<tr>
+<td>publish</td>
+<td>Moves a draft post from _drafts to _posts folder.</td>
+</tr>
+<tr>
+<td>render</td>
+<td>Render files with renderer plugins.</td>
+</tr>
+<tr>
+<td>server</td>
+<td>Start the server.</td>
+</tr>
+<tr>
+<td>version</td>
+<td>Display version information.</td>
+</tr>
+</tbody></table>
+<p>這邊我較常用到的是</p>
+<h2 id="建立文章"><a href="#建立文章" class="headerlink" title="建立文章"></a>建立文章</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new &quot;hello~world!&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="啟動網站預覽"><a href="#啟動網站預覽" class="headerlink" title="啟動網站預覽"></a>啟動網站預覽</h2><p>預設會在<code>localhost:4000</code>，同時修改文章的話還會有 browserSync</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+
+<h2 id="編譯部落格為靜態網頁"><a href="#編譯部落格為靜態網頁" class="headerlink" title="編譯部落格為靜態網頁"></a>編譯部落格為靜態網頁</h2><p>透過指令將部落格文章編譯成靜態網頁便於佈署，也可以輸入縮寫<code>hexo g</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo generate</span><br></pre></td></tr></table></figure>
+
+<h2 id="刪除快取及產生出來的檔案"><a href="#刪除快取及產生出來的檔案" class="headerlink" title="刪除快取及產生出來的檔案"></a>刪除快取及產生出來的檔案</h2><p>需要刪除無效的標籤索引時可以透過指令刪除產生出來的檔案及快取資料，下次重新產生即可</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br></pre></td></tr></table></figure>
+
+<h1 id="佈署網站"><a href="#佈署網站" class="headerlink" title="佈署網站"></a>佈署網站</h1><p>已經準備好靜態網頁資料後，剩下的就是將資料發布至伺服器上，一開始是放在 NAS，但後來想想有穩定又免錢的 github pages 幹嘛不用，於是又補了第二段，第一段 NAS 的部分看看就好囉</p>
+<h2 id="NAS"><a href="#NAS" class="headerlink" title="NAS"></a>NAS</h2><p>在我的 case 是透過 nas 作為伺服器，嘗試之後，透過 node.js 將網頁透過區域網路上傳是最簡易的做法</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//gulpfile.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> &#123; series &#125; = <span class="built_in">require</span>(<span class="string">&#x27;gulp&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs-extra&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> <span class="title class_">Hexo</span> = <span class="built_in">require</span>(<span class="string">&#x27;hexo&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> del = <span class="built_in">require</span>(<span class="string">&#x27;del&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> source = <span class="string">&#x27;public&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> dist = <span class="string">&#x27;\\\\192.168.1.80\\web\\hexo&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// The `clean` function is not exported so it can be considered a private task.</span></span><br><span class="line"><span class="comment">// It can still be used within the `series()` composition.</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">clean</span>(<span class="params">cb</span>) &#123;</span><br><span class="line">	<span class="comment">// body omitted</span></span><br><span class="line">	<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;clean old files&#x27;</span>);</span><br><span class="line">	<span class="title function_">del</span>([<span class="string">&#x27;public/**/*&#x27;</span>]);</span><br><span class="line">	<span class="title function_">cb</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// The `build` function is exported so it is public and can be run with the `gulp` command.</span></span><br><span class="line"><span class="comment">// It can also be used within the `series()` composition.</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">build</span>(<span class="params">cb</span>) &#123;</span><br><span class="line">	<span class="comment">// body omitted</span></span><br><span class="line">	<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;build hexo html files&#x27;</span>);</span><br><span class="line">	<span class="keyword">var</span> hexo = <span class="keyword">new</span> <span class="title class_">Hexo</span>(process.<span class="title function_">cwd</span>(), &#123;&#125;);</span><br><span class="line">	hexo.<span class="title function_">init</span>()</span><br><span class="line">		.<span class="title function_">then</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> hexo.<span class="title function_">call</span>(<span class="string">&#x27;generate&#x27;</span>, &#123;</span><br><span class="line">				<span class="attr">watch</span>: <span class="literal">false</span>,</span><br><span class="line">			&#125;);</span><br><span class="line">		&#125;)</span><br><span class="line">		.<span class="title function_">then</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> hexo.<span class="title function_">exit</span>();</span><br><span class="line">		&#125;)</span><br><span class="line">		.<span class="title function_">then</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="title function_">cb</span>();</span><br><span class="line">		&#125;)</span><br><span class="line">		.<span class="title function_">catch</span>(<span class="keyword">function</span> (<span class="params">err</span>) &#123;</span><br><span class="line">			<span class="variable language_">console</span>.<span class="title function_">log</span>(err);</span><br><span class="line">			hexo.<span class="title function_">exit</span>(err);</span><br><span class="line">			<span class="keyword">return</span> <span class="title function_">cb</span>(err);</span><br><span class="line">		&#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">deploy</span>(<span class="params">cb</span>) &#123;</span><br><span class="line">	<span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">copyFiles</span>(<span class="params"></span>) &#123;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			<span class="keyword">await</span> fs.<span class="title function_">copy</span>(source, dist);</span><br><span class="line">			<span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;deploy success!&#x27;</span>);</span><br><span class="line">		&#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">			<span class="variable language_">console</span>.<span class="title function_">error</span>(err);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="title function_">copyFiles</span>();</span><br><span class="line">	<span class="title function_">cb</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">exports</span>.<span class="property">build</span> = build;</span><br><span class="line"><span class="built_in">exports</span>.<span class="property">deploy</span> = deploy;</span><br><span class="line"><span class="built_in">exports</span>.<span class="property">clean</span> = clean;</span><br><span class="line"><span class="built_in">exports</span>.<span class="property">default</span> = <span class="title function_">series</span>(clean, build, deploy);</span><br></pre></td></tr></table></figure>
+
+<h2 id="github-pages"><a href="#github-pages" class="headerlink" title="github pages"></a>github pages</h2><p>首先要有一個 public 的 repository 來存放 hexo 所產生出來的靜態網頁，開一個新的 repo 即可</p>
+<p>接著修改<code>hexo</code>設定檔，大致上就是設定好發布的 repo url 及 branch，另外要注意的是網站若為子目錄，也要進行設定，官方網站的文件常常改地方，所以直接截圖</p>
+<p><img src="/artblog/hexo-blog/2020-01-15_11-06-48.png"></p>
+<p><a target="_blank" rel="noopener" href="https://hexo.io/docs/github-pages#content-inner">說明文件</a>，其實這邊利用的方法就是 private repository 的方式，因為比較簡單，只需要在設定檔中做下面這樣的設定，就可以方便地發布了</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># URL</span></span><br><span class="line"><span class="comment">## If your site is put in a subdirectory, set url as &#x27;http://yoursite.com/child&#x27; and root as &#x27;/child/&#x27;</span></span><br><span class="line"><span class="attr">url:</span> <span class="string">https://partypeopleland.github.io/artblog</span></span><br><span class="line"><span class="attr">root:</span> <span class="string">/artblog/</span></span><br><span class="line"></span><br><span class="line"><span class="attr">deploy:</span></span><br><span class="line">    <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">    <span class="attr">repo:</span> <span class="string">https://github.com/partypeopleland/artblog.git</span></span><br><span class="line">    <span class="attr">branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
+
+<p>安裝 npm 套件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+
+<p>利用指令發布網站</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo d -g</span><br></pre></td></tr></table></figure>
+
+<p>接著到 repository 的設定頁面，將 github pages 打開就完成了</p>
+<h1 id="使用-Next-Theme"><a href="#使用-Next-Theme" class="headerlink" title="使用 Next Theme"></a>使用 Next Theme</h1><p>使用 Hexo 也好一陣子，始終在換主題，發現了這套 Theme 看起來很舒服也很多人使用，畢竟部落格文章其實我覺得也不用太花俏，這個 Theme 在閱讀上非常舒服，那就是他了</p>
+<p>安裝透過<a target="_blank" rel="noopener" href="https://github.com/theme-next/hexo-theme-next/tree/master/docs/zh-CN">官網</a>的說明，直接進入子目錄將最新檔案 clone 下來即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd hexo</span><br><span class="line">$ git clone https://github.com/theme-next/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure>
+
+<p>如果需要更詳細的說明，請參考<a target="_blank" rel="noopener" href="https://github.com/theme-next/hexo-theme-next/blob/master/docs/zh-CN/INSTALLATION.md">詳細安裝步驟</a></p>
+<p>這樣子將 Theme 檔案下載完畢後，修改設定指定主題為<code>next</code>就好了<br><img src="/artblog/hexo-blog/2020-08-27_153317.png"></p>
+<h2 id="設定主題"><a href="#設定主題" class="headerlink" title="設定主題"></a>設定主題</h2><p>因為可以設定的東西跟選項很多，我也不打算介紹，因為很多地方都解釋得很清楚，這邊提供<a target="_blank" rel="noopener" href="https://theme-next.iissnan.com/">網站</a>參考就好，底下列出我的調整項目</p>
+<h3 id="Hexo-設定文件：-config-yml"><a href="#Hexo-設定文件：-config-yml" class="headerlink" title="Hexo 設定文件：_config.yml"></a>Hexo 設定文件：<code>_config.yml</code></h3><h3 id="主題設定文件：Themes-next-config-yml"><a href="#主題設定文件：Themes-next-config-yml" class="headerlink" title="主題設定文件：Themes/next/_config.yml"></a>主題設定文件：<code>Themes/next/_config.yml</code></h3><ol>
+<li>主題設定<code>scheme: Pisces</code></li>
+<li>主題設定<code>language: zh-TW</code></li>
+<li>Hexo 設定<code>language: zh-TW</code></li>
+</ol>
+<blockquote>
+<p>如果改完，使用 local 預覽卻發現變成阿拉伯文，記得先<code>hexo clean</code>清除暫存再試一次</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/hexo/" rel="tag"># hexo</a>
+              <a href="/artblog/tags/github-pages/" rel="tag"># github pages</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/LeetCode-Pow(x,n)/" rel="prev" title="LeetCode-Pow(x,n)">
+                  <i class="fa fa-angle-left"></i> LeetCode-Pow(x,n)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/alex-vue-calendar/" rel="next" title="Alex宅幹嘛 - Vue一個萬年曆">
+                  Alex宅幹嘛 - Vue一個萬年曆 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

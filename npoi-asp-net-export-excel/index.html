@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="這篇文章主要是為了記錄使用 NPOI 的方法及踩坑經驗，更細節還是請移步官網">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NPOI-ASP.net網站匯出Excel範例">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/npoi-asp-net-export-excel/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="這篇文章主要是為了記錄使用 NPOI 的方法及踩坑經驗，更細節還是請移步官網">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/npoi-asp-net-export-excel/2020-07-22_101801.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/npoi-asp-net-export-excel/2020-07-22_102338.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/npoi-asp-net-export-excel/2020-07-22-102901.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/npoi-asp-net-export-excel/2020-07-22_102954.png">
+<meta property="article:published_time" content="2020-07-22T01:53:44.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.285Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="excel">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/npoi-asp-net-export-excel/2020-07-22_101801.png">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/npoi-asp-net-export-excel/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/npoi-asp-net-export-excel/","path":"/npoi-asp-net-export-excel/","title":"NPOI-ASP.net網站匯出Excel範例"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>NPOI-ASP.net網站匯出Excel範例 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#NPOI-%E7%9A%84%E5%AE%89%E8%A3%9D"><span class="nav-number">1.</span> <span class="nav-text">NPOI 的安裝</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%96%8B%E5%A7%8B-Quick-Start"><span class="nav-number">2.</span> <span class="nav-text">如何開始 Quick Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B-EXCEL-%E6%AA%94%E6%A1%88"><span class="nav-number">2.1.</span> <span class="nav-text">建立 EXCEL 檔案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E5%B7%A5%E4%BD%9C%E8%A1%A8"><span class="nav-number">2.2.</span> <span class="nav-text">建立工作表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A8%AD%E5%AE%9A%E5%84%B2%E5%AD%98%E6%A0%BC"><span class="nav-number">2.3.</span> <span class="nav-text">設定儲存格</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BC%89%E6%AA%94%E6%A1%88"><span class="nav-number">2.4.</span> <span class="nav-text">下載檔案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A0%85"><span class="nav-number">2.5.</span> <span class="nav-text">注意事項</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%87%89%E7%94%A8%E7%AF%84%E4%BE%8B%EF%BC%9A%E7%B6%B2%E7%AB%99%E4%B8%8B%E8%BC%89-Excel"><span class="nav-number">3.</span> <span class="nav-text">應用範例：網站下載 Excel</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E7%AB%AF"><span class="nav-number">3.1.</span> <span class="nav-text">前端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%8C%E7%AB%AF"><span class="nav-number">3.2.</span> <span class="nav-text">後端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%AC%E8%A9%A6"><span class="nav-number">3.3.</span> <span class="nav-text">測試</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">4.</span> <span class="nav-text">結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/npoi-asp-net-export-excel/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="NPOI-ASP.net網站匯出Excel範例 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          NPOI-ASP.net網站匯出Excel範例
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2020-07-22 09:53:44" itemprop="dateCreated datePublished" datetime="2020-07-22T09:53:44+08:00">2020-07-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/NPOI/" itemprop="url" rel="index"><span itemprop="name">NPOI</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/npoi-asp-net-export-excel/" class="post-meta-item leancloud_visitors" data-flag-title="NPOI-ASP.net網站匯出Excel範例" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/npoi-asp-net-export-excel/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/npoi-asp-net-export-excel/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>這篇文章主要是為了記錄使用 NPOI 的方法及踩坑經驗，更細節還是請移步<a target="_blank" rel="noopener" href="https://github.com/tonyqus/npoi">官網</a></p>
+<span id="more"></span>
+
+<h2 id="NPOI-的安裝"><a href="#NPOI-的安裝" class="headerlink" title="NPOI 的安裝"></a>NPOI 的安裝</h2><p>使用<code>nuget</code>搜尋<code>NPOI</code>套件並安裝即可，做完這件事情後查看專案檔，可以看到他一共安裝三個套件</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--package.config--&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">package</span> <span class="attr">id</span>=<span class="string">&quot;NPOI&quot;</span> <span class="attr">version</span>=<span class="string">&quot;2.5.1&quot;</span> <span class="attr">targetFramework</span>=<span class="string">&quot;net452&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">package</span> <span class="attr">id</span>=<span class="string">&quot;Portable.BouncyCastle&quot;</span> <span class="attr">version</span>=<span class="string">&quot;1.8.6&quot;</span> <span class="attr">targetFramework</span>=<span class="string">&quot;net452&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">package</span> <span class="attr">id</span>=<span class="string">&quot;SharpZipLib&quot;</span> <span class="attr">version</span>=<span class="string">&quot;1.2.0&quot;</span> <span class="attr">targetFramework</span>=<span class="string">&quot;net452&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="如何開始-Quick-Start"><a href="#如何開始-Quick-Start" class="headerlink" title="如何開始 Quick Start"></a>如何開始 Quick Start</h2><p>通常我們使用 NPOI 的步驟大概會是這個樣子</p>
+<ol>
+<li>建立 EXCEL 檔案：從概念上講就是先建立一個工作本(WorkBook)</li>
+<li>建立工作表：這個就是工作本裡面的某一頁(Sheet)</li>
+<li>設定儲存格資料：沒甚麼好講的，就是每一頁面底下的儲存格</li>
+</ol>
+<h3 id="建立-EXCEL-檔案"><a href="#建立-EXCEL-檔案" class="headerlink" title="建立 EXCEL 檔案"></a>建立 EXCEL 檔案</h3><p>因為 EXCEL 版本的關係，官方提供兩個類別來建立工作表</p>
+<table>
+<thead>
+<tr>
+<th>版本</th>
+<th>副檔名</th>
+<th>類別</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Excel 2003</td>
+<td>xls</td>
+<td>HSSFWorkBook</td>
+</tr>
+<tr>
+<td>Excel 2007</td>
+<td>xlsx</td>
+<td>XSSFWorkbook</td>
+</tr>
+</tbody></table>
+<p><img src="/artblog/npoi-asp-net-export-excel/2020-07-22_101801.png"><br>從 IDE 的提示可以看到建構式允許輸入串流、FileInfo 或是檔案路徑等等，當然也可以不輸入，就是新建一個 EXCEL 檔案</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">IWorkbook target = <span class="keyword">new</span> XSSFWorkbook();</span><br></pre></td></tr></table></figure>
+
+<p>在搜尋<code>NPOI</code>用法的時候，有看到另外一個工廠方法，但是最終我並沒有使用這個方法，而是直接寫死，用<code>XSSFWorkbook</code>，因為需求僅需要使用<code>xlsx</code><br><img src="/artblog/npoi-asp-net-export-excel/2020-07-22_102338.png"></p>
+<h3 id="建立工作表"><a href="#建立工作表" class="headerlink" title="建立工作表"></a>建立工作表</h3><p>應該說這個步驟，要看檔案當下有沒有工作表，沒有的話需要建立；有的話只需要取得，然後存到變數供後續流程使用<br><img src="/artblog/npoi-asp-net-export-excel/2020-07-22-102901.png"><br><img src="/artblog/npoi-asp-net-export-excel/2020-07-22_102954.png"></p>
+<h3 id="設定儲存格"><a href="#設定儲存格" class="headerlink" title="設定儲存格"></a>設定儲存格</h3><p>遵循著工作表的概念，此處也是需要新建或是取得的概念，使用列(ROW)及儲存格(Cell)<br>具體的做法請參看下列程式碼</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">IWorkbook workbook = <span class="keyword">new</span> XSSFWorkbook();</span><br><span class="line">ISheet workSheet = workbook.CreateSheet(<span class="string">&quot;工作表1&quot;</span>);</span><br><span class="line"></span><br><span class="line">IRow row = workSheet.CreateRow(<span class="number">0</span>);</span><br><span class="line">ICell cell1 = row.CreateCell(<span class="number">0</span>);</span><br><span class="line">cell1.SetCellValue(<span class="string">&quot;column 1&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="下載檔案"><a href="#下載檔案" class="headerlink" title="下載檔案"></a>下載檔案</h3><p>當我們準備好一個 EXCEL 檔案要匯出，給網站使用者下載，我們可以透過<code>memoryStream</code>將 EXCEL 放到裡面，網路上的做法很多都是用<code>Response.BinaryWrite(exportData.GetBuffer());</code>這樣的方法去做，但是在<code>MVC</code>裡面我們可以直接使用<code>FileResult</code>回傳即可</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> File(ms.ToArray(), System.Net.Mime.MediaTypeNames.Application.Octet, fileName);</span><br></pre></td></tr></table></figure>
+
+<h3 id="注意事項"><a href="#注意事項" class="headerlink" title="注意事項"></a>注意事項</h3><p>在<code>NPOI</code>裡面可以發現是沒有日期型態的，從實際的 EXCEL 檔案讀取，它的型態會被判斷為數字，必須再透過<code>DateUtil.IsCellDateFormatted</code>方法來判斷是否為日期</p>
+<h2 id="應用範例：網站下載-Excel"><a href="#應用範例：網站下載-Excel" class="headerlink" title="應用範例：網站下載 Excel"></a>應用範例：網站下載 Excel</h2><h3 id="前端"><a href="#前端" class="headerlink" title="前端"></a>前端</h3><p>前端的部分核心代碼大概就是下面這段了，透過<code>ajax</code>送出請求，接收到結果之後再建立一個 a 標籤，模擬使用者點擊達到自動下載的效果</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 匯出 Excel */</span></span><br><span class="line"><span class="title function_">downloadExcel</span>(<span class="params">sendData</span>)&#123;</span><br><span class="line">  <span class="keyword">return</span> $.<span class="title function_">ajax</span>(&#123;</span><br><span class="line">    <span class="attr">url</span>: <span class="string">`/Demo/DownloadExcel`</span>,</span><br><span class="line">    <span class="attr">type</span>: <span class="string">&quot;POST&quot;</span>,</span><br><span class="line">    <span class="attr">data</span>: sendData,</span><br><span class="line">    <span class="attr">xhrFields</span>: &#123;</span><br><span class="line">      <span class="attr">responseType</span>: <span class="string">&quot;blob&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">downloadHandler</span>(<span class="params"></span>)&#123;</span><br><span class="line">  <span class="title function_">downloadExcel</span>(condition).<span class="title function_">then</span>(<span class="function">(<span class="params">response, status, hr</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> $a = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&quot;a&quot;</span>);</span><br><span class="line">    <span class="keyword">const</span> url = <span class="variable constant_">URL</span>.<span class="title function_">createObjectURL</span>(response);</span><br><span class="line">    <span class="keyword">const</span> fileName = xhr.<span class="title function_">getResponseHeader</span>(<span class="string">&#x27;Content-Disposition&#x27;</span>).<span class="title function_">split</span>(<span class="string">&quot;=&quot;</span>)[<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">const</span> currentFileName = fileName.<span class="title function_">replace</span>(<span class="regexp">/&quot;(.*)&quot;/</span>, <span class="string">&quot;$1&quot;</span>);</span><br><span class="line">    $a.<span class="property">download</span> = <span class="built_in">decodeURI</span>(currentFileName);</span><br><span class="line">    $a.<span class="property">href</span> = url;</span><br><span class="line">    $a.<span class="title function_">click</span>();</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> <span class="variable constant_">URL</span>.<span class="title function_">revokeObjectURL</span>(url), <span class="number">5000</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="後端"><a href="#後端" class="headerlink" title="後端"></a>後端</h3><p>核心代碼是改寫自<a target="_blank" rel="noopener" href="https://dotblogs.azurewebsites.net/stanley14/2018/01/24/npoi_template_print_header">[.NET][C#]NPOI 產生 Excel 報表(一)列印表頭資訊(xlsx)</a>，這份程式的優點是允許接受泛型輸入來產生 EXCEL 檔案，所以 <strong>EXCEL 欄位的順序會與輸入的泛型屬性順序相關</strong>，但是若直接依照原文的方法產生出來的 EXCEL，再開啟的時候會提示錯誤**NPOI 已移除的記錄: &#x2F;xl&#x2F;workbook.xml 部分的 文件佈景主題 (活頁簿)**，研究了很久始終沒有頭緒，最終的解決方案是參考官網範例：<a target="_blank" rel="noopener" href="https://github.com/tonyqus/npoi/blob/master/examples/xssf/CopySheet/Program.cs">CopySheet(複製工作表)</a>，改寫後就正常了。</p>
+<blockquote>
+<p>順便查到其實<code>xlsx</code>檔案就是<code>zip</code>檔案，可以解壓，修改內容後再壓回<code>zip</code>也行，不過正常人還是不要用這招，因為後續你也不能做什麼有用的事情</p>
+</blockquote>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// DemoController</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> FileResult <span class="title">DownloadExcel</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 取得匯出資料</span></span><br><span class="line">    List&lt;ExcelInfo&gt; excelData = GetMyExcelData();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 匯出資料 -&gt; EXCEL</span></span><br><span class="line">    <span class="built_in">string</span> templatePath = Server.MapPath(<span class="string">&quot;~/App_Data/templateOrderQA.xlsx&quot;</span>);</span><br><span class="line">    IWorkbook workbook = <span class="keyword">new</span> ExcelModule().GenerateExcel(templatePath, excelData, <span class="number">1</span>);</span><br><span class="line">    MemoryStream ms = <span class="keyword">new</span> MemoryStream();</span><br><span class="line">    workbook.Write(ms);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// EXCEL -&gt; Download</span></span><br><span class="line">    <span class="keyword">var</span> fileName =</span><br><span class="line">        HttpUtility.UrlEncode(<span class="string">$&quot;匯出資料<span class="subst">&#123;DateTime.Now:yyyy-MM-dd_HHmmss&#125;</span>.xlsx&quot;</span>, System.Text.Encoding.UTF8);</span><br><span class="line">    <span class="keyword">return</span> File(ms.ToArray(), System.Net.Mime.MediaTypeNames.Application.Octet, fileName);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ExcelModule</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">ExcelModule</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> IWorkbook <span class="title">GenerateExcel</span>&lt;<span class="title">T</span>&gt;(<span class="params"><span class="built_in">string</span> templatePath, List&lt;T&gt; entities, <span class="built_in">int</span> offset</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            IWorkbook target = <span class="keyword">new</span> XSSFWorkbook();</span><br><span class="line">            IWorkbook source =</span><br><span class="line">                <span class="keyword">new</span> XSSFWorkbook(<span class="keyword">new</span> FileStream(templatePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));</span><br><span class="line"></span><br><span class="line">            ISheet sourceSheet = source.GetSheetAt(<span class="number">0</span>);</span><br><span class="line">            sourceSheet.CopyTo(target, sourceSheet.SheetName, <span class="literal">true</span>, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">            ISheet targetSheet = target.GetSheetAt(<span class="number">0</span>);</span><br><span class="line">            List&lt;ICell&gt; templateCells = targetSheet.GetRow(offset).Cells;</span><br><span class="line"></span><br><span class="line">            PropertyInfo[] properties = <span class="keyword">typeof</span>(T).GetProperties();</span><br><span class="line">            <span class="keyword">foreach</span> (<span class="keyword">var</span> entity <span class="keyword">in</span> entities)</span><br><span class="line">            &#123;</span><br><span class="line">                targetSheet.CreateRow(offset);</span><br><span class="line">                <span class="built_in">int</span> cellInRow = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">foreach</span> (<span class="keyword">var</span> property <span class="keyword">in</span> properties)</span><br><span class="line">                &#123;</span><br><span class="line">                    ICell cell = targetSheet.GetRow(offset).CreateCell(cellInRow);</span><br><span class="line">                    cell.CellStyle = templateCells[cellInRow].CellStyle;</span><br><span class="line">                    cell.SetCellType(templateCells[cellInRow].CellType);</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">var</span> currentValue = property.GetValue(entity, <span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">switch</span> (templateCells[cellInRow].CellType)</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="keyword">case</span> CellType.Numeric:</span><br><span class="line">                            <span class="keyword">if</span> (currentValue == <span class="literal">null</span>) <span class="keyword">break</span>;</span><br><span class="line">                            <span class="keyword">if</span> (DateUtil.IsCellDateFormatted(templateCells[cellInRow]))</span><br><span class="line">                            &#123;</span><br><span class="line">                                cell.SetCellValue(Convert.ToDateTime(currentValue));</span><br><span class="line">                            &#125;</span><br><span class="line">                            <span class="keyword">else</span></span><br><span class="line">                            &#123;</span><br><span class="line">                                cell.SetCellValue(Convert.ToDouble(currentValue));</span><br><span class="line">                            &#125;</span><br><span class="line"></span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                        <span class="keyword">case</span> CellType.String:</span><br><span class="line">                            cell.SetCellValue(Convert.ToString(currentValue));</span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                        <span class="literal">default</span>:</span><br><span class="line">                            cell.SetCellValue(Convert.ToString(currentValue));</span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    cellInRow++;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                offset++;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> target;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="測試"><a href="#測試" class="headerlink" title="測試"></a>測試</h3><p>這裡的測試一樣是改寫自<a target="_blank" rel="noopener" href="https://dotblogs.azurewebsites.net/stanley14/2018/01/24/npoi_template_print_header">[.NET][C#]NPOI 產生 Excel 報表(一)列印表頭資訊(xlsx)</a>，但這個測試應該不算是單元測試，充其量只能是用來測試看看我們的模組是否可以順利產生 Excel 檔案，所以測試功能正常後，應該還是把它砍掉，專案會比較乾淨</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">TestClass</span>]</span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">ExcelModuleTests</span></span><br><span class="line">   &#123;</span><br><span class="line">       [<span class="meta">TestMethod</span>]</span><br><span class="line">       <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GenerateExcelFileTest</span>()</span></span><br><span class="line">       &#123;</span><br><span class="line">           <span class="comment">//(1)製造測試資料</span></span><br><span class="line">           List&lt;Poker&gt; pokers = <span class="keyword">new</span> List&lt;Poker&gt;();</span><br><span class="line">           <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)</span><br><span class="line">           &#123;</span><br><span class="line">               pokers.Add(<span class="keyword">new</span> Poker &#123;Id = <span class="number">1</span>, Name = <span class="string">&quot;David&quot;</span>, Title = <span class="string">&quot;King&quot;</span>, Color = <span class="string">&quot;Spades&quot;</span>, Balance = <span class="number">1000</span>&#125;);</span><br><span class="line">               pokers.Add(<span class="keyword">new</span> Poker &#123;Id = <span class="number">2</span>, Name = <span class="string">&quot;Charlemagne&quot;</span>, Title = <span class="string">&quot;King&quot;</span>, Color = <span class="string">&quot;Hearts&quot;</span>, Balance = <span class="number">2000</span>&#125;);</span><br><span class="line">               pokers.Add(<span class="keyword">new</span> Poker &#123;Id = <span class="number">3</span>, Name = <span class="string">&quot;Caesar&quot;</span>, Title = <span class="string">&quot;King&quot;</span>, Color = <span class="string">&quot;Diamonds&quot;</span>, Balance = <span class="number">3000</span>&#125;);</span><br><span class="line">               pokers.Add(<span class="keyword">new</span> Poker &#123;Id = <span class="number">4</span>, Name = <span class="string">&quot;Alexander&quot;</span>, Title = <span class="string">&quot;King&quot;</span>, Color = <span class="string">&quot;Clubs&quot;</span>, Balance = <span class="number">4000</span>&#125;);</span><br><span class="line">               pokers.Add(<span class="keyword">new</span> Poker &#123;Id = <span class="number">5</span>, Name = <span class="string">&quot;Athena&quot;</span>, Title = <span class="string">&quot;Queen&quot;</span>, Color = <span class="string">&quot;Spades&quot;</span>, Balance = <span class="number">5000</span>&#125;);</span><br><span class="line">               pokers.Add(<span class="keyword">new</span> Poker &#123;Id = <span class="number">6</span>, Name = <span class="string">&quot;Judith&quot;</span>, Title = <span class="string">&quot;Queen&quot;</span>, Color = <span class="string">&quot;Hearts&quot;</span>, Balance = <span class="number">6000</span>&#125;);</span><br><span class="line">               pokers.Add(<span class="keyword">new</span> Poker &#123;Id = <span class="number">7</span>, Name = <span class="string">&quot;Rachel&quot;</span>, Title = <span class="string">&quot;Queen&quot;</span>, Color = <span class="string">&quot;Diamonds&quot;</span>, Balance = <span class="number">7000</span>&#125;);</span><br><span class="line">               pokers.Add(<span class="keyword">new</span> Poker &#123;Id = <span class="number">8</span>, Name = <span class="string">&quot;Argine&quot;</span>, Title = <span class="string">&quot;Queen&quot;</span>, Color = <span class="string">&quot;Clubs&quot;</span>, Balance = <span class="number">8000</span>&#125;);</span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">           <span class="comment">//(2)產生報表</span></span><br><span class="line">           <span class="built_in">string</span> templateFile = <span class="string">@&quot;TestHelper\myTemplate.xlsx&quot;</span>;</span><br><span class="line">           <span class="built_in">string</span> ReportPath = <span class="string">@&quot;D:\temp\output.xlsx&quot;</span>;</span><br><span class="line">           <span class="keyword">var</span> sut = <span class="keyword">new</span> ExcelModule();</span><br><span class="line">           IWorkbook workbook = sut.GenerateExcel(templateFile, pokers, <span class="number">1</span>);</span><br><span class="line">           <span class="keyword">using</span> (FileStream fileOut = <span class="keyword">new</span> FileStream(ReportPath, FileMode.Create))</span><br><span class="line">           &#123;</span><br><span class="line">               workbook.Write(fileOut);</span><br><span class="line">           &#125;</span><br><span class="line">           Assert.AreEqual(<span class="literal">true</span>, File.Exists(ReportPath));</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Poker</span></span><br><span class="line">   &#123;</span><br><span class="line">       <span class="keyword">public</span> <span class="built_in">int</span> Id &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">       <span class="keyword">public</span> <span class="built_in">string</span> Name &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">       <span class="keyword">public</span> <span class="built_in">string</span> Title &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">       <span class="keyword">public</span> <span class="built_in">string</span> Color &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">       <span class="keyword">public</span> Decimal Balance &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p><code>NPOI</code> 的使用其實沒有想像中困難，只是麻煩一點而已，而儲存格的樣式設定則是另外一個討人厭的事情，透過 Template 的方式可以省去很多工，但如果要客製許多樣式還是需要慢慢手刻，不過若以基本的檔案匯出功能來看，到這邊應該就差不多了</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/excel/" rel="tag"># excel</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/rider-file-watchers-for-scss/" rel="prev" title="Rider-利用檔案監控來編譯scss">
+                  <i class="fa fa-angle-left"></i> Rider-利用檔案監控來編譯scss
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/cypress-io-test-data-handling/" rel="next" title="Cypress.io 測試資料的處理">
+                  Cypress.io 測試資料的處理 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

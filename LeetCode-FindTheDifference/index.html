@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="LeetCode 這一題感覺非常容易啊，給出兩個字串，這兩個字串當中只會有一個字是不一樣的，找出來就行了。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeetCode-FindTheDifference">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/LeetCode-FindTheDifference/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="LeetCode 這一題感覺非常容易啊，給出兩個字串，這兩個字串當中只會有一個字是不一樣的，找出來就行了。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/LeetCode-FindTheDifference/2019-09-27_22-22-35.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/LeetCode-FindTheDifference/2019-09-27_22-31-44.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/LeetCode-FindTheDifference/2019-09-27_22-39-10.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/LeetCode-FindTheDifference/2019-09-27_22-49-10.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/LeetCode-FindTheDifference/2019-09-27_22-57-09.png">
+<meta property="article:published_time" content="2019-09-27T13:56:56.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.214Z">
+<meta property="article:author" content="art">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/LeetCode-FindTheDifference/2019-09-27_22-22-35.png">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/LeetCode-FindTheDifference/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/LeetCode-FindTheDifference/","path":"/LeetCode-FindTheDifference/","title":"LeetCode-FindTheDifference"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>LeetCode-FindTheDifference | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Test-Case"><span class="nav-number">1.</span> <span class="nav-text">Test Case</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E9%A1%8C%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">解題思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Dirty-%E8%A7%A3%E6%B3%95"><span class="nav-number">2.1.</span> <span class="nav-text">Dirty 解法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%B2%E9%9A%8E%E5%AF%AB%E6%B3%95"><span class="nav-number">2.2.</span> <span class="nav-text">進階寫法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E7%B5%82%E5%AF%AB%E6%B3%95"><span class="nav-number">2.3.</span> <span class="nav-text">最終寫法</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/LeetCode-FindTheDifference/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="LeetCode-FindTheDifference | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LeetCode-FindTheDifference
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2019-09-27 21:56:56" itemprop="dateCreated datePublished" datetime="2019-09-27T21:56:56+08:00">2019-09-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/LeetCode-FindTheDifference/" class="post-meta-item leancloud_visitors" data-flag-title="LeetCode-FindTheDifference" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/LeetCode-FindTheDifference/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/LeetCode-FindTheDifference/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>LeetCode 這一題感覺非常容易啊，給出兩個字串，這兩個字串當中只會有一個字是不一樣的，找出來就行了。</p>
+<span id="more"></span>
+
+<h2 id="Test-Case"><a href="#Test-Case" class="headerlink" title="Test Case"></a>Test Case</h2><p>輸入：s &#x3D; “abcd”, t &#x3D; “abcde”<br>輸出：e</p>
+<h2 id="解題思路"><a href="#解題思路" class="headerlink" title="解題思路"></a>解題思路</h2><h3 id="Dirty-解法"><a href="#Dirty-解法" class="headerlink" title="Dirty 解法"></a>Dirty 解法</h3><p>當然就是最直覺的解法囉，既然兩個字串只會有一個字不一樣，那麼就把同時出現在兩邊的單字給刪除了，剩下的那個就是答案了</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Solution</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="built_in">char</span> <span class="title">FindTheDifference</span>(<span class="params"><span class="built_in">string</span> s, <span class="built_in">string</span> t</span>)</span> &#123;</span><br><span class="line">        <span class="keyword">var</span> bigWord = s.Length &gt; t.Length ? s : t;</span><br><span class="line">        <span class="keyword">var</span> smallWord = s.Length &lt;= t.Length ? s : t;</span><br><span class="line">        <span class="keyword">var</span> bigAry = <span class="keyword">new</span> List&lt;<span class="built_in">char</span>&gt;(bigWord);</span><br><span class="line">        <span class="keyword">var</span> smallAry = <span class="keyword">new</span> List&lt;<span class="built_in">char</span>&gt;(smallWord);</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">var</span> c <span class="keyword">in</span> smallAry)</span><br><span class="line">        &#123;</span><br><span class="line">            bigAry.Remove(c);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> bigAry.FirstOrDefault();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/LeetCode-FindTheDifference/2019-09-27_22-22-35.png"></p>
+<h3 id="進階寫法"><a href="#進階寫法" class="headerlink" title="進階寫法"></a>進階寫法</h3><p>第一版的 Dirty 寫法，完全沒有任何的優化，想當然的成績應該不是很理想，所以當然要接著想想看還能夠怎麼處理</p>
+<p>我們知道英文字母都可以轉成 ASCII Code 來處理，那麼也就是說，我能夠將兩個字串的 ASCII 碼都算出來，然後加總，接著得到兩個數字相減，就是那個答案的 ASCII Code 了</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Solution</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="built_in">char</span> <span class="title">FindTheDifference</span>(<span class="params"><span class="built_in">string</span> s, <span class="built_in">string</span> t</span>)</span> &#123;</span><br><span class="line">        <span class="keyword">var</span> sTotal = s.Sum(Convert.ToInt32);</span><br><span class="line">        <span class="keyword">var</span> tTotal = t.Sum(Convert.ToInt32);</span><br><span class="line">        <span class="keyword">return</span> (<span class="built_in">char</span>)Math.Abs(sTotal - tTotal);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的程式碼可以再簡寫，但是我覺得沒有什麼意義，能夠清晰且直覺的表達程式的意涵，比所謂的一行代碼好多了，而且，就算自己很容易就能夠看懂，但是團隊成員通常程度有高有低，一個良好的習慣是，盡量用大家都能夠理解的寫法，會省去不少時間成本</p>
+<p><img src="/artblog/LeetCode-FindTheDifference/2019-09-27_22-31-44.png"></p>
+<h3 id="最終寫法"><a href="#最終寫法" class="headerlink" title="最終寫法"></a>最終寫法</h3><p>第二版與第一版在執行速度及記憶體的用量來看，差異並不大，但是還是能夠在延續這個思路下去進行優化，曾經有利用過 XOR 的技巧，這次就派上用場了</p>
+<p>來溫習一下 XOR 的真值表，當兩個輸入都相同，輸出為 0；兩個輸入不同的話，則輸出為 1</p>
+<table>
+<thead>
+<tr>
+<th>XOR</th>
+<th>1</th>
+<th>0</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<p>也就是說，我拿英文字母<code>a</code>去跟 0 做 XOR 運算，會得到 <code>a</code> 的 ASCII Code：97</p>
+<p><img src="/artblog/LeetCode-FindTheDifference/2019-09-27_22-39-10.png"></p>
+<p>那麼，如果我用<code>a</code>跟<code>b</code>去做 XOR，接著再用答案去跟<code>b</code>做一次 XOR，也是會得到 97</p>
+<p>這是為什麼呢？來看一下這張圖<br><img src="/artblog/LeetCode-FindTheDifference/2019-09-27_22-49-10.png"></p>
+<p>a 的 ASCII Code 是 97，也就是<code>110 0001</code><br>b 的 ASCII Code 是 98，也就是<code>110 0010</code><br>參考 XOR 真值表，得出最終結果 <code>000 0011</code>，也就是<code>3</code><br>接著如果再用<code>3</code>去跟<code>b</code>做 XOR 運算，答案會是<code>110 0001</code>，也就是 97</p>
+<p>所以，我們只需要將題目給的兩個字串，逐一透過 XOR 運算，最終就可以得到答案</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Solution</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="built_in">char</span> <span class="title">FindTheDifference</span>(<span class="params"><span class="built_in">string</span> s, <span class="built_in">string</span> t</span>)</span> &#123;</span><br><span class="line">        <span class="keyword">var</span> result = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">var</span> c <span class="keyword">in</span> s + t)</span><br><span class="line">        &#123;</span><br><span class="line">            result = result ^ c;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> (<span class="built_in">char</span>)result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/LeetCode-FindTheDifference/2019-09-27_22-57-09.png"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/Working-Effectively-with-Legacy-Code/" rel="prev" title="讀書心得 Working Effectively with Legacy Code">
+                  <i class="fa fa-angle-left"></i> 讀書心得 Working Effectively with Legacy Code
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/yapi-docker/" rel="next" title="docker-yapi初體驗">
+                  docker-yapi初體驗 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

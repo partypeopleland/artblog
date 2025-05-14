@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="這篇文章沒甚麼特別的，只是純粹應用了一次axios的錯誤處理而已，希望表達在應用程式內，將重複程式碼抽象出來利用的範例">
+<meta property="og:type" content="article">
+<meta property="og:title" content="axios Error Handle">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/axios-error-handle/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="這篇文章沒甚麼特別的，只是純粹應用了一次axios的錯誤處理而已，希望表達在應用程式內，將重複程式碼抽象出來利用的範例">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2021-08-18T08:04:32.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.379Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="axios">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/axios-error-handle/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/axios-error-handle/","path":"/axios-error-handle/","title":"axios Error Handle"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>axios Error Handle | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E8%AA%9E%E6%B3%95%E7%AF%84%E4%BE%8B"><span class="nav-number">1.</span> <span class="nav-text">基本語法範例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%83%85%E5%A2%83"><span class="nav-number">2.</span> <span class="nav-text">情境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%B1%BA%E6%96%B9%E6%A1%88"><span class="nav-number">3.</span> <span class="nav-text">解決方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%B6%E4%BC%B8%E8%AD%B0%E9%A1%8C"><span class="nav-number">4.</span> <span class="nav-text">延伸議題</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/axios-error-handle/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="axios Error Handle | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          axios Error Handle
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2021-08-18 16:04:32" itemprop="dateCreated datePublished" datetime="2021-08-18T16:04:32+08:00">2021-08-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/javascript/" itemprop="url" rel="index"><span itemprop="name">javascript</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/axios-error-handle/" class="post-meta-item leancloud_visitors" data-flag-title="axios Error Handle" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/axios-error-handle/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/axios-error-handle/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>這篇文章沒甚麼特別的，只是純粹應用了一次<code>axios</code>的錯誤處理而已，希望表達在應用程式內，將重複程式碼抽象出來利用的範例</p>
+<span id="more"></span>
+
+<h2 id="基本語法範例"><a href="#基本語法範例" class="headerlink" title="基本語法範例"></a>基本語法範例</h2><p><code>axios</code>與 <code>jquery</code>語法都還蠻像的，經由<code>config</code>設定發出請求的網址、資料，像是下面這樣</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">axios</span>(&#123;</span><br><span class="line"> <span class="attr">method</span>: <span class="string">&#x27;post&#x27;</span>,</span><br><span class="line"> <span class="attr">url</span>: <span class="string">&#x27;/user/12345&#x27;</span>,</span><br><span class="line"> <span class="attr">data</span>: &#123;</span><br><span class="line">  <span class="attr">firstName</span>: <span class="string">&#x27;bar&#x27;</span>,</span><br><span class="line">  <span class="attr">lastName</span>: <span class="string">&#x27;foo&#x27;</span>,</span><br><span class="line"> &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>也可以經由別名來處理網址、資料，若是需要也可以再添加<code>config</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">axios.<span class="title function_">post</span>(</span><br><span class="line"> <span class="string">&#x27;/user/12345&#x27;</span>,</span><br><span class="line"> &#123;</span><br><span class="line">  <span class="attr">firstName</span>: <span class="string">&#x27;bar&#x27;</span>,</span><br><span class="line">  <span class="attr">lastName</span>: <span class="string">&#x27;foo&#x27;</span>,</span><br><span class="line"> &#125;,</span><br><span class="line"> &#123;</span><br><span class="line">  <span class="comment">/*config here*/</span></span><br><span class="line"> &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://axios-http.com/zh/docs/intro">官網</a>已經寫得很清楚了，細節就請移步官網瀏覽</p>
+<h2 id="情境"><a href="#情境" class="headerlink" title="情境"></a>情境</h2><p>當我們的程式碼越來越多、也越來越複雜的時候，為了維護方便，我們可能會自然而然地將架構逐漸演化，假設是一個登陸頁面好了，除了基本的頁面進入點<code>index.js</code>，可能還會在裡面有一個<code>Service</code>來處理這個頁面的一些操作，因為<code>Service</code>只是負責處理邏輯，一些比較細節的處理則是再放給<code>Helper</code>、<code>Utiliy</code>、<code>Adapter</code>之類的去做，而為了便於維護，我也會使用<code>AxiosHelper</code>去將一些行為包裝起來，所以輸入帳號密碼登入的操作會是像這樣</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span>&gt;</span></span><br><span class="line">    Name:<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;name&quot;</span> <span class="attr">id</span>=<span class="string">&quot;name&quot;</span> <span class="attr">v-model</span>=<span class="string">&quot;form.name&quot;</span> /&gt;</span> </span><br><span class="line">    Pass:<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;pass&quot;</span> <span class="attr">id</span>=<span class="string">&quot;pass&quot;</span> <span class="attr">v-model</span>=<span class="string">&quot;form.pass&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">v-on:click</span>=<span class="string">&quot;loginHandler&quot;</span>&gt;</span>Login<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// index.js</span></span><br><span class="line"><span class="comment">// import ....</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="title class_">Vue</span>(&#123;</span><br><span class="line">    <span class="title function_">data</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            <span class="attr">form</span>: &#123;</span><br><span class="line">                <span class="attr">name</span>: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">                <span class="attr">pass</span>: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">            &#125;,</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">methods</span>: &#123;</span><br><span class="line">        <span class="keyword">async</span> <span class="title function_">loginHandler</span>(<span class="params"></span>) &#123;</span><br><span class="line">            sweetAlertHelper.<span class="title class_">ShowLoading</span>();</span><br><span class="line">            <span class="keyword">let</span> &#123; isSuccess, message &#125; = <span class="keyword">await</span> memberService.<span class="title function_">login</span>(&#123; ...<span class="variable language_">this</span>.<span class="property">form</span> &#125;);</span><br><span class="line">            sweetAlertHelper.<span class="title class_">CloseModal</span>();</span><br><span class="line">            <span class="keyword">if</span> (isSuccess) &#123;</span><br><span class="line">                <span class="comment">// 登入成功，跳轉頁面</span></span><br><span class="line">                <span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">href</span> = <span class="string">&#x27;/Member&#x27;</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">// 登入錯誤，將資料傳遞給Log服務，將錯誤記錄下來</span></span><br><span class="line">                logService.<span class="title function_">loginFailed</span>(&#123; ...<span class="variable language_">this</span>.<span class="property">form</span> &#125;, message);</span><br><span class="line">                <span class="comment">// 顯示錯誤訊息，告知使用者登入錯誤，訊息由後端控制</span></span><br><span class="line">                sweetAlertHelper.<span class="title function_">showError</span>(message);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// MemberService.js</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">MemberAdapter</span> <span class="keyword">from</span> <span class="string">&#x27;./MemberAdapter.js&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="title class_">MemberService</span> = &#123;</span><br><span class="line">    <span class="title function_">login</span>(<span class="params">&#123; name, pass &#125;</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">MemberAdapter</span>.<span class="title function_">login</span>(&#123; name, pass &#125;);</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title class_">MemberService</span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// MemberAdapter.js</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">AxiosHelper</span> <span class="keyword">from</span> <span class="string">&#x27;./AxiosHelper.js&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">MemberAdapter</span> = &#123;</span><br><span class="line">    <span class="title function_">login</span>(<span class="params">&#123;name,pass&#125;</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">AxiosHelper</span>.<span class="title function_">sendRequest</span>(<span class="string">&#x27;/Login&#x27;</span>,&#123;name,pass&#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title class_">MemberAdapter</span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// axiosHelper.js</span></span><br><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">&#x27;axios&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="title class_">AxiosHelper</span> = &#123;</span><br><span class="line">    <span class="attr">sendRequest</span>: <span class="keyword">async</span> (url, sendData) =&gt; &#123;</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">await</span> axios.<span class="title function_">post</span>(url, sendData)).<span class="property">data</span>;</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title class_">AxiosHelper</span>;</span><br></pre></td></tr></table></figure>
+
+<p>按照上面的程式碼來看，登入的回應如果是正確或失敗，都是有動作的，乍看之下沒甚麼問題，但是如果後端伺服器沒有回應呢？最常見的就是後端很忙，結果前端請求就一直掛在那邊變成 timeout，然後因為程式碼在呼叫後端之前，透過<code>SweetAlertHelper</code>將畫面墊了一層遮罩，秀出 Loading 畫面，避免讓使用者重複送出請求，結果因為後端 Timeout，則前端 Js 就掛掉了，於是使用者看到的畫面就是一直轉圈圈的 Loading 畫面</p>
+<blockquote>
+<p>上面程式碼沒有實際跑過，只是為了讓大家比較理解情境隨手寫的，跑不起來的</p>
+</blockquote>
+<h2 id="解決方案"><a href="#解決方案" class="headerlink" title="解決方案"></a>解決方案</h2><p>既然我們針對的情境是要解決 <code>timeout</code>，那我們就直接使用官方所提供的<a target="_blank" rel="noopener" href="https://axios-http.com/zh/docs/handling_errors">錯誤處理</a>不就好了？</p>
+<p>是的，沒有錯，我們就直接套用就行了，OK，結案。</p>
+<p>因為我們已經將所有使用到 <code>axios</code> 的東西都封裝在 <code>AxiosHelper</code> 裡面了，所以我們也只需要改一個地方就好了</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// axiosHelper.js</span></span><br><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">&#x27;axios&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="title class_">AxiosHelper</span> = &#123;</span><br><span class="line">    <span class="attr">sendRequest</span>: <span class="keyword">async</span> (url, sendData) =&gt; &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 多了一個 &#123;timeout: 5000&#125; 的 option config</span></span><br><span class="line">            <span class="keyword">return</span> (<span class="keyword">await</span> axios.<span class="title function_">post</span>(url, sendData, &#123; <span class="attr">timeout</span>: <span class="number">5000</span> &#125;)).<span class="property">data</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">            <span class="comment">// 顯示錯誤訊息，告知使用者登入錯誤，訊息由後端控制</span></span><br><span class="line">            sweetAlertHelper.<span class="title function_">showError</span>(<span class="string">&#x27;伺服器忙碌，請稍後再試&#x27;</span>);</span><br><span class="line">            <span class="comment">// throw error 中斷後面的程式不再執行</span></span><br><span class="line">            <span class="keyword">throw</span> error;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>這樣子的話，在原先程式碼的部分，就不會繼續往下執行，</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="title function_">loginHandler</span>(<span class="params"></span>)&#123;</span><br><span class="line">      sweetAlertHelper.<span class="title class_">ShowLoading</span>()</span><br><span class="line">      <span class="keyword">let</span> &#123;isSuccess, message&#125; = <span class="keyword">await</span> memberService.<span class="title function_">login</span>(&#123;...<span class="variable language_">this</span>.<span class="property">form</span>&#125;)</span><br><span class="line">      <span class="comment">/** 這以下就不會執行了</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">      sweetAlertHelper.CloseModal()</span></span><br><span class="line"><span class="comment">      if (isSuccess) &#123;</span></span><br><span class="line"><span class="comment">          // 登入成功，跳轉頁面</span></span><br><span class="line"><span class="comment">          window.location.href=&quot;/Member&quot;</span></span><br><span class="line"><span class="comment">      &#125; else &#123;</span></span><br><span class="line"><span class="comment">          // 登入錯誤，將資料傳遞給Log服務，將錯誤記錄下來</span></span><br><span class="line"><span class="comment">          logService.loginFailed(&#123;...this.form&#125;, message)</span></span><br><span class="line"><span class="comment">          // 顯示錯誤訊息，告知使用者登入錯誤，訊息由後端控制</span></span><br><span class="line"><span class="comment">          sweetAlertHelper.showError(message)</span></span><br><span class="line"><span class="comment">      &#125;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">      */</span></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>原本的程式碼就會再呼叫完畢後，拋出例外，直接中斷掉，使用者也能看到畫面顯示<code>伺服器忙碌</code>，同時我們也只需要改一個地方，其他頁面都不需再調整，好吧，技術本身沒甚麼難度，但是共用的抽象出來才是我要表達的</p>
+<h2 id="延伸議題"><a href="#延伸議題" class="headerlink" title="延伸議題"></a>延伸議題</h2><ol>
+<li><p><a target="_blank" rel="noopener" href="https://www.it145.com/9/82557.html">#研發解決方案#易車前端監控系統</a>：這篇文章是某一天我逛到的，它們自己做了一套監控系統，在錯誤處理的部分，也可以將這些資訊像它們一樣，不管是透過自己建立，或者是用現有 Open Source 解決方案，都是不錯的，不過我沒有再研究下去，有興趣的朋友可以點進去看看</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://medium.com/i-am-mike/%E4%BD%BF%E7%94%A8axios%E6%99%82%E4%BD%A0%E7%9A%84api%E9%83%BD%E6%80%8E%E9%BA%BC%E7%AE%A1%E7%90%86-557d88365619">使用 Axios 你的 API 都怎麼管理</a>：這篇則是一位知名的前端 Youtuber 寫的一篇關於 <code>axios</code> 的東西，概念上是不錯的，他這篇文章主要針對的情境是你可能服務來自好幾個<code>Domain</code>所以會需要這樣做，但我碰到的情境這部分會在後端就整合起來而不是在前端來做。所以他的辦法就比較不合我用，但是概念上都是為了便於管理，也是一個不錯的案例解決方案，提供大家參考</p>
+</li>
+</ol>
+<p>這也是為什麼我會說要看情況套用解決方案，別人的<code>best practice</code>不一定適合你，多看多參考，你會有自己的想法的</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/axios/" rel="tag"># axios</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/Classic-TDD-by-Examples-Refactor-to-Design/" rel="prev" title="心得 - Classic TDD by Examples Refactor to Design">
+                  <i class="fa fa-angle-left"></i> 心得 - Classic TDD by Examples Refactor to Design
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/Jenkins-pipeline-script-VuePress-By-SCM/" rel="next" title="Jenkins Pipeline Script 部署 VuePress 到本地目錄範例">
+                  Jenkins Pipeline Script 部署 VuePress 到本地目錄範例 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

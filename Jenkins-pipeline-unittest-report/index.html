@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="將 Jenkins 的 pipeline 專案加入單元測試的一些注意事項">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jenkins-pipeline-加入單元測試報告">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/Jenkins-pipeline-unittest-report/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="將 Jenkins 的 pipeline 專案加入單元測試的一些注意事項">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2021-04-20T08:46:48.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.356Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="jenkins">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/Jenkins-pipeline-unittest-report/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/Jenkins-pipeline-unittest-report/","path":"/Jenkins-pipeline-unittest-report/","title":"Jenkins-pipeline-加入單元測試報告"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Jenkins-pipeline-加入單元測試報告 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A5%97%E4%BB%B6"><span class="nav-number">1.</span> <span class="nav-text">套件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A8%AD%E5%AE%9A"><span class="nav-number">2.</span> <span class="nav-text">設定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#net6"><span class="nav-number">3.</span> <span class="nav-text">.net6</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B8%A9%E9%81%8E%E7%9A%84%E5%9D%91"><span class="nav-number">4.</span> <span class="nav-text">踩過的坑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7%E7%89%88%E6%9C%AC%E4%B8%8D%E4%B8%80"><span class="nav-number">4.1.</span> <span class="nav-text">工具版本不一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Jenkins-%E5%A4%96%E6%8E%9B%E8%A8%AD%E5%AE%9A"><span class="nav-number">4.2.</span> <span class="nav-text">Jenkins 外掛設定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E5%8D%80%E7%9B%AE%E9%8C%84%E8%88%87%E7%99%BC%E4%BD%88%E7%9B%AE%E9%8C%84"><span class="nav-number">4.3.</span> <span class="nav-text">工作區目錄與發佈目錄</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%AC%E8%A9%A6%E5%A4%B1%E6%95%97%E5%BE%8C%E6%9C%AA%E8%83%BD%E4%B8%AD%E6%96%B7-pipeline"><span class="nav-number">4.4.</span> <span class="nav-text">測試失敗後未能中斷 pipeline</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%96%B7-pipeline"><span class="nav-number">4.5.</span> <span class="nav-text">中斷 pipeline</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">5.</span> <span class="nav-text">其他</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/Jenkins-pipeline-unittest-report/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Jenkins-pipeline-加入單元測試報告 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Jenkins-pipeline-加入單元測試報告
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2021-04-20 16:46:48" itemprop="dateCreated datePublished" datetime="2021-04-20T16:46:48+08:00">2021-04-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/devOps/" itemprop="url" rel="index"><span itemprop="name">devOps</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/Jenkins-pipeline-unittest-report/" class="post-meta-item leancloud_visitors" data-flag-title="Jenkins-pipeline-加入單元測試報告" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/Jenkins-pipeline-unittest-report/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/Jenkins-pipeline-unittest-report/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>將 Jenkins 的 pipeline 專案加入單元測試的一些注意事項</p>
+<span id="more"></span>
+
+<h2 id="套件"><a href="#套件" class="headerlink" title="套件"></a>套件</h2><p>Jenkins 可以搭配下列兩個套件來加入單元測試報告，直接在 plugin 頁面進行安裝即可</p>
+<ol>
+<li><code>VSTest Runner</code></li>
+<li><code>MSTest Runner</code></li>
+</ol>
+<h2 id="設定"><a href="#設定" class="headerlink" title="設定"></a>設定</h2><p>目前設定流程：<code>Git</code>–&gt;<code>NuGet</code>–&gt;<code>Build</code>–&gt;<code>Deploy</code></p>
+<p>加入單元測試：<code>Git</code>–&gt;<code>NuGet</code>–&gt;<code>Test</code>–&gt;<code>Build</code>–&gt;<code>Deploy</code></p>
+<p>各個環節的細部設定就不提了，以下是單元測試的設定範例</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">stage(&#x27;nuget&#x27;)</span> &#123;</span><br><span class="line">    <span class="string">//</span> <span class="string">nuget</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="string">stage(&#x27;build</span> <span class="string">Test&#x27;)</span> &#123;</span><br><span class="line">    <span class="attr">bat label:</span> <span class="string">&#x27;&#x27;</span>, <span class="attr">script:</span> <span class="string">&#x27;&#x27;</span><span class="string">&#x27;</span></span><br><span class="line"><span class="string">        chcp 65001</span></span><br><span class="line"><span class="string">        msbuild MyProject.Core.Test\\MyProject.Core.Test.csproj /p:Configuration=Debug /t:Rebuild</span></span><br><span class="line"><span class="string">    &#x27;</span><span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="attr">vsTest cmdLineArgs:</span> <span class="string">&#x27;/Logger:trx;LogFileName=MyProject.Core.trx&#x27;</span>, <span class="attr">testFiles:</span> <span class="string">&#x27;MyProject.Core.Test\\bin\\Debug\\MyProject.Core.Test.dll&#x27;</span></span><br><span class="line">    <span class="attr">mstest testResultsFile:</span> <span class="string">&#x27;TestResults/MyProject.Core.trx&#x27;</span></span><br><span class="line"></span><br><span class="line">    <span class="string">if</span> <span class="string">(currentBuild.result</span> <span class="string">==</span> <span class="string">&quot;FAILURE&quot;</span><span class="string">)</span> &#123;</span><br><span class="line">        <span class="string">error(&#x27;測試失敗&#x27;)</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="net6"><a href="#net6" class="headerlink" title=".net6"></a>.net6</h2><p>如果專案是.NET6，直接可以透過 CLI 下指令去測試，並產生報告檔，再接著透過 mstest 指定報告檔的路徑就可以了</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">stage(&#x27;unitTest&#x27;)</span> &#123;</span><br><span class="line">    <span class="attr">bat returnStatus:</span> <span class="literal">true</span>, <span class="attr">script:</span> <span class="string">&#x27;&#x27;</span><span class="string">&#x27;</span></span><br><span class="line"><span class="string">        chcp 65001</span></span><br><span class="line"><span class="string">        c:</span></span><br><span class="line"><span class="string">        cd C:\\Program Files\\dotnet</span></span><br><span class="line"><span class="string">        dotnet test -c Release &quot;D:\\MyProject.Core.Test\\MyProject.Core.Test.csproj&quot; --filter TestCategory=UnitTest --logger &quot;trx;LogFileName=unit_tests.xml&quot;</span></span><br><span class="line"><span class="string">    &#x27;</span><span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="attr">mstest testResultsFile:</span> <span class="string">&#x27;**/unit_tests.xml&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="踩過的坑"><a href="#踩過的坑" class="headerlink" title="踩過的坑"></a>踩過的坑</h2><h3 id="工具版本不一"><a href="#工具版本不一" class="headerlink" title="工具版本不一"></a>工具版本不一</h3><p>LAB 環境已經有點久了，所以安裝的軟體都還蠻舊的，使用<code>msbuild</code>的指令在 LAB 環境與 Local 環境有差異，需要加上一些參數並指定版本，為了避免這樣的情況，希望可以使用相同的設定，因此需要將 Jenkins 主機上的工具程式更新</p>
+<p>微軟有提供一個東西叫做<code>BuildTools</code>，而且很神奇的非常難找到下載點，還好在這篇文章 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/answers/questions/136985/build-tools-for-visual-studio.html">Build Tools for Visual Studio</a> 裏面有好心人士直接提供直接下載<a target="_blank" href="https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16">連結</a></p>
+<p>下載後安裝<code>buildTools</code>，將頁籤切換到個別工具，找到測試相關類別底下有一個中文叫做<code>測試工具的核心功能 - 建置工具</code>，打勾才會安裝<code>VSTest.console.exe</code></p>
+<h3 id="Jenkins-外掛設定"><a href="#Jenkins-外掛設定" class="headerlink" title="Jenkins 外掛設定"></a>Jenkins 外掛設定</h3><p>怕影響到其他使用原有舊程式的 Jenkins 專案，所以沒有設定<code>path</code>，使用到<code>msbuild</code>以及<code>VSTest.console.exe</code>的地方，都透過絕對路徑來呼叫，而絕對路徑中間有空格，就必須要使用雙引號將整段括起來<br>若不須考慮舊專案，可以直接在系統環境變數中將路徑加上，這樣在指令列就不需要輸入完整路徑呼叫工具</p>
+<p>接著是 Jenkins 的 plugin 設定，需要在<code>Jenkins</code>的<code>Global Tool Configuration</code>裡面設定好工具程式的呼叫方式，此處可以直接用雙引號將絕對路徑打上，如果先前有設定<code>path</code>，也可以直接輸入執行檔名稱就好。以<code>VSTest.Console.exe</code>為例，可以直接設定</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="工作區目錄與發佈目錄"><a href="#工作區目錄與發佈目錄" class="headerlink" title="工作區目錄與發佈目錄"></a>工作區目錄與發佈目錄</h3><p>因為在 LAB 環境有區分工作區目錄、發佈目錄，所以最好遵循著流程，測試通過之前都操作都在工作區做，所以建議在 Git 下載原始碼之後，就直接在工作區建置測試專案，接著測試通過後才進行發佈</p>
+<h3 id="測試失敗後未能中斷-pipeline"><a href="#測試失敗後未能中斷-pipeline" class="headerlink" title="測試失敗後未能中斷 pipeline"></a>測試失敗後未能中斷 pipeline</h3><p>利用<code>if</code>指令判斷當前狀態來決定是否中斷，範例可參考先前的設定</p>
+<h3 id="中斷-pipeline"><a href="#中斷-pipeline" class="headerlink" title="中斷 pipeline"></a>中斷 pipeline</h3><p>在 Jenkins pipeline 中整合另外一篇文章<a href="https://partypeopleland.github.io/artblog/2020/02/25/Jenkins%E6%AA%A2%E6%9F%A5%E5%89%8D%E7%AB%AF%E7%B7%A8%E8%AD%AF%E7%A8%8B%E5%BC%8F%E6%9C%89%E7%84%A1%E7%B0%BD%E5%85%A5%E7%89%88%E6%8E%A7/">Jenkins 檢查前端編譯程式有無簽入版控</a>，測試了一下後發現若發生錯誤未能中斷 pipeline，查了一下，解決的方式如下</p>
+<p>使用 bat 去執行命令，可以讓回傳狀態碼，然後將它存到變數內</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">def x = bat(</span><br><span class="line">    returnStdout: true,</span><br><span class="line">    script: &quot;exit 1&quot;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>然後再 stage 的區段之內，透過<code>if</code>判斷式來拋<code>error</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if (x == 1) &#123;</span><br><span class="line">    error(&#x27;something wrong!&#x27;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p>Code Coverage 並沒有加入，一方面是因為我沒有使用<code>VSTest.console.exe</code>或是<code>NCover</code>做出來，以前曾經有做過<code>DotCover.exe</code>的覆蓋率報告，但是它不是免費的，所以不能用在公司的機器上，而我自己若需要覆蓋率的資訊，現在其實也都使用<code>Rider</code>的功能去看我的 Production Code 還有哪個邏輯分支沒有被覆蓋到，它是屬於哪一個測試案例，我有沒有需要為此寫一個測試，所以在 Jenkins 上面也不太需要報告；而且單元測試覆蓋率其實一直有個爭議，很容易讓大家追求這個數據要越高越好，但其實這也是一種浪費，有興趣了解的人可以自行查詢一下，我很推薦 91 的這篇文章：<a target="_blank" rel="noopener" href="https://dotblogs.com.tw/hatelove/2017/05/30/my-opinions-of-code-coverage-and-tdd">測試覆蓋率與 TDD 的正確心態</a>，裡面的童子軍法則其實就是每天進步一點點的概念，這樣的方式也比較容易達成，至少把自己製造的垃圾帶走吧~</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/jenkins/" rel="tag"># jenkins</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/language-understanding-intelligent-service/" rel="prev" title="LUIS - 自然語言語意分析初學入門">
+                  <i class="fa fa-angle-left"></i> LUIS - 自然語言語意分析初學入門
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/Classic-TDD-by-Examples-Refactor-to-Design/" rel="next" title="心得 - Classic TDD by Examples Refactor to Design">
+                  心得 - Classic TDD by Examples Refactor to Design <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

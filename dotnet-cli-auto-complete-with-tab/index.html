@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="最近打算開始學習 .NET 6，自然就要先做一些準備工作，第一步就是 CLI 的 AutoComplete 功能">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dotnet-CLI透過TAB自動完成">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/dotnet-cli-auto-complete-with-tab/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="最近打算開始學習 .NET 6，自然就要先做一些準備工作，第一步就是 CLI 的 AutoComplete 功能">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/dotnet-cli-auto-complete-with-tab/2021-11-12-110127.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/dotnet-cli-auto-complete-with-tab/2021-11-12-110302.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/dotnet-cli-auto-complete-with-tab/2021-11-12-110353.jpg">
+<meta property="article:published_time" content="2021-11-12T02:33:50.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.379Z">
+<meta property="article:author" content="art">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/dotnet-cli-auto-complete-with-tab/2021-11-12-110127.jpg">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/dotnet-cli-auto-complete-with-tab/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/dotnet-cli-auto-complete-with-tab/","path":"/dotnet-cli-auto-complete-with-tab/","title":"dotnet-CLI透過TAB自動完成"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>dotnet-CLI透過TAB自動完成 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#PowerShell-%E8%A8%AD%E5%AE%9A"><span class="nav-number">1.</span> <span class="nav-text">PowerShell 設定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B-powerShell-%E8%A8%AD%E5%AE%9A%E6%AA%94"><span class="nav-number">2.</span> <span class="nav-text">建立 powerShell 設定檔</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A8%AD%E5%AE%9A%E6%AA%94%E5%92%8C%E5%9F%B7%E8%A1%8C%E5%8E%9F%E5%89%87"><span class="nav-number">3.</span> <span class="nav-text">設定檔和執行原則</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VSCode-%E8%A8%AD%E5%AE%9A%E9%A0%90%E8%A8%AD-shell"><span class="nav-number">4.</span> <span class="nav-text">VSCode 設定預設 shell</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E5%B0%BE"><span class="nav-number">5.</span> <span class="nav-text">結尾</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/dotnet-cli-auto-complete-with-tab/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="dotnet-CLI透過TAB自動完成 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          dotnet-CLI透過TAB自動完成
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2021-11-12 10:33:50" itemprop="dateCreated datePublished" datetime="2021-11-12T10:33:50+08:00">2021-11-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/dotnet/" itemprop="url" rel="index"><span itemprop="name">dotnet</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/dotnet-cli-auto-complete-with-tab/" class="post-meta-item leancloud_visitors" data-flag-title="dotnet-CLI透過TAB自動完成" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/dotnet-cli-auto-complete-with-tab/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/dotnet-cli-auto-complete-with-tab/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>最近打算開始學習 .NET 6，自然就要先做一些準備工作，第一步就是 CLI 的 AutoComplete 功能</p>
+<span id="more"></span>
+
+<p>一直以來習慣的指令列工具都是微軟內建的 CMD.exe，可能是因為他跟 MS-DOS 6.0 很像，從以前就用到現在了所以就一直沒改，後來也都是用類似<code>Cmder</code>這樣的工具，但骨子還是沒變。</p>
+<p>不過因為<code>powerShell</code>真的很強大，也應該是時候換一下工具了，最主要的是，他能夠透過設定的方式達到我們需要的自動完成功能，其實官方文件就已經說明了這件事情，並且介紹了支援的幾個 shell</p>
+<p>有興趣的可以前往觀看<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/dotnet/core/tools/enable-tab-autocomplete">如何啟用 .NET CLI 的 TAB 鍵自動完成</a></p>
+<h2 id="PowerShell-設定"><a href="#PowerShell-設定" class="headerlink" title="PowerShell 設定"></a>PowerShell 設定</h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># PowerShell parameter completion shim for the dotnet CLI</span></span><br><span class="line"><span class="built_in">Register-ArgumentCompleter</span> <span class="literal">-Native</span> <span class="literal">-CommandName</span> dotnet <span class="literal">-ScriptBlock</span> &#123;</span><br><span class="line">     <span class="keyword">param</span>(<span class="variable">$commandName</span>, <span class="variable">$wordToComplete</span>, <span class="variable">$cursorPosition</span>)</span><br><span class="line">         dotnet complete <span class="literal">--position</span> <span class="variable">$cursorPosition</span> <span class="string">&quot;<span class="variable">$wordToComplete</span>&quot;</span> | <span class="built_in">ForEach-Object</span> &#123;</span><br><span class="line">            [<span class="type">System.Management.Automation.CompletionResult</span>]::new(<span class="variable">$_</span>, <span class="variable">$_</span>, <span class="string">&#x27;ParameterValue&#x27;</span>, <span class="variable">$_</span>)</span><br><span class="line">         &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>重點就是上面的程式碼而已，雖然我不會寫<code>powerShell</code>但也能看得懂邏輯，大概就是註冊一個自動完成的事件給<code>dotnet</code>指令，然後接受參數，並透過設定的<code>dotnet complete --position</code>指令去循環，大概的原理是這樣，能夠做到這件事情應該也是依靠<code>dotnet complete</code></p>
+<p>那麼理解了之後，自然也就要知道這份設定檔如何設定，在官網範例程式碼旁邊可以看到</p>
+<blockquote>
+<p>請參閱如何和設定檔與執行原則。</p>
+</blockquote>
+<h2 id="建立-powerShell-設定檔"><a href="#建立-powerShell-設定檔" class="headerlink" title="建立 powerShell 設定檔"></a>建立 powerShell 設定檔</h2><p>第一步當然就是先去看一下<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/powershell/module/microsoft.powershell.core/about/about_profiles?view=powershell-7.2#how-to-create-a-profile">建立設定檔</a></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (!(<span class="built_in">Test-Path</span> <span class="literal">-Path</span> <span class="variable">$PROFILE</span>)) &#123;</span><br><span class="line">  <span class="built_in">New-Item</span> <span class="literal">-ItemType</span> File <span class="literal">-Path</span> <span class="variable">$PROFILE</span> <span class="literal">-Force</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>看起來應該也很容易理解語意，如果路徑檔案名稱不存在的話，就強制建立一個檔案:$PROFILE，這應該也是一個特殊保留字，用來表示設定檔的吧</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">notepad <span class="variable">$PROFILE</span></span><br></pre></td></tr></table></figure>
+
+<p>接著再透過 notepad 開啟該檔案，並且將我們之前自動完成的程式碼貼上去儲存就可以了</p>
+<h2 id="設定檔和執行原則"><a href="#設定檔和執行原則" class="headerlink" title="設定檔和執行原則"></a>設定檔和執行原則</h2><p>如果開啟<code>powerShell</code>之後發現紅色的警告說是不能執行程式的話，那麼這個<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.2">關於執行原則</a>可能就要先了解一下</p>
+<p>建議是全部先看過一次，然後挑選適合的設定值進行設定，以我的情況在本機自己練習開發，所以我直接設定</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Set-ExecutionPolicy</span> <span class="literal">-ExecutionPolicy</span> RemoteSigned <span class="literal">-scope</span> CurrentUser</span><br></pre></td></tr></table></figure>
+
+<h2 id="VSCode-設定預設-shell"><a href="#VSCode-設定預設-shell" class="headerlink" title="VSCode 設定預設 shell"></a>VSCode 設定預設 shell</h2><p>開啟<code>Terminal</code>之後這個地方可以設定預設值<br><img src="/artblog/dotnet-cli-auto-complete-with-tab/2021-11-12-110127.jpg"></p>
+<p>或是直接按下<code>F1</code>輸入關鍵字，也能夠查到指令<br><img src="/artblog/dotnet-cli-auto-complete-with-tab/2021-11-12-110302.jpg"></p>
+<p>然後就會列出各種 shell，在這邊就可以指定預設的 shell 了<br><img src="/artblog/dotnet-cli-auto-complete-with-tab/2021-11-12-110353.jpg"></p>
+<h2 id="結尾"><a href="#結尾" class="headerlink" title="結尾"></a>結尾</h2><p>經過上面的設定後，開啟 powerShell 也不再出現錯誤提示，並且在我輸入 <code>dotnet a</code>的時候，他也會自動幫我改為<code>dotnet add</code>，但不知道是不是因為我電腦比較慢的關係，反應時間有點久，不過起碼是正確動作了</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/rider-reformat-code-and-cleanup/" rel="prev" title="Rider-重新格式化代碼及代碼清理">
+                  <i class="fa fa-angle-left"></i> Rider-重新格式化代碼及代碼清理
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/oh-my-posh-powershell-windows-terminal/" rel="next" title="使用oh-my-posh美化指令列工具-powershell, windows terminal">
+                  使用oh-my-posh美化指令列工具-powershell, windows terminal <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="老實說看到這一次研討會主題，我猶豫了一下是否要報名，因為我沒有聽過 Redis 是什麼，然後很害怕主講人說的太深入；於是思考了那麼幾秒鐘之後還是立刻報名了。一方面是依據經驗，每次參加 twMVC 的研討會總是抱著忐忑的心情前往，然後帶著滿滿的收穫回家，即使是工作上真的沒機會用，但是就像曹祖聖老師曾經說過的，要增加自己的知識廣度。這其實就是一個積累的過程，未來也許在思考解決方案上，能有更多的選擇。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="twMVC 26 研討會心得">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/twmvc-26/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="老實說看到這一次研討會主題，我猶豫了一下是否要報名，因為我沒有聽過 Redis 是什麼，然後很害怕主講人說的太深入；於是思考了那麼幾秒鐘之後還是立刻報名了。一方面是依據經驗，每次參加 twMVC 的研討會總是抱著忐忑的心情前往，然後帶著滿滿的收穫回家，即使是工作上真的沒機會用，但是就像曹祖聖老師曾經說過的，要增加自己的知識廣度。這其實就是一個積累的過程，未來也許在思考解決方案上，能有更多的選擇。">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2017-02-11T11:10:07.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.156Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="twmvc">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/twmvc-26/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/twmvc-26/","path":"/twmvc-26/","title":"twMVC 26 研討會心得"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>twMVC 26 研討會心得 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/twmvc-26/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="twMVC 26 研討會心得 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          twMVC 26 研討會心得
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2017-02-11 19:10:07" itemprop="dateCreated datePublished" datetime="2017-02-11T19:10:07+08:00">2017-02-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/%E5%BF%83%E5%BE%97/" itemprop="url" rel="index"><span itemprop="name">心得</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/twmvc-26/" class="post-meta-item leancloud_visitors" data-flag-title="twMVC 26 研討會心得" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/twmvc-26/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/twmvc-26/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>老實說看到這一次研討會主題，我猶豫了一下是否要報名，因為我沒有聽過 Redis 是什麼，然後很害怕主講人說的太深入；於是思考了那麼幾秒鐘之後還是立刻報名了。一方面是依據經驗，每次參加 twMVC 的研討會總是抱著忐忑的心情前往，然後帶著滿滿的收穫回家，即使是工作上真的沒機會用，但是就像曹祖聖老師曾經說過的，要增加自己的知識廣度。這其實就是一個積累的過程，未來也許在思考解決方案上，能有更多的選擇。</p>
+<p>另外一方面也是因為常常聽人家說實作 Cache 機制，然後 BLA<del>BLA</del>BLA~的。目前工作上還在使用 ASP 的我來說，Cache 這件事情是只知其然不知其所以然。都知道 Cache 是個好東西，但是怎麼做？我也只能科科兩聲。一看到這次主題是 Cache 又是淺談。不趁這次搞懂還要等甚麼時候？</p>
+<span id="more"></span>
+
+<p>twMVC#26 上半場 Redis 資料型別與場景連結<br>講師：Jamis (Blog：<a target="_blank" rel="noopener" href="https://dotblogs.com.tw/jamis">天橋下的說書人</a>)<br>連結：<a target="_blank" rel="noopener" href="https://doc.co/SBtm7m">Slide</a>、<a target="_blank" rel="noopener" href="https://github.com/twMVC/twMVC-26">Sample Code For LinqPad</a><br>這位主講者最近才成為 twMVC 的核心成員，也就是上次#22 的講師，台風穩健，專業度也是一級棒的，主題解說與投影片更是相得益彰。我自己的習慣是參加研討會的時候會記筆記，這場的筆記是我有史以來紀錄最多頁的。因為資訊量真的太大了，也或許是因為我根本不懂 Redis 是甚麼，所以很多東西需要筆記。</p>
+<p>沒錯，這次 Jamis 的介紹就是真的能夠讓我這個完全不懂 Redis 是甚麼的人，結束後都可以來跟公司內部同事做一次簡單的分享了。一開始介紹 Redis 的本質就是透過 Key-Value 的 In Memory 的 Storage，也因為它是利用 Memory，所以速度很快，然後也秀了一下官方的數據，(當然後面也有 Live Demo，可以看到它實際的 16 次請求，總共花了多少時間，真的霹靂快的)，說明了快這件事情，再開始從架構說明，最後再細到最基礎的 Master-Slave，這樣子先讓我完整的知道 Redis 這個東西是幹嘛的，然後他能夠做什麼，又應該怎麼去使用這個東西，最後，再透過一些 Live Demo，架起來實際的 Redis，並且搭配 C#的範例程式碼，並且模擬了各種情境，然後在這些情境之下，可以透過怎樣的方式去利用 Redis 完成快取這件事情。</p>
+<p>Redis 幹嘛的，知道了；Redis 的架構應該怎麼弄比較好，豪華版跟基本款的架構都說明了；實際上怎麼架，也知道了；架起來之後，我的 Client 端怎麼使用，也介紹了免錢的套件；這些套件怎麼設定，也說明了；套件有許多資料型別，如何在最洽當的情境之下使用正確的型別來使用 Redis 的服務，也很貼心的準備了 Sample。先從 Knowhow 著手，再細到實務，加上詳細的投影片、還提供 Sample Code。這一切的一切都在兩個小時之內告訴你，還給你打包帶回家。我的老天爺，這真是過年的一份大禮包。由此可知講師的課前準備的用心與專業程度。</p>
+<p>這種感覺就像是 TDD 完成了數個循環的爽度啊。總算又覺得自己有學習到一些東西，這個年假沒有荒廢掉。哈哈</p>
+<p>twMVC#26 下半場 淺談 ASP.NET Caching 技術與實踐<br>講師：Cheng-Ju Wu (Blog：<a target="_blank" rel="noopener" href="https://dotblogs.com.tw/wuanunet">阿砮的學習手寫板</a>)<br>連結：<a target="_blank" rel="noopener" href="https://doc.co/FuSK99">Slide</a>、<a target="_blank" rel="noopener" href="https://github.com/twMVC/twMVC-26-2-1">Sample1</a>、<a target="_blank" rel="noopener" href="https://github.com/twMVC/twMVC-26-2-2">Sample2</a><br>這一位講師如果有參加過研討會、或是參加過 skilltree 的課程，應該會常常看到他。不過就像是 Demo 的介紹，似乎真的是比較內向，到了今天才知道：啊<del>原來之前我看到過的那個 MVC 的 Route 測試的文章，學習手寫板的版主就是他呀</del>(還是我真的太孤陋寡聞了？)</p>
+<p>果然能夠站上台分享的都是狠腳色，雖然比不過別的講師風趣幽默的氣場，但是咱今天的初衷就是為了要好好的學習一下 ASP.Net 的 Cache 要怎麼搞，別的都是虛的，振奮了一下精神開始注意聽。</p>
+<p>講師的簡報風格也很實在，從資料庫的查詢成本開始說起，透過講師的說明，我幾乎可以同時在腦中畫出了一次資料庫查詢的流程圖，以及如果是利用快取，又是怎樣的流程。而快取的機制又是如何改善應用程式的效能，相比於資料庫查詢，省略了那些環節的查詢成本，講師也從情境開始下手，再搭配上課程後續的一些說明，可以很明顯的感受到講師想要表達的事情，就我的理解來看：快取就像是藥，不是仙丹，吃藥要對症，快取也是。網站速度緩慢有很多原因，如果不管病發原因，碰到問題我就是給你快取下去，看起來似乎能對症，網站速度也快了，但是實際上只是將問題延後爆發而已，如果是因為 DB 查詢語法造成 table scan，類似這樣的語法，那就真的是無言以對了。萬事加快取，再怎麼加也比不過初心工程師拼命給你寫奇怪的 SQL 語法啊 (這個是個人經驗，很多問題我也犯過，在這邊感謝一下我們公司的佛心 DBA 還願意內部教學)</p>
+<p>回到快取這件事情，後面的部分主要在說明一些實務上的 Code，在 MVC 上面要怎麼去實作 Cache、一些技巧、在加上一些實務上的情境，以及這些情境要怎麼去處理、克服問題，這邊當然就是只能先聽講師的說明、因為手邊沒有 Code 能看，所以其實我又開始昏昏欲睡了，沒辦法，就是沒有 Cache 實務經驗，所以很多地方沒有共鳴，只能等 Sample Code 釋出之後再找時間研究，尤其是 autofac 這個東西，真心不懂。不過後來講到要測試 cache code 的部分，自己下去思考好像也會想翻桌，難道就要為了測一行程式碼，將其他 10 行手動註解掉嗎？</p>
+<p>江湖一點訣，這也就是講師開頭埋的梗，為什麼要弄一個 NullCacheProvider 出來，原因在於我的 production code 只要把邏輯設好，如果我抓不到快取資料，就去撈 DB。那麼我在抓快取資料的時候，都回應【抓不到快取】，那不就可以測到我們真正要測試的部分，而且也不用去改 Production Code 嗎？物件導向萬歲。(回頭看了我的 ASP，嘆了一口氣)</p>
+<p>除了 MVC 實作，講師也介紹了.Net Core 上面 Cache 要怎麼做，並且也實際透過範例來 demo，Review 一下整個課程，從一開始的最簡單的 cache 的實作，到後面其他各式各樣的實作，可以發現就真的是越來越貼近實務面。最後也順便將使用快取的觀念在重申一次，快取真的不是萬靈丹。最後順帶一提，如果想要知道快取用了 Server 多少記憶體，可以透過 windows 本身工作管理員的效能來監控。</p>
+<hr>
+<p>這一次的研討會也是第一次有了閃電秀這個概念出現，並且有兩位分享者出來分享了一些 tips，</p>
+<p>第一位講的東西比較偏向 JavaScript，NodeJs 的茶包，但因為我就沒有在碰 node.js，所以也不是很懂茶包的點在哪裡，大概知道就是可以透過設定甚麼東西的 config 檔案，把 path 補上去，然後就可以吃到正確的檔案了~….好吧。我真的不明瞭。<br>第二位講的東西就是跟 Dapper 的一個不為人知的命令有關，沒錯，因為名字有點長，我又是剛好前幾天才看著分享者的 Blog 開始學習 Dapper 怎麼用，所以到現在那個方法還是不為我知。anyway，大概也就是在特定的應用情境之下，可以透過那個神奇的方法，然後好像可以做到某些神奇的事情。當下大家應該都是內行在看門道，不過每一個環節我都在聽天書，所以我也只能看熱鬧了。</p>
+<p>從過年前報名完畢之後就一直很期待著這次的研討會，果然結束之後，再次驗證參加 twMVC 的研討會是絕對值得的，收穫真的滿滿的啊。而這幾次我所參加的研討會經驗，可以發現 Demo 一次又一次的再想辦法推 mvc 社群，期望有更多人參加進來，不論是分享、討論，很謝謝 demo 持續的付出，讓很多對於程式設計有興趣的人，有這一個管道可以吸收新知，在這邊也謝謝各位網路上的佛心大神，一次又一次地將自己的經驗與知識分享出來，如果是在老闆的壓力之下剛好看到有文章能夠得到解決方案，我這種心情會更加強烈。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/twmvc/" rel="tag"># twmvc</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/twmvc-22/" rel="prev" title="twMVC 22 研討會心得">
+                  <i class="fa fa-angle-left"></i> twMVC 22 研討會心得
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/twmvc-27/" rel="next" title="twMVC 27 研討會心得">
+                  twMVC 27 研討會心得 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

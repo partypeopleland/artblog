@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="透過.net Core identity 實作身份認證">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dotnet core identity">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/dotnet-core-identity/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="透過.net Core identity 實作身份認證">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/dotnet-core-identity/2020-05-26_14-41-38.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/dotnet-core-identity/2020-05-26_14-46-46.png">
+<meta property="article:published_time" content="2020-03-17T06:04:22.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.303Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="identity">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/dotnet-core-identity/2020-05-26_14-41-38.png">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/dotnet-core-identity/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/dotnet-core-identity/","path":"/dotnet-core-identity/","title":"dotnet core identity"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>dotnet core identity | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A8%AD%E5%AE%9A-net-core-app"><span class="nav-number">1.</span> <span class="nav-text">設定.net core app</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A6%81%E6%AD%A2%E6%9C%AA%E7%B6%93%E6%8E%88%E6%AC%8A%E7%9A%84%E7%94%A8%E6%88%B6%E8%A8%AA%E5%95%8F"><span class="nav-number">2.</span> <span class="nav-text">禁止未經授權的用戶訪問</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E7%99%BB%E5%85%A5%E9%A0%81%E9%9D%A2"><span class="nav-number">3.</span> <span class="nav-text">建立登入頁面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%99%BB%E5%85%A5%E9%82%8F%E8%BC%AF"><span class="nav-number">4.</span> <span class="nav-text">登入邏輯</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cookie-%E9%81%8E%E6%9C%9F"><span class="nav-number">5.</span> <span class="nav-text">Cookie 過期</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CookieAuthenticationOptions-ExpireTimeSpan"><span class="nav-number">6.</span> <span class="nav-text">CookieAuthenticationOptions.ExpireTimeSpan</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/dotnet-core-identity/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="dotnet core identity | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          dotnet core identity
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2020-03-17 14:04:22" itemprop="dateCreated datePublished" datetime="2020-03-17T14:04:22+08:00">2020-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/dotnet/" itemprop="url" rel="index"><span itemprop="name">dotnet</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/dotnet-core-identity/" class="post-meta-item leancloud_visitors" data-flag-title="dotnet core identity" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/dotnet-core-identity/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/dotnet-core-identity/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>透過.net Core identity 實作身份認證</p>
+<span id="more"></span>
+
+<p>透過身分認證機制，我們可以讓沒有認證過的人拒絕訪問我們的網站，下面的練習是參考<a target="_blank" rel="noopener" href="https://code-maze.com/authentication-aspnet-core-identity/">Authentication with ASP.NET Core Identity</a>實作，有興趣的人可以觀看原文</p>
+<h2 id="設定-net-core-app"><a href="#設定-net-core-app" class="headerlink" title="設定.net core app"></a>設定.net core app</h2><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//StartUp.cs</span></span><br><span class="line">services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//StartUp.cs</span></span><br><span class="line">app.UseAuthentication();</span><br></pre></td></tr></table></figure>
+
+<h2 id="禁止未經授權的用戶訪問"><a href="#禁止未經授權的用戶訪問" class="headerlink" title="禁止未經授權的用戶訪問"></a>禁止未經授權的用戶訪問</h2><p>建立一個資訊頁，顯示登入人員的基本資料，這個頁面如果沒有登入系統是不允許訪問的，套用<code>[Authorize]</code>即可</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> 測試頁面，顯示登入者資訊</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;returns&gt;</span><span class="doctag">&lt;/returns&gt;</span></span></span><br><span class="line">[<span class="meta">Authorize</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> ActionResult <span class="title">Secret</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> View();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight xhtml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>Claim details<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">	@foreach (var claim in User.Claims) &#123;</span><br><span class="line">	<span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">strong</span>&gt;</span>@claim.Type<span class="tag">&lt;/<span class="name">strong</span>&gt;</span>: @claim.Value<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">	&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="建立登入頁面"><a href="#建立登入頁面" class="headerlink" title="建立登入頁面"></a>建立登入頁面</h2><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> 登入頁面</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;returns&gt;</span><span class="doctag">&lt;/returns&gt;</span></span></span><br><span class="line">[<span class="meta">HttpGet</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> IActionResult <span class="title">Login</span>(<span class="params"><span class="built_in">string</span> returnUrl = <span class="literal">null</span></span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    ViewData[<span class="string">&quot;ReturnUrl&quot;</span>] = returnUrl;</span><br><span class="line">    <span class="keyword">return</span> View();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> 登入頁面(post)</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name=&quot;loginForm&quot;&gt;</span>登入表單<span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;returns&gt;</span><span class="doctag">&lt;/returns&gt;</span></span></span><br><span class="line">[<span class="meta">HttpPost</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">async</span> Task&lt;IActionResult&gt; <span class="title">Login</span>(<span class="params">LoginFormViewModel loginForm</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> View();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>登入表單 ViewModel</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> 登入表單 viewModel</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">LoginFormViewModel</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 帳號</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    [<span class="meta">MaxLength(100, ErrorMessage = <span class="string">&quot;帳號長度不可多於100字元&quot;</span>)</span>]</span><br><span class="line">    [<span class="meta">Required(ErrorMessage = <span class="string">&quot;請輸入帳號&quot;</span>)</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> LoginID &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 密碼</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    [<span class="meta">Required(ErrorMessage = <span class="string">&quot;請輸入密碼&quot;</span>)</span>]</span><br><span class="line">    [<span class="meta">DataType(DataType.Password)</span>]</span><br><span class="line">    [<span class="meta">JsonIgnore</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> Password &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 導頁網址</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> ReturnUrl &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>登入頁面 Html</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">asp-action</span>=<span class="string">&quot;Login&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span> <span class="attr">asp-route-returnUrl</span>=<span class="string">&quot;@ViewData[&quot;</span><span class="attr">ReturnUrl</span>&quot;]&quot;&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h2</span>&gt;</span>JoPE Member Login Page<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;loginId&quot;</span>&gt;</span>帳號<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">id</span>=<span class="string">&quot;loginId&quot;</span> <span class="attr">name</span>=<span class="string">&quot;loginId&quot;</span> <span class="attr">placeholder</span>=<span class="string">&quot;請輸入帳號&quot;</span> <span class="attr">autocomplete</span>=<span class="string">&quot;off&quot;</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;password&quot;</span>&gt;</span>密碼<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">id</span>=<span class="string">&quot;password&quot;</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">placeholder</span>=<span class="string">&quot;請輸入密碼&quot;</span> <span class="attr">autocomplete</span>=<span class="string">&quot;off&quot;</span>/&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;登入&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="登入邏輯"><a href="#登入邏輯" class="headerlink" title="登入邏輯"></a>登入邏輯</h2><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> 登入頁面(post)</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name=&quot;form&quot;&gt;</span>登入表單<span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;returns&gt;</span><span class="doctag">&lt;/returns&gt;</span></span></span><br><span class="line">[<span class="meta">HttpPost</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">async</span> Task&lt;IActionResult&gt; <span class="title">Login</span>(<span class="params">LoginFormViewModel form</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (!ModelState.IsValid)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> View(loginForm);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> user = <span class="keyword">await</span> MemberModule.FindByLoginId(form.LoginID);</span><br><span class="line">    <span class="keyword">if</span> (user != <span class="literal">null</span> &amp;&amp; <span class="keyword">await</span> MemberModule.CheckPassword(user, form.Password))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> identity = <span class="keyword">new</span> ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);</span><br><span class="line">        identity.AddClaim(<span class="keyword">new</span> Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));</span><br><span class="line">        identity.AddClaim(<span class="keyword">new</span> Claim(ClaimTypes.Name, user.Name));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> authProperties = <span class="keyword">new</span> AuthenticationProperties</span><br><span class="line">        &#123;</span><br><span class="line">            AllowRefresh = <span class="literal">true</span>,</span><br><span class="line">            ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(<span class="number">15</span>),</span><br><span class="line">            IsPersistent = <span class="literal">true</span>,</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">await</span> HttpContext.SignInAsync(</span><br><span class="line">            CookieAuthenticationDefaults.AuthenticationScheme,</span><br><span class="line">            <span class="keyword">new</span> ClaimsPrincipal(identity),</span><br><span class="line">            authProperties);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> RedirectToLocal(form.ReturnUrl);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> View(loginForm);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> IActionResult <span class="title">RedirectToLocal</span>(<span class="params"><span class="built_in">string</span> returnUrl</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (Url.IsLocalUrl(returnUrl))</span><br><span class="line">        <span class="keyword">return</span> Redirect(returnUrl);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">return</span> RedirectToAction(<span class="keyword">nameof</span>(HomeController.Index), <span class="string">&quot;Home&quot;</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Cookie-過期"><a href="#Cookie-過期" class="headerlink" title="Cookie 過期"></a>Cookie 過期</h2><p>透過上述的機制，進行使用者登入動作的話，會在 Client 端產生一個名稱為<code>.AspNetCore.Cookies</code>的 cookie，內容經過編碼，透過瀏覽器開發者工具可以看到，有一欄是 Cookie 的 Expires &#x2F; max-age，可以理解為，超過這個時間，這份資料就沒有用了</p>
+<p>關於 Cookie 的更多資訊，可以參考 MDN 的<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-TW/docs/Web/HTTP/Cookies">說明</a></p>
+<p>這邊要測試的是 Cookie Expires 的這件事情，在上一段使用者登入呼叫的程式片段中，可以看到我們設定了 Cookie 的過期時間為 15 分鐘，此處為了測試，我將它設定為，登入之後 20 秒，沒有其他的操作行為就會自動移除 Cookie</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> authProperties = <span class="keyword">new</span> AuthenticationProperties</span><br><span class="line">&#123;</span><br><span class="line">    AllowRefresh = <span class="literal">true</span>,</span><br><span class="line">    ExpiresUtc = DateTimeOffset.UtcNow.AddSeconds(<span class="number">20</span>),</span><br><span class="line">    IsPersistent = <span class="literal">true</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">await</span> HttpContext.SignInAsync(</span><br><span class="line">    CookieAuthenticationDefaults.AuthenticationScheme,</span><br><span class="line">    <span class="keyword">new</span> ClaimsPrincipal(identity),</span><br><span class="line">    authProperties);</span><br></pre></td></tr></table></figure>
+
+<p>然後我在後端取得<code>DateTime.now</code>送給前端顯示，所以可以看到系統登入的時間，從後端取得的時間，再加上 20 秒，就等於我們看到 Cookie 資訊的 Expires 的值</p>
+<p><img src="/artblog/dotnet-core-identity/2020-05-26_14-41-38.png"></p>
+<blockquote>
+<p>此處 cookie 的時間是 GMT time , 所以要自行轉為 UTC+8 來比較</p>
+</blockquote>
+<p>在這 20 秒當中都沒有跟網站後端溝通的話，那麼 Cookie 就會自動被清掉，這表示 client 端已經沒有使用者的資訊了，所以也就代表著將使用者登出系統了<br><img src="/artblog/dotnet-core-identity/2020-05-26_14-46-46.png"></p>
+<h2 id="CookieAuthenticationOptions-ExpireTimeSpan"><a href="#CookieAuthenticationOptions-ExpireTimeSpan" class="headerlink" title="CookieAuthenticationOptions.ExpireTimeSpan"></a>CookieAuthenticationOptions.ExpireTimeSpan</h2><p>如果有注意到的話，我們在<code>startup.cs</code>也可以設定這個參數</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ConfigureServices</span>(<span class="params">IServiceCollection services</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//...略</span></span><br><span class="line">    services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        option.ExpireTimeSpan = TimeSpan.FromMinutes(<span class="number">60</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="comment">//...略</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>大概可以想成<strong>我希望用戶最少在一個月之內重新登錄一次</strong>，嗯，這就是這個屬性可以拿來利用的情境，這個參數的<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/dotnet/api/microsoft.aspnetcore.authentication.cookies.cookieauthenticationoptions?view=aspnetcore-3.1">解釋</a>我看的不是很懂，於是我搜尋了一下，發現了一篇文章:<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/37086645/how-to-set-asp-net-identity-cookies-expires-time">How to set asp.net Identity cookies expires time</a>來解釋這個屬性</p>
+<p>這篇文章的解答如下</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">async</span> Task <span class="title">SignInAsync</span>(<span class="params">ApplicationUser user, <span class="built_in">bool</span> isPersistent, <span class="built_in">bool</span> rememberBrowser</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> userIdentity = <span class="keyword">await</span> CreateUserIdentityAsync(user).WithCurrentCulture();</span><br><span class="line">    <span class="comment">// Clear any partial cookies from external or two factor partial sign ins</span></span><br><span class="line">    AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie, DefaultAuthenticationTypes.TwoFactorCookie);</span><br><span class="line">    <span class="keyword">if</span> (rememberBrowser)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> rememberBrowserIdentity = AuthenticationManager.CreateTwoFactorRememberBrowserIdentity(ConvertIdToString(user.Id));</span><br><span class="line">        AuthenticationManager.SignIn(<span class="keyword">new</span> AuthenticationProperties &#123; IsPersistent = isPersistent &#125;, userIdentity, rememberBrowserIdentity);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//AuthenticationManager.SignIn(new AuthenticationProperties &#123; IsPersistent = isPersistent &#125;, userIdentity);</span></span><br><span class="line">        <span class="keyword">if</span> (isPersistent)</span><br><span class="line">        &#123;</span><br><span class="line">            AuthenticationManager.SignIn(<span class="keyword">new</span> AuthenticationProperties &#123; IsPersistent = <span class="literal">true</span> &#125;, userIdentity);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            AuthenticationManager.SignIn(<span class="keyword">new</span> AuthenticationProperties &#123; IsPersistent = <span class="literal">true</span>, ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(<span class="number">30</span>) &#125;, userIdentity);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>這篇文章提供了一個很好的解決方案，但我們要關注的重點其實是：在預設情況下程式會使用<code>startup.cs</code>裡面設定的<code>ExpireTimeSpan</code>；但如果我們自行設定了<code>ExpiresUtc</code>，就會以我們設定的值為主。</p>
+<blockquote>
+<p>換句話說，如果情境較簡單，你可以只考慮 <code>ExpiresUtc</code> 屬性這件事情就好，然後在登入的 SignInAsync 的判斷就直接用本文提到的方式處理即可</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/identity/" rel="tag"># identity</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/encrypt-connection-string/" rel="prev" title="連線字串加密的方式">
+                  <i class="fa fa-angle-left"></i> 連線字串加密的方式
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/dotnet-core-appSetting/" rel="next" title="dotnet core appSetting">
+                  dotnet core appSetting <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="Azure Search Document 是 Azure Cognitive Search documentation（認知搜尋文件) 這項服務的 Nuget 套件，也就是以前說的 Azure Search，這項服務可以讓使用者的搜尋體驗變得較為友善－透過自動完成、同義字比對、模糊比對、模式比對、篩選和排序 一般情況下大部分我們自己做的搜尋都還在篩選排序等等，要做到同義字比對與模糊比對就比較複雜">
+<meta property="og:type" content="article">
+<meta property="og:title" content="azure認知搜尋初學">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/azure-cognitive-search/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="Azure Search Document 是 Azure Cognitive Search documentation（認知搜尋文件) 這項服務的 Nuget 套件，也就是以前說的 Azure Search，這項服務可以讓使用者的搜尋體驗變得較為友善－透過自動完成、同義字比對、模糊比對、模式比對、篩選和排序 一般情況下大部分我們自己做的搜尋都還在篩選排序等等，要做到同義字比對與模糊比對就比較複雜">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/azure-cognitive-search/as01.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/azure-cognitive-search/as02.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/azure-cognitive-search/as03.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/azure-cognitive-search/as04.jpg">
+<meta property="article:published_time" content="2022-01-17T02:13:56.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.447Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="azureSearch">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/azure-cognitive-search/as01.jpg">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/azure-cognitive-search/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/azure-cognitive-search/","path":"/azure-cognitive-search/","title":"azure認知搜尋初學"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>azure認知搜尋初學 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#intro"><span class="nav-number">1.</span> <span class="nav-text">intro</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B3%87%E6%96%99%E4%BE%86%E6%BA%90"><span class="nav-number">1.1.</span> <span class="nav-text">資料來源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-number">1.2.</span> <span class="nav-text">索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%AD%90"><span class="nav-number">1.3.</span> <span class="nav-text">索引子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8C%E7%BE%A9%E8%A9%9E%E5%BB%BA%E7%AB%8B"><span class="nav-number">1.4.</span> <span class="nav-text">同義詞建立</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%90%9C%E5%B0%8B%E5%BB%BA%E8%AD%B0"><span class="nav-number">1.5.</span> <span class="nav-text">搜尋建議</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AF%84%E4%BE%8B%E7%A8%8B%E5%BC%8F%E7%A2%BC"><span class="nav-number">2.</span> <span class="nav-text">範例程式碼</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AppSettingConfig-json"><span class="nav-number">2.1.</span> <span class="nav-text">AppSettingConfig.json</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AzureSearchSettings-cs"><span class="nav-number">2.2.</span> <span class="nav-text">AzureSearchSettings.cs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MyProduct-cs"><span class="nav-number">2.3.</span> <span class="nav-text">MyProduct.cs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AzureSearchHelper-cs"><span class="nav-number">2.4.</span> <span class="nav-text">AzureSearchHelper.cs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BC%E5%8F%AB%E7%AB%AF-init"><span class="nav-number">2.5.</span> <span class="nav-text">呼叫端: init</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BC%E5%8F%AB%E7%AB%AF-Synonyms-Create-or-Remove"><span class="nav-number">2.6.</span> <span class="nav-text">呼叫端: Synonyms Create or Remove</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BC%E5%8F%AB%E7%AB%AF-DataSrouce-Create-or-Update"><span class="nav-number">2.7.</span> <span class="nav-text">呼叫端: DataSrouce Create or Update</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BC%E5%8F%AB%E7%AB%AF-Index-Create-or-Remove"><span class="nav-number">2.8.</span> <span class="nav-text">呼叫端: Index Create or Remove</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BC%E5%8F%AB%E7%AB%AF-Indexer-Create-or-Run"><span class="nav-number">2.9.</span> <span class="nav-text">呼叫端: Indexer Create or Run</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%8C%E8%A8%98"><span class="nav-number">3.</span> <span class="nav-text">後記</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/azure-cognitive-search/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="azure認知搜尋初學 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          azure認知搜尋初學
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2022-01-17 10:13:56" itemprop="dateCreated datePublished" datetime="2022-01-17T10:13:56+08:00">2022-01-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/azure/" itemprop="url" rel="index"><span itemprop="name">azure</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/azure-cognitive-search/" class="post-meta-item leancloud_visitors" data-flag-title="azure認知搜尋初學" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/azure-cognitive-search/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/azure-cognitive-search/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><code>Azure Search Document</code> 是 <code>Azure Cognitive Search documentation</code>（認知搜尋文件) 這項服務的 Nuget 套件，也就是以前說的 <code>Azure Search</code>，這項服務可以讓使用者的搜尋體驗變得較為友善－透過自動完成、同義字比對、模糊比對、模式比對、篩選和排序</p>
+<p>一般情況下大部分我們自己做的搜尋都還在篩選排序等等，要做到同義字比對與模糊比對就比較複雜，或者說需要付出較高的企業成本，而採用<code>Azure Search</code>就是一個可以考慮的解決方案了，接下來就著重在如何使用的部分，透過一個簡單的範例來說明。</p>
+<span id="more"></span>
+
+<h2 id="intro"><a href="#intro" class="headerlink" title="intro"></a>intro</h2><p>搜尋服務最核心的就是下面的三個東西，我們首先需要先準備資料，放在資料來源當中，並且建立好索引，也就是資料與欄位的對應關係，並確認該欄位的一些屬性，例如是否可搜尋、可排序等等；最後再透過索引子實際執行，將資料來源的資料經過處理後放到索引之內。之後就可以透過 API 去做查詢，也可以透過 <code>Azure Search Document</code>這個 Nuget 套件查詢資料</p>
+<p><img src="/artblog/azure-cognitive-search/as01.jpg"></p>
+<ol>
+<li>索引:透過 SDK 或 REST API 發出請求，針對索引欄位作操作</li>
+<li>索引子:索引＆資料來源中間愛的橋樑</li>
+<li>資料來源:支援 Azure Blob、Azure SQL Database…等等</li>
+</ol>
+<p>詳細的設定及文件還是需要參考官方文件比較清楚，這裡只是稍微說明一下</p>
+<h3 id="資料來源"><a href="#資料來源" class="headerlink" title="資料來源"></a>資料來源</h3><p>能夠作為資料來源的有很多，這邊以 Azure Blob 容器為例子，指定好<code>連接字串</code>、<code>容器名稱</code>就可以使用這裡也有很多設定值可以調整，也要考量到自己的規劃來做設定。像是<code>追蹤刪除</code>就會影響到你索引的定義，還有資料來源上傳的檔案 Schema 要怎麼規劃，在我的使用情境下，我是需要追蹤刪除的，所以我採用了使用一個欄位<code>IsDel</code>來做，只要這個欄位是 1 就代表這筆資料需要被刪除<br><img src="/artblog/azure-cognitive-search/as02.jpg"></p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/azure/search/search-indexer-tutorial">教學課程：使用 .NET SDK 為 Azure SQL 資料編製索引</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/azure/search/tutorial-multiple-data-sources">教學課程：使用 .NET SDK 從多個資料來源編製索引</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/Azure-Samples/azure-search-dotnet-samples/blob/master/multiple-data-sources/v11/src/Program.cs">Sample Code - 1</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/Azure-Samples/azure-search-dotnet-samples/blob/beb243914650fd3eb7355f8a775eb9138df70aa3/tutorial-ai-enrichment/v10/Program.cs">Sample Code - 2</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/azure/search/samples-dotnet">適用于 Azure 認知搜尋的 .NET (c # ) 程式碼範例</a></li>
+</ol>
+<h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><p>在這邊設定的就是定義好每一筆資料的欄位，是否可以被搜尋、篩選、取出、排序等等，比較重要的部分就是要定義那個欄位是<code>Key</code>值，當然也要加上一個虛刪除的欄位<br><img src="/artblog/azure-cognitive-search/as03.jpg"></p>
+<p>假設我要做一個商品查詢，那索引應該要有哪些欄位呢？</p>
+<ul>
+<li>搜尋結果：前端會用到的欄位，如商品標題，價格等等</li>
+<li>篩選條件：商品數量、銷售狀態、分類等等</li>
+<li>關鍵字查詢：商品名稱、商品明細</li>
+<li>統計資訊：分類等等</li>
+<li>排序條件：商品庫存、價格等等</li>
+</ul>
+<p>決定好有哪些欄位之後，依據各欄位用途設定屬性，使其可以被取出、篩選、排序、搜尋、Facet</p>
+<ol>
+<li>可取出：大概的意思就是跟 SQL 的 Select 差不多吧。基本上不需要被取出的欄位也沒必要上傳到資料來源了吧（除非要做篩選排序搜尋等等)</li>
+<li>可排序：就是字面上的意思，該欄位可以用來排序</li>
+<li>可篩選：這個意思就是類似 SQL 的 Where 條件，例如當我設定商品類型可以篩選，那我就可以透過篩選商品類型的值，取得某類型的商品</li>
+<li>可 Facet：假設我有三筆資料，兩筆是 3C 用品，一筆是文具，當我加上了參數要他回傳 Facet，並且搜尋所有商品，他就會額外給我一個統計資料，告訴我 3C 有兩筆，文具有一筆；大概就是這樣的意思；另一種解釋是：用該面向去看你的搜尋結果</li>
+<li>可搜尋：設定為可搜尋的話，後續需要指定要用哪一種分析器，應該是跟語意分析、拆字有關係吧…</li>
+</ol>
+<blockquote>
+<p>在這裡要注意資料庫的欄位定義與索引的欄位定義資料型態的問題，要看一下是否相容</p>
+</blockquote>
+<h3 id="索引子"><a href="#索引子" class="headerlink" title="索引子"></a>索引子</h3><p><img src="/artblog/azure-cognitive-search/as04.jpg"></p>
+<p>索引子的設定相對較為單純，這裡因為我採用的是 json 的資料來源，所以<code>parsingMode</code>設定為 <code>jsonArray</code>，代表的是 Json 檔案內是一個 json 物件的集合</p>
+<h3 id="同義詞建立"><a href="#同義詞建立" class="headerlink" title="同義詞建立"></a>同義詞建立</h3><p>建立、更新和刪除同義字地圖永遠是整份檔的作業，這表示您無法以累加方式更新或刪除同義字地圖的部分。 即使只更新單一規則，也需要重載。</p>
+<ol>
+<li><p>只能每次重新做</p>
+</li>
+<li><p>做完就需要去更新索引有哪些欄位使用到了同義字</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/azure/search/search-synonyms">新增同義字</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/Azure-Samples/search-dotnet-getting-started/blob/master/DotNetHowToSynonyms/DotNetHowToSynonyms/Program.cs">Sample Code</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/azure/search/search-synonyms-tutorial-sdk">Example: Add synonyms for Azure Cognitive Search in C#</a></p>
+</li>
+</ol>
+<h3 id="搜尋建議"><a href="#搜尋建議" class="headerlink" title="搜尋建議"></a>搜尋建議</h3><ol>
+<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/azure/search/index-add-suggesters">建立建議工具，以在查詢中啟用自動完成和建議的結果</a></li>
+</ol>
+<h2 id="範例程式碼"><a href="#範例程式碼" class="headerlink" title="範例程式碼"></a>範例程式碼</h2><p>基於開發時期常常會需要修改調整，如果都透過手動來建立索引等等動作，會非常的煩人，所以寫個 Console 專案透過參數來做這些事情會比較方便，這邊就節錄我自己寫的一個 Helper，全都是參考官方範例改的。下面的程式碼僅供參考</p>
+<h3 id="AppSettingConfig-json"><a href="#AppSettingConfig-json" class="headerlink" title="AppSettingConfig.json"></a>AppSettingConfig.json</h3><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;azureSearchConfig&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;ServiceName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;service-name&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;ApiKey&quot;</span><span class="punctuation">:</span> <span class="string">&quot;api-key&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;IndexName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;index-name&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;DataSourceName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;datasource-name&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;DataSourceConnectionString&quot;</span><span class="punctuation">:</span> <span class="string">&quot;datasource-conn-str&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;DataSourceContainer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;container-name&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;DataSourceContainerQuery&quot;</span><span class="punctuation">:</span> <span class="string">&quot;container-folder&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;IndexerName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;indexer-name&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="AzureSearchSettings-cs"><a href="#AzureSearchSettings-cs" class="headerlink" title="AzureSearchSettings.cs"></a>AzureSearchSettings.cs</h3><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">AzureSearchSettings</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">const</span> <span class="built_in">string</span> Position = <span class="string">&quot;AzureSearchConfig&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 同義詞名稱</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">const</span> <span class="built_in">string</span> SynonymsName = <span class="string">&quot;kw-synonym&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 採用同義詞的欄位</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">readonly</span> <span class="built_in">string</span>[] SynonymsFields = &#123; <span class="string">&quot;ProductName&quot;</span>, <span class="string">&quot;Detail&quot;</span> &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 搜尋建議來源欄位</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">readonly</span> <span class="built_in">string</span>[] SuggestFields = &#123; <span class="string">&quot;ProductName&quot;</span>, <span class="string">&quot;Detail&quot;</span> &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> service name</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> ServiceName &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125; = <span class="built_in">string</span>.Empty;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> API Key</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> ApiKey &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125; = <span class="built_in">string</span>.Empty;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 索引名稱</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> IndexName &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125; = <span class="built_in">string</span>.Empty;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> Azure Search Service EndPoint</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="keyword">public</span> Uri ServiceEndPoint =&gt; <span class="keyword">new</span>(<span class="string">$&quot;https://<span class="subst">&#123;ServiceName&#125;</span>.search.windows.net/&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 資料來源名稱</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> DataSourceName &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125; = <span class="built_in">string</span>.Empty;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 資料來源連線字串</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> DataSourceConnectionString &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125; = <span class="built_in">string</span>.Empty;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 容器名稱</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> DataSourceContainer &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125; = <span class="built_in">string</span>.Empty;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 容器子目錄名稱</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> DataSourceContainerQuery &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125; = <span class="built_in">string</span>.Empty;</span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 索引子名稱</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> IndexerName &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125; = <span class="built_in">string</span>.Empty;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="MyProduct-cs"><a href="#MyProduct-cs" class="headerlink" title="MyProduct.cs"></a>MyProduct.cs</h3><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">MyProduct</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 商品代碼</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    [<span class="meta">SimpleField(IsKey = true)</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> ProductID &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 圖片</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    [<span class="meta">SimpleField</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> Pic &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 售價</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    [<span class="meta">SimpleField</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">long</span> Price &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 商品數量顯示所需資料</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    [<span class="meta">SimpleField(IsFilterable = true)</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> Qty &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 關鍵字商品查詢條件</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    [<span class="meta">SearchableField(AnalyzerName = LexicalAnalyzerName.Values.StandardLucene, SynonymMapNames = new[</span>] &#123; <span class="string">&quot;kw-synonym&quot;</span> &#125;)]</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> ProductName &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 關鍵字商品查詢條件</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    [<span class="meta">SearchableField(AnalyzerName = LexicalAnalyzerName.Values.StandardLucene, SynonymMapNames = new[</span>] &#123; <span class="string">&quot;kw-synonym&quot;</span> &#125;)]</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> Detail &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 篩選條件：商品分類</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    [<span class="meta">SimpleField(IsFacetable = true, IsFilterable = true)</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> ProductType &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 排序條件：商品排序</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    [<span class="meta">SimpleField(IsSortable = true)</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> Sort &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 是否刪除</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    [<span class="meta">SimpleField</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">int</span> IsDel &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="AzureSearchHelper-cs"><a href="#AzureSearchHelper-cs" class="headerlink" title="AzureSearchHelper.cs"></a>AzureSearchHelper.cs</h3><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">AzureSearchHelper</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> SearchIndexClient _indexClient;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> SearchIndexerClient _indexerClient;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="built_in">string</span> _indexName;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> AzureSearchSettings _settings;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">AzureSearchHelper</span>(<span class="params">AzureSearchSettings settings</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        _settings = settings;</span><br><span class="line">        _indexName = settings.IndexName;</span><br><span class="line">        _indexClient = <span class="keyword">new</span> SearchIndexClient(settings.ServiceEndPoint, <span class="keyword">new</span> AzureKeyCredential(settings.ApiKey));</span><br><span class="line">        _indexerClient = <span class="keyword">new</span> SearchIndexerClient(settings.ServiceEndPoint, <span class="keyword">new</span> AzureKeyCredential(settings.ApiKey));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> SearchIndexerDataSourceConnection <span class="title">PrepareDataSourceConnection</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> SearchIndexerDataSourceConnection(</span><br><span class="line">            _settings.DataSourceName,</span><br><span class="line">            SearchIndexerDataSourceType.AzureBlob,</span><br><span class="line">            _settings.DataSourceConnectionString,</span><br><span class="line">            <span class="keyword">new</span> SearchIndexerDataContainer(_settings.DataSourceContainer) &#123; Query = _settings.DataSourceContainerQuery &#125;)</span><br><span class="line">        &#123;</span><br><span class="line">            DataDeletionDetectionPolicy = <span class="keyword">new</span> SoftDeleteColumnDeletionDetectionPolicy</span><br><span class="line">            &#123;</span><br><span class="line">                SoftDeleteColumnName = <span class="string">&quot;IsDel&quot;</span>,</span><br><span class="line">                SoftDeleteMarkerValue = <span class="string">&quot;1&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">HandleSynonymsIndexSafely</span>(<span class="params"><span class="built_in">string</span> action</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> MaxNumTries = <span class="number">3</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; MaxNumTries; ++i)</span><br><span class="line">            <span class="keyword">try</span></span><br><span class="line">            &#123;</span><br><span class="line">                SearchIndex index = _indexClient.GetIndex(_indexName);</span><br><span class="line">                index = HandleSynonymMapsToFields(index, action);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// The IfNotChanged condition ensures that the index is updated only if the ETags match.</span></span><br><span class="line">                _indexClient.CreateOrUpdateIndex(index);</span><br><span class="line">                Console.WriteLine(<span class="string">&quot;更新索引 OK.&quot;</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">catch</span> (Exception ex)</span><br><span class="line">            &#123;</span><br><span class="line">                Console.WriteLine(<span class="string">$&quot;Index update failed : . Attempt(<span class="subst">&#123;i&#125;</span>/<span class="subst">&#123;MaxNumTries&#125;</span>).\n&quot;</span>);</span><br><span class="line">                Console.WriteLine(ex);</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> SearchIndex <span class="title">HandleSynonymMapsToFields</span>(<span class="params">SearchIndex index, <span class="built_in">string</span> action</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">var</span> fields <span class="keyword">in</span> AzureSearchSettings.SynonymsFields)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">var</span> synonymMapNames = index.Fields.First(f =&gt; f.Name == fields).SynonymMapNames;</span><br><span class="line">            <span class="keyword">if</span> (action == SynonymsOpera.Create)</span><br><span class="line">                synonymMapNames.Add(AzureSearchSettings.SynonymsName);</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                synonymMapNames.Clear();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> index;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="built_in">string</span> <span class="title">SynonymsString</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// <span class="doctag">TODO:</span>取得同義詞</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;喫肉趣, 御牧牛, 台畜\n卜蜂,美特多,洽富氣冷雞 =&gt; 雞肉&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> SearchIndexer <span class="title">PrepareSearchIndexer</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> SearchIndexer(_settings.IndexerName, _settings.DataSourceName, _indexName)</span><br><span class="line">        &#123;</span><br><span class="line">            Parameters = <span class="keyword">new</span> IndexingParameters</span><br><span class="line">            &#123;</span><br><span class="line">                Configuration =</span><br><span class="line">                &#123;</span><br><span class="line">                    &#123; <span class="string">&quot;parsingMode&quot;</span>, <span class="string">&quot;jsonArray&quot;</span> &#125;,</span><br><span class="line">                    &#123; <span class="string">&quot;dataToExtract&quot;</span>, <span class="string">&quot;contentAndMetadata&quot;</span> &#125;</span><br><span class="line">                &#125;,</span><br><span class="line">                MaxFailedItems = <span class="number">0</span>,</span><br><span class="line">                MaxFailedItemsPerBatch = <span class="number">0</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 建立同義詞</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">CreateOrUpdateSynonymMap</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> synonymMap = <span class="keyword">new</span> SynonymMap(AzureSearchSettings.SynonymsName, SynonymsString());</span><br><span class="line">        _indexClient.CreateOrUpdateSynonymMap(synonymMap);</span><br><span class="line">        Console.WriteLine(<span class="string">&quot;上傳同義詞 OK.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 刪除同義詞</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">DeleteSynonymMap</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        _indexClient.DeleteSynonymMap(AzureSearchSettings.SynonymsName);</span><br><span class="line">        Console.WriteLine(<span class="string">&quot;刪除同義詞 OK.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 刪除索引</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">DeleteIndexIfExists</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> isExistIndex = _indexClient.GetIndexNames().Any(index =&gt; index == _indexName);</span><br><span class="line">        <span class="keyword">if</span> (!isExistIndex) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">        _indexClient.DeleteIndex(_indexName);</span><br><span class="line">        Console.WriteLine(<span class="string">&quot;清除索引 OK.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 建立 INDEX</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;typeparam name=&quot;T&quot;&gt;</span>索引資料類別<span class="doctag">&lt;/typeparam&gt;</span></span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">CreateIndex</span>&lt;<span class="title">T</span>&gt;()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> fieldBuilder = <span class="keyword">new</span> FieldBuilder();</span><br><span class="line">        <span class="keyword">var</span> searchFields = fieldBuilder.Build(<span class="keyword">typeof</span>(T));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> definition = <span class="keyword">new</span> SearchIndex(_indexName, searchFields);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 搜尋建議</span></span><br><span class="line">        <span class="comment">// REF:https://docs.microsoft.com/zh-tw/azure/search/index-add-suggesters</span></span><br><span class="line">        <span class="keyword">var</span> suggester = <span class="keyword">new</span> SearchSuggester(<span class="string">&quot;sg&quot;</span>, AzureSearchSettings.SuggestFields);</span><br><span class="line">        definition.Suggesters.Add(suggester);</span><br><span class="line"></span><br><span class="line">        _indexClient.CreateOrUpdateIndex(definition);</span><br><span class="line">        Console.WriteLine(<span class="string">$&quot;建立索引:[<span class="subst">&#123;_indexName&#125;</span>] OK.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 更新同義詞索引欄位</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;param name=&quot;action&quot;&gt;</span>新增或移除<span class="doctag">&lt;/param&gt;</span></span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">HandleSynonymsWhenIndexExist</span>(<span class="params"><span class="built_in">string</span> action</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 更新索引欄位定義</span></span><br><span class="line">        <span class="keyword">var</span> isExistIndex = _indexClient.GetIndexNames().Any(index =&gt; index == _indexName);</span><br><span class="line">        <span class="keyword">if</span> (!isExistIndex) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Console.WriteLine($&quot;索引存在，&#123;(action == SynonymsOpera.Create ? &quot;新增&quot; : &quot;移除&quot;)&#125;索引同義詞 ...&quot;);</span></span><br><span class="line">        <span class="comment">// foreach (var field in AzureSearchSettings.SynonymsFields) Console.WriteLine($&quot;同義詞欄位:&#123;field&#125;&quot;);</span></span><br><span class="line">        HandleSynonymsIndexSafely(action);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 執行索引子</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">RunIndexer</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        Console.WriteLine(<span class="string">&quot;Running Blob Storage indexer...\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span></span><br><span class="line">        &#123;</span><br><span class="line">            _indexerClient.RunIndexer(_settings.IndexerName);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (RequestFailedException ex) <span class="keyword">when</span> (ex.Status == <span class="number">429</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            Console.WriteLine(<span class="string">&quot;Failed to run indexer: &#123;0&#125;&quot;</span>, ex.Message);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (Exception ex)</span><br><span class="line">        &#123;</span><br><span class="line">            Console.WriteLine(ex);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Console.WriteLine(<span class="string">&quot;執行 Indexer OK.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 建立 Indexer</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">CreateOrUpdateIndexer</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> blobIndexer = PrepareSearchIndexer();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Reset the indexer if it already exists</span></span><br><span class="line">        <span class="keyword">try</span></span><br><span class="line">        &#123;</span><br><span class="line">            _indexerClient.GetIndexer(blobIndexer.Name);</span><br><span class="line">            <span class="comment">//Rest the indexer if it exists.</span></span><br><span class="line">            _indexerClient.ResetIndexer(blobIndexer.Name);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (RequestFailedException ex) <span class="keyword">when</span> (ex.Status == <span class="number">404</span>)</span><br><span class="line">        &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        _indexerClient.CreateOrUpdateIndexer(blobIndexer);</span><br><span class="line">        Console.WriteLine(<span class="string">$&quot;建立 Indexer:[<span class="subst">&#123;blobIndexer.Name&#125;</span>] OK.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span>  建立 DataSource</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">CreateOrUpdateDataSourceConnection</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> blobDataSource = PrepareDataSourceConnection();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// The blob data source does not need to be deleted if it already exists,</span></span><br><span class="line">        <span class="comment">// but the connection string might need to be updated if it has changed.</span></span><br><span class="line">        _indexerClient.CreateOrUpdateDataSourceConnection(blobDataSource);</span><br><span class="line"></span><br><span class="line">        Console.WriteLine(<span class="string">$&quot;建立 Data Source:[<span class="subst">&#123;blobDataSource.Name&#125;</span>] OK.&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="呼叫端-init"><a href="#呼叫端-init" class="headerlink" title="呼叫端: init"></a>呼叫端: init</h3><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] param</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 建立同義詞</span></span><br><span class="line">    _helper.CreateOrUpdateSynonymMap();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 確保同名的 INDEX 不存在</span></span><br><span class="line">    _helper.DeleteIndexIfExists();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 建立 INDEX</span></span><br><span class="line">    _helper.CreateIndex&lt;MyProduct&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 建立 DataSource</span></span><br><span class="line">    _helper.CreateOrUpdateDataSourceConnection();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 建立 Indexer</span></span><br><span class="line">    _helper.CreateOrUpdateIndexer();</span><br><span class="line">    _helper.RunIndexer();</span><br><span class="line"></span><br><span class="line">    Console.WriteLine(<span class="string">&quot;Done!&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="呼叫端-Synonyms-Create-or-Remove"><a href="#呼叫端-Synonyms-Create-or-Remove" class="headerlink" title="呼叫端: Synonyms Create or Remove"></a>呼叫端: Synonyms Create or Remove</h3><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] param</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">switch</span> (param[<span class="number">1</span>])</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">case</span> Opera.Create:</span><br><span class="line">            <span class="comment">// 建立同義詞</span></span><br><span class="line">            _helper.CreateOrUpdateSynonymMap();</span><br><span class="line">            <span class="comment">// 更新同義詞索引欄位 - 新增</span></span><br><span class="line">            _helper.HandleSynonymsWhenIndexExist(SynonymsOpera.Create);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> Opera.Remove:</span><br><span class="line">            <span class="comment">// 刪除同義詞</span></span><br><span class="line">            _helper.DeleteSynonymMap();</span><br><span class="line">            <span class="comment">// 更新同義詞索引欄位 - 移除</span></span><br><span class="line">            _helper.HandleSynonymsWhenIndexExist(SynonymsOpera.Remove);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="literal">default</span>:</span><br><span class="line">            Console.WriteLine(<span class="string">&quot;Command Error , &#x27;create&#x27; or &#x27;remove&#x27; only&quot;</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="呼叫端-DataSrouce-Create-or-Update"><a href="#呼叫端-DataSrouce-Create-or-Update" class="headerlink" title="呼叫端: DataSrouce Create or Update"></a>呼叫端: DataSrouce Create or Update</h3><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] param</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 建立 DataSource</span></span><br><span class="line">    _helper.CreateOrUpdateDataSourceConnection();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="呼叫端-Index-Create-or-Remove"><a href="#呼叫端-Index-Create-or-Remove" class="headerlink" title="呼叫端: Index Create or Remove"></a>呼叫端: Index Create or Remove</h3><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] param</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">switch</span> (param[<span class="number">1</span>])</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">case</span> Opera.Create:</span><br><span class="line">            <span class="comment">// 建立索引</span></span><br><span class="line">            _helper.CreateIndex&lt;MyProduct&gt;();</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> Opera.Remove:</span><br><span class="line">            <span class="comment">// 刪除索引</span></span><br><span class="line">            _helper.DeleteIndexIfExists();</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="literal">default</span>:</span><br><span class="line">            Console.WriteLine(<span class="string">&quot;Command Error , &#x27;create&#x27; or &#x27;remove&#x27; only&quot;</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="呼叫端-Indexer-Create-or-Run"><a href="#呼叫端-Indexer-Create-or-Run" class="headerlink" title="呼叫端: Indexer Create or Run"></a>呼叫端: Indexer Create or Run</h3><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">override</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] param</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">switch</span> (param[<span class="number">1</span>])</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">case</span> Opera.Create:</span><br><span class="line">            <span class="comment">// 建立 Indexer</span></span><br><span class="line">            _helper.CreateOrUpdateIndexer();</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> Opera.Run:</span><br><span class="line">            <span class="comment">// 執行索引子</span></span><br><span class="line">            _helper.RunIndexer();</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="literal">default</span>:</span><br><span class="line">            Console.WriteLine(<span class="string">&quot;Command Error , &#x27;create&#x27; or &#x27;run&#x27; only&quot;</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="後記"><a href="#後記" class="headerlink" title="後記"></a>後記</h2><p>其實在實做的過程還有很多細節需要注意，這些東西就很難一一說明，但是官方文件大部分都有提到，如果沒有提到的部分，可以多參考一下 API 的文件，也可以從中取得相關資訊，整體來說文件還蠻詳細，但是就是需要花時間找，而且大部分都有官方範例可以看，需要考量的反而是制訂解決方案，還有決定付費層級，如果只是自己練習的話，建議還是開個新帳號去申請試用，趁著免費的期間熟悉吧。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/azureSearch/" rel="tag"># azureSearch</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/oh-my-posh-powershell-windows-terminal/" rel="prev" title="使用oh-my-posh美化指令列工具-powershell, windows terminal">
+                  <i class="fa fa-angle-left"></i> 使用oh-my-posh美化指令列工具-powershell, windows terminal
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/logging-using-serilog-and-seq/" rel="next" title="使用Serilog和Seq紀錄Log">
+                  使用Serilog和Seq紀錄Log <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

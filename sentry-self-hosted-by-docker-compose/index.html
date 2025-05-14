@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="很久以前就有聽過 sentry 這個服務，但一直沒有機會使用，這次有機會就來試試看，這邊就記錄一下重點">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 sentry 追蹤前端錯誤">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/sentry-self-hosted-by-docker-compose/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="很久以前就有聽過 sentry 這個服務，但一直沒有機會使用，這次有機會就來試試看，這邊就記錄一下重點">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sentry-self-hosted-by-docker-compose/2.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sentry-self-hosted-by-docker-compose/1.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sentry-self-hosted-by-docker-compose/3.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sentry-self-hosted-by-docker-compose/4.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sentry-self-hosted-by-docker-compose/5.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sentry-self-hosted-by-docker-compose/6.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sentry-self-hosted-by-docker-compose/7.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sentry-self-hosted-by-docker-compose/8.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sentry-self-hosted-by-docker-compose/11.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sentry-self-hosted-by-docker-compose/9.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sentry-self-hosted-by-docker-compose/10.png">
+<meta property="article:published_time" content="2023-08-24T02:09:29.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.534Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="sentry">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/sentry-self-hosted-by-docker-compose/2.png">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/sentry-self-hosted-by-docker-compose/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/sentry-self-hosted-by-docker-compose/","path":"/sentry-self-hosted-by-docker-compose/","title":"使用 sentry 追蹤前端錯誤"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>使用 sentry 追蹤前端錯誤 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%8E%E9%BA%BC%E5%AE%89%E8%A3%9D%E6%9C%AC%E5%9C%B0%E7%9A%84-sentry-%E6%9C%8D%E5%8B%99"><span class="nav-number">1.</span> <span class="nav-text">怎麼安裝本地的 sentry 服務</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%8E%E9%BA%BC%E5%9C%A8%E5%89%8D%E7%AB%AF%E4%BD%BF%E7%94%A8-sentry"><span class="nav-number">2.</span> <span class="nav-text">怎麼在前端使用 sentry</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sentry-%E7%9A%84%E5%95%8F%E9%A1%8C%E8%BF%BD%E8%B9%A4"><span class="nav-number">3.</span> <span class="nav-text">sentry 的問題追蹤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sentry-%E7%9A%84%E6%80%A7%E8%83%BD%E8%BF%BD%E8%B9%A4"><span class="nav-number">4.</span> <span class="nav-text">sentry 的性能追蹤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sentry-%E7%9A%84%E5%84%80%E9%8C%B6%E6%9D%BF"><span class="nav-number">5.</span> <span class="nav-text">sentry 的儀錶板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">6.</span> <span class="nav-text">結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/sentry-self-hosted-by-docker-compose/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="使用 sentry 追蹤前端錯誤 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用 sentry 追蹤前端錯誤
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2023-08-24 10:09:29" itemprop="dateCreated datePublished" datetime="2023-08-24T10:09:29+08:00">2023-08-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+
+  
+    <span id="/artblog/sentry-self-hosted-by-docker-compose/" class="post-meta-item leancloud_visitors" data-flag-title="使用 sentry 追蹤前端錯誤" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/sentry-self-hosted-by-docker-compose/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/sentry-self-hosted-by-docker-compose/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>很久以前就有聽過 sentry 這個服務，但一直沒有機會使用，這次有機會就來試試看，這邊就記錄一下重點</p>
+<span id="more"></span>
+
+<h2 id="怎麼安裝本地的-sentry-服務"><a href="#怎麼安裝本地的-sentry-服務" class="headerlink" title="怎麼安裝本地的 sentry 服務"></a>怎麼安裝本地的 sentry 服務</h2><p>如果作業系統是 windows 可以直接使用 linux 子系統，執行 <code>wsl</code> 後再安裝，官方其實已經提供文件<a target="_blank" rel="noopener" href="https://develop.sentry.dev/self-hosted/">Self-Hosted Sentry</a>，只需要照著做就可以了，實際上的步驟是</p>
+<ol>
+<li>從 Github 下載 <a target="_blank" rel="noopener" href="https://github.com/getsentry/self-hosted/releases/latest">release</a> 的原始碼，目前最新的是 23.8.0</li>
+<li>解壓縮進入該目錄下執行 <code>./install.sh</code></li>
+<li>等待完成後，畫面提示所有事情都做完了，可以使用<code>docker compose up -d</code>來啟動服務<br><img src="/artblog/sentry-self-hosted-by-docker-compose/2.png"></li>
+</ol>
+<p><img src="/artblog/sentry-self-hosted-by-docker-compose/1.png"><br>安裝過程會詢問是否提供資料給 sentry，可以選擇 N</p>
+<p>安裝過程會詢問<code>Would you like to create a user account now? [Y/n]</code><br>是否要建立一開始的使用者帳號，請選擇 Y 並設定帳號密碼</p>
+<blockquote>
+<p>如果需要將在 proxy 後安裝，可以參考<a target="_blank" rel="noopener" href="https://develop.sentry.dev/self-hosted/#installing-behind-a-proxy">installing-behind-a-proxy</a></p>
+</blockquote>
+<p>服務若正常啟動後，可以訪問 9000 port 來瀏覽 sentry 的頁面，預設帳號密碼是剛剛設定的。至於一些設定的方式可以參考目錄下</p>
+<ol>
+<li>sentry&#x2F;config.yml</li>
+<li>sentry&#x2F;sentry.conf.py</li>
+</ol>
+<p>這兩隻檔案的內容可以看一下，裡面有許多可以設定的東西，例如資料庫的連線方式、redis 的連線方式、服務的 port 等等，更詳細的設定可以參考<a target="_blank" rel="noopener" href="https://develop.sentry.dev/config/">Configuration</a></p>
+<p>整個步驟下來其實是很簡單就能夠在本地跑起來，但要特別注意的是因為系統架構很複雜，所以其實對於想要自行擴充的人來說是有門檻的，官方對此的建議是希望有這部份需求的人轉而採用他們的雲端服務，這樣就不用自己搞這麼多事情了</p>
+<p>所以我覺得如果只是想要試試看，或者是本身的應用程式不大，用這份文件就可以了；如果官方提供的這份架構不夠，真的需要自己擴充，那我覺得還是直接用雲端服務比較好</p>
+<h2 id="怎麼在前端使用-sentry"><a href="#怎麼在前端使用-sentry" class="headerlink" title="怎麼在前端使用 sentry"></a>怎麼在前端使用 sentry</h2><p>這邊用 Vue3 做示範，讓我很驚豔的是，在 sentry 頁面也有互動的方式詢問你要怎麼使用，並給予對應的程式碼，這樣的體驗真的很棒，</p>
+<p><img src="/artblog/sentry-self-hosted-by-docker-compose/3.png"><br>就像上面說的，快速地建立專案，只需要選擇對應的程式語言，警告的頻率，輸入名稱就行了，接著會馬上顯示對應的程式碼，照著說明一步步做就行了</p>
+<p>Vue 的部分也提供了 Vue2 , Vue3 的版本<br><img src="/artblog/sentry-self-hosted-by-docker-compose/4.png"><br><img src="/artblog/sentry-self-hosted-by-docker-compose/5.png"></p>
+<h2 id="sentry-的問題追蹤"><a href="#sentry-的問題追蹤" class="headerlink" title="sentry 的問題追蹤"></a>sentry 的問題追蹤</h2><p>為了測試一下 sentry 在捕捉錯誤之後的效果，我照著步驟安裝前端套件並設定後，故意做一個 throw Error 的動作，看看捕捉的錯誤會長怎樣<br><img src="/artblog/sentry-self-hosted-by-docker-compose/6.png"><br><img src="/artblog/sentry-self-hosted-by-docker-compose/7.png"><br><img src="/artblog/sentry-self-hosted-by-docker-compose/8.png"></p>
+<p>這些資訊對於除錯都有很大幫助，而且看著那些密密麻麻的頁籤，這還是我用初始的設定下去跑，如果更細緻一點的設定，對於除錯的效率幫助應該會更大</p>
+<h2 id="sentry-的性能追蹤"><a href="#sentry-的性能追蹤" class="headerlink" title="sentry 的性能追蹤"></a>sentry 的性能追蹤</h2><p>網頁上有提供一個範例，讓我們了解這功能看起來會是怎樣的，我感覺這畫面類似以前用過的 seq , elk rum 之類的服務，可以追蹤系統的效能，有機會再來試試看<br><img src="/artblog/sentry-self-hosted-by-docker-compose/11.png"></p>
+<h2 id="sentry-的儀錶板"><a href="#sentry-的儀錶板" class="headerlink" title="sentry 的儀錶板"></a>sentry 的儀錶板</h2><p>另外一個可以關注的部分我覺得是儀錶板，他有針對前、後端、手機應用給予預設的 dashboard 範本，點開來看一下<br><img src="/artblog/sentry-self-hosted-by-docker-compose/9.png"><br><img src="/artblog/sentry-self-hosted-by-docker-compose/10.png"></p>
+<p>可以看到他一些追蹤的指標例如<code>overall FID</code>，我一看真的沒有懂，於是去搜尋到這篇文章<a target="_blank" rel="noopener" href="https://web.dev/fid/">First Input Delay 首次输入延迟 (FID)</a>，發現這些指標的設定還真的是很細緻。</p>
+<p>實際上我們會想要快速地掌握系統現況，藉由 dashboard 統整資訊是很基本的，但是提供那些資訊就很講究了，從人家的範本來學習一下應該追蹤哪些指標，我覺得幫助很大</p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>這篇文章基本上只是照著官方說明把服務架起來體驗一下而已，並沒有能實質上說些什麼，大概就是屬於感受一下官方的威力展示，了解一下所謂的錯誤追蹤系統是怎麼一回事，而 sentry 提供的功能選單以及一些友善提示都讓我覺得這個服務可以很完整的串接在日常的工作流程中</p>
+<p>只是一想到這東西超級複雜，如果工作上要用到他又沒有提供擴充機制的配套，只能選擇用雲端的話，我覺得還是會有點猶豫，畢竟這東西不是免費的，如果要付費的話，我覺得還是要看看有沒有其他的選擇，因為牽涉到公司、要錢的事情、就是一件很麻煩的事。</p>
+<p>不過總體來說，我覺得這東西很棒，超酷的，如果不考慮架設，只單純使用，誰會不愛呢?</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/sentry/" rel="tag"># sentry</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/eml-format-download-with-decorator-pattern/" rel="prev" title="將資料存成eml格式下載-使用裝飾模式">
+                  <i class="fa fa-angle-left"></i> 將資料存成eml格式下載-使用裝飾模式
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/use-xunit-for-dotnet/" rel="next" title="使用 xUnit 測試">
+                  使用 xUnit 測試 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

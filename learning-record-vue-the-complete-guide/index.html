@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="已經很久沒有寫心得文了，趁這次剛好有機會碰到一個學習動機比較強烈的 moment，順便當成新年新希望之一，學習一下新購入的 Udemy 課程並記錄">
+<meta property="og:type" content="article">
+<meta property="og:title" content="學習紀錄-Vue - The Complete Guide (incl. Router &amp; Composition API)">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/learning-record-vue-the-complete-guide/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="已經很久沒有寫心得文了，趁這次剛好有機會碰到一個學習動機比較強烈的 moment，順便當成新年新希望之一，學習一下新購入的 Udemy 課程並記錄">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2023-01-30T09:33:08.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.548Z">
+<meta property="article:author" content="art">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/learning-record-vue-the-complete-guide/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/learning-record-vue-the-complete-guide/","path":"/learning-record-vue-the-complete-guide/","title":"學習紀錄-Vue - The Complete Guide (incl. Router & Composition API)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>學習紀錄-Vue - The Complete Guide (incl. Router & Composition API) | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Getting-Started"><span class="nav-number">1.</span> <span class="nav-text">Getting Started</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Basics-Core-Concepts-DOM-Interaction-with-Vue"><span class="nav-number">2.</span> <span class="nav-text">Basics &amp; Core Concepts - DOM Interaction with Vue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rendering-Conditional-Content-Lists"><span class="nav-number">3.</span> <span class="nav-text">Rendering Conditional Content &amp; Lists</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Course-Project-The-Monster-Slayer-Game"><span class="nav-number">4.</span> <span class="nav-text">Course Project: The Monster Slayer Game</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Vue-Behind-the-Scenes"><span class="nav-number">5.</span> <span class="nav-text">Vue: Behind the Scenes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Introducing-Components"><span class="nav-number">6.</span> <span class="nav-text">Introducing Components</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Moving-to-a-Better-Development-Setup-Workflow-with-the-Vue-CLI"><span class="nav-number">7.</span> <span class="nav-text">Moving to a Better Development Setup &amp; Workflow with the Vue CLI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Component-Communication"><span class="nav-number">8.</span> <span class="nav-text">Component Communication</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Diving-Deeper-Into-Components"><span class="nav-number">9.</span> <span class="nav-text">Diving Deeper Into Components</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Course-Project-The-Learning-Resources-App"><span class="nav-number">10.</span> <span class="nav-text">Course Project: The Learning Resources App</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Forms"><span class="nav-number">11.</span> <span class="nav-text">Forms</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sending-Http-Requests"><span class="nav-number">12.</span> <span class="nav-text">Sending Http Requests</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Routing-Building-%E2%80%9CMulti-Page%E2%80%9D-Single-Page-Applications"><span class="nav-number">13.</span> <span class="nav-text">Routing: Building “Multi-Page” Single Page Applications</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Animations-Transitions"><span class="nav-number">14.</span> <span class="nav-text">Animations &amp; Transitions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Vuex"><span class="nav-number">15.</span> <span class="nav-text">Vuex</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Main-Project-%E2%80%9CFind-a-Coach%E2%80%9D-Web-App"><span class="nav-number">16.</span> <span class="nav-text">Main Project: “Find a Coach” Web App</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Vue-Authentication"><span class="nav-number">17.</span> <span class="nav-text">Vue &amp; Authentication</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Optimizing-Deploying-Vue-Apps"><span class="nav-number">18.</span> <span class="nav-text">Optimizing &amp; Deploying Vue Apps</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-Composition-API-Replacing-the-Options-API"><span class="nav-number">19.</span> <span class="nav-text">The Composition API - Replacing the Options API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reusing-Functionality-Mixins-Custom-Composition-Functions"><span class="nav-number">20.</span> <span class="nav-text">Reusing Functionality: Mixins &amp; Custom Composition Functions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Roundup-Next-Steps"><span class="nav-number">21.</span> <span class="nav-text">Roundup &amp; Next Steps</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Vue2-to-Vue3-Migration"><span class="nav-number">22.</span> <span class="nav-text">Vue2 to Vue3 Migration</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Learn-Vue2-Old-Course-Content"><span class="nav-number">23.</span> <span class="nav-text">Learn Vue2 | Old Course Content</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/learning-record-vue-the-complete-guide/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="學習紀錄-Vue - The Complete Guide (incl. Router & Composition API) | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          學習紀錄-Vue - The Complete Guide (incl. Router & Composition API)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2023-01-30 17:33:08" itemprop="dateCreated datePublished" datetime="2023-01-30T17:33:08+08:00">2023-01-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/%E5%BF%83%E5%BE%97/" itemprop="url" rel="index"><span itemprop="name">心得</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/learning-record-vue-the-complete-guide/" class="post-meta-item leancloud_visitors" data-flag-title="學習紀錄-Vue - The Complete Guide (incl. Router & Composition API)" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/learning-record-vue-the-complete-guide/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/learning-record-vue-the-complete-guide/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>已經很久沒有寫心得文了，趁這次剛好有機會碰到一個學習動機比較強烈的 moment，順便當成新年新希望之一，學習一下新購入的 Udemy 課程並記錄</p>
+<span id="more"></span>
+
+<p>因為章節很多，加上我覺得可能心得也會很簡單沒什麼好寫的，所以大概就是遵循之前 TDD 的學習方式，紀錄一下日期、感想即可。畢竟這篇文章沒有要闡述什麼東西，純粹就是用來鞭策自己的一個學習紀錄而已，對於其他人來說，大概也就像是一個課程開箱文的東西吧。</p>
+<ul>
+<li>課程資訊:<a target="_blank" rel="noopener" href="https://www.udemy.com/share/101WzM3@HVUKN6JRnISOpZ3roSbIC-ar-bkxodFjQXmrrESrl-8lU3pvZVPVihZeZZNZTCh7/">Vue - The Complete Guide (incl. Router &amp; Composition API)</a></li>
+<li>購入價格:NT:570(2023 過年特價期間)</li>
+<li>購入動機:對於<code>Routing: Building &quot;Multi-Page&quot; Single Page Applications</code>、<code>Vue &amp; Authentication</code>、<code>Vue2 to Vue3 Migration</code>這三個章節主題還蠻有興趣的</li>
+<li>對課程的期許:希望能了解一下這麼多人一致推薦點讚的課程，關於這三個主題有甚麼值得學習的重點</li>
+<li>對自己的期許:除了這三個主題以外，也順便從頭惡補一下基礎，順便重新培養一下學習的習慣，最近幾個月以來真的太放鬆了</li>
+</ul>
+<h2 id="Getting-Started"><a href="#Getting-Started" class="headerlink" title="Getting Started"></a>Getting Started</h2><p><strong>2023-01-30</strong>: 大概所有的課程一開始都是比較介紹性質，所以也就輕鬆的大致瀏覽一下，比較有趣的部份是除了理論性的介紹以外，講師用一個簡單的範例來展示使用 Vue.js 前後的語法差異，對於開發而言應該很有感覺，將 Vue.js 的優點做了一個火力展示。相信沒有接觸過前端開發框架的人應該很震撼。</p>
+<h2 id="Basics-Core-Concepts-DOM-Interaction-with-Vue"><a href="#Basics-Core-Concepts-DOM-Interaction-with-Vue" class="headerlink" title="Basics &amp; Core Concepts - DOM Interaction with Vue"></a>Basics &amp; Core Concepts - DOM Interaction with Vue</h2><p><strong>2023-01-30</strong>: 這個章節大概的內容就是將比較實用的一些基本語法用範例來做教學，講的程度我覺得剛好，沒有非常細緻到你看不下去，也不會太省略，基本上該知道的基礎用法都有帶過一次，讓我覺得比較驚豔的是關於 <code>v-on:input</code>的部分，以前基礎知識不夠，只知道能這樣用 <code>event</code>、<code>$event</code>，但卻不知道這個東西從哪裡來，看完之後才知道原來是內建的香草，而 Vue 也能用<code>$event</code>，這個其實以前都不是很清楚，透過這次釐清觀念，很開心。而且也因為對於 CSS 不熟悉，剛好這次的基礎中關於 style 的部分講師還透過好幾種寫法，逐漸演變的方式重構，真的是很不錯。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 行內樣式 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">&quot;demo&quot;</span> <span class="attr">style</span>=<span class="string">&quot;border-color: blue&quot;</span> @<span class="attr">click</span>=<span class="string">&quot;boxSelected&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 綁定物件 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">&quot;demo&quot;</span> <span class="attr">:style</span>=<span class="string">&quot;&#123; borderColor: &#x27;blue&#x27; &#125;&quot;</span> @<span class="attr">click</span>=<span class="string">&quot;boxSelected&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 動態綁定 style --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">&quot;demo&quot;</span> <span class="attr">:style</span>=<span class="string">&quot;&#123; borderColor: selected ? &#x27;blue&#x27; : &#x27;red&#x27; &#125;&quot;</span> @<span class="attr">click</span>=<span class="string">&quot;boxSelected&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 動態綁定 class (CSS預先建立好 active 類別)--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">:class</span>=<span class="string">&quot;selected ? &#x27;demo active&#x27; : &#x27;demo&#x27;&quot;</span> @<span class="attr">click</span>=<span class="string">&quot;boxSelected&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 動態綁定 class 物件 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">&quot;demo&quot;</span> <span class="attr">:class</span>=<span class="string">&quot;&#123;active: selected&#125;&quot;</span> @<span class="attr">click</span>=<span class="string">&quot;boxSelected&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">:class</span>=<span class="string">&quot;&#123; demo:true, active: selected&#125;&quot;</span> @<span class="attr">click</span>=<span class="string">&quot;boxSelected&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 或者改用陣列綁定 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">:class</span>=<span class="string">&quot;[&#x27;demo&#x27;, &#123;active:selected&#125;]&quot;</span> @<span class="attr">click</span>=<span class="string">&quot;boxSelected&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 改成用計算屬性設定樣式 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">class</span>=<span class="string">&quot;demo&quot;</span> <span class="attr">:class</span>=<span class="string">&quot;boxCss&quot;</span> @<span class="attr">click</span>=<span class="string">&quot;boxSelected&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="title function_">data</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">return</span> &#123; <span class="attr">selected</span>: <span class="literal">false</span> &#125;</span></span><br><span class="line"><span class="language-javascript">        &#125;,</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">computed</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="title function_">boxCss</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">                <span class="keyword">return</span> &#123; <span class="attr">active</span>: <span class="variable language_">this</span>.<span class="property">selected</span> &#125;</span></span><br><span class="line"><span class="language-javascript">            &#125;,</span></span><br><span class="line"><span class="language-javascript">        &#125;,</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">method</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="title function_">boxSelected</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">                <span class="variable language_">this</span>.<span class="property">selected</span> = !<span class="variable language_">this</span>.<span class="property">selected</span></span></span><br><span class="line"><span class="language-javascript">            &#125;,</span></span><br><span class="line"><span class="language-javascript">        &#125;,</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Rendering-Conditional-Content-Lists"><a href="#Rendering-Conditional-Content-Lists" class="headerlink" title="Rendering Conditional Content &amp; Lists"></a>Rendering Conditional Content &amp; Lists</h2><p><strong>2023-01-31</strong>: 這一章節重點在於如何根據所定義的條件來呈現不一樣的畫面，當然集合的列表呈現也是重點，今天嘗試了一下在解說需求的時候就先完成範例程式碼，最終與講師的比較，相差的不多，而在<code>v-for</code>的<code>key</code>屬性解說上，講得算清楚易懂，也順便重新溫習了一下這一段，還好沒有忘記，當然渲染列表最好還是有後端給予的<code>unique key</code>最方便。簡單來說如果只是用來作呈現，不會動態的去改變集合元素的話，我是覺得給不給 key 無所謂，反正渲染出來就都不會改變那就沒事；但如果是會動態改變元素的話，還是要確保 key 屬性是以唯一值代入的。</p>
+<h2 id="Course-Project-The-Monster-Slayer-Game"><a href="#Course-Project-The-Monster-Slayer-Game" class="headerlink" title="Course Project: The Monster Slayer Game"></a>Course Project: The Monster Slayer Game</h2><p><strong>2023-01-31</strong>: 講師設計了一個簡單的小遊戲，透過這個需求來練習之前學習過的各種指令，整體來說是很有趣的，也透過一開始的需求說明，逐漸地釐清整體要做的事情有那些，有一點工作拆解的教學意思。使用到的東西都不難，而且也以實際需求帶出來用法，我是覺得這個小遊戲練習挺好的。</p>
+<h2 id="Vue-Behind-the-Scenes"><a href="#Vue-Behind-the-Scenes" class="headerlink" title="Vue: Behind the Scenes"></a>Vue: Behind the Scenes</h2><p><strong>2023-02-02</strong>: 這個章節講的東西都是一些你不知道但仍舊可以使用 vue，不過知道了之後對於 vue 的掌握度會更高一點，主要都是一些簡短但重要的觀念說明</p>
+<ul>
+<li>Vue 的工作原理:<ul>
+<li>Vue 更新機制:透過 Proxy 來追蹤更新</li>
+<li>Vue 的 Template 語法:透過模板語法，將 HTML 語法與方法、資料內聚在一起</li>
+<li>Vue 透過 Virtual DOM 的比對來渲染修改過的頁面到實際 DOM</li>
+<li>支援 Fragments: 一個、或者掛載多個 Vue Instance</li>
+<li>透過 ref 讓 vue 訪問 DOM</li>
+</ul>
+</li>
+<li>Vue 生命週期:透過解說與實際操作中斷點展示生命週期過程中的 hook 與 UI 的狀態</li>
+</ul>
+<h2 id="Introducing-Components"><a href="#Introducing-Components" class="headerlink" title="Introducing Components"></a>Introducing Components</h2><p><strong>2023-02-02</strong>: 很多時候我們並沒有辦法透過到目前為止所學習到的東西來完成所有需求，就像是範例中的兩筆、或多筆資料呈現，如果要針對他做更精細的控制，就會碰上每一筆資料各自的狀態處理問題；而解決辦法就是封裝成一個 component，讓每個元件各自管理它們自己的狀態，當然到目前為止還沒有學到 SFC 與 props 等等，所以這個章節也只是簡單的帶出來問題與解決方案，後續還有一些基礎知識要補</p>
+<h2 id="Moving-to-a-Better-Development-Setup-Workflow-with-the-Vue-CLI"><a href="#Moving-to-a-Better-Development-Setup-Workflow-with-the-Vue-CLI" class="headerlink" title="Moving to a Better Development Setup &amp; Workflow with the Vue CLI"></a>Moving to a Better Development Setup &amp; Workflow with the Vue CLI</h2><p><strong>2023-02-02</strong>:在這個章節開頭，重溫了一下之前的開發方式所遇到的問題，在改善開發流程的部分，使用了 vue cli 來解決先前碰到的問題，也因此開始接觸到當前流行的前端開發方式。影片中解說了 vue cli 的預設範本以及開發階段工作流程說明，其實也就是跟後端編譯式語言一樣，我們所撰寫的代碼不能直接被瀏覽器識別，需要先經過前端編譯的步驟，將其轉換為瀏覽器支援的語法後才能使用，這些東西 vue cli 都已經做好了，能夠在專案開始的時候省去很多設定的繁瑣作業，節省很多時間。當然開發工具也需要能夠支援 SFC 語法，這邊則是透過 VSCode plugin Vetur 來獲得 vue SFC 的 highlight 支援。當這些基礎的工作都準備完成之後，就可以著手開發新專案了</p>
+<p>接下來的練習，則是從一個空白的專案開始，從安裝依賴項目，執行開發伺服器，同時編寫第一個 Vue SFC，熟悉一下開發的流程，並完成一個簡單的元件</p>
+<blockquote>
+<p>當然隨著工具的演進，現在也可以使用<code>npm init vue</code>以及 VSCode 套件<code>Volar</code>來替換</p>
+</blockquote>
+<h2 id="Component-Communication"><a href="#Component-Communication" class="headerlink" title="Component Communication"></a>Component Communication</h2><p><strong>2023-02-06</strong>: 關於組件之間的資料傳遞，基本的解決方案都是透過 <code>props</code>、<code>$emit</code> 直接傳遞數據或方法，在這個章節以一個簡單的範例來解說，也補充了<code>props</code>,<code>$emit</code>定義的方式，便於偵錯。像是下面這樣的方式</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">props</span>:&#123;</span><br><span class="line">    <span class="attr">username</span>:&#123;</span><br><span class="line">        <span class="attr">type</span>:<span class="title class_">String</span>,</span><br><span class="line">        <span class="attr">default</span>:<span class="string">&#x27;noname&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;,</span><br><span class="line"><span class="attr">emits</span>:&#123;</span><br><span class="line">    <span class="string">&#x27;toggle-favorite&#x27;</span>: <span class="keyword">function</span>(<span class="params">id</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (id) <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">warning</span>(<span class="string">&#x27;id is missing&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>若是有資料要從父組件，往下要傳遞多個子組件，一路傳遞到最底層，中間若是都用 props 來層層傳遞就會很多餘，因此可以改用 <code>provide</code>、<code>inject</code>，不論是資料或函式方法都可以透過這樣的方式傳遞給最底層元件，對於程式碼的整潔有很大幫助，基本上透過這樣的方式大致上就能夠處理好組件資料傳遞的問題了。在講師提供的教學範例中，所有的示範都遵循著一個規則：<strong>根組件提供資料，子組件使用資料</strong></p>
+<h2 id="Diving-Deeper-Into-Components"><a href="#Diving-Deeper-Into-Components" class="headerlink" title="Diving Deeper Into Components"></a>Diving Deeper Into Components</h2><p><strong>2023-02-06</strong>: 在先前的章節中，程式碼雖然可以運作，但若是在比較大型一點點的應用程式之內，就有一些議題值得思考及關注，講師又用了另外一個例子來解釋這一切，包含了</p>
+<ol>
+<li>組件的註冊方式: 全域註冊或是在組件內引用其他組件，基本上一些屬於樣式的東西全站都會用到，所以樣式組件應該會是全域註冊</li>
+<li>限縮樣式的有效範圍: <code>style scoped</code></li>
+<li>簡介<code>slot</code>、<code>named slot</code>的使用方式</li>
+<li>動態組件相關:dynamic component、<code>keep-alive</code></li>
+<li><code>teleport</code>標籤，可用於改變輸出的 HTML 位置</li>
+<li>簡介了一下檔案命名及目錄存放的建議</li>
+</ol>
+<p>在這邊講師重構範例中有一段是因為想要消除重複的 css 樣式而建立了一個 <code>BaseCard</code> 的組件，這是我沒想過的，可能是因為我完全不碰 CSS 所以對於這部分敏感度很低，但是經過示範後，才發現這樣的做法的確可以讓我目前專案很多東西都更簡潔；而要注意的地方是原先的樣式，因為作用域的關係也要隨之搬移到 <code>BaseCard</code>組件內，這樣可以避免在元件內宣告全域樣式從而影響到別的地方。</p>
+<p>另外由於可以透過 <code>$slot.header</code> 檢查上層元件是否有傳入 header 的 slot 內容，因此也可以用下面的技巧來渲染輸出結果</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">header</span> <span class="attr">v-if</span>=<span class="string">&quot;$slots.header&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">slot</span> <span class="attr">name</span>=<span class="string">&quot;header&quot;</span>&gt;</span> <span class="tag">&lt;/<span class="name">slot</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">header</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">slot</span>&gt;</span><span class="tag">&lt;/<span class="name">slot</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>而在這邊還有更重要也是非常實用的一個技巧，那就是透過 slot 由父組件傳遞內容給子組件的同時，在父組件使用的資料是子組件提供的，這個觀念就是<code>scoped slot</code>，意思就是讓這個 slot 在父、子組件之間的 scoped 去共享資料，範例如下</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 父組件:透過 slotProps 取得 scoped slot 所綁定的所有資料--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">course-goals</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">template</span> #<span class="attr">default</span>=<span class="string">&quot;slotProps&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h2</span>&gt;</span>&#123;&#123; slotProps.item &#125;&#125; - &#123;&#123; slotProps.anotherProp &#125;&#125;<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">course-goals</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 子組件:宣告 slot 的同時綁定資料提供給 scoped slot --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">li</span> <span class="attr">v-for</span>=<span class="string">&quot;goal in goals&quot;</span> <span class="attr">:key</span>=<span class="string">&quot;goal&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">slot</span> <span class="attr">:item</span>=<span class="string">&quot;goal&quot;</span> <span class="attr">another-prop</span>=<span class="string">&quot;something&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">slot</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>更細節的部份可以看一下 Vue 官網<a target="_blank" rel="noopener" href="https://vuejs.org/guide/components/slots.html#scoped-slots">Slots</a>說明會更清晰一點</p>
+<blockquote>
+<p>連續幾個範例下來，我發現講師在設計課程的時候是有用心過的，可以注意到每次透過解說範例來教學新的指令的時候，都是伴隨著需求而直觀的寫出第一版，隨後學習到更多東西，或者是碰到問題後，再接著用別的方式改善，其實就是一直在針對程式碼進行重構，而在重構過程中，也都在為了消除重複，不管是程式碼、HTML 或者是樣式，從而使最終程式碼變得更為清晰易懂</p>
+</blockquote>
+<h2 id="Course-Project-The-Learning-Resources-App"><a href="#Course-Project-The-Learning-Resources-App" class="headerlink" title="Course Project: The Learning Resources App"></a>Course Project: The Learning Resources App</h2><p><strong>2023-02-06</strong>:之前學習過的東西，在這個章節都實際演練一次加深印象，同時在過程中伴隨著講解說明，將組件的設計概念、目錄配置及考量的原因都一併解說，含金量很高。這邊會從 <code>components</code> 目錄開始，底下再開始細分<code>UI</code>(帶入 base 組件概念)、<code>layouts</code>(共用布局)以及應用程式本身功能的目錄；同時也依據各種組件，決定採用<code>Global</code>或者是<code>Local</code>引用，順便帶了一下命名規則概念，這些都是重溫先前學習過的東西，相信對於不是一開始就學習前端的人會有所幫助</p>
+<p>從頭到尾跟著做一遍，的確也發現了許多地方以為自己知道，但實戰總會卡住想一下的情況，沒有辦法，多練習幾次就知道了，這一章節的練習對於學習效果的確是不錯的</p>
+<h2 id="Forms"><a href="#Forms" class="headerlink" title="Forms"></a>Forms</h2><p><strong>2023-02-07</strong>:關於表單的部分專門弄了一個章節來解說，其實也就是把 vue 綁定各種表單元素的東西做過一次，一些比較容易錯誤的地方也有說明，至少看完這章節能夠將表單資料記錄下來就是了，至於驗證提示的方式，也有稍微示範一下，比較特別的是最後有補充如何自訂表單客製化元件，是個不錯的啟發。</p>
+<h2 id="Sending-Http-Requests"><a href="#Sending-Http-Requests" class="headerlink" title="Sending Http Requests"></a>Sending Http Requests</h2><p><strong>2023-02-07</strong>:這章節很有意思，除了教怎麼發出請求獲取資料以外，當然也帶了一下 firebase，範例透過一個簡單的 local 資料處理範例，展示了新增、讀取的功能，一步步地轉換到將資料儲存於後端，有意思的點在於在跟後端互動的過程不一定是順利的，又或者是為了顧及使用者體驗，所以需要在畫面上有一些回饋，因此針對這些情況作了一些例外處理，這就是實務上一定會碰到的事情</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">fetch</span>(<span class="string">&quot;https://xxxxxxx.firebaseio.com/surveys.json&quot;</span>, &#123;</span><br><span class="line">    <span class="attr">method</span>: <span class="string">&quot;POST&quot;</span>,</span><br><span class="line">    <span class="attr">headers</span>: &#123; <span class="string">&quot;Content-Type&quot;</span>: <span class="string">&quot;application/json&quot;</span> &#125;,</span><br><span class="line">    <span class="attr">body</span>: <span class="title class_">JSON</span>.<span class="title function_">stringify</span>(sendData),</span><br><span class="line">&#125;)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function">(<span class="params">response</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (response.<span class="property">ok</span>) &#123;</span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// server 端錯誤</span></span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&quot;Could not save data!&quot;</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_">catch</span>(<span class="function">(<span class="params">error</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">error</span> = error.<span class="property">message</span></span><br><span class="line">    &#125;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Routing-Building-“Multi-Page”-Single-Page-Applications"><a href="#Routing-Building-“Multi-Page”-Single-Page-Applications" class="headerlink" title="Routing: Building “Multi-Page” Single Page Applications"></a>Routing: Building “Multi-Page” Single Page Applications</h2><p><strong>2023-02-07</strong>: 這個章節主要解說 SPA 的概念及實作，重點會放在路由的部分，由於涉及的東西真的很多，只看一次應該會是有點印象而已，自己之後可能會再參照官網說明或者是再多看幾次。除了基本的路由設定以外，還包含了動態路由參數、將動態路由參數改用 props 傳遞給元件、巢狀路由等等，講師在示範的時候我覺得蠻詳細的，路由順序設定的部分也特別提醒了路由比對的小問題及解決方案，算是非常貼心了</p>
+<h2 id="Animations-Transitions"><a href="#Animations-Transitions" class="headerlink" title="Animations &amp; Transitions"></a>Animations &amp; Transitions</h2><p>TBD</p>
+<h2 id="Vuex"><a href="#Vuex" class="headerlink" title="Vuex"></a>Vuex</h2><p>TBD</p>
+<h2 id="Main-Project-“Find-a-Coach”-Web-App"><a href="#Main-Project-“Find-a-Coach”-Web-App" class="headerlink" title="Main Project: “Find a Coach” Web App"></a>Main Project: “Find a Coach” Web App</h2><p>TBD</p>
+<h2 id="Vue-Authentication"><a href="#Vue-Authentication" class="headerlink" title="Vue &amp; Authentication"></a>Vue &amp; Authentication</h2><p>TBD</p>
+<h2 id="Optimizing-Deploying-Vue-Apps"><a href="#Optimizing-Deploying-Vue-Apps" class="headerlink" title="Optimizing &amp; Deploying Vue Apps"></a>Optimizing &amp; Deploying Vue Apps</h2><p>TBD</p>
+<h2 id="The-Composition-API-Replacing-the-Options-API"><a href="#The-Composition-API-Replacing-the-Options-API" class="headerlink" title="The Composition API - Replacing the Options API"></a>The Composition API - Replacing the Options API</h2><p>TBD</p>
+<h2 id="Reusing-Functionality-Mixins-Custom-Composition-Functions"><a href="#Reusing-Functionality-Mixins-Custom-Composition-Functions" class="headerlink" title="Reusing Functionality: Mixins &amp; Custom Composition Functions"></a>Reusing Functionality: Mixins &amp; Custom Composition Functions</h2><p>TBD</p>
+<h2 id="Roundup-Next-Steps"><a href="#Roundup-Next-Steps" class="headerlink" title="Roundup &amp; Next Steps"></a>Roundup &amp; Next Steps</h2><p>TBD</p>
+<h2 id="Vue2-to-Vue3-Migration"><a href="#Vue2-to-Vue3-Migration" class="headerlink" title="Vue2 to Vue3 Migration"></a>Vue2 to Vue3 Migration</h2><p>TBD</p>
+<h2 id="Learn-Vue2-Old-Course-Content"><a href="#Learn-Vue2-Old-Course-Content" class="headerlink" title="Learn Vue2 | Old Course Content"></a>Learn Vue2 | Old Course Content</h2><p>這個章節主要是釋出一些舊的課程資源，原因是當初課程是為了 Vue2 所錄製的，後來 Vue3 發佈之後，講師也將課程全部重新錄製為 Vue3 版本。若是想要訪問原始課程內容學習 Vue2 的話，在這邊可以透過講師提供的原始影片及代碼學習，影片品質很不錯，可惜的是沒有提供任何語系的字幕檔案</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/sonarQube-with-sonarLint/" rel="prev" title="sonarQube-使用sonarLint協助開發">
+                  <i class="fa fa-angle-left"></i> sonarQube-使用sonarLint協助開發
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/vue3-MPA-sample/" rel="next" title="vue3-MPA sample">
+                  vue3-MPA sample <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

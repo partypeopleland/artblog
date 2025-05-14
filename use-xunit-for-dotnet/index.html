@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="紀錄使用 xUnit 測試的一些筆記">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 xUnit 測試">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/use-xunit-for-dotnet/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="紀錄使用 xUnit 測試的一些筆記">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2024-03-14T03:27:34.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.576Z">
+<meta property="article:author" content="art">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/use-xunit-for-dotnet/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/use-xunit-for-dotnet/","path":"/use-xunit-for-dotnet/","title":"使用 xUnit 測試"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>使用 xUnit 測試 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BA%96%E5%82%99%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E7%92%B0%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">準備單元測試環境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E7%AF%84%E4%BE%8B%E3%80%81%E6%B8%AC%E8%A9%A6%E6%A1%86%E6%9E%B6%E6%98%AF%E5%90%A6%E6%AD%A3%E7%A2%BA%E5%B7%A5%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">單元測試範例、測試框架是否正確工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%B7%E8%A1%8C%E6%B8%AC%E8%A9%A6"><span class="nav-number">3.</span> <span class="nav-text">執行測試</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%90%86%E8%AB%96-throey-%E8%88%87%E4%BA%8B%E5%AF%A6-fact-%E7%9A%84%E6%AF%94%E8%BC%83%E8%88%87%E4%BB%8B%E7%B4%B9"><span class="nav-number">4.</span> <span class="nav-text">理論 throey 與事實 fact 的比較與介紹</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A0%E5%85%A5%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%A8%AD%E5%AE%9A"><span class="nav-number">5.</span> <span class="nav-text">加入配置文件設定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%A6%E8%A1%8C%E6%B8%AC%E8%A9%A6%EF%BC%8C%E4%B8%A6%E9%80%8F%E9%81%8E%E9%A1%AF%E7%A4%BA%E9%A9%97%E8%AD%89"><span class="nav-number">6.</span> <span class="nav-text">並行測試，並透過顯示驗證</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%9E-MSTest-%E5%88%B0-xUnit"><span class="nav-number">7.</span> <span class="nav-text">從 MSTest 到 xUnit</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/use-xunit-for-dotnet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="使用 xUnit 測試 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用 xUnit 測試
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2024-03-14 11:27:34" itemprop="dateCreated datePublished" datetime="2024-03-14T11:27:34+08:00">2024-03-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+
+  
+    <span id="/artblog/use-xunit-for-dotnet/" class="post-meta-item leancloud_visitors" data-flag-title="使用 xUnit 測試" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/use-xunit-for-dotnet/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/use-xunit-for-dotnet/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>紀錄使用 xUnit 測試的一些筆記</p>
+<span id="more"></span>
+
+<h2 id="準備單元測試環境"><a href="#準備單元測試環境" class="headerlink" title="準備單元測試環境"></a>準備單元測試環境</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看專案安裝的 nuget 套件</span></span><br><span class="line">dotnet list package</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安裝 xunit 核心套件</span></span><br><span class="line">dotnet add package xunit</span><br><span class="line"><span class="comment"># Visual Studio 及 dotnet 需要安裝下面兩個套件才能執行測試</span></span><br><span class="line">dotnet add package Microsoft.NET.Test.Sdk</span><br><span class="line">dotnet add package xunit.runner.visualstudio</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="單元測試範例、測試框架是否正確工作"><a href="#單元測試範例、測試框架是否正確工作" class="headerlink" title="單元測試範例、測試框架是否正確工作"></a>單元測試範例、測試框架是否正確工作</h2><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> Xunit;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">UnitTestDemo</span></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    [<span class="meta">Fact</span>]</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestSuccess</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        Assert.True(<span class="literal">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    [<span class="meta">Fact</span>]</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestFail</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        Assert.True(<span class="literal">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="執行測試"><a href="#執行測試" class="headerlink" title="執行測試"></a>執行測試</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## 執行測試</span></span><br><span class="line">dotnet <span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="理論-throey-與事實-fact-的比較與介紹"><a href="#理論-throey-與事實-fact-的比較與介紹" class="headerlink" title="理論 throey 與事實 fact 的比較與介紹"></a>理論 throey 與事實 fact 的比較與介紹</h2><p>實際上 fact 就等同於其他測試框架的測試，沒有甚麼不同，但是如果是需要測試多個不同的輸入，卻也要有相同的結果，則可以利用 throey 來做測試，他實際上是為了在以前的單元測試框架下，因為要測試多組參數呼叫同一個方法的情況，可能會寫出多個不同名稱的測試，內容都是呼叫相同方法，只是在測試不同的傳入參數。就可以採用 throey 的方式來做測試。</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">Theory</span>]</span><br><span class="line">[<span class="meta">InlineData(3)</span>]</span><br><span class="line">[<span class="meta">InlineData(5)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">MyFirst_Theory_IsOdd</span>(<span class="params"><span class="built_in">int</span> <span class="keyword">value</span></span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    Assert.True(IsOdd(<span class="keyword">value</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[<span class="meta">Theory</span>]</span><br><span class="line">[<span class="meta">InlineData(6)</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">MyFirst_Theory_IsNotOdd</span>(<span class="params"><span class="built_in">int</span> <span class="keyword">value</span></span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    Assert.False(IsOdd(<span class="keyword">value</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果不用 throey 要驗證這三個情況，就可能需要寫成三個 fact</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">Fact</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">MyFirstFactWithOddValue3</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    Assert.True(IsOdd(<span class="number">3</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[<span class="meta">Fact</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">MyFirstFactWithOddValue5</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    Assert.True(IsOdd(<span class="number">5</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[<span class="meta">Fact</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">MyFirstFactWithEvenValue6</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    Assert.False(IsOdd(<span class="number">6</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>這兩種寫法都是可以的，因為它們也都各有優缺點，關注的點也不太一樣，所以要看自己的需求來決定要用哪一種。</p>
+<p>一般來說 fact 可以很明確的驗證一件事情，並且在發生錯誤的時候可以直接根據測試的名稱識別出錯誤的測試。<br>而 throey 比較適用於需要測試相同功能在不同輸入的情況下是否正常運作，並且避免撰寫過多的測試方法。</p>
+<p>也可以理解為</p>
+<ol>
+<li>當測試不會根據不同的輸入參數而改變行為，並且只需要驗證一個確定的行為時，可以採用 fact 較為合適</li>
+<li>當需要驗證多種輸入參數的情況下，並且需要驗證的行為是相同的，可以採用 throey 較為合適</li>
+</ol>
+<blockquote>
+<p>驗證多種輸入參數的時候不建議把多種行為也寫在同一個 throey</p>
+</blockquote>
+<h2 id="加入配置文件設定"><a href="#加入配置文件設定" class="headerlink" title="加入配置文件設定"></a>加入配置文件設定</h2><p>官方配置設定說明的蠻清楚的，有需要可以參考<a target="_blank" rel="noopener" href="https://xunit.net/docs/configuration-files#longRunningTestSeconds">官方文件</a>進行設定，這邊用一個簡單的設定來示範</p>
+<p>測試專案目錄下新增 <code>xunit.runner.json</code> 檔案</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;$schema&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://xunit.net/schema/current/xunit.runner.schema.json&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;methodDisplayOptions&quot;</span><span class="punctuation">:</span> <span class="string">&quot;replaceUnderscoreWithSpace,useOperatorMonikers &quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>選擇該檔案在建置動作時複製到輸出目錄 (修改專案 csproj 檔)</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ItemGroup</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Content</span> <span class="attr">Include</span>=<span class="string">&quot;xunit.runner.json&quot;</span> <span class="attr">CopyToOutputDirectory</span>=<span class="string">&quot;PreserveNewest&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ItemGroup</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="並行測試，並透過顯示驗證"><a href="#並行測試，並透過顯示驗證" class="headerlink" title="並行測試，並透過顯示驗證"></a>並行測試，並透過顯示驗證</h2><p>首先先在測試中透過建構式注入 <code>ITestOutputHelper</code> 來輸出測試的訊息，預設的情況下， TestClass1 底下的兩個測試會一個接著一個的執行，用來驗證的單元測試執行的開始跟結束，都有紀錄時間，透過指定 logger 參數可以在 CLI 看到測試的進度及結果</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dotnet <span class="built_in">test</span> --logger <span class="string">&quot;console;verbosity=detailed&quot;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">TestClass1</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> ITestOutputHelper _output;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TestClass1</span>(<span class="params">ITestOutputHelper output</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        _output = output;</span><br><span class="line">    &#125;</span><br><span class="line">    [<span class="meta">Fact</span>]</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Test1</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        _output.WriteLine(<span class="string">&quot;Test 1 begin at &#123;0:HH:mm:ss&#125;&quot;</span>, DateTime.Now);</span><br><span class="line">        Thread.Sleep(<span class="number">3000</span>);</span><br><span class="line">        _output.WriteLine(<span class="string">&quot;Test 1 end at &#123;0:HH:mm:ss&#125;&quot;</span>, DateTime.Now);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    [<span class="meta">Fact</span>]</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Test2</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        _output.WriteLine(<span class="string">&quot;Test 2 begin at &#123;0:HH:mm:ss&#125;&quot;</span>, DateTime.Now);</span><br><span class="line">        Thread.Sleep(<span class="number">5000</span>);</span><br><span class="line">        _output.WriteLine(<span class="string">&quot;Test 2 end at &#123;0:HH:mm:ss&#125;&quot;</span>, DateTime.Now);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>預設情況下，每一個測試類別都是一個唯一的測試集合，這些測試之間並不會同時執行，但如果將它們放在不同的測試類別當中，就能夠同時進行測試</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">TestClass2A</span></span><br><span class="line">   &#123;</span><br><span class="line">       <span class="keyword">private</span> <span class="keyword">readonly</span> ITestOutputHelper _output;</span><br><span class="line"></span><br><span class="line">       <span class="function"><span class="keyword">public</span> <span class="title">TestClass2A</span>(<span class="params">ITestOutputHelper output</span>)</span></span><br><span class="line">       &#123;</span><br><span class="line">           _output = output;</span><br><span class="line">       &#125;</span><br><span class="line">       [<span class="meta">Fact</span>]</span><br><span class="line">       <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Test1</span>()</span></span><br><span class="line">       &#123;</span><br><span class="line">           _output.WriteLine(<span class="string">&quot;Test 2A begin at &#123;0:HH:mm:ss&#125;&quot;</span>, DateTime.Now);</span><br><span class="line">           Thread.Sleep(<span class="number">3000</span>);</span><br><span class="line">           _output.WriteLine(<span class="string">&quot;Test 2A end at &#123;0:HH:mm:ss&#125;&quot;</span>, DateTime.Now);</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">TestClass2B</span></span><br><span class="line">   &#123;</span><br><span class="line">       <span class="keyword">private</span> <span class="keyword">readonly</span> ITestOutputHelper _output;</span><br><span class="line"></span><br><span class="line">       <span class="function"><span class="keyword">public</span> <span class="title">TestClass2B</span>(<span class="params">ITestOutputHelper output</span>)</span></span><br><span class="line">       &#123;</span><br><span class="line">           _output = output;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       [<span class="meta">Fact</span>]</span><br><span class="line">       <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Test1</span>()</span></span><br><span class="line">       &#123;</span><br><span class="line">           _output.WriteLine(<span class="string">&quot;Test 2B begin at &#123;0:HH:mm:ss&#125;&quot;</span>, DateTime.Now);</span><br><span class="line">           Thread.Sleep(<span class="number">5000</span>);</span><br><span class="line">           _output.WriteLine(<span class="string">&quot;Test 2B end at &#123;0:HH:mm:ss&#125;&quot;</span>, DateTime.Now);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<pre>
+❯ dotnet test --logger "console;verbosity=detailed"
+  正在判斷要還原的專案...
+  所有專案都在最新狀態，可進行還原。
+C:\Program Files\dotnet\sdk\8.0.100-preview.7.23376.3\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.RuntimeIdentifierInference.targets(314,5): message NETSDK1057: 您目前使用的是 .NET 預覽版。請參閱: https://aka.ms/dotnet-support-policy [D:\Code\GitLabCE\MyProject\MyProject.csproj]
+  MyProject -> D:\Code\GitLabCE\MyProject\bin\Debug\net7.0\MyProject.dll
+D:\Code\GitLabCE\MyProject\bin\Debug\net7.0\MyProject.dll 的測試回合 (.NETCoreApp,Version=v7.0)
+Microsoft (R) Test Execution Command Line Tool 17.7.0-preview-23317-01+919ec8358820228cc5fa77ef000051c1d6875399 (x64) 版Copyright (C) Microsoft Corporation. 著作權所有，並保留一切權利。
+
+正在啟動測試執行，請稍候...
+總共有 1 個測試檔案與指定的模式相符。
+D:\Code\GitLabCE\MyProject\bin\Debug\net7.0\MyProject.dll
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.5.0.1+5ebf84cd75 (64-bit .NET 7.0.5)
+[xUnit.net 00:00:00.06]   Discovering: MyProject
+[xUnit.net 00:00:00.08]   Discovered:  MyProject
+[xUnit.net 00:00:00.08]   Starting:    MyProject
+  已通過 MyProject.TestClass2A.Test1 [3 s]
+  標準輸出訊息:
+ Test 2A begin at 15:44:50
+ Test 2A end at 15:44:53
+
+
+  已通過 MyProject.TestClass2B.Test1 [5 s]
+  標準輸出訊息:
+ Test 2B begin at 15:44:50
+ Test 2B end at 15:44:55
+
+
+  已通過 MyProject.TestClass1.Test2 [5 s]
+  標準輸出訊息:
+ Test 2 begin at 15:44:50
+ Test 2 end at 15:44:55
+
+
+[xUnit.net 00:00:08.15]   Finished:    MyProject
+  已通過 MyProject.TestClass1.Test1 [3 s]
+  標準輸出訊息:
+ Test 1 begin at 15:44:55
+ Test 1 end at 15:44:58
+
+
+
+測試回合成功。
+測試數總計: 4
+     通過: 4
+ 時間總計: 8.5914 秒
+</pre>
+
+<blockquote>
+<p>在 Visual Studio 2022, Rider, CLI 環境都是相同的</p>
+</blockquote>
+<h2 id="從-MSTest-到-xUnit"><a href="#從-MSTest-到-xUnit" class="headerlink" title="從 MSTest 到 xUnit"></a>從 MSTest 到 xUnit</h2><p>請參閱<a target="_blank" rel="noopener" href="https://xunit.net/docs/ms-test-migration">官方文件</a><br>基本上就是</p>
+<ol>
+<li>替換 nuget package</li>
+<li>修正一些 mstest 的標籤，改成用 xunit 的語法</li>
+<li>可以依照警告來逐步修正，修正完畢後可以移除掉向後兼容的暫時用的套件<code>xunit.MSTest</code></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/sentry-self-hosted-by-docker-compose/" rel="prev" title="使用 sentry 追蹤前端錯誤">
+                  <i class="fa fa-angle-left"></i> 使用 sentry 追蹤前端錯誤
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/use-docker-container-test-actual-write-to-database/" rel="next" title="使用 docker container 測試實際寫入資料庫">
+                  使用 docker container 測試實際寫入資料庫 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="這一篇文章主要是針對 cypress.io + cucumber 的介紹">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cypress.io 搭配 cucumber 進行測試">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/cypress-io-cucumber-testing/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="這一篇文章主要是針對 cypress.io + cucumber 的介紹">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-cucumber-testing/2020-07-30_162947.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-cucumber-testing/2020-07-30_163203.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-cucumber-testing/2020-08-04_104641.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-cucumber-testing/2020-08-04_110352.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-cucumber-testing/2020-08-04_105634.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-cucumber-testing/2020-08-04_105824.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-cucumber-testing/2020-08-04_110009.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-cucumber-testing/2020-08-04_110136.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-cucumber-testing/2020-08-04_110549.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-cucumber-testing/2020-08-04_111029.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-cucumber-testing/2020-08-04_111210.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-cucumber-testing/2020-08-04_112535.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-cucumber-testing/2020-08-04_114821.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-cucumber-testing/2020-08-04_162737.png">
+<meta property="article:published_time" content="2020-07-24T02:37:29.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.251Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="cypress">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/cypress-io-cucumber-testing/2020-07-30_162947.png">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/cypress-io-cucumber-testing/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/cypress-io-cucumber-testing/","path":"/cypress-io-cucumber-testing/","title":"Cypress.io 搭配 cucumber 進行測試"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Cypress.io 搭配 cucumber 進行測試 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#How-To-Start"><span class="nav-number">1.</span> <span class="nav-text">How To Start</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cucumber"><span class="nav-number">2.</span> <span class="nav-text">cucumber</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IDE-%E6%94%AF%E6%8F%B4-cucumber-%E7%9A%84%E7%A8%8B%E5%BA%A6"><span class="nav-number">2.1.</span> <span class="nav-text">IDE 支援 cucumber 的程度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-Gherkin-%E6%92%B0%E5%AF%AB%E6%B8%AC%E8%A9%A6%E6%A1%88%E4%BE%8B"><span class="nav-number">2.2.</span> <span class="nav-text">使用 Gherkin 撰寫測試案例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%92%B0%E5%AF%AB%E6%B8%AC%E8%A9%A6%E7%9A%84%E5%BB%BA%E8%AD%B0"><span class="nav-number">3.</span> <span class="nav-text">撰寫測試的建議</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-data-attribute"><span class="nav-number">3.1.</span> <span class="nav-text">使用 data-* attribute</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-page-object-pattern"><span class="nav-number">3.2.</span> <span class="nav-text">使用 page object pattern</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%9D%E6%93%9A%E4%B8%8D%E5%90%8C%E7%92%B0%E5%A2%83%E5%9F%B7%E8%A1%8C%E6%B8%AC%E8%A9%A6"><span class="nav-number">3.3.</span> <span class="nav-text">依據不同環境執行測試</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%B7%E8%A1%8C%E6%9F%90%E4%BA%9B%E7%89%B9%E5%AE%9A%E7%9A%84%E6%B8%AC%E8%A9%A6"><span class="nav-number">3.4.</span> <span class="nav-text">執行某些特定的測試</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A2%E7%94%9F%E6%B8%AC%E8%A9%A6%E5%A0%B1%E5%91%8A"><span class="nav-number">3.5.</span> <span class="nav-text">產生測試報告</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Generate-Json"><span class="nav-number">3.5.1.</span> <span class="nav-text">Generate Json</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Install"><span class="nav-number">3.5.2.</span> <span class="nav-text">Install</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Usage"><span class="nav-number">3.5.3.</span> <span class="nav-text">Usage</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B3%87%E6%96%99%E4%BE%86%E6%BA%90"><span class="nav-number">4.</span> <span class="nav-text">資料來源</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/cypress-io-cucumber-testing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Cypress.io 搭配 cucumber 進行測試 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Cypress.io 搭配 cucumber 進行測試
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2020-07-24 10:37:29" itemprop="dateCreated datePublished" datetime="2020-07-24T10:37:29+08:00">2020-07-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/e2e/" itemprop="url" rel="index"><span itemprop="name">e2e</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/cypress-io-cucumber-testing/" class="post-meta-item leancloud_visitors" data-flag-title="Cypress.io 搭配 cucumber 進行測試" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/cypress-io-cucumber-testing/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/cypress-io-cucumber-testing/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>這一篇文章主要是針對 cypress.io + cucumber 的介紹</p>
+<span id="more"></span>
+
+<h2 id="How-To-Start"><a href="#How-To-Start" class="headerlink" title="How To Start"></a>How To Start</h2><p>安裝 <a target="_blank" rel="noopener" href="https://github.com/TheBrainFamily/cypress-cucumber-preprocessor">cypress-cucumber-processor</a> 套件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install cypress-cucumber-preprocessor --save-dev</span><br></pre></td></tr></table></figure>
+
+<p>指定預處理器</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// cypress/plugins/index.js</span></span><br><span class="line"><span class="keyword">const</span> cucumber = <span class="built_in">require</span>(<span class="string">&quot;cypress-cucumber-preprocessor&quot;</span>).<span class="property">default</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = <span class="function">(<span class="params">on, config</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="title function_">on</span>(<span class="string">&quot;file:preprocessor&quot;</span>, <span class="title function_">cucumber</span>());</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>讓<code>cypress</code>支援<code>feature</code>檔，並且忽略<code>*.js</code>這樣就只顯示 <code>feature</code> 的測試檔案，而不會有其他<code>js</code>檔案的干擾</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// cypress.json</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;testFiles&quot;</span><span class="punctuation">:</span> <span class="string">&quot;**/*.feature&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;ignoreTestFiles&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;*.js&quot;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>同時在<code>package.json</code>加入下列的設定區段</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;cypress-cucumber-preprocessor&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;nonGlobalStepDefinitions&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>上面的設定其實牽涉到了傳統的 cucumber 問題，也就是所有的東西都是<code>global</code></p>
+<ol>
+<li>撰寫測試步驟定義的時候，你必須確保不會跟其他定義衝突，這一點在大型專案特別困擾</li>
+<li>也因為所有的東西都是<code>global</code>，導致執行測試的時候，所有東西都需要掃過一次，這將造成效能問題</li>
+</ol>
+<blockquote>
+<p>如果不改變其他設定的話，依照這樣做下來，在一些可以共用的 step 定義，可以存放在<code>cypress/integration/common</code>資料夾下</p>
+</blockquote>
+<p>撰寫測試檔案的規則</p>
+<ol>
+<li>所有<code>feature</code>檔案都必須在<code>cypress/integration</code>目錄下</li>
+<li>在<code>feature</code>檔相同層級，建立一個與其相同名稱的資料夾作為存放 step 定義的地方</li>
+</ol>
+<p>撰寫測試的範例如下</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Given</span>, <span class="title class_">When</span>, <span class="title class_">Then</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;cypress-cucumber-preprocessor/steps&#x27;</span>;</span><br><span class="line"><span class="title class_">Given</span>(<span class="regexp">/^One given step$/</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">   ...</span><br><span class="line">&#125;);</span><br><span class="line"><span class="title class_">Given</span>(<span class="regexp">/^another given step$/</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">   ...</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="title class_">When</span>(<span class="regexp">/^Some other when step$/</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  ...</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="title class_">Then</span>(<span class="regexp">/^I have some results$/</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  ...</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="cucumber"><a href="#cucumber" class="headerlink" title="cucumber"></a>cucumber</h2><h3 id="IDE-支援-cucumber-的程度"><a href="#IDE-支援-cucumber-的程度" class="headerlink" title="IDE 支援 cucumber 的程度"></a>IDE 支援 cucumber 的程度</h3><p>套件本身有一些高亮、其他功能支援，但我覺得比較重要的功能就是能夠在<code>feature</code>檔，透過<code>F12</code>的快捷鍵，跳至<code>step</code>定義</p>
+<p>如果用<code>Rider</code>開發，可以直接透過<code>Ctrl</code>+<code>Alt</code>+<code>S</code>叫出設定，並將<code>cucumber</code>外掛裝好<br>如果是<code>VSCode</code>，就安裝<a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=alexkrechik.cucumberautocomplete">Cucumber (Gherkin) Full Support</a>，並且設定一下定義檔的路徑</p>
+<p><img src="/artblog/cypress-io-cucumber-testing/2020-07-30_162947.png"><br>透過右上角的 ICON 開啟<code>Json</code>格式進行編輯<br><img src="/artblog/cypress-io-cucumber-testing/2020-07-30_163203.png"></p>
+<p>因為 cypress 的定義檔放在規定的路徑下，所以加入了<code>cypress/integration/**/*.js</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;cucumberautocomplete.steps&quot;</span>: [</span><br><span class="line">        <span class="string">&quot;cypress/integration/**/*.js&quot;</span>,</span><br><span class="line">        <span class="string">&quot;test/features/step_definitions/*.js&quot;</span>,</span><br><span class="line">        <span class="string">&quot;node_modules/qa-lib/src/step_definitions/*.js&quot;</span></span><br><span class="line">    ],</span><br><span class="line">	<span class="string">&quot;cucumberautocomplete.strictGherkinCompletion&quot;</span>: <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此處我們透過新增一個簡單的測試案例來練習如何透過 IDE 提供的功能方便我們撰寫</p>
+<p>一開始先新增一個<code>feature</code>檔案<br><img src="/artblog/cypress-io-cucumber-testing/2020-08-04_104641.png"></p>
+<p>當然因為<code>cypress-cucumber-preprocessor</code>的關係，我們需要把定義檔放在同名的子目錄下，所以我也建立了一個<code>Search</code>目錄<br><img src="/artblog/cypress-io-cucumber-testing/2020-08-04_110352.png"></p>
+<p>接著完成這份測試</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Feature: Google Search Test</span><br><span class="line"></span><br><span class="line">  Scenario: 搜尋測試</span><br><span class="line">    Given 瀏覽 Google 首頁</span><br><span class="line">    When 我輸入 art的辦公桌</span><br><span class="line">    Then 會出現搜尋結果</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/cypress-io-cucumber-testing/2020-08-04_105634.png"><br>在黃色底線的地方按下<code>Alt</code>+<code>Enter</code>，叫出 Rider 的快速選單，選擇 <code>Run inspection on</code>的選項，他會詢問你檢查定義檔的範圍在哪裡<br><img src="/artblog/cypress-io-cucumber-testing/2020-08-04_105824.png"><br>這邊可以自己決定，我這邊是定義了一個<code>Scope</code>叫做<code>GoogleSearch</code>，指定目錄，讓他去找這個<code>Scope</code>底下有沒有符合我<code>feature</code>檔描述的<code>Step 定義</code><br><img src="/artblog/cypress-io-cucumber-testing/2020-08-04_110009.png"><br>完成後會看到下面的視窗，顯示我尚未定義這些步驟<br><img src="/artblog/cypress-io-cucumber-testing/2020-08-04_110136.png"><br>選擇一個步驟，右側視窗上會出現按鈕，點選建立步驟定義的按鈕，他會詢問要將產生出來的定義放在哪裡，這邊我們選擇建立新檔案<br><img src="/artblog/cypress-io-cucumber-testing/2020-08-04_110549.png"></p>
+<p>接著他會出現下面的視窗，記得調整定義檔輸出的目錄及檔案名稱<br><img src="/artblog/cypress-io-cucumber-testing/2020-08-04_111029.png"></p>
+<p>它會自動幫你建立對應的 Step 檔案，只是自動建立的是針對<code>cucumber</code>，並非我們使用的<code>cypress-cucumber-preprocessor</code>，所以還是需要自己調整<br><img src="/artblog/cypress-io-cucumber-testing/2020-08-04_111210.png"></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> &#123; <span class="title class_">Given</span>, <span class="title class_">Then</span>, <span class="title class_">When</span> &#125; = <span class="built_in">require</span>(<span class="string">&quot;cypress-cucumber-preprocessor/steps&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="title class_">Given</span>(<span class="regexp">/^瀏覽 Google 首頁$/</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;step1&quot;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="title class_">When</span>(<span class="regexp">/^我輸入 art的辦公桌$/</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;step2&quot;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="title class_">Then</span>(<span class="regexp">/^會出現搜尋結果$/</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;step3&quot;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>接著我們看一下執行結果<br><img src="/artblog/cypress-io-cucumber-testing/2020-08-04_112535.png"></p>
+<p>測試框架有順利執行定義，接著就可以填充每個定義的內容</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> &#123; <span class="title class_">Given</span>, <span class="title class_">Then</span>, <span class="title class_">When</span> &#125; = <span class="built_in">require</span>(<span class="string">&quot;cypress-cucumber-preprocessor/steps&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">SEARCH_FIELD</span> = <span class="string">&quot;input[type=text]&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">SEARCH_BUTTON</span> = <span class="string">&quot;input[type=submit]&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GoogleSearchPage</span> &#123;</span><br><span class="line">  <span class="keyword">static</span> <span class="title function_">visit</span>(<span class="params"></span>) &#123;</span><br><span class="line">    cy.<span class="title function_">visit</span>(<span class="string">&quot;http://www.google.com&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> <span class="title function_">type</span>(<span class="params">query</span>) &#123;</span><br><span class="line">    cy.<span class="title function_">get</span>(<span class="variable constant_">SEARCH_FIELD</span>).<span class="title function_">type</span>(query);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> <span class="title function_">pressSearch</span>(<span class="params"></span>) &#123;</span><br><span class="line">    cy.<span class="title function_">get</span>(<span class="variable constant_">SEARCH_BUTTON</span>).<span class="title function_">contains</span>(<span class="string">&quot;Google 搜尋&quot;</span>).<span class="title function_">click</span>(&#123; <span class="attr">force</span>: <span class="literal">true</span> &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">RESULT_LINK</span> = <span class="string">&quot;h3&quot;</span>;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GoogleResultsPage</span> &#123;</span><br><span class="line">  <span class="keyword">static</span> <span class="title function_">expect</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">toHaveResults</span>: <span class="function">() =&gt;</span> &#123;</span><br><span class="line">        cy.<span class="title function_">get</span>(<span class="variable constant_">RESULT_LINK</span>)</span><br><span class="line">          .<span class="title function_">its</span>(<span class="string">&quot;length&quot;</span>)</span><br><span class="line">          .<span class="title function_">then</span>(<span class="function">(<span class="params">length</span>) =&gt;</span> &#123;</span><br><span class="line">            <span class="title function_">expect</span>(length).<span class="property">to</span>.<span class="property">be</span>.<span class="title function_">greaterThan</span>(<span class="number">5</span>);</span><br><span class="line">          &#125;);</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title class_">Given</span>(<span class="regexp">/^瀏覽 Google 首頁$/</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title class_">GoogleSearchPage</span>.<span class="title function_">visit</span>();</span><br><span class="line">&#125;);</span><br><span class="line"><span class="title class_">When</span>(<span class="regexp">/^我輸入 art的辦公桌$/</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title class_">GoogleSearchPage</span>.<span class="title function_">type</span>(<span class="string">&quot;art的辦公桌&quot;</span>);</span><br><span class="line">  <span class="title class_">GoogleSearchPage</span>.<span class="title function_">pressSearch</span>();</span><br><span class="line">&#125;);</span><br><span class="line"><span class="title class_">Then</span>(<span class="regexp">/^會出現搜尋結果$/</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title class_">GoogleResultsPage</span>.<span class="title function_">expect</span>().<span class="title function_">toHaveResults</span>();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/cypress-io-cucumber-testing/2020-08-04_114821.png"></p>
+<h3 id="使用-Gherkin-撰寫測試案例"><a href="#使用-Gherkin-撰寫測試案例" class="headerlink" title="使用 Gherkin 撰寫測試案例"></a>使用 Gherkin 撰寫測試案例</h3><p>使用 BDD 方式撰寫測試案例，與一般的測試案例不太一樣；一般來說我們可能會有類似下面這樣的測試案例</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">describe</span>(<span class="string">&quot;搜尋測試&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="title function_">it</span>(<span class="string">&quot;搜尋業務 art 應該會出現 1 筆資料&quot;</span>, <span class="keyword">async</span> <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> expected = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">await</span> <span class="title class_">SearchPageObject</span>.<span class="title class_">Search</span>(&#123; <span class="attr">search</span>: <span class="string">&quot;art&quot;</span> &#125;);</span><br><span class="line">    <span class="keyword">let</span> result = <span class="keyword">await</span> <span class="title class_">SearchPageObject</span>.<span class="title class_">GetResult</span>();</span><br><span class="line">    <span class="keyword">var</span> actual = result.<span class="property">data</span>.<span class="property">length</span>;</span><br><span class="line">    assert.<span class="title function_">equal</span>(actual, expected);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>我們的重點可能會放在程式的輸入、輸出，結構通常會以 3A 原則：arrange、act、assert 來編排，但是不論將上述的測試程式如何的拆分職責，語意化，始終不如直接用我們熟悉的自然語言來得更直接<br>但是我個人認為，這樣的方式放在 e2e 測試案例，就有點不合時宜，因為 e2e 測試主要是為了要模擬使用者對網站真實的操作，這也能讓我在撰寫測試的時候將注意力放在使用者的行為，而不是程式的行為</p>
+<p>在如何撰寫的部分，可以看一下下面這兩篇文章，會比較有概念</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/7ea42a0bf37e">写好 BDD 测试用例 —— 羊头、蜂腰、蝎尾</a></li>
+<li><a target="_blank" rel="noopener" href="https://cuketest.gitbooks.io/-bdd/content/cucumber/concepts.html">Cucumber 的概念定义</a></li>
+</ol>
+<h2 id="撰寫測試的建議"><a href="#撰寫測試的建議" class="headerlink" title="撰寫測試的建議"></a>撰寫測試的建議</h2><h3 id="使用-data-attribute"><a href="#使用-data-attribute" class="headerlink" title="使用 data-* attribute"></a>使用 data-* attribute</h3><p>一直以來撰寫程式碼的時候都希望能夠不要重複，最根本的原因就是因為如果寫錯了，相同的東西可能要改很多次。那麼如果今天是 HTML 有東西改了呢？</p>
+<p><code>cypress.io</code> 的<a target="_blank" rel="noopener" href="https://docs.cypress.io/guides/references/best-practices.html#Selecting-Elements">best practice</a>也有提到，給予 DOM 一個<code>data-*</code>的 attribute 用在 selector 是比較推薦的做法</p>
+<p>文章下方表格也說明了各種 selector 語法的缺點，並解釋了為甚麼不要這樣做、這樣做為什麼不夠好</p>
+<blockquote>
+<p><code>Best Practice</code>這種東西之所以會出現，意味著這些都是從別人的失敗經驗裡面歸納出來的好辦法。</p>
+</blockquote>
+<h3 id="使用-page-object-pattern"><a href="#使用-page-object-pattern" class="headerlink" title="使用 page object pattern"></a>使用 page object pattern</h3><p><code>page object</code>的部分有一篇文章或許可以給大家參考一下:<a target="_blank" rel="noopener" href="https://www.cypress.io/blog/2019/01/03/stop-using-page-objects-and-start-using-app-actions/">Stop using Page Objects and Start using App Actions</a></p>
+<h3 id="依據不同環境執行測試"><a href="#依據不同環境執行測試" class="headerlink" title="依據不同環境執行測試"></a>依據不同環境執行測試</h3><p>預設<code>cypress</code>會使用專案根目錄下的<code>cypress.json</code>，但是我們可以透過下面的方式來覆蓋掉預設設定值</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// cypress/plugins/index.js</span></span><br><span class="line"><span class="keyword">const</span> &#123; cypressConfigResolver &#125; = <span class="built_in">require</span>(<span class="string">&quot;../config/cypress-config-resolver&quot;</span>);</span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = <span class="function">(<span class="params">on, config</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="title function_">on</span>(<span class="string">&quot;file:preprocessor&quot;</span>, <span class="title function_">cucumber</span>());</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">cypressConfigResolver</span>();</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// cypress/config/cypress-config-resolver.js</span></span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&quot;fs-extra&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&quot;path&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">cypressConfigResolverByFile</span> = (<span class="params">filename</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> pathToConfigFile = path.<span class="title function_">resolve</span>(__dirname, <span class="string">`<span class="subst">$&#123;filename&#125;</span>.json`</span>);</span><br><span class="line">  <span class="keyword">return</span> fs.<span class="title function_">readJsonSync</span>(pathToConfigFile);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">const</span> <span class="title function_">cypressConfigResolver</span> = (<span class="params"></span>) =&gt;</span><br><span class="line">  <span class="title function_">cypressConfigResolverByFile</span>(process.<span class="property">env</span>.<span class="property">CYPRESS_ENV</span> || <span class="string">&quot;localhost&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span>.<span class="property">cypressConfigResolver</span> = cypressConfigResolver;</span><br></pre></td></tr></table></figure>
+
+<p>相對應的，也要為環境建立一個自己的設定檔，在<code>Windows</code>作業系統之下，設定環境變數可以利用<code>SET</code>指令，接著在程式內就可以利用<code>process.env.xxxx</code>的方式取得環境變數</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// package.json</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="string">&quot;scripts&quot;</span>: &#123;</span><br><span class="line">		<span class="string">&quot;cy:open:localhost&quot;</span>: <span class="string">&quot;SET CYPRESS_ENV=localhost &amp;&amp; npm run cy:open&quot;</span>,</span><br><span class="line">		<span class="string">&quot;cy:open:lab&quot;</span>: <span class="string">&quot;SET CYPRESS_ENV=lab &amp;&amp; npm run cy:open&quot;</span>,</span><br><span class="line">		<span class="string">&quot;cy:open&quot;</span>: <span class="string">&quot;cypress open&quot;</span>,</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// cypress/config/localhost.json</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="string">&quot;baseUrl&quot;</span>: <span class="string">&quot;https://www.google.es&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// cypress/config/production.json</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;baseUrl&quot;</span>: <span class="string">&quot;https://www.google.com&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="執行某些特定的測試"><a href="#執行某些特定的測試" class="headerlink" title="執行某些特定的測試"></a>執行某些特定的測試</h3><p>我們可以在平常開發的時候撰寫一些 e2e 測試，但如果所有測試都拿去跑的話，可能就沒有那麼必要，這時候在 CI 上面跑一些冒煙測試，是比較可行的方案</p>
+<blockquote>
+<p>冒煙測試僅僅是在短時間廣泛地覆蓋產品功能。如果關鍵功能無法正常工作或關鍵 bug 尚未修復，那麼你們的團隊就不需要浪費更多時間去安裝部署以及測試。，則煙霧測試將在有限的時間內廣泛涵蓋產品功能。不會浪費更多的時間來安裝或測試 – <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%86%92%E7%83%9F%E6%B5%8B%E8%AF%95_(%E8%BD%AF%E4%BB%B6)">wiki</a></p>
+</blockquote>
+<p>在這樣的情況下我們可以透過指定 TAGS 來將測試的範圍限縮，語法範例如下</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//package.json</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="string">&quot;cy:run1&quot;</span>: <span class="string">&quot;cypress run --env TAGS=&#x27;@e2e-test&#x27; --spec &#x27;cypress/integration/**/*.feature&#x27;&quot;</span>,</span><br><span class="line">	<span class="string">&quot;cy:run2&quot;</span>: <span class="string">&quot;cypress run --headless --browser chrome --spec &#x27;cypress/integration/moneyIn/orderqaSearch.feature,cypress/integration/moneyIn/orderqaCreate.feature&#x27;&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>安裝了套件之後，執行完測試也會產生相對應的報告資料 json 檔案，後續就可以利用這個檔案產生報告</p>
+<p>附帶一提，在透過<code>command line</code>執行<code>cyrpess run</code>指令，在我的環境下總是會出現一些錯誤，像是<code>cypress Timed out waiting for the browser to connect. Retrying</code>；或者是<code>could not find CRI target / Failed to connect to Chrome</code>，但如果僅是透過<code>cypress open</code>，手動執行測試案例，是沒有問題的，問題可能出在<code>headless</code>模式底下</p>
+<p>從這一點來看，也許<code>cypress</code>還不是很穩定</p>
+<h3 id="產生測試報告"><a href="#產生測試報告" class="headerlink" title="產生測試報告"></a>產生測試報告</h3><p>這裡採用的是<a target="_blank" rel="noopener" href="https://www.npmjs.com/package/cucumber-html-reporter">cucumber-html-reporter</a>，這個套件能夠幫你把<code>cypress-cucumber-preprocessor</code>測試產生的數據，拿來產生 HTML 格式的報告</p>
+<h4 id="Generate-Json"><a href="#Generate-Json" class="headerlink" title="Generate Json"></a>Generate Json</h4><p>設定<code>package.json</code>，使其產生測試數據</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// package.json</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;cypress-cucumber-preprocessor&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;nonGlobalStepDefinitions&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">&quot;cucumberJson&quot;</span>: &#123;</span><br><span class="line">      <span class="string">&quot;generate&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="string">&quot;outputFolder&quot;</span>: <span class="string">&quot;cypress/cucumber-json&quot;</span>,</span><br><span class="line">      <span class="string">&quot;filePrefix&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">      <span class="string">&quot;fileSuffix&quot;</span>: <span class="string">&quot;.cucumber&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h4><p>安裝報告的套件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install cucumber-html-reporter --save-dev</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>cucumber.js 的版本差異，會需要找到支援的 cucumber-html-reporter 安裝</p>
+</blockquote>
+<h4 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h4><p>建立一個<code>cucumber-html-reporter.js</code>檔案，之後給<code>node</code>呼叫產生報告用</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// cucumber-html-reporter.js</span></span><br><span class="line"><span class="keyword">const</span> reporter = <span class="built_in">require</span>(<span class="string">&quot;cucumber-html-reporter&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> options = &#123;</span><br><span class="line">  <span class="attr">theme</span>: <span class="string">&quot;hierarchy&quot;</span>, <span class="comment">// Available: [&#x27;bootstrap&#x27;, &#x27;hierarchy&#x27;, &#x27;foundation&#x27;, &#x27;simple&#x27;] Type: String</span></span><br><span class="line">  <span class="attr">jsonDir</span>: <span class="string">&quot;cypress/cucumber-json&quot;</span>,</span><br><span class="line">  <span class="attr">output</span>: <span class="string">&quot;reports/cucumber_report.html&quot;</span>,</span><br><span class="line">  <span class="attr">reportSuiteAsScenarios</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">scenarioTimestamp</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">launchReport</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">ignoreBadJsonFile</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">scenarioTimestamp</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">metadata</span>: &#123;</span><br><span class="line">    <span class="string">&quot;App Version&quot;</span>: <span class="string">&quot;1.0.0&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Test Environment&quot;</span>: <span class="string">&quot;STAGING&quot;</span>,</span><br><span class="line">    <span class="title class_">Browser</span>: <span class="string">&quot;Chrome  54.0.2840.98&quot;</span>,</span><br><span class="line">    <span class="title class_">Platform</span>: <span class="string">&quot;Windows 10&quot;</span>,</span><br><span class="line">    <span class="title class_">Parallel</span>: <span class="string">&quot;Scenarios&quot;</span>,</span><br><span class="line">    <span class="title class_">Executed</span>: <span class="string">&quot;Remote&quot;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">reporter.<span class="title function_">generate</span>(options);</span><br></pre></td></tr></table></figure>
+
+<p>設定的部分還是需要前往官網看看<a target="_blank" rel="noopener" href="https://www.npmjs.com/package/cucumber-html-reporter">說明文件</a>的，不過其實<code>metadata</code>的資訊都可以自訂，就看需求來處理囉</p>
+<p>下面是故意讓測試案例失敗的例子，畫面會顯示錯誤原因，以及相關的程式行數，如果 step 成功的話會是綠色的，失敗則會是紅色，當然如果沒有改設定的話，失敗的測試案例也會截圖<br><img src="/artblog/cypress-io-cucumber-testing/2020-08-04_162737.png"></p>
+<h2 id="資料來源"><a href="#資料來源" class="headerlink" title="資料來源"></a>資料來源</h2><p><a target="_blank" rel="noopener" href="https://medium.com/@itortv/how-to-integrate-cypress-and-cucumber-in-your-development-flow-in-just-a-few-weeks-96a46ac9165a">How to integrate Cypress and Cucumber in your development flow in just a few weeks.</a></p>
+<blockquote>
+<p>如果對英文不苦惱，強烈建議前往原文瀏覽，這篇文章大部分都是原文的補充及心得</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/TheBrainFamily/cypress-cucumber-preprocessor#readme">cypress-cucumber-preprocessor github</a></p>
+<blockquote>
+<p>學習、使用工具最重要的事情就是看說明書了，對吧</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/cypress/" rel="tag"># cypress</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/cypress-io-test-data-handling/" rel="prev" title="Cypress.io 測試資料的處理">
+                  <i class="fa fa-angle-left"></i> Cypress.io 測試資料的處理
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/dependency-injection-principles-practices-patterns/" rel="next" title="讀書心得-依賴注入：原理、實作與設計模式">
+                  讀書心得-依賴注入：原理、實作與設計模式 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

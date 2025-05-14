@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="專注於如何測試 vue.js 應用程式的書籍，雖然出版已經有一陣子了，但對於如何測試 vue.js 來說，是一本很優秀的入門書籍，網路上有找到這本書的英文版，看起來好像可以免費觀看：Testing Vue.js Applications，如果喜歡的話也可以考慮去天瓏入手一本vue.js 應用測試 - testing vue.js application">
+<meta property="og:type" content="article">
+<meta property="og:title" content="讀書心得-Vue.js應用測試">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/testing-vue-js-applications/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="專注於如何測試 vue.js 應用程式的書籍，雖然出版已經有一陣子了，但對於如何測試 vue.js 來說，是一本很優秀的入門書籍，網路上有找到這本書的英文版，看起來好像可以免費觀看：Testing Vue.js Applications，如果喜歡的話也可以考慮去天瓏入手一本vue.js 應用測試 - testing vue.js application">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/testing-vue-js-applications/2021-02-17_171459.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/testing-vue-js-applications/2021-02-17_171211.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/testing-vue-js-applications/horse.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/testing-vue-js-applications/07fig01_alt.jpg">
+<meta property="article:published_time" content="2021-02-17T01:51:55.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.392Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="vue">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/testing-vue-js-applications/2021-02-17_171459.jpg">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/testing-vue-js-applications/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/testing-vue-js-applications/","path":"/testing-vue-js-applications/","title":"讀書心得-Vue.js應用測試"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>讀書心得-Vue.js應用測試 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BA%96%E5%82%99%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.</span> <span class="nav-text">準備工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC-1-%E7%AB%A0-Vue-%E7%A8%8B%E5%BA%8F%E6%B8%AC%E8%A9%A6%E4%BB%8B%E7%B4%B9"><span class="nav-number">2.</span> <span class="nav-text">第 1 章 Vue 程序測試介紹</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC-2-%E7%AB%A0-%E5%89%B5%E5%BB%BA%E4%BD%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E5%80%8B%E6%B8%AC%E8%A9%A6"><span class="nav-number">3.</span> <span class="nav-text">第 2 章 創建你的第一個測試</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A2%E7%94%9F-jest-config-js"><span class="nav-number">3.1.</span> <span class="nav-text">產生 jest.config.js</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%93-Jest-%E6%94%AF%E6%8F%B4-Import-%E3%80%81%E6%94%AF%E6%8F%B4-Vue-SFC"><span class="nav-number">3.2.</span> <span class="nav-text">讓 Jest 支援 Import 、支援 Vue SFC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E8%88%AC%E7%8B%80%E6%B3%81%E4%B8%8B%E5%A6%82%E4%BD%95-debug-%E6%B8%AC%E8%A9%A6%E7%A8%8B%E5%BC%8F"><span class="nav-number">3.3.</span> <span class="nav-text">一般狀況下如何 debug 測試程式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-Rider-WebStorm-%E5%A6%82%E4%BD%95-debug-%E6%B8%AC%E8%A9%A6%E7%A8%8B%E5%BC%8F"><span class="nav-number">3.4.</span> <span class="nav-text">使用 Rider &#x2F; WebStorm 如何 debug 測試程式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC-3-%E7%AB%A0-%E6%B8%B2%E6%9F%93%E7%B5%84%E4%BB%B6%E8%BC%B8%E5%87%BA%E6%B8%AC%E8%A9%A6"><span class="nav-number">4.</span> <span class="nav-text">第 3 章 渲染組件輸出測試</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC-4-%E7%AB%A0-%E6%B8%AC%E8%A9%A6%E7%B5%84%E4%BB%B6%E6%96%B9%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">第 4 章 測試組件方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%AC%E8%A9%A6%E5%85%AC%E5%85%B1%E7%B5%84%E4%BB%B6%E3%80%81%E7%A7%81%E6%9C%89%E7%B5%84%E4%BB%B6%E6%96%B9%E6%B3%95"><span class="nav-number">5.1.</span> <span class="nav-text">測試公共組件、私有組件方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%AC%E8%A9%A6%E4%BD%BF%E7%94%A8%E5%AE%9A%E6%99%82%E5%99%A8%E5%8A%9F%E8%83%BD%E7%9A%84%E4%BB%A3%E7%A2%BC"><span class="nav-number">5.2.</span> <span class="nav-text">測試使用定時器功能的代碼</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-mock-%E6%B8%AC%E8%A9%A6%E4%BB%A3%E7%A2%BC"><span class="nav-number">5.3.</span> <span class="nav-text">使用 mock 測試代碼</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E6%93%AC%E6%A8%A1%E5%A1%8A%E4%BE%9D%E8%B3%B4%E9%97%9C%E4%BF%82"><span class="nav-number">5.4.</span> <span class="nav-text">模擬模塊依賴關係</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC-5-%E7%AB%A0-%E6%B8%AC%E8%A9%A6%E4%BA%8B%E4%BB%B6"><span class="nav-number">6.</span> <span class="nav-text">第 5 章 測試事件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%AC%E8%A9%A6%E5%8E%9F%E7%94%9F-DOM-%E4%BA%8B%E4%BB%B6%E3%80%81%E6%B8%AC%E8%A9%A6%E8%87%AA%E5%AE%9A%E7%BE%A9%E4%BA%8B%E4%BB%B6"><span class="nav-number">6.1.</span> <span class="nav-text">測試原生 DOM 事件、測試自定義事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%AC%E8%A9%A6%E8%BC%B8%E5%85%A5%E8%A1%A8%E5%96%AE"><span class="nav-number">6.2.</span> <span class="nav-text">測試輸入表單</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%86%E8%A7%A3-jsdom-%E7%9A%84%E4%BE%B7%E9%99%90"><span class="nav-number">6.3.</span> <span class="nav-text">了解 jsdom 的侷限</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC-6-%E7%AB%A0-%E4%BA%86%E8%A7%A3-Vuex"><span class="nav-number">7.</span> <span class="nav-text">第 6 章 了解 Vuex</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC-7-%E7%AB%A0-%E6%B8%AC%E8%A9%A6-Vuex"><span class="nav-number">8.</span> <span class="nav-text">第 7 章 測試 Vuex</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC-8-%E7%AB%A0-%E4%BD%BF%E7%94%A8%E5%B7%A5%E5%BB%A0%E5%87%BD%E6%95%B8%E7%B5%84%E7%B9%94%E6%B8%AC%E8%A9%A6"><span class="nav-number">9.</span> <span class="nav-text">第 8 章 使用工廠函數組織測試</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC-9-%E7%AB%A0-%E4%BA%86%E8%A7%A3-Vue-Router"><span class="nav-number">10.</span> <span class="nav-text">第 9 章 了解 Vue Router</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC-10-%E7%AB%A0-%E6%B8%AC%E8%A9%A6-Vue-Router"><span class="nav-number">11.</span> <span class="nav-text">第 10 章 測試 Vue Router</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC-11-%E7%AB%A0-%E6%B8%AC%E8%A9%A6-mixin-%E5%92%8C%E9%81%8E%E6%BF%BE%E5%99%A8"><span class="nav-number">12.</span> <span class="nav-text">第 11 章 測試 mixin 和過濾器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC-12-%E7%AB%A0-%E7%B7%A8%E5%AF%AB%E5%BF%AB%E7%85%A7%E6%B8%AC%E8%A9%A6"><span class="nav-number">13.</span> <span class="nav-text">第 12 章 編寫快照測試</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC-13-%E7%AB%A0-%E6%B8%AC%E8%A9%A6%E6%9C%8D%E5%8B%99%E7%AB%AF%E6%B8%B2%E6%9F%93"><span class="nav-number">14.</span> <span class="nav-text">第 13 章 測試服務端渲染</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC-14-%E7%AB%A0-%E7%B7%A8%E5%AF%AB%E7%AB%AF%E5%88%B0%E7%AB%AF%E6%B8%AC%E8%A9%A6"><span class="nav-number">15.</span> <span class="nav-text">第 14 章 編寫端到端測試</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Recap"><span class="nav-number">16.</span> <span class="nav-text">Recap</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/testing-vue-js-applications/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="讀書心得-Vue.js應用測試 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          讀書心得-Vue.js應用測試
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2021-02-17 09:51:55" itemprop="dateCreated datePublished" datetime="2021-02-17T09:51:55+08:00">2021-02-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/%E5%BF%83%E5%BE%97/" itemprop="url" rel="index"><span itemprop="name">心得</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/testing-vue-js-applications/" class="post-meta-item leancloud_visitors" data-flag-title="讀書心得-Vue.js應用測試" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/testing-vue-js-applications/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/testing-vue-js-applications/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>專注於如何測試 vue.js 應用程式的書籍，雖然出版已經有一陣子了，但對於如何測試 <code>vue.js</code> 來說，是一本很優秀的入門書籍，網路上有找到這本書的英文版，看起來好像可以免費觀看：<a target="_blank" rel="noopener" href="https://livebook.manning.com/book/testing-vue-js-applications/">Testing Vue.js Applications</a>，如果喜歡的話也可以考慮去天瓏入手一本<a target="_blank" rel="noopener" href="https://www.tenlong.com.tw/products/9787111646709">vue.js 應用測試 - testing vue.js application</a></p>
+<span id="more"></span>
+
+<p>在其他關於 <code>vue.js</code> 的書籍中通常都用一兩個章節提到 <code>vue.js</code> 的測試；或者是在講測試的書籍內，用某些前端框架作為例子，用幾個章節介紹，我沒有看過一本專門講 <code>vue.js</code> 如何測試的書，因此這本書的確很吸引我，所以盡管這本書已經出版好一陣子，我還是打算買下來，並好好研讀一下；但是畢竟這是一本關於前端框架測試的書籍，而我本身其實並沒有對前端涉略很多，工作上也用不到，因此書籍的某些章節會略過，真的想了解的朋友可以自己買書研究一下</p>
+<p>這本書畢竟是在講測試，所以會假設讀者都已經對 <code>vue.js</code>有一定認識，所以一些東西就被歸類於常識，如果對於 <code>vue.js</code> 比較不熟，可能還是需要先了解一下，另外，這本書畢竟有點久了，跟著書籍的步驟練習的話，可能會發生套件相容的問題，這個時候看是要去切換分支比對各個套件依賴關係，確定可用的套件版本，或者是自行依照錯誤訊息，確認相關套件是否需要隨著更新，這些就不再撰述</p>
+<p>簡單的說就是當時安裝的是甚麼套件，現在手動練習的話，你也要安裝相同版本的套件才不容易出錯；要不就是自己解一下衝突，看一下哪個套件要更新版本</p>
+<h2 id="準備工作"><a href="#準備工作" class="headerlink" title="準備工作"></a>準備工作</h2><p>書籍提供一個用來練習的 repository <a target="_blank" rel="noopener" href="https://github.com/eddyerburgh/vue-hackernews">hacker news</a>，但是按照步驟將他還原套件的時候會發現在安裝<code>firebase</code>套件的時候錯誤，也上網找了很多解決辦法，但是沒一個能穩定運作，專案還原到懷疑人生</p>
+<p>最後嘗試很多種辦法，我最後也不確定哪一種才是關鍵因素，因此都列出來</p>
+<ol>
+<li>參考 <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/2b831714bbff">windows 下安装 node-gyp</a> 處理<code>node-gyp</code>的問題 (<code>npm install --global --production windows-build-tools</code>)</li>
+<li>將專案本身依賴的<code>firebase</code>砍掉，然後重新安裝最新版本</li>
+</ol>
+<p>但其實或許也可以將套件記著，全部砍掉後重新一個個手動加入依賴，但我已經不想去測試了，底下是截至第二章結束時，正常運作的<code>package.json</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// package.json</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;name&quot;</span>: <span class="string">&quot;vue-hackernews-2&quot;</span>,</span><br><span class="line">  <span class="string">&quot;version&quot;</span>: <span class="string">&quot;0.1.0&quot;</span>,</span><br><span class="line">  <span class="string">&quot;private&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="string">&quot;scripts&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;serve&quot;</span>: <span class="string">&quot;vue-cli-service serve&quot;</span>,</span><br><span class="line">    <span class="string">&quot;build&quot;</span>: <span class="string">&quot;vue-cli-service build&quot;</span>,</span><br><span class="line">    <span class="string">&quot;lint&quot;</span>: <span class="string">&quot;vue-cli-service lint&quot;</span>,</span><br><span class="line">    <span class="string">&quot;test&quot;</span>: <span class="string">&quot;jest&quot;</span>,</span><br><span class="line">    <span class="string">&quot;test:unit&quot;</span>: <span class="string">&quot;jest --no-cache&quot;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">&quot;dependencies&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;firebase&quot;</span>: <span class="string">&quot;^8.2.7&quot;</span>,</span><br><span class="line">    <span class="string">&quot;vue&quot;</span>: <span class="string">&quot;^2.5.16&quot;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">&quot;devDependencies&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;@babel/core&quot;</span>: <span class="string">&quot;^7.12.16&quot;</span>,</span><br><span class="line">    <span class="string">&quot;@vue/cli-plugin-babel&quot;</span>: <span class="string">&quot;^3.0.0-beta.15&quot;</span>,</span><br><span class="line">    <span class="string">&quot;@vue/cli-plugin-eslint&quot;</span>: <span class="string">&quot;^3.0.0-beta.16&quot;</span>,</span><br><span class="line">    <span class="string">&quot;@vue/cli-service&quot;</span>: <span class="string">&quot;^3.0.0-beta.15&quot;</span>,</span><br><span class="line">    <span class="string">&quot;@vue/eslint-config-standard&quot;</span>: <span class="string">&quot;^3.0.0-beta.16&quot;</span>,</span><br><span class="line">    <span class="string">&quot;@vue/test-utils&quot;</span>: <span class="string">&quot;^1.1.3&quot;</span>,</span><br><span class="line">    <span class="string">&quot;babel-core&quot;</span>: <span class="string">&quot;^7.0.0-bridge.0&quot;</span>,</span><br><span class="line">    <span class="string">&quot;babel-jest&quot;</span>: <span class="string">&quot;^26.6.3&quot;</span>,</span><br><span class="line">    <span class="string">&quot;cross-env&quot;</span>: <span class="string">&quot;^5.2.0&quot;</span>,</span><br><span class="line">    <span class="string">&quot;jest&quot;</span>: <span class="string">&quot;^26.6.3&quot;</span>,</span><br><span class="line">    <span class="string">&quot;vue-jest&quot;</span>: <span class="string">&quot;^3.0.7&quot;</span>,</span><br><span class="line">    <span class="string">&quot;vue-template-compiler&quot;</span>: <span class="string">&quot;^2.5.16&quot;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">&quot;eslintConfig&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;root&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">&quot;env&quot;</span>: &#123;</span><br><span class="line">      <span class="string">&quot;node&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="string">&quot;jest&quot;</span>: <span class="literal">true</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&quot;extends&quot;</span>: [</span><br><span class="line">      <span class="string">&quot;plugin:vue/essential&quot;</span>,</span><br><span class="line">      <span class="string">&quot;@vue/standard&quot;</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="string">&quot;rules&quot;</span>: &#123;</span><br><span class="line">      <span class="string">&quot;prefer-promise-reject-errors&quot;</span>: <span class="number">0</span>,</span><br><span class="line">      <span class="string">&quot;no-new&quot;</span>: <span class="number">0</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&quot;parserOptions&quot;</span>: &#123;</span><br><span class="line">      <span class="string">&quot;parser&quot;</span>: <span class="string">&quot;babel-eslint&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">&quot;postcss&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;plugins&quot;</span>: &#123;</span><br><span class="line">      <span class="string">&quot;autoprefixer&quot;</span>: &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">&quot;browserslist&quot;</span>: [</span><br><span class="line">    <span class="string">&quot;&gt; 1%&quot;</span>,</span><br><span class="line">    <span class="string">&quot;last 2 versions&quot;</span>,</span><br><span class="line">    <span class="string">&quot;not ie &lt;= 8&quot;</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>之後雖然作者在每一個章節都有提供分支做切換，但被坑過的我，第一次測試 OK，切到分支第三章，重新再跑一次就又被整到懷疑人生了，因此這一次我直接從第二章的分支開始做，然後不做分支切換了。如果要參考相關 Code，應該就是自己再另外開一個 Repository 去做切換來觀看。這一次練習的也會放在 Github:<a target="_blank" rel="noopener" href="https://github.com/art-Forks/vue-hackernews/commits/my-practice">my practice commit history</a>，如果有需要參考的人請自取</p>
+<h2 id="第-1-章-Vue-程序測試介紹"><a href="#第-1-章-Vue-程序測試介紹" class="headerlink" title="第 1 章 Vue 程序測試介紹"></a>第 1 章 Vue 程序測試介紹</h2><h2 id="第-2-章-創建你的第一個測試"><a href="#第-2-章-創建你的第一個測試" class="headerlink" title="第 2 章 創建你的第一個測試"></a>第 2 章 創建你的第一個測試</h2><p>經由本章介紹，熟悉專案內容的各項功能</p>
+<ol>
+<li>執行專案 <code>npm run serve</code></li>
+<li>執行 ESLint 檢查：執行 ESLint 後，書上說的錯誤源自於<code>src/components/ItemList.vue</code>，實際上是<code>src/views/ItemList.vue</code></li>
+<li>編譯網站：如果發生錯誤是與<code>firebase</code>有關，可以參考一下<a href="#%E6%BA%96%E5%82%99%E5%B7%A5%E4%BD%9C">準備工作</a></li>
+<li>建立單元測試：<code>jest</code>框架預設的測試檔案 pattern：<code>**/__tests__/**/*.[jt]s?(x), **/?(*.)+(spec|test).[tj]s?(x)</code></li>
+<li>讓 Jest 支援 Vue SFC (Single File Component)</li>
+<li>如何 debug 測試程式</li>
+</ol>
+<p>跟隨著章節練習，手動加入套件的時候可能會發生奇奇怪怪的錯誤，猜測應該是當時的<code>jest</code>套件比較舊，而現在的<code>jest</code>套件與專案內的<code>babel core</code>衝突，解決辦法就是將<code>package.json</code>內的 babel 依賴砍掉，重新再安裝一次<code>babel</code>就好了</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save-dev babel-jest vue-jest @babel/core babel-core@bridge</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>這邊順便介紹了一個知識點，透過<code>--</code>將參數帶給 npm 的指令，例如 <code>npm run unit:test -- --watch</code></p>
+</blockquote>
+<h3 id="產生-jest-config-js"><a href="#產生-jest-config-js" class="headerlink" title="產生 jest.config.js"></a>產生 jest.config.js</h3><p>這邊不採用將設定寫在<code>package.json</code>的方式，而是直接透過<code>jest --init</code>的方式來產生設定檔，之後再自行修改</p>
+<blockquote>
+<p>特別注意需要確認 <code>testEnvironment</code>使用<code>jsdom</code>，如果在 init 的時候有回<code>jsdom</code>的話就沒問題，我是點了<code>node</code>結果發生錯誤查半天，最後才發現我選錯了，要選<code>jsdom</code>才對</p>
+</blockquote>
+<h3 id="讓-Jest-支援-Import-、支援-Vue-SFC"><a href="#讓-Jest-支援-Import-、支援-Vue-SFC" class="headerlink" title="讓 Jest 支援 Import 、支援 Vue SFC"></a>讓 Jest 支援 Import 、支援 Vue SFC</h3><p>要讓<code>jest</code>支援<code>import</code>的語法，請參閱<a target="_blank" rel="noopener" href="https://jestjs.io/docs/en/configuration.html#transform-objectstring-pathtotransformer--pathtotransformer-object">Configuring Jest</a>，這邊有提到需要顯式指定<code>transform</code>區段的設定，可參考<a target="_blank" rel="noopener" href="https://github.com/facebook/jest/tree/master/packages/babel-jest">babel-jest</a>的設定方式範例，在<a target="_blank" rel="noopener" href="https://github.com/vuejs/vue-jest">vue-jest</a>有提到一些相關版本的注意事項，因為現在是新安裝，採用的 <code>babel</code> &gt; 7，且 <code>jest</code> &gt; 24，所以還要再額外安裝套件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save-dev babel-jest @babel/core babel-core@bridge</span><br></pre></td></tr></table></figure>
+
+<p>並且加上 vue 的設定，最後設定的部分看起來是這樣的，要注意 js 的 regex pattern，可能會因為我們檔名用 item.spec.js，不符合<code>^.+\\.js$</code>這種 pattern，所以只判斷副檔名結尾即可，或者是自己重新寫一個符合的 regex pattern</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">transform</span>: &#123;</span><br><span class="line">  <span class="string">&quot;\\.[jt]sx?$&quot;</span>: <span class="string">&quot;babel-jest&quot;</span>,</span><br><span class="line">  <span class="string">&quot;^.+\\.vue$&quot;</span>: <span class="string">&quot;vue-jest&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是到這邊之後還沒完，接著要讓測試把 Vue Component 掛載起來，官方有推出一個測試工具可以使用</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save-dev @vue/test-utils</span><br></pre></td></tr></table></figure>
+
+<p>可以參考一下官方文件：<a target="_blank" rel="noopener" href="https://vue-test-utils.vuejs.org/zh/installation/testing-single-file-components-with-jest.html">用 Jest 测试单文件组件</a>，大概都把重點說出來了，難怪人家說 vue 的文件做的很棒</p>
+<h3 id="一般狀況下如何-debug-測試程式"><a href="#一般狀況下如何-debug-測試程式" class="headerlink" title="一般狀況下如何 debug 測試程式"></a>一般狀況下如何 debug 測試程式</h3><ol>
+<li>在程式中下中斷點<code>debugger</code></li>
+<li>透過<code>node --inspect-brk ./node_modules/jest/bin/jest.js --no-cache --runInBand</code>執行測試</li>
+<li>node 會顯示監控一個 websocket 的時候，透過 chrome 開啟 chrome:&#x2F;&#x2F;inspect，從 Remote Target 底下點<code>inspect</code>開啟一個 DevTool</li>
+<li>在 DevTool 可以執行 F8，讓程式開始執行，接著會中斷在<code>debugger</code>的地方</li>
+</ol>
+<h3 id="使用-Rider-WebStorm-如何-debug-測試程式"><a href="#使用-Rider-WebStorm-如何-debug-測試程式" class="headerlink" title="使用 Rider &#x2F; WebStorm 如何 debug 測試程式"></a>使用 Rider &#x2F; WebStorm 如何 debug 測試程式</h3><p>但如果你用的是<code>Rider</code>，先設定一個執行的設定檔<br><img src="/artblog/testing-vue-js-applications/2021-02-17_171459.jpg"></p>
+<p>然後按旁邊的蟲蟲 Icon，直接就可以在 IDE 裡面 Debug (這邊上面的綠色 Play 旁邊那個 Bug Icon 沒有截圖好)<br><img src="/artblog/testing-vue-js-applications/2021-02-17_171211.jpg"></p>
+<h2 id="第-3-章-渲染組件輸出測試"><a href="#第-3-章-渲染組件輸出測試" class="headerlink" title="第 3 章 渲染組件輸出測試"></a>第 3 章 渲染組件輸出測試</h2><p>這裡採用有點類似 <code>TDD</code> 的概念先將需求釐清，確認那些 Component 要做到那些事情，然後先寫測試；再這邊的準備工作就是將職責確定好，分析的方式可以仔細看看書裡面，分析完畢後就是接著實作，書籍先示範了一次 item.url 這個屬性的測試；接著大概就是以測試驅動的方式產生 production code，也就是實際上 Item Component 的實作</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; shallowMount &#125; <span class="keyword">from</span> <span class="string">&#x27;@vue/test-utils&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Item</span> <span class="keyword">from</span> <span class="string">&#x27;../Item.vue&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="title function_">describe</span>(<span class="string">&#x27;Item.vue&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">	<span class="title function_">test</span>(<span class="string">&#x27;renders item.url&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">		<span class="keyword">const</span> item = &#123; <span class="attr">url</span>: <span class="number">10</span> &#125;;</span><br><span class="line">		<span class="keyword">const</span> wrapper = <span class="title function_">shallowMount</span>(<span class="title class_">Item</span>, &#123;</span><br><span class="line">			<span class="attr">propsData</span>: &#123; item &#125;,</span><br><span class="line">		&#125;);</span><br><span class="line">		<span class="title function_">expect</span>(wrapper.<span class="title function_">text</span>()).<span class="title function_">toContain</span>(item.<span class="property">url</span>);</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>原文中提到：<strong>其他兩個測試與你剛剛編寫的測試非常相似，因此在這裡就不再重複展示了</strong>。</p>
+<p>所以從 repository 切到 chapter-4 分支，來看看這段消失的歷史發生了那些事情<br><img src="/artblog/testing-vue-js-applications/horse.jpg"><br>還好上面的事情沒有發生，它只是略過了兩個類似的測試而已，如果它能順便附上<code>item.score</code>、<code>item.by</code>，就是所謂的<code>其他兩個測試</code>，我會覺得好一些，這兩個測試與先前的大同小異，測試只要判斷有抓到一樣的文字就好，在 production code 那邊要考量到顯示的結果，所以要再另外編排一下畫面。</p>
+<p>接著透過範例來介紹如何取得元件內的元素、測試標籤的文字內容以及屬性，在這邊有一個重點是避免透過 boolean 來做斷言，因為出錯了你看訊息也無法明確的知道為什麼失敗，我們在撰寫單元測試的時候很重要的是，當它失敗的時候我們能夠確切的知道為何失敗，若是回應 boolean，這應該很難達到</p>
+<p>接著我們希望能夠測試被渲染出來的子組件數量有多少個，在這邊的情境是 <code>ItemList</code> Component 有沒有正確的 render 出來對應數量的 <code>Item</code> Component；用這個案例來帶出 <code>mount</code> 與 <code>shallowMount</code> 的差異，這邊照著書裡面的流程一步步做就可以了</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; shallowMount &#125; <span class="keyword">from</span> <span class="string">&#x27;@vue/test-utils&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="title class_">ItemList</span> <span class="keyword">from</span> <span class="string">&#x27;../ItemList.vue&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Item</span> <span class="keyword">from</span> <span class="string">&#x27;../../components/Item.vue&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="title function_">describe</span>(<span class="string">&#x27;ItemList.vue&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">	<span class="title function_">test</span>(<span class="string">&#x27;renders an Item for each item in windows.items&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">		<span class="variable language_">window</span>.<span class="property">items</span> = [&#123;&#125;, &#123;&#125;, &#123;&#125;];</span><br><span class="line">		<span class="keyword">const</span> wrapper = <span class="title function_">shallowMount</span>(<span class="title class_">ItemList</span>);</span><br><span class="line">		<span class="title function_">expect</span>(wrapper.<span class="title function_">findAll</span>(<span class="title class_">Item</span>)).<span class="title function_">toHaveLength</span>(<span class="variable language_">window</span>.<span class="property">items</span>.<span class="property">length</span>);</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>書裡面教到的<code>findAll</code>方法，在新版的測試工具提示為過時，要改用<code>findAllComponents</code></p>
+</blockquote>
+<p>最後一個步驟是用進度條 component 來帶出測試樣式的方法，這邊書裡面有提到因為樣式的部分對網站顯示蠻重要的，所以可以先透過切換章節的 branch 去看看各個 SFC 的樣式</p>
+<h2 id="第-4-章-測試組件方法"><a href="#第-4-章-測試組件方法" class="headerlink" title="第 4 章 測試組件方法"></a>第 4 章 測試組件方法</h2><h3 id="測試公共組件、私有組件方法"><a href="#測試公共組件、私有組件方法" class="headerlink" title="測試公共組件、私有組件方法"></a>測試公共組件、私有組件方法</h3><p>這裡有提到<strong>私有方法是實現細節的，因此不用直接為他們編寫測試</strong>，我也因此聯想到自己的經驗，通常我們測試的都是邏輯，而非實作細節，所以還蠻贊同的。</p>
+<p>以上一章節的進度條作範例，提供方法給外部呼叫，並說明測試的條件，作為入門我覺得挺好，因為夠簡單也沒有依賴其他東西，但如果你依照書裡面的作法，還是錯誤的，我不確定是否是因為依賴套件版本的關係，但是牽涉到變更 component 狀態，可能還要考慮到 DOM 是否有 re-render，查詢了之後，解決方案是<code>await Vue.nextTick()</code>，所以在之後的測試程式中，需要先等候 re-render 的情況，就需要先加上<code>await Vue.nextTick()</code>之後才去斷言</p>
+<p>因此第一個範例應為</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">test</span>(<span class="string">&#x27;displays the bar when start is called&#x27;</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">	<span class="keyword">const</span> wrapper = <span class="title function_">shallowMount</span>(<span class="title class_">ProgressBar</span>);</span><br><span class="line">	<span class="title function_">expect</span>(wrapper.<span class="title function_">classes</span>()).<span class="title function_">toContain</span>(<span class="string">&#x27;hidden&#x27;</span>);</span><br><span class="line">	wrapper.<span class="property">vm</span>.<span class="title function_">start</span>();</span><br><span class="line">	<span class="keyword">await</span> <span class="title class_">Vue</span>.<span class="title function_">nextTick</span>();</span><br><span class="line">	<span class="title function_">expect</span>(wrapper.<span class="title function_">classes</span>()).<span class="property">not</span>.<span class="title function_">toContain</span>(<span class="string">&#x27;hidden&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="測試使用定時器功能的代碼"><a href="#測試使用定時器功能的代碼" class="headerlink" title="測試使用定時器功能的代碼"></a>測試使用定時器功能的代碼</h3><p>正如書中所說的，js 裡面要去測試有<code>setTimeout</code>這種東西無疑是很拖累單元測試速度的一件事情，所以這邊提出的解決方案是，使用自己的函式去替換掉原生的<code>setTimeout</code>，書裡面稱之為<code>模擬函數</code>，而在我們所使用的測試框架裡面，也有提供了這樣方便的工具來讓我們模擬定時器的功能 <code>jest.userFakeTimers()</code>；這邊書裡面的註解就很清楚，在測試之前，我們透過<code>jest</code>提供的假計時器功能取代掉實際上真正的計時器，然後在我們的測試程式裡面，我們要告訴<code>jest</code>的計時器功能，時間再往前推進多少，很好理解，但實際操作後，還是要加上<code>await Vue.nextTick()</code>才能順利測試成功。</p>
+<p>我的理解是在需要斷言的地方，先等待<code>Component</code> re-render 完畢，才去斷言，因此都是加在<code>expect</code>前面，但加到現在為止我已經加了很多次，我都懷疑是不是我打開範例的姿勢錯誤了，所以才需要加這些東西，還是真的如我所說的，因為我用的套件版本比較新，跟書上不一樣….第一次寫心得寫的這麼心虛的。</p>
+<p>整個計時器的範例是這樣的</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ProgressBar.spec.js</span></span><br><span class="line"><span class="title function_">beforeEach</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">	jest.<span class="title function_">useFakeTimers</span>();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="title function_">test</span>(<span class="string">&#x27;increases width by 1% every 100ms after start call&#x27;</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">	<span class="keyword">const</span> wrapper = <span class="title function_">shallowMount</span>(<span class="title class_">ProgressBar</span>);</span><br><span class="line">	wrapper.<span class="property">vm</span>.<span class="title function_">start</span>();</span><br><span class="line"></span><br><span class="line">	jest.<span class="title function_">runTimersToTime</span>(<span class="number">100</span>);</span><br><span class="line">	<span class="keyword">await</span> <span class="title class_">Vue</span>.<span class="title function_">nextTick</span>();</span><br><span class="line">	<span class="title function_">expect</span>(wrapper.<span class="property">element</span>.<span class="property">style</span>.<span class="property">width</span>).<span class="title function_">toBe</span>(<span class="string">&#x27;1%&#x27;</span>);</span><br><span class="line"></span><br><span class="line">	jest.<span class="title function_">runTimersToTime</span>(<span class="number">900</span>);</span><br><span class="line">	<span class="keyword">await</span> <span class="title class_">Vue</span>.<span class="title function_">nextTick</span>();</span><br><span class="line">	<span class="title function_">expect</span>(wrapper.<span class="property">element</span>.<span class="property">style</span>.<span class="property">width</span>).<span class="title function_">toBe</span>(<span class="string">&#x27;10%&#x27;</span>);</span><br><span class="line"></span><br><span class="line">	jest.<span class="title function_">runTimersToTime</span>(<span class="number">4000</span>);</span><br><span class="line">	<span class="keyword">await</span> <span class="title class_">Vue</span>.<span class="title function_">nextTick</span>();</span><br><span class="line">	<span class="title function_">expect</span>(wrapper.<span class="property">element</span>.<span class="property">style</span>.<span class="property">width</span>).<span class="title function_">toBe</span>(<span class="string">&#x27;50%&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>而透過這個例子，順勢帶出來第二個測試案例，因為結束的時候要清除計時器(clearInterval)</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">finish</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">hidden</span> = <span class="literal">true</span></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">percent</span> = <span class="number">100</span></span><br><span class="line">  <span class="built_in">clearInterval</span>(<span class="variable language_">this</span>.<span class="property">timer</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>所以依照測試情境，透過<code>jest</code>提供的<code>spyOn</code>讓他監視 window 的<code>clearInterval</code>方法，接著模擬 setInterval 的返回值，最後斷言該方法有沒有被我們指定的值呼叫</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">test</span>(<span class="string">&#x27;clears timer when finish is called&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">	jest.<span class="title function_">spyOn</span>(<span class="variable language_">window</span>, <span class="string">&#x27;clearInterval&#x27;</span>);</span><br><span class="line">	<span class="built_in">setInterval</span>.<span class="title function_">mockReturnValue</span>(<span class="number">123</span>);</span><br><span class="line">	<span class="keyword">const</span> wrapper = <span class="title function_">shallowMount</span>(<span class="title class_">ProgressBar</span>);</span><br><span class="line">	wrapper.<span class="property">vm</span>.<span class="title function_">start</span>();</span><br><span class="line">	wrapper.<span class="property">vm</span>.<span class="title function_">finish</span>();</span><br><span class="line">	<span class="title function_">expect</span>(<span class="variable language_">window</span>.<span class="property">clearInterval</span>).<span class="title function_">toHaveBeenCalledWith</span>(<span class="number">123</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用-mock-測試代碼"><a href="#使用-mock-測試代碼" class="headerlink" title="使用 mock 測試代碼"></a>使用 mock 測試代碼</h3><p>這裡的解釋有點難懂，但看圖卻很好理解，在實際應用透過 Vue Instance 去載入 <code>ItemList</code>這個 Component，此時因為先前有將<code>ProgressBar</code>注入到 Vue Instance 裡面，因此<code>ItemList</code>可以調用$bar屬性，呼叫到進度條，但是在單元測試只有載入ItemList，因此若調用不存在的$bar 屬性，就會產生錯誤，大概就是這個意思，所以我們這邊會利用到<code>mock</code>的方式來解決這個問題，一樣透過<code>jest</code>提供的 mock 函數。情境是當<code>ItemList</code>元件被載入的時候，希望他會去呼叫進度條的<code>start</code>方法，所以為此撰寫的測試是</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">test</span>(<span class="string">&#x27;calls $bar start on load&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">	<span class="keyword">const</span> $bar = &#123;</span><br><span class="line">		<span class="attr">start</span>: jest.<span class="title function_">fn</span>(),</span><br><span class="line">		<span class="attr">finish</span>: <span class="function">() =&gt;</span> &#123;&#125;,</span><br><span class="line">	&#125;;</span><br><span class="line">	<span class="title function_">shallowMount</span>(<span class="title class_">ItemList</span>, &#123; <span class="attr">mocks</span>: &#123; $bar &#125; &#125;);</span><br><span class="line">	<span class="title function_">expect</span>($bar.<span class="property">start</span>).<span class="title function_">toHaveBeenCalledTimes</span>(<span class="number">1</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>但是這樣又會讓先前一個測試失敗，要解決這個問題之前，<a href="#%E6%A8%A1%E6%93%AC%E6%A8%A1%E5%A1%8A%E4%BE%9D%E8%B3%B4%E9%97%9C%E4%BF%82">模擬模塊依賴關係</a>了解一下</p>
+<h3 id="模擬模塊依賴關係"><a href="#模擬模塊依賴關係" class="headerlink" title="模擬模塊依賴關係"></a>模擬模塊依賴關係</h3><p>若要模擬 api.js 的<code>fetchData</code>方法，我們就要先建立一個 mock 的文件，讓 jest 知道他實際上真正應該要解析的 mock 文件，而非被請求的文件，mock 文件內我們只需要包含測試會用到的函數就好，如下</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/api/__mocks__/api.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> fetchListData = jest.<span class="title function_">fn</span>(<span class="function">() =&gt;</span> <span class="title class_">Promise</span>.<span class="title function_">resolve</span>([]));</span><br></pre></td></tr></table></figure>
+
+<p>關於 mock 的部分可以在看一下<a target="_blank" rel="noopener" href="https://jestjs.io/docs/en/manual-mocks">官方文件</a>說明，會比較詳細；接下來範例就直接看 Code，重點是要先看一下他<code>ItemList</code>元件，掛載之後要做的事情，其實也就是載入的時候先呼叫進度條<code>start</code>，然後打 API 要資料，結束之後呼叫<code>finish</code>，在這邊就透過<code>jest.mock()</code>模擬<code>api.js</code>，因為又有用到<code>flush-promises</code>，所以也要先安裝一下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save-dev flush-promises</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 讓jest模擬api.js</span></span><br><span class="line">jest.<span class="title function_">mock</span>(<span class="string">&#x27;../../api/api.js&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="title function_">test</span>(<span class="string">&#x27;renders an Item with data for each item in window.items&#x27;</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">	<span class="comment">// 預期會有四次斷言，包含預期會有三筆資料一次斷言，以及迴圈的三次斷言</span></span><br><span class="line">	expect.<span class="title function_">assertions</span>(<span class="number">4</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 先前提到過的，透過jest.mocks注入其他的Instance，這邊也是直接建立一個假物件並透過jest框架提供的mocks注入進去</span></span><br><span class="line">	<span class="keyword">const</span> $bar = &#123;</span><br><span class="line">		<span class="attr">start</span>: <span class="function">() =&gt;</span> &#123;&#125;,</span><br><span class="line">		<span class="attr">finish</span>: <span class="function">() =&gt;</span> &#123;&#125;,</span><br><span class="line">	&#125;;</span><br><span class="line">	<span class="comment">// 讓mock的api.js方法可以取得假資料來做測試</span></span><br><span class="line">	<span class="keyword">const</span> items = [&#123; <span class="attr">id</span>: <span class="number">1</span> &#125;, &#123; <span class="attr">id</span>: <span class="number">2</span> &#125;, &#123; <span class="attr">id</span>: <span class="number">3</span> &#125;];</span><br><span class="line">	<span class="comment">// Component的mount事件就會呼叫這個方法取得資料回來顯示，所以這裡模擬它的回傳結果</span></span><br><span class="line">	fetchListData.<span class="title function_">mockImplementationOnce</span>(<span class="function">() =&gt;</span> <span class="title class_">Promise</span>.<span class="title function_">resolve</span>(items));</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 渲染待測元件</span></span><br><span class="line">	<span class="keyword">const</span> wrapper = <span class="title function_">shallowMount</span>(<span class="title class_">ItemList</span>, &#123; <span class="attr">mocks</span>: &#123; $bar &#125; &#125;);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 等候所有的promise callback都執行過才會往下走</span></span><br><span class="line">	<span class="keyword">await</span> <span class="title function_">flushPromises</span>();</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 測試資料筆數</span></span><br><span class="line">	<span class="keyword">const</span> <span class="title class_">Items</span> = wrapper.<span class="title function_">findAllComponents</span>(<span class="title class_">Item</span>);</span><br><span class="line">	<span class="title function_">expect</span>(<span class="title class_">Items</span>).<span class="title function_">toHaveLength</span>(items.<span class="property">length</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 測試每筆資料是否相等</span></span><br><span class="line">	<span class="title class_">Items</span>.<span class="property">wrappers</span>.<span class="title function_">forEach</span>(<span class="function">(<span class="params">wrapper, i</span>) =&gt;</span> &#123;</span><br><span class="line">		<span class="title function_">expect</span>(wrapper.<span class="property">vm</span>.<span class="property">item</span>).<span class="title function_">toBe</span>(items[i]);</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>這邊要提一下，如果你跟我一樣都寫過 C#的測試，可能會覺得奇怪為什麼測試程式中，明明就用到了 fetchData，但是測試程式卻不用去模擬呢？C#寫測試的時候我都還要用 NSub 在每一個測試中去 mock 有用到的 function，並指定回傳結果呢…因為一開始，我們有先把 mock 的東西寫在<code>src/api/__mocks__/api.js</code>，而且在測試文件開頭有<code>jest.mock(&#39;../../api/api.js&#39;)</code>，這兩個搭配在一起，所以<code>jest</code>會知道 fetchData 被模擬了</p>
+<p>在後面的部分要測試 fetchData 發生例外錯誤的部分，也可以透過<code>fetchListData.mockRejectedValueOnce()</code>來模擬，當然也可以直接用<code>fetchListData.mockImplementationOnce(() =&gt; Promise.reject())</code>，我個人是比較喜歡前者</p>
+<p>在這章節最後，語重心長地再次提醒，適度的使用<code>mock</code>這個技巧，因為濫用它會有一些問題，我自己的心得是如果你模擬了越多的東西，就代表這個測試越脆弱，測試成功的條件必須建立在很多假設的前提，自然這個測試就不會有太大的信心，而書中建議，應該要 mock 的應該是</p>
+<ol>
+<li>Http 調用</li>
+<li>連接數據庫</li>
+<li>使用文件系統</li>
+</ol>
+<p>因為單元測試不應該包含這些外部依賴，因為</p>
+<ol>
+<li>速度會被這些外部依賴拖累</li>
+<li>當測試失敗的時候你不會知道是測試失敗還是外部依賴失敗，應該一次只測一件事情</li>
+</ol>
+<p>我也喜歡這書編排，在章節的最後會 Recap 重點學到什麼，這可以讓我重新 focus 一下，我對這些重點項目有沒有記憶，而且他還有出練習題，感覺好像教科書，又回到學校上課的感覺，也是個不錯的方法，透過練習題目來檢視自己有沒有學到</p>
+<h2 id="第-5-章-測試事件"><a href="#第-5-章-測試事件" class="headerlink" title="第 5 章 測試事件"></a>第 5 章 測試事件</h2><p>測試事件的範例改用別的 repository：<a target="_blank" rel="noopener" href="https://github.com/eddyerburgh/vue-email-signup-form-app">testing-events-in-vue-components</a>，入手新專案後一樣<code>npm install</code>走起來先。然後透過<code>npm run serve</code>看看網站</p>
+<h3 id="測試原生-DOM-事件、測試自定義事件"><a href="#測試原生-DOM-事件、測試自定義事件" class="headerlink" title="測試原生 DOM 事件、測試自定義事件"></a>測試原生 DOM 事件、測試自定義事件</h3><p>這兩小節相對前面的章節來講我覺得比較簡單，測試自定義事件其實就是<code>emit</code>，只要了解了 emit 是甚麼，其實看這章節很輕鬆；就算不是很懂，透過一開始的原生 DOM 事件測試，改寫成 Vue 的自定義事件，也比較容易理解，如果想練習的話就把 repository 切到比較早的 commit，如果只想看結果測試看看，那就直接用最後的 commit</p>
+<h3 id="測試輸入表單"><a href="#測試輸入表單" class="headerlink" title="測試輸入表單"></a>測試輸入表單</h3><p>這章節可以細細研讀一下，解釋了一下如何用純 js 操作 Dom 的值，接著在 vue-test-utils 該如何做，又因為 v-model 的關係，最終解決方案是採用官方測試工具的<code>setValue()</code>來設置表單的值。然後是測試送出去給 API 的資料是否跟表單一致，這邊有個 key point 是<code>expect.objectContaining(&#123; email: &#39;email@gmail.com&#125;)</code>這樣的用法，它可以用 match 的方式去斷言，而不是完全比對，未來表單擴充之後，測試也比較不容易壞掉</p>
+<p>而<code>radio button</code>的測試比較不同的是，需要透過直接指定<code>checked</code>屬性的方式來做，先前的<code>setValue()</code>並不適用，可參考下列範例</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// js的寫法</span></span><br><span class="line"><span class="keyword">const</span> wrapper = <span class="title function_">shallowMount</span>(<span class="title class_">Form</span>);</span><br><span class="line"><span class="keyword">const</span> radioInput = wrapper.<span class="title function_">find</span>(<span class="string">&#x27;input[&quot;radio&quot;]&#x27;</span>);</span><br><span class="line">radioInput.<span class="property">element</span>.<span class="property">checked</span> = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 工具提供的方法</span></span><br><span class="line">wrapper.<span class="title function_">find</span>(<span class="string">&#x27;input[type=&quot;radio&quot;]&#x27;</span>).<span class="title function_">setChecked</span>();</span><br></pre></td></tr></table></figure>
+
+<h3 id="了解-jsdom-的侷限"><a href="#了解-jsdom-的侷限" class="headerlink" title="了解 jsdom 的侷限"></a>了解 jsdom 的侷限</h3><p>這一塊就是說明一下 jsdom 有那些東西不能做；也就是關於畫面上的布局，以及轉導頁面的部分，就大概看過有個印象就行了，等到需要用的時候再回來翻也可以</p>
+<h2 id="第-6-章-了解-Vuex"><a href="#第-6-章-了解-Vuex" class="headerlink" title="第 6 章 了解 Vuex"></a>第 6 章 了解 Vuex</h2><p>這一章在解釋 vuex 是甚麼東西，他用的例子還蠻生動的，後面也針對 store 的各項功能逐一解說，但我認為最好還是搭配官方的 vuex 文件來看，這邊就沒甚麼特別要說的，已經熟悉 vuex 的人可以直接略過本章節</p>
+<h2 id="第-7-章-測試-Vuex"><a href="#第-7-章-測試-Vuex" class="headerlink" title="第 7 章 測試 Vuex"></a>第 7 章 測試 Vuex</h2><p>在具備了<code>vuex</code>的基礎知識之後，回到<code>hacker news</code>這個範例專案，從高一點的層面來看一下元件與資料流的關係，書裡面將這個解釋得很清楚，尤其那個流程圖畫的還真是不錯；大概就是從元件被建立之後，一開始需要打後端 API 要資料，接著拿到資料後的一些動作。</p>
+<p><img src="/artblog/testing-vue-js-applications/07fig01_alt.jpg"></p>
+<blockquote>
+<p>圖片來源：<a target="_blank" rel="noopener" href="https://livebook.manning.com/book/testing-vue-js-applications/chapter-7/20">https://livebook.manning.com/book/testing-vue-js-applications/chapter-7/20</a></p>
+</blockquote>
+<p>在實際寫程式實現這些事情之前，第一步當然還是要先建立 store 的 instance，並注入給 vue instance 使用，所以套件還是要先裝起來 <code>npm install vuex --save</code>，接著有兩種方式來測試，一種是針對 store 裡面拆分出來的各個東西測試，這種測試方式足夠簡單，很容易就能上手，而且測試失敗的資訊也能夠很明確，如果對於書裡面的說明不夠容易理解，你可以直接看測試程式與 production code，會比較清楚；但是這也有一個難以忽視的缺點，當需要為非同步撰寫測試的時候，會需要 mock 一堆東西</p>
+<p>另外一種方式是直接測試整個 vuex store instance，這可以用很直覺的方式，就像我們在 production code 使用<code>vuex</code>的方式一樣，但是這也有缺點，那就是物件參考的問題，以及基礎 Vue 構造函數污染的問題。這兩種問題書裡面都有解釋得很清楚，對於前者，如果有傳值、傳址的概念很容易就能搞懂，解決方式也很簡單，使用物件之前你自己先深層複製一個出來用就可以了，此處用的是<code>lodash</code>的功能，所以也需要先安裝套件<code>npm install --save-dev lodash.clonedeep</code>；對於後者若難以理解，也可以參考他解釋的圖，那個圖很明確地指出基礎函數被汙染的過程，解決方案是透過官方測試框架的<code>localVue</code>構造函數，養成習慣，大概都是用這樣的起手式</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createLocalVue, shallowMount &#125; <span class="keyword">from</span> <span class="string">&#x27;@vue/test-utils&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> lovalVue = <span class="title function_">createLocalVue</span>();</span><br><span class="line">localVue.<span class="title function_">use</span>(<span class="title class_">Vuex</span>);</span><br><span class="line"></span><br><span class="line"><span class="title function_">shallowMount</span>(<span class="title class_">TestComponent</span>, &#123; localVue &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>所以對於這個抓資料的測試，完整的測試程式如下，我會在旁邊寫上我理解的註解</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="title class_">Vuex</span> <span class="keyword">from</span> <span class="string">&#x27;vuex&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; createLocalVue &#125; <span class="keyword">from</span> <span class="string">&#x27;@vue/test-utils&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> cloneDeep <span class="keyword">from</span> <span class="string">&#x27;lodash.clonedeep&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> flushPromises <span class="keyword">from</span> <span class="string">&#x27;flush-promises&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> storeConfig <span class="keyword">from</span> <span class="string">&#x27;../store-config&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; fetchListData &#125; <span class="keyword">from</span> <span class="string">&#x27;../../api/api&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 告訴 jest 框架我們要 mock 這個 api，當然在先前的章節，我們已經將模擬的api寫在src/api/__mocks__/api.js裡面了</span></span><br><span class="line">jest.<span class="title function_">mock</span>(<span class="string">&#x27;../../api/api&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 為了避免構造函數污染的問題，採用官方測試工具提供的 createLocalVue 替代 Vue</span></span><br><span class="line"><span class="keyword">const</span> localVue = <span class="title function_">createLocalVue</span>();</span><br><span class="line">localVue.<span class="title function_">use</span>(<span class="title class_">Vuex</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 做假資料，模擬後端回應結果</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">createItems</span>(<span class="params"></span>) &#123;</span><br><span class="line">	<span class="keyword">const</span> arr = <span class="keyword">new</span> <span class="title class_">Array</span>(<span class="number">22</span>);</span><br><span class="line">	<span class="keyword">return</span> arr.<span class="title function_">fill</span>().<span class="title function_">map</span>(<span class="function">(<span class="params">item, i</span>) =&gt;</span> (&#123; <span class="attr">id</span>: <span class="string">`a<span class="subst">$&#123;i&#125;</span>`</span>, <span class="attr">name</span>: <span class="string">&#x27;item&#x27;</span> &#125;));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">describe</span>(<span class="string">&#x27;store-config&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">	<span class="title function_">test</span>(<span class="string">&#x27;calling fetchListData with the type returns top 20 displayItems from displayItems getter&#x27;</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">		<span class="comment">// 3A rule:arrange</span></span><br><span class="line">		<span class="comment">// 預期會有一次 assertion</span></span><br><span class="line">		expect.<span class="title function_">assertions</span>(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">const</span> items = <span class="title function_">createItems</span>();</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 為了避免汙染到其他測試也用到了相同的store設定，在這邊先複製一份出來給這個測試案例使用</span></span><br><span class="line">		<span class="keyword">const</span> clonedStoreConfig = <span class="title function_">cloneDeep</span>(storeConfig);</span><br><span class="line">		<span class="keyword">const</span> store = <span class="keyword">new</span> <span class="title class_">Vuex</span>.<span class="title class_">Store</span>(clonedStoreConfig);</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 設定模擬打後端API後回傳的結果</span></span><br><span class="line">		<span class="keyword">const</span> type = <span class="string">&#x27;top&#x27;</span>;</span><br><span class="line">		fetchListData.<span class="title function_">mockImplementation</span>(<span class="function">(<span class="params">calledType</span>) =&gt;</span> &#123;</span><br><span class="line">			<span class="keyword">return</span> calledType === type ? <span class="title class_">Promise</span>.<span class="title function_">resolve</span>(items) : <span class="title class_">Promise</span>.<span class="title function_">resolve</span>();</span><br><span class="line">		&#125;);</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 3A rule:act</span></span><br><span class="line">		<span class="comment">// 實際要測試的行為</span></span><br><span class="line">		store.<span class="title function_">dispatch</span>(<span class="string">&#x27;fetchListData&#x27;</span>, &#123; type &#125;);</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 等候測試中的promise都結束了才往下走</span></span><br><span class="line">		<span class="keyword">await</span> <span class="title function_">flushPromises</span>();</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 3A rule:assert</span></span><br><span class="line">		<span class="comment">// 預期store的getters的資料等於測試資料的前20筆</span></span><br><span class="line">		<span class="title function_">expect</span>(store.<span class="property">getters</span>.<span class="property">displayItems</span>).<span class="title function_">toEqual</span>(items.<span class="title function_">slice</span>(<span class="number">0</span>, <span class="number">20</span>));</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>上面說的都只是單獨測試 store，但如果要測試的是 component 裡面的 store 呢？書籍這邊也用實際的範例來做 demo，就是先前我們為了<code>itemList.vue</code>做的測試，還記得當時我們的資料來源是 window.items，現在改寫成 vuex 版本，相對應的我們也要來將這個測試，改寫成使用 vuex 的版本</p>
+<p>在這邊利用 jest hooks 在每個測試開始之前，建立一個新的 store 給測試使用，跟著書裡面的教學一步步先建立好測試，這些細節先前都學過，然後測試紅燈，去調整元件的內容，綠燈後重構，刪除無效代碼，完成一個 TDD 的小循環</p>
+<h2 id="第-8-章-使用工廠函數組織測試"><a href="#第-8-章-使用工廠函數組織測試" class="headerlink" title="第 8 章 使用工廠函數組織測試"></a>第 8 章 使用工廠函數組織測試</h2><p>這一章其實就是用<code>factory</code>來將一些我們常常重複的動作包裝起來，我自己覺得其實是沒有什麼必要特別說明，但想一想似乎也有道理。因為我覺得這屬於重構的部分，而重構是無時無刻都會在做的事情，不管你是用 TDD 開發，或者是平常接到需求在做，又或者是直接優化系統，當你的程式碼重複第三次了，就應該要重構他，這邊只是透過<code>factory</code>來做這件事情而已。</p>
+<p>當然對我自己而言，我喜歡用這樣的方式除了 reuse 的原因之外，更重要的一點是我可以更輕鬆的在測試程式中表現我的意圖</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">createStore</span>(<span class="params"></span>) &#123;</span><br><span class="line">	<span class="keyword">const</span> defaultStoreConfig = &#123;</span><br><span class="line">		<span class="attr">getters</span>: &#123;</span><br><span class="line">			<span class="attr">displayItems</span>: jest.<span class="title function_">fn</span>(),</span><br><span class="line">		&#125;,</span><br><span class="line">		<span class="attr">actions</span>: &#123;</span><br><span class="line">			<span class="attr">fetchListData</span>: jest.<span class="title function_">fn</span>(<span class="function">() =&gt;</span> <span class="title class_">Promise</span>.<span class="title function_">resolve</span>()),</span><br><span class="line">		&#125;,</span><br><span class="line">	&#125;;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Vuex</span>.<span class="title class_">Store</span>(defaultStoreConfig);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>書裡面的範例如上，他包裝起來的部分都是實作的細節，對我而言其實可以忽略，我只要知道這些東西的意圖在<code>createStore</code>就可以了，至於更細節的應用及設計方式，這邊就直接留給書本介紹囉</p>
+<h2 id="第-9-章-了解-Vue-Router"><a href="#第-9-章-了解-Vue-Router" class="headerlink" title="第 9 章 了解 Vue Router"></a>第 9 章 了解 Vue Router</h2><p>略，因為工作上並不使用 Vue Router，後端都是直接用<code>asp.net mvc</code></p>
+<h2 id="第-10-章-測試-Vue-Router"><a href="#第-10-章-測試-Vue-Router" class="headerlink" title="第 10 章 測試 Vue Router"></a>第 10 章 測試 Vue Router</h2><p>略，因為工作上並不使用 Vue Router，後端都是直接用<code>asp.net mvc</code></p>
+<h2 id="第-11-章-測試-mixin-和過濾器"><a href="#第-11-章-測試-mixin-和過濾器" class="headerlink" title="第 11 章 測試 mixin 和過濾器"></a>第 11 章 測試 mixin 和過濾器</h2><p>mixin 在追蹤錯誤部分較困難，且在新版本中也會移除掉這個東西，所以這章節就屬於時代的眼淚了，直接棄坑吧</p>
+<h2 id="第-12-章-編寫快照測試"><a href="#第-12-章-編寫快照測試" class="headerlink" title="第 12 章 編寫快照測試"></a>第 12 章 編寫快照測試</h2><p>快照測試的部分我其實沒有 follow 照著做一遍，我只有閱讀而已，他其實就是比較元件的輸出，將他快照起來，等到你下一次執行的時候再去跟快照比較，如果輸出的 Html 不一樣，就會測試失敗；如果是想要更新快照的話，必須要在加上參數<code>--updateSnapshot</code>，這會讓<code>jest</code>重寫測試失敗的快照文件，但這樣有風險，建議還是透過<code>--watch</code>執行測試，然後透過互動的方式輸入指令列的回應，來更新快照會是比較安全的方式。</p>
+<h2 id="第-13-章-測試服務端渲染"><a href="#第-13-章-測試服務端渲染" class="headerlink" title="第 13 章 測試服務端渲染"></a>第 13 章 測試服務端渲染</h2><p>略，因為工作上並不使用 SSR，後端都是直接用<code>asp.net mvc</code></p>
+<h2 id="第-14-章-編寫端到端測試"><a href="#第-14-章-編寫端到端測試" class="headerlink" title="第 14 章 編寫端到端測試"></a>第 14 章 編寫端到端測試</h2><p>略，關於 e2e 測試的部分先前已經用過<code>testcafe</code>、<code>cypress</code>，這些都是不錯的解決方案，這章節用的是<code>nightwatch</code>，除了工具的不同以外，其他的都差不多</p>
+<h2 id="Recap"><a href="#Recap" class="headerlink" title="Recap"></a>Recap</h2><p>看完書之後，也照著做了一次，覺得大部分的東西我都能看懂，但真的闔上書之後，面對著自己實務上的 production code，看著那滿坑滿谷的 component，我還是抓瞎了。其實這個時候就發現，念書學到的東西都只是告訴你基本的技巧跟觀念，但是甚麼時候該怎麼下手開幹又是另外一門學問跟經驗；好比水電師傅的三用電表跟老虎鉗，都會用也知道拿來幹嘛的，但碰到冷氣壞掉開始叫你維修的時候，面板拆開之後整個呆掉</p>
+<p>打開書本直接翻開目錄，首先印入眼簾的就是每章節的標題，看到一些關鍵字，重新再畫一下重點</p>
+<p><strong>CH3：渲染組件輸出測試</strong>，完美地解釋了我目前的窘境，碰到後再回來看，的確字字珠璣；如果是從無到有的話，可以動手在草稿上畫出元件的草圖，大概長什麼樣子，然後針對這個東西去發想。依照我現在的情況來看，我手上有已經開發完成的元件，所以我應該可以直接跳到最後一個步驟，釐清該元件的職責為何？如何釐清，我想就參考書本內的範例吧；列表的元件，碰到的第一個問題肯定都是資料從哪裡來？接著呈現畫面的時候就要看看一頁幾筆？或是不分頁？</p>
+<p>諸如此類的東西都是這個元件應該要做到的事情，接著我才能用後面學到的實務技巧，去測試這些項目</p>
+<ol>
+<li>渲染文本測試：元件有沒有正確的渲染文字訊息？</li>
+<li>測試 DOM 屬性：像是動態產生出來的連結是否有正確的設定好 href 屬性？</li>
+<li>測試組件數量：像是列表會呈現 20 筆資料，那我應該如何測試有沒有真的渲染 20 筆？</li>
+<li>測試 Props：子組件是否有正確接收到父元件給予的資料？</li>
+<li>測試 class、style：對於樣式是否有需要測試？</li>
+</ol>
+<p>甚麼時候要測試渲染的 component 輸出？</p>
+<ol>
+<li>輸出是動態產生的</li>
+<li>輸出是 component 契約的一部分</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/vue/" rel="tag"># vue</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/%E5%BF%83%E5%BE%97-Refactor-Tennis-Game-By-Baby-Step-in-Java/" rel="prev" title="心得-Refactor Tennis Game By Baby Step in Java">
+                  <i class="fa fa-angle-left"></i> 心得-Refactor Tennis Game By Baby Step in Java
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/language-understanding-intelligent-service/" rel="next" title="LUIS - 自然語言語意分析初學入門">
+                  LUIS - 自然語言語意分析初學入門 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

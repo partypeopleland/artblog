@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="用自己的方式理解觀察者模式，並嘗試撰寫 C# 範例程式碼說明">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ObServer Mode 觀察者模式">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/observer-mode/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="用自己的方式理解觀察者模式，並嘗試撰寫 C# 範例程式碼說明">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/observer-mode/1538719773_19433.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/observer-mode/1538732249_75848.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/observer-mode/1538732267_11974.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/observer-mode/1538732192_57713.png">
+<meta property="article:published_time" content="2018-10-05T01:56:50.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.170Z">
+<meta property="article:author" content="art">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/observer-mode/1538719773_19433.png">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/observer-mode/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/observer-mode/","path":"/observer-mode/","title":"ObServer Mode 觀察者模式"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ObServer Mode 觀察者模式 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/observer-mode/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ObServer Mode 觀察者模式 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ObServer Mode 觀察者模式
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2018-10-05 09:56:50" itemprop="dateCreated datePublished" datetime="2018-10-05T09:56:50+08:00">2018-10-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/pattern/" itemprop="url" rel="index"><span itemprop="name">pattern</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/observer-mode/" class="post-meta-item leancloud_visitors" data-flag-title="ObServer Mode 觀察者模式" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/observer-mode/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/observer-mode/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>用自己的方式理解觀察者模式，並嘗試撰寫 C# 範例程式碼說明</p>
+<span id="more"></span>
+
+<p>物件導向程式設計中通常都會遵循單一職責等設計原則，所以通常會有一個一個的物件負責處理某一件事情，而在撰寫開發的時候，通常就會在程式內去直接 new 物件實體出來，這就導致了程式相依於該物件實體，因為寫死在裡面了，動不了。</p>
+<p>舉例來說：在主程式內我們希望有一個 People，並且讓這個人去移動，程式碼如下</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Main</span></span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">Program</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> people = <span class="keyword">new</span> People(<span class="string">&quot;art&quot;</span>);</span><br><span class="line">        people.Move();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Lib</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">People</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> Name &#123; <span class="keyword">get</span>; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">People</span>(<span class="params"><span class="built_in">string</span> name</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Move</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> myCar = <span class="keyword">new</span> Car();</span><br><span class="line">        myCar.Drive(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">Car</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Drive</span>(<span class="params">People people</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Console.WriteLine(<span class="string">$&quot;<span class="subst">&#123;people.Name&#125;</span> Moving by car&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/artblog/observer-mode/1538719773_19433.png"></p>
+<p>這當然違反了開放封閉原則，未來如果你想要更換別的物件實體，就必須要重新去修改那一段寫死的程式，<strong>而且是要修改 Lib</strong> ，也因此，通常都會利用一些技巧，讓程式內不要出現 new 這件事情，而其中一種方法，就是透過注入的方式去處理</p>
+<p>將原本程式依賴某些物件的這個部分，把這個控制權從程式內部改為從外部傳進來，也就是<strong>程式依賴的物件實體改由注入取得</strong>。只要能夠達到這個目標，手段怎麼做那就是看情況、需求來調整，有透過建構式注入的，也有直接透過屬性注入的，當然也有透過方法來注入的。</p>
+<p>以上面的例子來說，我們在主程式內先將交通工具準備好，再把交通工具交給人，接著讓人去移動。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Main</span></span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">Program</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> car = <span class="keyword">new</span> Car();</span><br><span class="line">        <span class="keyword">var</span> people = <span class="keyword">new</span> People(<span class="string">&quot;art&quot;</span>);</span><br><span class="line">        people.Drive(car);</span><br><span class="line">        people.Move();</span><br><span class="line"></span><br><span class="line">        Console.ReadKey();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Lib</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">People</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> Car _myCar;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> Name &#123; <span class="keyword">get</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">People</span>(<span class="params"><span class="built_in">string</span> name</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Move</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        _myCar.Drive(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Drive</span>(<span class="params">Car car</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        _myCar = car;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Car</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Drive</span>(<span class="params">People people</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Console.WriteLine(<span class="string">$&quot;<span class="subst">&#123;people.Name&#125;</span> Moving by car&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第二個版本已經將交通工具，改由主程式建立，然後傳遞給人，所以也新增加了一個 Drive() 方法，讓交通工具先保存在 People 內，而等到 Move() 的時候，就直接調用剛才注入的交通工具來執行，所以產生依賴物件的控制權不再由 Move() 方法內直接實作，而是相依於外部注入的實體，這樣的行為我們就稱呼它叫做依賴注入</p>
+<p>當然還可以有更多的版本繼續走下去，還有很多要改善的地方，但是這個 part 我們只要先搞懂依賴注入是怎麼一回事就夠了</p>
+<hr>
+<p>接著我們換到另外一個情境，看看透過剛才學到的技巧，應該怎麼實作</p>
+<p>嗯，就繼續剛才的交通工具好了，現在的情況是這樣的，有一群小夥子在飆車，每一個飆車族手上都有個無線電，一開始飆車的時候，每個人都必須要先調整到同一個無線電的頻道，而飆車地點從無線電公布，這樣大家才聽得到。聽到了就會一窩蜂的往那邊飆過去，所以大概會有幾個類別：</p>
+<p>無線電：需要廣播飆車的地點 ( Notice )<br>飆車族：就是飆車的人，要能夠飆車 ( CrazyMove )，一開始需要先調整無線電的頻道<br>程式碼大概像是這樣</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Main</span></span><br><span class="line"><span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">Program</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> radio = <span class="keyword">new</span> Radio();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> man1 = <span class="keyword">new</span> FastMan(<span class="string">&quot;張三&quot;</span>, radio);</span><br><span class="line">        <span class="keyword">var</span> man2 = <span class="keyword">new</span> FastMan(<span class="string">&quot;李四&quot;</span>, radio);</span><br><span class="line"></span><br><span class="line">        radio.Notice(<span class="string">&quot;陽明山&quot;</span>);</span><br><span class="line">        Console.ReadKey();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Lib</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">FastMan</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="built_in">string</span> _name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> Radio _radio;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">FastMan</span>(<span class="params"><span class="built_in">string</span> name, Radio radio</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">this</span>._name = name;</span><br><span class="line">        <span class="keyword">this</span>._radio = radio;</span><br><span class="line">        _radio.SetRoger(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">CrazyMove</span>(<span class="params"><span class="built_in">string</span> place</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Console.WriteLine(<span class="string">$&quot;<span class="subst">&#123;_name&#125;</span> 接獲指示，飆車前往<span class="subst">&#123;place&#125;</span>...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Radio</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> List&lt;FastMan&gt; _list = <span class="keyword">new</span> List&lt;FastMan&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Notice</span>(<span class="params"><span class="built_in">string</span> place</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Console.WriteLine(<span class="string">$&quot;無線電傳來聲音：讓我們奮力奔向 <span class="subst">&#123;place&#125;</span> 吧!!&quot;</span>);</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">var</span> man <span class="keyword">in</span> _list)</span><br><span class="line">        &#123;</span><br><span class="line">            man.CrazyMove(place);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SetRoger</span>(<span class="params">FastMan fastMan</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        _list.Add(fastMan);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/artblog/observer-mode/1538732249_75848.png"></p>
+<p>這邊用到的技巧就是幾個物件導向的原則，合起來就達到了這個效果，在程式碼中只要先透過 Radio 宣布飆車地點，所有人就會接收到資訊，並做出相應的行為。</p>
+<p>把這個概念完善一點，調整頻道的動作，其實就是加入一個清單，離開頻道，就是從清單中移除；廣播通知的對象則依循清單中的名單處理；通知對象其實就是透過依賴注入的方式，將物件注入給 Radio；聽到的人具體要做甚麼行為，則是由聽到的自行決定；也因為不是所有人都喜歡飆車，說不定也有的人聽到之後的反應是繼續做自己的事情，所以程式碼為了要有彈性，應該要做一個介面，其他的人就實作這個介面，來實現具體的行為。</p>
+<p>調整一下程式碼</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Main</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> radio = <span class="keyword">new</span> Radio();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> man1 = <span class="keyword">new</span> FastMan(<span class="string">&quot;張三&quot;</span>, radio);</span><br><span class="line">    <span class="keyword">var</span> man2 = <span class="keyword">new</span> IdleMan(<span class="string">&quot;李四&quot;</span>, radio);</span><br><span class="line"></span><br><span class="line">    radio.Notice(<span class="string">&quot;陽明山&quot;</span>);</span><br><span class="line">    Console.ReadKey();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Lib </span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">IRadioKeeper</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">CrazyMove</span>(<span class="params"><span class="built_in">string</span> place</span>)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">IdleMan</span> : <span class="title">IRadioKeeper</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="built_in">string</span> _name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> Radio _radio;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">IdleMan</span>(<span class="params"><span class="built_in">string</span> name, Radio radio</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">this</span>._name = name;</span><br><span class="line">        <span class="keyword">this</span>._radio = radio;</span><br><span class="line">        _radio.SetRoger(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">CrazyMove</span>(<span class="params"><span class="built_in">string</span> place</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Console.WriteLine(<span class="string">$&quot;<span class="subst">&#123;_name&#125;</span> 接獲指示，站在原地發呆看著其他人飆車前往<span class="subst">&#123;place&#125;</span>...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Radio</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> List&lt;IRadioKeeper&gt; _list = <span class="keyword">new</span> List&lt;IRadioKeeper&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Notice</span>(<span class="params"><span class="built_in">string</span> place</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Console.WriteLine(<span class="string">$&quot;無線電傳來聲音：讓我們奮力奔向 <span class="subst">&#123;place&#125;</span> 吧!!&quot;</span>);</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">var</span> man <span class="keyword">in</span> _list)</span><br><span class="line">        &#123;</span><br><span class="line">            man.CrazyMove(place);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SetRoger</span>(<span class="params">IRadioKeeper fastMan</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        _list.Add(fastMan);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/artblog/observer-mode/1538732267_11974.png"></p>
+<p>那接著又如果張三想回家睡覺，不想要飆車了怎麼辦？所以我們要幫它做一個離開無線電頻道的方法，而因為這個方法不只張三用，李四可能也會用，所以我們應該將它放在介面，讓繼承的類別實作，實作細節就是呼叫 radio 的一個方法，讓廣播的對象清單移除掉。而 radio 類別，為了相依介面，我們也應該將它抽象成為介面、或是抽象類別</p>
+<p>最終程式碼在整理一下，大概會是這樣子，因為先前例子沒有寫得很好，順便把一些名稱重新命名了</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Main</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> radio = <span class="keyword">new</span> Radio();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> man1 = <span class="keyword">new</span> FastMan(<span class="string">&quot;張三&quot;</span>, radio);</span><br><span class="line">    <span class="keyword">var</span> man2 = <span class="keyword">new</span> IdleMan(<span class="string">&quot;李四&quot;</span>, radio);</span><br><span class="line"></span><br><span class="line">    radio.NoticeEverybody(<span class="string">&quot;陽明山&quot;</span>);</span><br><span class="line"></span><br><span class="line">    man1.LeaveRadio();</span><br><span class="line"></span><br><span class="line">    radio.NoticeEverybody(<span class="string">&quot;北海岸&quot;</span>);</span><br><span class="line"></span><br><span class="line">    Console.ReadKey();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Lib</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title">IRadioKeeper</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">UpdatePlace</span>(<span class="params"><span class="built_in">string</span> place</span>)</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">JoinRadio</span>()</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">LeaveRadio</span>()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">IdleMan</span> : <span class="title">IRadioKeeper</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="built_in">string</span> _name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> BaseRadio _baseRadio;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">IdleMan</span>(<span class="params"><span class="built_in">string</span> name, BaseRadio baseRadio</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">this</span>._name = name;</span><br><span class="line">        <span class="keyword">this</span>._baseRadio = baseRadio;</span><br><span class="line">        JoinRadio();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">UpdatePlace</span>(<span class="params"><span class="built_in">string</span> place</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Console.WriteLine(<span class="string">$&quot;<span class="subst">&#123;_name&#125;</span> 接獲指示，站在原地發呆看著其他人飆車前往<span class="subst">&#123;place&#125;</span>...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">JoinRadio</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        _baseRadio.JoinChannel(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">LeaveRadio</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        _baseRadio.LeaveChannel(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">FastMan</span> : <span class="title">IRadioKeeper</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="built_in">string</span> _name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> BaseRadio _baseRadio;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">FastMan</span>(<span class="params"><span class="built_in">string</span> name, BaseRadio baseRadio</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">this</span>._name = name;</span><br><span class="line">        <span class="keyword">this</span>._baseRadio = baseRadio;</span><br><span class="line">        JoinRadio();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">UpdatePlace</span>(<span class="params"><span class="built_in">string</span> place</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Console.WriteLine(<span class="string">$&quot;<span class="subst">&#123;_name&#125;</span> 接獲指示，飆車前往<span class="subst">&#123;place&#125;</span>...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">JoinRadio</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        _baseRadio.JoinChannel(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">LeaveRadio</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        _baseRadio.LeaveChannel(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Radio</span> : <span class="title">BaseRadio</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ChangePlace</span>(<span class="params"><span class="built_in">string</span> place</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        Console.WriteLine(<span class="string">$&quot;無線電傳來聲音：讓我們奮力奔向 <span class="subst">&#123;place&#125;</span> 吧!!&quot;</span>);</span><br><span class="line">        NoticeEverybody(place);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title">BaseRadio</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> List&lt;IRadioKeeper&gt; _list = <span class="keyword">new</span> List&lt;IRadioKeeper&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">NoticeEverybody</span>(<span class="params"><span class="built_in">string</span> place</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">var</span> man <span class="keyword">in</span> _list)</span><br><span class="line">        &#123;</span><br><span class="line">            man.UpdatePlace(place);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">JoinChannel</span>(<span class="params">IRadioKeeper man</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        _list.Add(man);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">LeaveChannel</span>(<span class="params">IRadioKeeper man</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        _list.Remove(man);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/observer-mode/1538732192_57713.png"></p>
+<p>好囉，我們剛才已經把觀察者模式實作完畢了，讓我們來看一下<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F">觀察者模式</a>的定義：<strong>一個目標物件管理所有相依於它的觀察者物件，並且在它本身的狀態改變時主動發出通知</strong></p>
+<p>所以我們除了<code>radio.NoticeEverbody(&quot;somewhere&quot;);</code> 的實作，沒有與 wiki 上的定義相符合，而是每一次都通知，但是實作模式切記不能生搬硬套，主要還是要看情境，你說不說的出來，為甚麼你要這樣寫，而不是怎樣怎樣。</p>
+<p>我當然可以說因為我的情境是飆車族、通知的方法是無線電，就像聊天室一樣我說甚麼就通知甚麼，不管我這次說的話跟上次說的話一不一樣都要通知。</p>
+<p>但如果我的情境不是這個，而是在一些伺服器的狀態更新之類的，那麼當然是我的狀態有更新，才需要發出 Request 給觀察者，所以就像 Bill 每次都會提到的獨孤九劍，沒有一定的形式，招要活學活使。</p>
+<p>透過上面的步驟，大概也能夠理解到設計模式其實都是用物件導向原則組合出來的，怎麼組合的或許每個人的作法都有一些不同，但重要的是目的與情境有沒有滿足。希望大家學習設計模式的時候不要看著圖生搬硬套，應該從目的著手，</p>
+<blockquote>
+<p>設計模式其實都是基於物件導向原則的一個實作出來的方式，只要達到目的，怎麼完成的方式其實並不重要</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/backup-restore-gitlab-service/" rel="prev" title="如何備份還原 GitLab 服務">
+                  <i class="fa fa-angle-left"></i> 如何備份還原 GitLab 服務
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/clean-code-architect/" rel="next" title="讀書心得-無暇的程式碼-整潔的軟體設計與架構篇">
+                  讀書心得-無暇的程式碼-整潔的軟體設計與架構篇 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

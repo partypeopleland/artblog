@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="這一篇主要在示範如何在 整合開發環境(Integrated Development Environment) 中，依據 ESLint 的規則設定，自動修復及格式化文件；並且於簽入 Git 版控之前，預先檢查 ESLINT 規則">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何在IDE中使用ESLint自動格式化文件">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/auto-format-file-with-eslint-in-ide/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="這一篇主要在示範如何在 整合開發環境(Integrated Development Environment) 中，依據 ESLint 的規則設定，自動修復及格式化文件；並且於簽入 Git 版控之前，預先檢查 ESLINT 規則">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/auto-format-file-with-eslint-in-ide/00.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/auto-format-file-with-eslint-in-ide/05.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/auto-format-file-with-eslint-in-ide/2020-04-21_17-37-50.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/auto-format-file-with-eslint-in-ide/2020-04-21_17-39-22.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/auto-format-file-with-eslint-in-ide/01.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/auto-format-file-with-eslint-in-ide/01-2.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/auto-format-file-with-eslint-in-ide/02.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/auto-format-file-with-eslint-in-ide/03.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/auto-format-file-with-eslint-in-ide/04.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/auto-format-file-with-eslint-in-ide/2020-04-21_18-04-23.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/auto-format-file-with-eslint-in-ide/2020-04-21_18-01-42.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/auto-format-file-with-eslint-in-ide/2020-05-12_10-19-16.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/auto-format-file-with-eslint-in-ide/2020-05-13_09-27-51.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/auto-format-file-with-eslint-in-ide/2020-05-13_09-55-05.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/auto-format-file-with-eslint-in-ide/2020-05-14_14-20-09.png">
+<meta property="article:published_time" content="2020-04-16T09:49:23.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.328Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="ESLint">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/auto-format-file-with-eslint-in-ide/00.png">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/auto-format-file-with-eslint-in-ide/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/auto-format-file-with-eslint-in-ide/","path":"/auto-format-file-with-eslint-in-ide/","title":"如何在IDE中使用ESLint自動格式化文件"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>如何在IDE中使用ESLint自動格式化文件 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ESLINT-%E7%B0%A1%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">ESLINT 簡介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ESLint-%E8%A8%AD%E5%AE%9A%E7%AF%84%E4%BE%8B%E5%8F%8A%E5%90%84-IDE-%E6%B8%AC%E8%A9%A6"><span class="nav-number">2.</span> <span class="nav-text">ESLint 設定範例及各 IDE 測試</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ESLint-%E8%A8%AD%E5%AE%9A%E7%AF%84%E4%BE%8B"><span class="nav-number">3.</span> <span class="nav-text">ESLint 設定範例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Environments-env"><span class="nav-number">3.1.</span> <span class="nav-text">Environments (env)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#extends"><span class="nav-number">3.2.</span> <span class="nav-text">extends</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#plugins"><span class="nav-number">3.3.</span> <span class="nav-text">plugins</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#parserOptions"><span class="nav-number">3.4.</span> <span class="nav-text">parserOptions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#parser"><span class="nav-number">3.5.</span> <span class="nav-text">parser</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#globals"><span class="nav-number">3.6.</span> <span class="nav-text">globals</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rules"><span class="nav-number">3.7.</span> <span class="nav-text">rules</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ESLint-%E8%A6%8F%E5%89%87%E8%A8%AD%E5%AE%9A"><span class="nav-number">4.</span> <span class="nav-text">ESLint 規則設定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ESLint-IDE-Support"><span class="nav-number">5.</span> <span class="nav-text">ESLint IDE Support</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Rider"><span class="nav-number">5.1.</span> <span class="nav-text">Rider</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VSCode"><span class="nav-number">5.2.</span> <span class="nav-text">VSCode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Visual-Studio-2019"><span class="nav-number">5.3.</span> <span class="nav-text">Visual Studio 2019</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%88%87-Git-Hook-%E6%95%B4%E5%90%88"><span class="nav-number">6.</span> <span class="nav-text">與 Git Hook 整合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9-pre-commit-sample"><span class="nav-number">6.1.</span> <span class="nav-text">修改 pre-commit.sample</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-husky-%E5%B7%A5%E5%85%B7%E4%BE%86%E8%99%95%E7%90%86-git-hooks"><span class="nav-number">6.2.</span> <span class="nav-text">使用 husky 工具來處理 git hooks</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%8F%E9%81%8E-lint-staged-%E5%8F%AA%E6%AA%A2%E6%9F%A5-staged-%E7%9A%84%E5%85%A7%E5%AE%B9"><span class="nav-number">6.3.</span> <span class="nav-text">透過 lint-staged 只檢查 staged 的內容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Git-GUI"><span class="nav-number">6.4.</span> <span class="nav-text">Git GUI</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/auto-format-file-with-eslint-in-ide/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="如何在IDE中使用ESLint自動格式化文件 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何在IDE中使用ESLint自動格式化文件
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2020-04-16 17:49:23" itemprop="dateCreated datePublished" datetime="2020-04-16T17:49:23+08:00">2020-04-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">工具</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/auto-format-file-with-eslint-in-ide/" class="post-meta-item leancloud_visitors" data-flag-title="如何在IDE中使用ESLint自動格式化文件" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/auto-format-file-with-eslint-in-ide/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/auto-format-file-with-eslint-in-ide/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>這一篇主要在示範如何在 整合開發環境(Integrated Development Environment) 中，依據 ESLint 的規則設定，自動修復及格式化文件；並且於簽入 Git 版控之前，預先檢查 ESLINT 規則</p>
+<span id="more"></span>
+
+<h2 id="ESLINT-簡介"><a href="#ESLINT-簡介" class="headerlink" title="ESLINT 簡介"></a>ESLINT 簡介</h2><p>關於 ESLint 的介紹可以直接瀏覽<a target="_blank" rel="noopener" href="https://cn.eslint.org/">網站說明</a><br>大致上就是能夠在開發程式的時候，提示你一些語法上的錯誤、或者是怎麼寫會比較好</p>
+<p>規則的設定，在官網就直接分成幾個區塊說明</p>
+<ol>
+<li>Possible Errors</li>
+<li>Best Practices</li>
+<li>Variables</li>
+<li>Node.js and CommonJS</li>
+<li>Stylistic Issues</li>
+<li>ECMAScript 6</li>
+</ol>
+<p>這些都可以自行定義是否啟用，整體來說就是一個協助你維持程式碼品質的工具</p>
+<p>所以第一步，要使用 ESLINT，就需要先在專案目錄安裝並進行設定</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">install eslint</span></span><br><span class="line">npm install eslint --save-dev</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">generate eslint config</span></span><br><span class="line">npx eslint --init</span><br></pre></td></tr></table></figure>
+
+<h2 id="ESLint-設定範例及各-IDE-測試"><a href="#ESLint-設定範例及各-IDE-測試" class="headerlink" title="ESLint 設定範例及各 IDE 測試"></a>ESLint 設定範例及各 IDE 測試</h2><p>範例使用到的規則可參考</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://cn.eslint.org/docs/rules/">ESLint</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.npmjs.com/package/eslint-plugin-react">eslint-plugin-react</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.npmjs.com/package/eslint-plugin-react-hooks">eslint-plugin-react-hooks</a></li>
+</ol>
+<h2 id="ESLint-設定範例"><a href="#ESLint-設定範例" class="headerlink" title="ESLint 設定範例"></a>ESLint 設定範例</h2><p>在專案根目錄的<code>.eslintrc</code>檔案進行設定如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">	<span class="attr">&quot;env&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">		<span class="attr">&quot;browser&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;amd&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;es6&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;node&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">	<span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="attr">&quot;extends&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;eslint:recommended&quot;</span><span class="punctuation">,</span> <span class="string">&quot;plugin:react/recommended&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">	<span class="attr">&quot;plugins&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;react&quot;</span><span class="punctuation">,</span> <span class="string">&quot;react-hooks&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">	<span class="attr">&quot;parserOptions&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">		<span class="attr">&quot;ecmaVersion&quot;</span><span class="punctuation">:</span> <span class="number">7</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;sourceType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;module&quot;</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;ecmaFeatures&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;jsx&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span> <span class="attr">&quot;modules&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span> <span class="punctuation">&#125;</span></span><br><span class="line">	<span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="attr">&quot;parser&quot;</span><span class="punctuation">:</span> <span class="string">&quot;babel-eslint&quot;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="attr">&quot;globals&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">		<span class="attr">&quot;React&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;ReactDOM&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;moment&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;$&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;_&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span></span><br><span class="line">	<span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">	<span class="attr">&quot;rules&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">		<span class="attr">&quot;no-extra-parens&quot;</span><span class="punctuation">:</span> <span class="string">&quot;error&quot;</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;react/jsx-filename-extension&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="number">1</span><span class="punctuation">,</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;extensions&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;.js&quot;</span><span class="punctuation">,</span> <span class="string">&quot;.jsx&quot;</span><span class="punctuation">]</span> <span class="punctuation">&#125;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;react-hooks/rules-of-hooks&quot;</span><span class="punctuation">:</span> <span class="string">&quot;error&quot;</span><span class="punctuation">,</span></span><br><span class="line">		<span class="attr">&quot;react-hooks/exhaustive-deps&quot;</span><span class="punctuation">:</span> <span class="string">&quot;warn&quot;</span></span><br><span class="line">	<span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Environments-env"><a href="#Environments-env" class="headerlink" title="Environments (env)"></a>Environments (env)</h3><p>表示程式碼運行的環境，通常這些環境都會有對應的一組全域變數；例如在<code>browser</code>環境下，預設就會有<code>window</code>、<code>document</code>可以用；而<code>jest</code>，也會預設該測是套件的一些全域變數是允許使用的，詳細清單可參考官網<a target="_blank" rel="noopener" href="https://cn.eslint.org/docs/user-guide/configuring#specifying-environments">說明</a></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;env&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;browser&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;amd&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;es6&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;node&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line"><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="extends"><a href="#extends" class="headerlink" title="extends"></a>extends</h3><p>撰寫 React 的 ESlint 設定，還需要安裝依賴的套件<code>ESLint-plugin-React</code>，再加上 ESLint 本身，所以就需要安裝下面這兩個套件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install eslint --save-dev</span><br><span class="line">npm install eslint-plugin-react --save-dev</span><br></pre></td></tr></table></figure>
+
+<p>因為要使用預設的官方推薦設定，以及開發 React，因此在 ESLint 設定要加上這一段來繼承這些設定</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;extends&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;eslint:recommended&quot;</span><span class="punctuation">,</span> <span class="string">&quot;plugin:react/recommended&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ol>
+<li><code>eslint:recommended</code>源自於<code>ESLint</code>套件</li>
+<li><code>plugin:react/recommended</code>源自於<code>eslint-plugin-react</code>套件</li>
+</ol>
+<p>至於<code>react-hook</code>，這裡沒有繼承<code>plugin:react-hooks/recommended</code>，而是在<code>rule</code>區段直接宣告 hook 的兩個規則</p>
+</blockquote>
+<h3 id="plugins"><a href="#plugins" class="headerlink" title="plugins"></a>plugins</h3><p>ESLint 所使用的外掛，可省略<code>eslint-plugin-</code>的前綴</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;plugins&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;react&quot;</span><span class="punctuation">,</span> <span class="string">&quot;react-hooks&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br></pre></td></tr></table></figure>
+
+<p>因此實際上專案的 ESLint 設定，使用了這兩個套件</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://www.npmjs.com/package/eslint-plugin-react">eslint-plugin-react</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.npmjs.com/package/eslint-plugin-react-hooks">eslint-plugin-react-hooks</a></li>
+</ol>
+<p>之所以要用這兩個套件，就是因為我們需要擴充 ESLint 的規則，讓他支援 React、還有 React Hook 的開發</p>
+<h3 id="parserOptions"><a href="#parserOptions" class="headerlink" title="parserOptions"></a>parserOptions</h3><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;parserOptions&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;ecmaVersion&quot;</span><span class="punctuation">:</span> <span class="number">7</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;sourceType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;module&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;ecmaFeatures&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;jsx&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span> <span class="attr">&quot;modules&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span> <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br></pre></td></tr></table></figure>
+
+<p>這一段的意思是說</p>
+<ol>
+<li>使用 EMCAScript 7 版本</li>
+<li>使用 module</li>
+<li>啟用<code>jsx</code></li>
+</ol>
+<h3 id="parser"><a href="#parser" class="headerlink" title="parser"></a>parser</h3><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;parser&quot;</span><span class="punctuation">:</span> <span class="string">&quot;babel-eslint&quot;</span><span class="punctuation">,</span></span><br></pre></td></tr></table></figure>
+
+<p>ESLint 經由這個解析器，來分析我們的程式與法；如果有使用<code>babel</code>，解析器就使用<code>babel-eslint</code></p>
+<h3 id="globals"><a href="#globals" class="headerlink" title="globals"></a>globals</h3><p>這個區段代表的是全域變數的部分，如果想要在程式碼中調用全域變數，就可以加在這裡。後方參數參照官網說明，因為歷史因素，採用 true 等價於<code>writable</code>；false 則是等價於<code>readonly</code>；這表示的是該全域變數是否允許被重新設定。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;globals&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;React&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;ReactDOM&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;moment&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;$&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;_&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span></span><br><span class="line"><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="rules"><a href="#rules" class="headerlink" title="rules"></a>rules</h3><p>規則區段，族繁不及備載，僅節錄部分示範</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;rules&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;react-hooks/rules-of-hooks&quot;</span><span class="punctuation">:</span> <span class="string">&quot;error&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;react-hooks/exhaustive-deps&quot;</span><span class="punctuation">:</span> <span class="string">&quot;warn&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>針對<code>react-hooks/rules-of-hooks</code>這一條規則，如果發生的時候，提示為<code>error</code>；另一條則提示<code>warn</code><br>可選的值為</p>
+<ol>
+<li>error：錯誤</li>
+<li>warn：警告</li>
+<li>off：忽略</li>
+</ol>
+<h2 id="ESLint-規則設定"><a href="#ESLint-規則設定" class="headerlink" title="ESLint 規則設定"></a>ESLint 規則設定</h2><p>因為我們的 Rule 設定是</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;no-extra-parens&quot;</span><span class="punctuation">:</span> <span class="string">&quot;error&quot;</span><span class="punctuation">,</span></span><br><span class="line"><span class="attr">&quot;react-hooks/rules-of-hooks&quot;</span><span class="punctuation">:</span> <span class="string">&quot;error&quot;</span><span class="punctuation">,</span></span><br></pre></td></tr></table></figure>
+
+<p>所以故意在下列的程式碼埋入不合規則的語法，預期ＩＤＥ應該會提示我們發生錯誤</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">let</span> b = <span class="number">2</span>;</span><br><span class="line"><span class="keyword">let</span> c = <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 這裡的括號是可以省略的</span></span><br><span class="line">a = (b * c);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在React Hook的規則裡面，不建議將useEffect放在判斷式裡面執行</span></span><br><span class="line"><span class="keyword">if</span> (<span class="number">1</span>===<span class="number">2</span>) &#123;</span><br><span class="line">    <span class="title function_">useEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// some code here ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>先透過指令測試一下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eslint step1.js</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/auto-format-file-with-eslint-in-ide/00.png"></p>
+<h2 id="ESLint-IDE-Support"><a href="#ESLint-IDE-Support" class="headerlink" title="ESLint IDE Support"></a>ESLint IDE Support</h2><p>在目前 IDE 裡面，個人最喜歡的順序如下</p>
+<ol>
+<li>Rider (需收費)</li>
+<li>VSCode (免費)</li>
+<li>VS2019 (社群版免費)</li>
+</ol>
+<p>一開始學習<code>ASP.Net</code>都是使用 VS2019 來開發 C#程式，或多或少都會碰到 javascript 檔案的開發需求，但 Visual Studio 系列其實用起來很難用，因此我都是以 VS2019 開發 C#、js 及 HTML 都是由 VSCode 處理，後來買了 Rider 授權，直接使用 Rider 作為日常開發主力，不論是 C#或是 js 都好用，除了個別功能還不熟悉、或是 Rider 尚不支援的，還是會開 VS2019 去做，大部分時間已經沒有在開 VS2019 了</p>
+<p>在這三種 IDE 裡面，都可以支援 ESLint 的設定，而且也可以透過設定讓 ESLint 自動修復不符合規則的程式碼</p>
+<h3 id="Rider"><a href="#Rider" class="headerlink" title="Rider"></a>Rider</h3><p>在 Rider 的部份也可正確顯示，即使是調整設定檔，ＩＤＥ也會即時變更顯示結果<br><img src="/artblog/auto-format-file-with-eslint-in-ide/05.png"></p>
+<p>關於設定的部分可參考官網<a target="_blank" rel="noopener" href="https://www.jetbrains.com/help/rider/Settings_JavaScript_Code_Quality_Tools_ESLint.html">說明</a></p>
+<p>在自動格式化的部份，好像沒有直接支援 ESLint 的文件格式化、修復，但是我們可以利用外部工具擴展來作到這件事情</p>
+<p>原理就是在 IDE 透過外部呼叫，執行<code>node.js</code>下的 eslint，並正確給予參數即可，因此需要確定 ESLint 安裝於全域、或者是專案內，這邊的範例採用專案內安裝，且為 Windows 系統，因此路徑直接指向專案底下的<code>/node_modules/.bin/eslint.cmd</code></p>
+<p>參數則是帶入<code>--fix &lt;檔案路徑名稱&gt;</code>，這邊有 Rider 提供的變數可供使用，點選旁邊的 Icon 可查看及預覽</p>
+<blockquote>
+<p>注意這邊檔案路徑要用雙引號包住</p>
+</blockquote>
+<p>最後工作目錄就以專案目錄為準，因此使用<code>$ContainRoot$</code></p>
+<p><img src="/artblog/auto-format-file-with-eslint-in-ide/2020-04-21_17-37-50.png"></p>
+<p>在使用上僅需要輸入熱鍵<code>Ctrl</code>+<code>Shift</code>+<code>A</code>，並輸入剛才設定的外部工具指令名稱<code>eslint</code>就可以在 Action 視窗中找到，執行該工具即可<br><img src="/artblog/auto-format-file-with-eslint-in-ide/2020-04-21_17-39-22.png"></p>
+<h3 id="VSCode"><a href="#VSCode" class="headerlink" title="VSCode"></a>VSCode</h3><p>於 VSCode 使用 ESLint 是最方便的，僅需要在 VSCode 安裝支援的套件即可<br><img src="/artblog/auto-format-file-with-eslint-in-ide/01.png"></p>
+<p>需要先安裝 VSCode 的套件 <code>ESLint</code>，然後就是設定儲存時自動格式化，或者是指定格式化的熱鍵<br>另外在外掛的設定中，有一項是儲存檔案時自動修正錯誤，一些比較簡單的錯誤可以直接幫你修掉<br><img src="/artblog/auto-format-file-with-eslint-in-ide/01-2.png"></p>
+<blockquote>
+<p>要注意的是如果有安裝多個 Formatter 外掛，如<code>prettier</code>，記得停用，然後重新將格式器選擇為 ESLint</p>
+</blockquote>
+<p>如此一來就可以即時在ＩＤＥ中看見 ESLINT 的規則已經生效，同時在輸出視窗也可以看到詳細的錯誤說明</p>
+<p><img src="/artblog/auto-format-file-with-eslint-in-ide/02.png"></p>
+<h3 id="Visual-Studio-2019"><a href="#Visual-Studio-2019" class="headerlink" title="Visual Studio 2019"></a>Visual Studio 2019</h3><p><img src="/artblog/auto-format-file-with-eslint-in-ide/03.png"><br>VS2019 的部份也可正確顯示錯誤，但實際測試卻發現，隨著我們變更<code>.eslintrc</code>檔案內的規則，IDE 並不會跟著即時變動，必須要整個關閉 VS2019 再重新開啟後，ＩＤＥ才能夠抓到最新的規則設定，目前暫不清楚是否有別的方式可即時更新</p>
+<p>另外 VS2019 中啟用&#x2F;關閉 ESLINT 功能，需要從 工具-&gt;選項，搜尋 ESLINT 即可</p>
+<p><img src="/artblog/auto-format-file-with-eslint-in-ide/04.png"></p>
+<p>預設情況之下，VS2019 吃的設定是全域的，在使用者目錄下的<code>.eslintrc</code>檔案，但如果專案目錄下有設定檔，他會優先吃專案目錄內的設定</p>
+<p>詳情可參考微軟 Github 頁面的<a target="_blank" rel="noopener" href="https://github.com/microsoft/JSTSdocs/blob/master/articles/editor/linting.md">說明</a></p>
+<p>VS2019 跟 Rider 一樣，也是透過外部工具的方式去呼叫，設定方式也大同小異</p>
+<p>透過<code>工具</code>-&gt;<code>外部工具</code>去設定<br><img src="/artblog/auto-format-file-with-eslint-in-ide/2020-04-21_18-04-23.png"></p>
+<p>要調用的話也是從 Menu 選擇，不清楚這邊有沒有更方便的執行方式，例如熱鍵什麼的。執行結果如下</p>
+<p><img src="/artblog/auto-format-file-with-eslint-in-ide/2020-04-21_18-01-42.png"></p>
+<h2 id="與-Git-Hook-整合"><a href="#與-Git-Hook-整合" class="headerlink" title="與 Git Hook 整合"></a>與 Git Hook 整合</h2><p>在使用 Git Commit 指令之前，透過 Git Hooks 的<code>Pre-Commit</code>來預先檢查是否通過<code>eslint</code>規則的檢查，如果通過才允許 Commit。</p>
+<h3 id="修改-pre-commit-sample"><a href="#修改-pre-commit-sample" class="headerlink" title="修改 pre-commit.sample"></a>修改 pre-commit.sample</h3><p>在專案目錄<code>.git/hooks</code>有預設的各種 hooks，將<code>pre-commit.sample</code>重新命名為<code>pre-commit</code>，並修改內容如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">STAGE_FILES=$(git diff --cached --name-only --diff-filter=ACM -- &#x27;*.js&#x27;)</span><br><span class="line">if test $&#123;#STAGE_FILES&#125; -gt 0</span><br><span class="line">then</span><br><span class="line">	echo &#x27;開始eslint檢查&#x27;</span><br><span class="line"></span><br><span class="line">	which eslint &amp;&gt; /dev/null</span><br><span class="line">	if [[ &quot;$?&quot; == 1 ]]; then</span><br><span class="line">		echo &#x27;沒安裝eslint&#x27;</span><br><span class="line">		exit 1</span><br><span class="line">	fi</span><br><span class="line"></span><br><span class="line">	PASS=true</span><br><span class="line"></span><br><span class="line">	for FILE in $STAGE_FILES</span><br><span class="line">	do</span><br><span class="line">		eslint $FILE</span><br><span class="line">		if [[ &quot;$?&quot; == 1 ]]; then</span><br><span class="line">  	  PASS=false</span><br><span class="line">  	fi</span><br><span class="line">  done</span><br><span class="line"></span><br><span class="line">  if ! $PASS; then</span><br><span class="line">	  echo &quot;eslint檢查沒通過！&quot;</span><br><span class="line">	  exit 1</span><br><span class="line">  else</span><br><span class="line">	  echo &quot;eslint檢查完畢&quot;</span><br><span class="line">  fi</span><br><span class="line"></span><br><span class="line">else</span><br><span class="line">	echo &#x27;沒有js檔案需要檢查&#x27;</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">exit 0</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>hooks 程式碼取自：<a target="_blank" rel="noopener" href="https://juejin.im/post/5addeb48518825672a028a3b">git hooks 之——pre-commit</a></p>
+</blockquote>
+<p>如果出現錯誤，可參考<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/20609816/git-pre-commit-hook-not-running-on-windows/31872301">Git pre-commit hook not running on windows</a></p>
+<ol>
+<li>第一行加上宣告<code>#!/bin/bash</code></li>
+<li>修改<code>pre-commit</code>權限：於 Git bash 介面下於 hooks 目錄執行<code>chmod +x pre-commit</code></li>
+</ol>
+<p>透過上述的步驟，可以在<code>Git Commit</code>指令的時候，觸發 pre-commit，進行<code>eslint</code>檢查<br><img src="/artblog/auto-format-file-with-eslint-in-ide/2020-05-12_10-19-16.png"></p>
+<p>但是通過<code>pre-commit</code>來檢查的這個動作，我們是沒有辦法強制其他人在他們自己的 repository 做這件事情的，因為 git 的觀念就是分散式版控，大家都有自己的 repository，自己的 repository 其實不應該受到別人的 Hook 影響。</p>
+<p>所以如果要團隊使用，建議還是另外建立一個新目錄，並請團隊成員手動執行 copy 的動作，或者是將複製指令寫在 package.json，直接執行也可以</p>
+<p>GitHub：<a target="_blank" rel="noopener" href="https://github.com/art-Blog/git-hook-pre-commit">Git Hook Sample</a></p>
+<h3 id="使用-husky-工具來處理-git-hooks"><a href="#使用-husky-工具來處理-git-hooks" class="headerlink" title="使用 husky 工具來處理 git hooks"></a>使用 husky 工具來處理 git hooks</h3><p>雖然上述的方法可以滿足需求，但是對於團隊開發的確是蠻不友善的，而且還要把 Git Hooks 的檔案放到 respoitory 裡面，感覺是有點怪怪的</p>
+<p>透過 husky 這個工具可以很好的幫我們處理掉這件事情，安裝套件的時候，他會在 git hooks 目錄下建立檔案，如果已經存在的 hook 會略過<br>設定方式也很簡單，只要先定義好各個 hook 要做的指令，在建立好<code>husky</code>的設定區段即可，參考下面範例，在 Git Commit 的時候他會先執行我們設定的<code>npm run lint</code>，如果有錯誤的話就會拒絕 commit 了</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;lint&quot;</span><span class="punctuation">:</span> <span class="string">&quot;eslint src&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line"><span class="attr">&quot;husky&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;hooks&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;pre-commit&quot;</span><span class="punctuation">:</span> <span class="string">&quot;npm run lint&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/auto-format-file-with-eslint-in-ide/2020-05-13_09-27-51.png"></p>
+<p>GitHub：<a target="_blank" rel="noopener" href="https://github.com/art-Blog/git-hook-pre-commit/tree/husky">Git Hook Sample Husky Branch</a></p>
+<h3 id="透過-lint-staged-只檢查-staged-的內容"><a href="#透過-lint-staged-只檢查-staged-的內容" class="headerlink" title="透過 lint-staged 只檢查 staged 的內容"></a>透過 lint-staged 只檢查 staged 的內容</h3><p>上面的作法每一次都會檢查我們指定的所有的檔案，但我其實只想要檢查有修改的檔案就好；那麼<a target="_blank" rel="noopener" href="https://github.com/okonet/lint-staged">lint-staged</a>就可以幫我們做到這件事情</p>
+<p>在專案根目錄下執行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npx mrm lint-staged</span><br></pre></td></tr></table></figure>
+
+<p>他會幫我們安裝好套件，並修改好 package.json 的設定</p>
+<p><img src="/artblog/auto-format-file-with-eslint-in-ide/2020-05-13_09-55-05.png"></p>
+<h3 id="Git-GUI"><a href="#Git-GUI" class="headerlink" title="Git GUI"></a>Git GUI</h3><p>因為<code>Husky</code>基本上也是基於<code>Git Hooks</code>的機制來處理，所以只要是一般的 Git GUI 軟體應該都支援才是。<br>這邊就只有測試<code>Fork</code>這套軟體了，其他的軟體就不再測試囉<br><img src="/artblog/auto-format-file-with-eslint-in-ide/2020-05-14_14-20-09.png"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/ESLint/" rel="tag"># ESLint</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/docker-registry/" rel="prev" title="如何建立自己的 docker registry">
+                  <i class="fa fa-angle-left"></i> 如何建立自己的 docker registry
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/Hangfire-%E5%88%9D%E5%AD%B8/" rel="next" title="Hangfire 初學">
+                  Hangfire 初學 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

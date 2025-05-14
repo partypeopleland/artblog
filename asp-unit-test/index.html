@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="希望能透過這一篇文章，至少Demo出來怎麼樣透過ASP來做單元測試。謹以此篇獻給還在與ASP奮鬥的朋友們。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ASP單元測試">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/asp-unit-test/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="希望能透過這一篇文章，至少Demo出來怎麼樣透過ASP來做單元測試。謹以此篇獻給還在與ASP奮鬥的朋友們。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/asp-unit-test/1531980223_83966.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/asp-unit-test/1531981358_6975.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/asp-unit-test/1531981493_93424.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/asp-unit-test/1531983217_57269.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/asp-unit-test/1531983320_196.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/asp-unit-test/1531983488_40284.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/asp-unit-test/1531983501_81272.png">
+<meta property="article:published_time" content="2018-07-18T23:21:18.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.160Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="asp">
+<meta property="article:tag" content="unittest">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/asp-unit-test/1531980223_83966.png">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/asp-unit-test/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/asp-unit-test/","path":"/asp-unit-test/","title":"ASP單元測試"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ASP單元測試 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E5%A2%9E%E6%B8%AC%E8%A9%A6%E7%A8%8B%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">新增測試程式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AA%BF%E6%95%B4%E6%B8%AC%E8%A9%A6%E7%A8%8B%E5%BC%8F%EF%BC%8C%E4%BD%BF%E5%85%B6%E5%8F%AF%E4%BB%A5%E9%81%8B%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">調整測試程式，使其可以運作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%96%8B%E5%A7%8B%E8%AA%8D%E7%9C%9F%E6%92%B0%E5%AF%AB%E7%AC%AC%E4%B8%80%E5%80%8B%E6%B8%AC%E8%A9%A6%E7%A8%8B%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text">開始認真撰寫第一個測試程式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%BB%9E%E4%BA%AE%E7%AC%AC%E4%B8%80%E5%80%8B%E7%B6%A0%E7%87%88"><span class="nav-number">4.</span> <span class="nav-text">點亮第一個綠燈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E6%A7%8B"><span class="nav-number">5.</span> <span class="nav-text">重構</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A0%E5%85%A5%E6%9C%83%E5%93%A1%E6%89%93%E6%8A%98%E7%9A%84%E8%A6%8F%E5%89%87"><span class="nav-number">6.</span> <span class="nav-text">加入會員打折的規則</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/asp-unit-test/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ASP單元測試 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ASP單元測試
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2018-07-19 07:21:18" itemprop="dateCreated datePublished" datetime="2018-07-19T07:21:18+08:00">2018-07-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/%E6%B8%AC%E8%A9%A6/" itemprop="url" rel="index"><span itemprop="name">測試</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/asp-unit-test/" class="post-meta-item leancloud_visitors" data-flag-title="ASP單元測試" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/asp-unit-test/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/asp-unit-test/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>希望能透過這一篇文章，至少Demo出來怎麼樣透過ASP來做單元測試。謹以此篇獻給還在與ASP奮鬥的朋友們。</p>
+<span id="more"></span>
+
+<p>我們直接進入正題吧。</p>
+<p>假設前端網站現在有一個購物車，使用者購買了好幾樣商品，每一樣商品都有它的價格；為了簡化範例，基本的屬性不會太多，但是真實世界的需求肯定是複雜許多，在這邊我們為了簡化範例，只挑重點的部分，也就是商品的名稱、價格及數量。前端的部分今天不談，我們專注在後端的部分。也就是今天的主題：ASP</p>
+<p>小明是個苦逼的碼農，對未來沒有什麼期待，每天的樂趣除了跟客服拉低賽以外，剩下的就是在每個月的發薪日，拿薪水犒勞自己的汗水跟淚水。今天在購物網站看到了好幾樣商品，情不自禁的就給他刷卡買下去了，我們來看一下小明買了甚麼東西。</p>
+<ol>
+<li>任天堂 Nintendo Switch 藍紅手把組，單價9780 x 1</li>
+<li>OSIM按摩椅，單價12800 x 1</li>
+<li>柔韌潔淨抽取衛生紙100抽(8包x8串&#x2F;箱)，單價820 x 1<br>嗯，看來小明壓力很大，我們也不要糾結商品了，想小明要買甚麼東西還花了我10分鐘。總之就是這樣了。</li>
+</ol>
+<p>所以這三樣東西小明應該要付的錢是多少呢？9780 + 12800 + 820 &#x3D; 23400<br>OKAY，那就開始我們的第一個測試程式吧….</p>
+<p>好像忘了先說，我們在ASP可以透過ASPUNIT來做單元測試，我也是找了很久才找到這一套還可以用的，然後，抱歉我真的忘了出處在哪裡，畢竟是好多年前找到的東西。之前找到的時候有順便調整了一下，把訊息改成我比較喜歡的，然後改來改去，我發現原始版本忘了放哪邊了，好了，閒話到這邊，最終這篇文章的程式會放在GitHub，有興趣請自取。</p>
+<blockquote>
+<p>aspunit單元測試框架必須要先架在IIS上面讓他先跑起來，這次的練習中，瀏覽器網址填入的路徑就指向&#x2F;test&#x2F;go.asp。</p>
+</blockquote>
+<h2 id="新增測試程式"><a href="#新增測試程式" class="headerlink" title="新增測試程式"></a>新增測試程式</h2><p>因為打算要做的是購物車的價格計算，預期的Service類別應該就叫做Cart，這個類別將負責計算商品價格總價，所以我們就分別在Services目錄下建立一個Cart.asp，然後再Test目錄下建立一個CartTest.asp吧。</p>
+<figure class="highlight vb"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&#x27; /Test/CartTest.asp</span></span><br><span class="line">&lt;!-- #include virtual=<span class="string">&quot;/Services/Cart.asp&quot;</span> --&gt;</span><br><span class="line">&lt;%</span><br><span class="line"><span class="keyword">Class</span> CartTest <span class="comment">&#x27; Extends TestCase</span></span><br><span class="line">    <span class="keyword">Private</span> target</span><br><span class="line">    <span class="keyword">Public</span> <span class="keyword">Function</span> TestCaseNames()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">Function</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">Public</span> <span class="keyword">Sub</span> SetUp()</span><br><span class="line">    <span class="keyword">set</span> target = <span class="built_in">new</span> Cart</span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">Sub</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">Public</span> <span class="keyword">Sub</span> TearDown()</span><br><span class="line">    <span class="keyword">Set</span> target = <span class="literal">Nothing</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">Sub</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">Public</span> <span class="keyword">Sub</span> AddNumberTest(oTestResult)</span><br><span class="line">    <span class="comment">&#x27;oTestResult.AssertEquals expected, actual</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">Sub</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Class</span></span><br><span class="line">%&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">&#x27;/Services/Cart.asp</span></span><br><span class="line">&lt;%</span><br><span class="line"><span class="keyword">Class</span> Cart </span><br><span class="line">    <span class="keyword">Private</span> <span class="keyword">Sub</span> Class_Initialize()</span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">Sub</span> </span><br><span class="line">    <span class="keyword">Private</span> <span class="keyword">Sub</span> Class_Terminate()</span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">Sub</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">Public</span> <span class="keyword">Default</span> <span class="keyword">function</span> Init()</span><br><span class="line">        <span class="keyword">Set</span> Init = <span class="keyword">Me</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">function</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Class</span></span><br><span class="line">%&gt;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="調整測試程式，使其可以運作"><a href="#調整測試程式，使其可以運作" class="headerlink" title="調整測試程式，使其可以運作"></a>調整測試程式，使其可以運作</h2><p>習慣上我會將asp的class基本語法以及常用的東西放在snippet裡面，因為asp沒有intellisense可以用，還是不要考驗自己的記憶力吧。而為了測試框架是否真的可以用，我會先讓他可以正常運作，之後才會開始開發。</p>
+<p>而為了在asp環境偵錯，我也會先把框架的On Error Resume Next語法給註解掉，這樣在撰寫過程中真的有錯誤的話，可以直接透過IIS設定，將錯誤顯示在瀏覽器上，從而找到是哪一段出錯。</p>
+<p><img src="/artblog/asp-unit-test/1531980223_83966.png"></p>
+<h2 id="開始認真撰寫第一個測試程式"><a href="#開始認真撰寫第一個測試程式" class="headerlink" title="開始認真撰寫第一個測試程式"></a>開始認真撰寫第一個測試程式</h2><p>藉由TDD的概念，首先我們要先想好，我們期望未來Client端應該怎麼使用我們的程式。當然一定是越簡單越好，一看就知道怎麼用，然後很清楚明白這樣。</p>
+<figure class="highlight vb"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Public</span> <span class="keyword">Sub</span> ProductsShouldPay_23400(oTestResult)</span><br><span class="line">    <span class="keyword">dim</span> productA : <span class="keyword">set</span> productA = (<span class="built_in">new</span> Product)(<span class="string">&quot;任天堂 Nintendo Switch 藍紅手把組&quot;</span>, <span class="number">9780</span>, <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">dim</span> productB : <span class="keyword">set</span> productB = (<span class="built_in">new</span> Product)(<span class="string">&quot;OSIM按摩椅&quot;</span>, <span class="number">12800</span>, <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">dim</span> productC : <span class="keyword">set</span> productC = (<span class="built_in">new</span> Product)(<span class="string">&quot;柔韌潔淨抽取衛生紙100抽(8包x8串/箱)&quot;</span>, <span class="number">820</span>, <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">dim</span> products : products = Array(productA, productB, productC)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">dim</span> actual : actual = <span class="number">23400</span></span><br><span class="line">    <span class="keyword">dim</span> expected : expected = target.ShouldPay(products)</span><br><span class="line">    oTestResult.AssertEquals expected, actual</span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
+<p>我們用到了一個商品類別(Product)，透過建構式注入了商品的名稱、單價及數量，接著將牠放到陣列裡面全部塞給購物車，最後購物車應該要付23400塊錢。</p>
+<p>因為用到了一個還不存在的商品類別，所以我們需要設計一下這個資料傳輸物件類別，讓測試程式能正常運行，順便將Service的ShouldPay()直接回傳0，讓他出現第一個紅燈。</p>
+<figure class="highlight vb"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Class</span> Product </span><br><span class="line">    <span class="keyword">public</span> Name     <span class="comment">&#x27;名稱</span></span><br><span class="line">    <span class="keyword">public</span> Price    <span class="comment">&#x27;單價</span></span><br><span class="line">    <span class="keyword">public</span> Qty      <span class="comment">&#x27;數量</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">Private</span> <span class="keyword">Sub</span> Class_Initialize()</span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">Sub</span> </span><br><span class="line">    <span class="keyword">Private</span> <span class="keyword">Sub</span> Class_Terminate()</span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">Sub</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">Public</span> <span class="keyword">Default</span> <span class="keyword">function</span> Init(productName, productPrice, productQty)</span><br><span class="line">        Name = productName</span><br><span class="line">        Price = productPrice</span><br><span class="line">        Qty = productQty</span><br><span class="line">        <span class="keyword">Set</span> Init = <span class="keyword">Me</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">function</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Class</span></span><br></pre></td></tr></table></figure>
+<p><img src="/artblog/asp-unit-test/1531981358_6975.png"></p>
+<h2 id="點亮第一個綠燈"><a href="#點亮第一個綠燈" class="headerlink" title="點亮第一個綠燈"></a>點亮第一個綠燈</h2><figure class="highlight vb"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">function</span> ShouldPay(products)</span><br><span class="line">    <span class="keyword">dim</span> result : result = <span class="number">0</span></span><br><span class="line">    <span class="keyword">dim</span> prod : <span class="keyword">for</span> <span class="keyword">each</span> prod <span class="keyword">in</span> products</span><br><span class="line">        result = result + ( prod.Price * prod.Qty )</span><br><span class="line">    <span class="keyword">next</span></span><br><span class="line">    ShouldPay = result</span><br><span class="line"><span class="keyword">end</span> <span class="keyword">function</span></span><br></pre></td></tr></table></figure>
+<p><img src="/artblog/asp-unit-test/1531981493_93424.png"></p>
+<blockquote>
+<p>TDD的概念雖然有一個BabyStep的部分，照理說我不應該在這一個測試就直接寫成單價乘數量加總，因為測試案例中並沒有體現這一點。不過當你如果很熟悉的話，自然這個步伐可以稍微的跨大一點。所以，在TDD開發中，測試案例的撰寫是一個非常重要的學問，因為每個測試案例都應該是一個關鍵的情境，關於這個有一本書很推薦 驗收測試驅動開發 ATDD實例詳解。</p>
+</blockquote>
+<h2 id="重構"><a href="#重構" class="headerlink" title="重構"></a>重構</h2><p>剛剛測試程式那邊在產生假資料的時候還在用productABC，最後還要用一個Array把它串再一起。如果東西很多我不就看的很累？所以我決定把它抽象出來，主要的程式就保留意圖就好。</p>
+<figure class="highlight vb"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Public</span> <span class="keyword">Sub</span> ProductsShouldPay_23400(oTestResult)</span><br><span class="line">    <span class="keyword">dim</span> products : products = GetWantedProducts()</span><br><span class="line">    <span class="keyword">dim</span> actual : actual = <span class="number">23400</span></span><br><span class="line">    <span class="keyword">dim</span> expected : expected = target.ShouldPay(products)</span><br><span class="line">    oTestResult.AssertEquals expected, actual</span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">function</span> GetWantedProducts()</span><br><span class="line">    <span class="keyword">dim</span> result() : <span class="keyword">redim</span> result(-<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">ReDim</span> <span class="keyword">Preserve</span> result(UBound(result) + <span class="number">1</span>) : <span class="keyword">set</span> result(UBound(result)) = (<span class="built_in">new</span> Product)(<span class="string">&quot;任天堂 Nintendo Switch 藍紅手把組&quot;</span>, <span class="number">9780</span>, <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">ReDim</span> <span class="keyword">Preserve</span> result(UBound(result) + <span class="number">1</span>) : <span class="keyword">set</span> result(UBound(result)) = (<span class="built_in">new</span> Product)(<span class="string">&quot;OSIM按摩椅&quot;</span>, <span class="number">12800</span>, <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">ReDim</span> <span class="keyword">Preserve</span> result(UBound(result) + <span class="number">1</span>) : <span class="keyword">set</span> result(UBound(result)) = (<span class="built_in">new</span> Product)(<span class="string">&quot;柔韌潔淨抽取衛生紙100抽(8包x8串/箱)&quot;</span>, <span class="number">820</span>, <span class="number">1</span>)</span><br><span class="line">    GetWantedProducts = result</span><br><span class="line"><span class="keyword">end</span> <span class="keyword">function</span></span><br></pre></td></tr></table></figure>
+
+<p>重構完畢，測試看看有沒有問題。這個步驟很重要喔，改壞了馬上就知道。</p>
+<h2 id="加入會員打折的規則"><a href="#加入會員打折的規則" class="headerlink" title="加入會員打折的規則"></a>加入會員打折的規則</h2><p>我們接下來來模擬一個需求，如果客戶是VIP會員的話，那就打八折吧。</p>
+<p>我希望在計算的時候從外面傳入參數，直接告訴我會員的身份。而不用建構式注入的方式給購物車，這樣子購物車就不會跟會員身份綁在一起。萬一哪一天要做兩種價格的呈現讓使用者一次看到，喔，原來我如果是VIP會員的話，我比一般會員節省了多少錢這樣。。。。這樣子的話我只要呼叫兩次方法，而不用建立兩個Cart的instance</p>
+<p>這邊因為沒有C#的Enum可以用，我們還是用傳統的字串來表明身份吧。同時因為我們以前的情境也不可以壞掉，所以我會再補上一個測試案例給VIP，而一般會員與VIP的測試案例，在呼叫Cart.ShouldPay的時候，因為簽章方法需要額外的會員身份，所以也要跟著改。很重要的一點是，既然加入了一些新的變因，原先的測試案例名稱好像也顯得不合時宜，需要一併調整。</p>
+<p><img src="/artblog/asp-unit-test/1531983217_57269.png"><br><img src="/artblog/asp-unit-test/1531983320_196.png"></p>
+<p>第二個紅燈出現，讓我們來消滅它吧。</p>
+<p><img src="/artblog/asp-unit-test/1531983488_40284.png"></p>
+<p><img src="/artblog/asp-unit-test/1531983501_81272.png"></p>
+<p>到這邊為止，大概就是Demo一下如何在ASP裡面也可以透過單元測試來保護你的程式。</p>
+<p>當然這個範例還可以繼續玩下去，玩得很誇張，把一些設計模式加入進來，例如用策略模式來替換掉ShouldPay裡面的演算法。但是我現在這篇文章已經打了三小時，肚子很餓了。</p>
+<p>以後有衝動再寫吧。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/asp/" rel="tag"># asp</a>
+              <a href="/artblog/tags/unittest/" rel="tag"># unittest</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/about-software-development/" rel="prev" title="軟體開發這件事">
+                  <i class="fa fa-angle-left"></i> 軟體開發這件事
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/use-nvm-to-manage-node-js-versions/" rel="next" title="使用 nvm 管理 node.js 版本">
+                  使用 nvm 管理 node.js 版本 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

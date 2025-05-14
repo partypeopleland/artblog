@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="視覺化之後的表格，應該怎麼去解讀，這個應該是未來所有人必備的常識了就像是英文、法文一樣，人家看得懂，會寫，就是會比你有更多的資訊，對於溝通能力也會有幫助透過今天研討會的主題分享，講師在課堂上、投影片中不斷給予的觀念與技巧相信對於網站開發者而言，要了解使用者的行為、依據這些資訊做出決策，將不再是遙不可及的事">
+<meta property="og:type" content="article">
+<meta property="og:title" content="twMVC 25 研討會心得">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/twmvc-25/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="視覺化之後的表格，應該怎麼去解讀，這個應該是未來所有人必備的常識了就像是英文、法文一樣，人家看得懂，會寫，就是會比你有更多的資訊，對於溝通能力也會有幫助透過今天研討會的主題分享，講師在課堂上、投影片中不斷給予的觀念與技巧相信對於網站開發者而言，要了解使用者的行為、依據這些資訊做出決策，將不再是遙不可及的事">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2017-02-11T09:05:57.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.156Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="twmvc">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/twmvc-25/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/twmvc-25/","path":"/twmvc-25/","title":"twMVC 25 研討會心得"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>twMVC 25 研討會心得 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E7%A8%8B%E5%B8%AB%E7%9A%84%E7%AC%AC%E4%B8%80%E5%A0%82%E8%B3%87%E6%96%99%E8%AA%B2%E4%B9%8B%E6%AF%AB%E7%84%A1%E7%BE%8E%E6%84%9F%E4%B9%9F%E5%8F%AF%E4%BB%A5%E7%8E%A9%E8%A6%96%E8%A6%BA%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text">工程師的第一堂資料課之毫無美感也可以玩視覺化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ASP-NET-MVC-A-B-Testing-%E7%9A%84%E7%9C%89%E7%9C%89%E8%A7%92%E8%A7%92"><span class="nav-number">2.</span> <span class="nav-text">ASP.NET MVC A&#x2F;B Testing 的眉眉角角</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/twmvc-25/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="twMVC 25 研討會心得 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          twMVC 25 研討會心得
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2017-02-11 17:05:57" itemprop="dateCreated datePublished" datetime="2017-02-11T17:05:57+08:00">2017-02-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/%E5%BF%83%E5%BE%97/" itemprop="url" rel="index"><span itemprop="name">心得</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/twmvc-25/" class="post-meta-item leancloud_visitors" data-flag-title="twMVC 25 研討會心得" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/twmvc-25/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/twmvc-25/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>視覺化之後的表格，應該怎麼去解讀，這個應該是未來所有人必備的常識了<br>就像是英文、法文一樣，人家看得懂，會寫，就是會比你有更多的資訊，對於溝通能力也會有幫助<br>透過今天研討會的主題分享，講師在課堂上、投影片中不斷給予的觀念與技巧<br>相信對於網站開發者而言，要了解使用者的行為、依據這些資訊做出決策，將不再是遙不可及的事</p>
+<span id="more"></span>
+
+<p>前陣子因為時間上剛好都衝到沒辦法參加，所以這一次 twMVC#25 一出來<br>確定當天行程是有空的，立刻就報名了</p>
+<p>這一次的主題，可能是因為平常對這些東西就比較沒概念，聽到就比較沒有感覺<br>因為不明白這些東西是做甚麼的，其實今天是抱著增廣見聞的心態去參加研討會</p>
+<h2 id="工程師的第一堂資料課之毫無美感也可以玩視覺化"><a href="#工程師的第一堂資料課之毫無美感也可以玩視覺化" class="headerlink" title="工程師的第一堂資料課之毫無美感也可以玩視覺化"></a>工程師的第一堂資料課之毫無美感也可以玩視覺化</h2><p>這是一位新的講師 Mia，講師的背景似乎是從學校就是學資料探勘、分析的專業，授課的內容也是跟這有關<br>一開始講師提到的很重要的是：如何問問題(畫甚麼)，接著在後續又提到【角色】這件事情。<br>這不就是跟需求訪談一樣，你一定要先知道客戶要解決什麼問題、達成甚麼目標，你才能開始分析規劃怎麼做<br>而要將資料視覺化呈現，不就也要先弄清楚這一件事情，所表達出來的圖像，想要告訴使用者甚麼資訊？</p>
+<p>這邊講師分享了他的經驗，我覺得這個很重要，雖然不知道有沒有曲解了講師的意思，但我是這樣理解的<br>資料視覺化最終呈現的有兩個類型：Dashboard 跟 Report。</p>
+<ol>
+<li>Dashboard：需要在即時、當下針對數據來做出決策，(講師用了開車的儀表板當例子，很貼切)</li>
+<li>Report：講師舉例，也許你今天有 100 個人跑去 QA，最終只有 4 個人下訂，這代表什麼呢？</li>
+</ol>
+<p>是不是你的商品不夠清楚，QA 完畢之後才發現商品不是顧客所要的。所以就喪失掉這部分的轉換率<br>當你以不同的角色去解讀同一份 Dataset，要解決的問題都不同，所以要看的圖表也不一樣。<br>透過講師整理出來的資料視覺化步驟，分析、掌握這些資料相信不會再是難事，當然也有提到實作方式及步驟<br>不過這個部分還是看 slide 會比較清楚 (傳送門：<a target="_blank" rel="noopener" href="https://doc.co/NzLcKM">twMVC#25 工程師的第一堂資料課之毫無美感也可以玩視覺化</a>)</p>
+<p>課程最後有附上一位資料視覺化的先驅，在資料視覺化還沒這麼盛行的時候，他就已經在 TED 上面分享的影片<br>(傳送門：<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=jbkSRLYSojo">Hans Rosling’s 200 Countries, 200 Years, 4 Minutes - The Joy of Stats - BBC Four</a>)</p>
+<p>其實這些東西沒人講之前都是模模糊糊的存在腦子裏面，經過有系統的說明之後，我覺得更能夠掌握這些東西<br>再加上今天介紹的工具，不管是講師提到的 Microsoft Sanddance 或是 Demo 補充的 POWER BI<br>這些對於我都是全新的東西，很期待未來有機會可以在工作上應用，或者是說，有機會自己拿來玩一下</p>
+<h2 id="ASP-NET-MVC-A-B-Testing-的眉眉角角"><a href="#ASP-NET-MVC-A-B-Testing-的眉眉角角" class="headerlink" title="ASP.NET MVC A&#x2F;B Testing 的眉眉角角"></a>ASP.NET MVC A&#x2F;B Testing 的眉眉角角</h2><p>老實說，AB Testing 這名詞我不知道，但是這件事情我知道<br>但是怎麼做，為什麼要做這件事情，我都是不清楚的</p>
+<p>Dino 的 Slide 開宗明義就說明了，著重在 ASP.NET MVC 的開發方法，不過讓我覺得很重要的<br>其實是 Dino 也有順帶提到要做 AB Testing 之前，應該要有那些事情是必須先搞清楚的<br>要將測試對象(分群)，這個很重要<br>當然，怎麼做到這件事情，每個人的網站都不同，要決策的事情也不一樣，這個只能自己來<br>不管是透過 Cookie、IP、還是使用者的資料來做群組，後續都是為了要收集這些群組使用者如何使用網站的<br>再經過一段時間透過工具或自行收集數據，接著來分析處理，最終再依據這些數據來決策</p>
+<p>結合上半場 Mia 的內容，難怪 Demo 會說如果你有自己的網站，那麼今天不來是很可惜的</p>
+<p>如果網站是透過 ASP.NET MVC 來開發的，就能夠透過本次 Dino 所分享的方法<br>很容易地做到 AB Testing 這件事情，也就是 ASP.NET MVC 的 Display Modes<br>沒有記錯的話，以前去上過 Demo 的課其實當下也有提到這件事情，我居然遺忘了，可見上課之外，還是需要複習，並常常利用，才不會忘記</p>
+<p>如果只是很單純的，只有一個維度，那麼應該就 OK 了，不過有經驗的開發者跟我這種初心者想的就是不一樣<br>立馬反駁掉啊!!啊如果是兩個、三個維度怎麼辦，對阿，怎麼辦。</p>
+<p>Dino 哥佛心出品 DisplayModeMatrix</p>
+<p>至於實作<a target="_blank" rel="noopener" href="https://github.com/dinowang/twmvc25samples">程式碼範例</a>及工具<a target="_blank" rel="noopener" href="https://github.com/dinowang/DisplayModeMatrix">DisplayModeMatrix</a>、Dino 也都有提供，課堂上並沒有針對細節著墨太多<br>這也對，畢竟又不是在上實作課，今天來主要應該都是來分享 KnowHow 的才是<br>配合 slide (<a target="_blank" rel="noopener" href="https://doc.co/2vMW1F">twMVC#25 ASP.NET MVC A&#x2F;B Testing 的眉眉角角</a>)的解說，挑一個時間安安靜靜的自己練習一下<br>一定可以順利掌握 AB Testing 的基本實作方式及概念，這個肯定有機會也要拿來在公司用一下的…</p>
+<hr>
+<p>總結來說，今天充實了不少應該具備的【常識】，對於講師所分享的主題，算是有了一個基本的概念了<br>學到為甚麼要做、如何做這件事情<br>學到如何在 ASP.NET MVC 中，更有效率的做到 AB Testing 這件事情<br>學到如何解讀這些資料並利用現成的工具適當的視覺化所要呈現的資料以供決策</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/twmvc/" rel="tag"># twmvc</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/visual-studio-cannot-open/" rel="prev" title="Visual Studio無法開啟">
+                  <i class="fa fa-angle-left"></i> Visual Studio無法開啟
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/twmvc-22/" rel="next" title="twMVC 22 研討會心得">
+                  twMVC 22 研討會心得 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

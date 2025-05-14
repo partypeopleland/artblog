@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="紀錄一下讀書心得，這本書因為是在說 Javascript 的 TDD，我對於這個還挺有興趣的，雖然是簡體中文書，但翻閱了一下就決定買回家閱讀了，主要是因為翻閱到異步測試這個章節，寫得還蠻不錯的，不過我應該會略過 AngularJS 的部份，畢竟沒研究過也不打算深入。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="讀書心得-JavaScript測試驅動開發">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/javascript-tdd/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="紀錄一下讀書心得，這本書因為是在說 Javascript 的 TDD，我對於這個還挺有興趣的，雖然是簡體中文書，但翻閱了一下就決定買回家閱讀了，主要是因為翻閱到異步測試這個章節，寫得還蠻不錯的，不過我應該會略過 AngularJS 的部份，畢竟沒研究過也不打算深入。">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2020-02-26T03:31:27.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.350Z">
+<meta property="article:author" content="art">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/javascript-tdd/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/javascript-tdd/","path":"/javascript-tdd/","title":"讀書心得-JavaScript測試驅動開發"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>讀書心得-JavaScript測試驅動開發 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC-1-%E7%AB%A0-%E8%87%AA%E5%8B%95%E5%8C%96%E6%B8%AC%E8%A9%A6%E8%AE%93%E4%BD%A0%E9%87%8D%E7%8D%B2%E8%87%AA%E7%94%B1"><span class="nav-number">1.</span> <span class="nav-text">第 1 章 - 自動化測試讓你重獲自由</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86-%E5%89%B5%E5%BB%BA%E8%87%AA%E5%8B%95%E5%8C%96%E6%B8%AC%E8%A9%A6"><span class="nav-number"></span> <span class="nav-text">第一部分 創建自動化測試</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC-2-%E7%AB%A0-%E6%B8%AC%E8%A9%A6%E9%A9%85%E5%8B%95%E8%A8%AD%E8%A8%88"><span class="nav-number">1.</span> <span class="nav-text">第 2 章 - 測試驅動設計</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC-3-%E7%AB%A0-%E7%95%B0%E6%AD%A5%E6%B8%AC%E8%A9%A6"><span class="nav-number">2.</span> <span class="nav-text">第 3 章 - 異步測試</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC-4-%E7%AB%A0-%E5%B7%A7%E5%A6%99%E8%99%95%E7%90%86%E4%BE%9D%E8%B3%B4"><span class="nav-number">3.</span> <span class="nav-text">第 4 章 - 巧妙處理依賴</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86-%E7%9C%9F%E5%AF%A6%E7%9A%84%E8%87%AA%E5%8B%95%E5%8C%96%E6%B8%AC%E8%A9%A6"><span class="nav-number"></span> <span class="nav-text">第二部分 真實的自動化測試</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC-5-%E7%AB%A0-Node-js-%E6%B8%AC%E8%A9%A6%E9%A9%85%E5%8B%95%E9%96%8B%E7%99%BC"><span class="nav-number">1.</span> <span class="nav-text">第 5 章 - Node.js 測試驅動開發</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC-6-%E7%AB%A0-Express-%E6%B8%AC%E8%A9%A6%E9%A9%85%E5%8B%95%E9%96%8B%E7%99%BC"><span class="nav-number">2.</span> <span class="nav-text">第 6 章 - Express 測試驅動開發</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC-7-%E7%AB%A0-%E8%88%87-DOM-%E5%92%8C-jQuery-%E5%8D%94%E4%BD%9C"><span class="nav-number">3.</span> <span class="nav-text">第 7 章 - 與 DOM 和 jQuery 協作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC-8-%E7%AB%A0-%E4%BD%BF%E7%94%A8-AngularJS"><span class="nav-number">4.</span> <span class="nav-text">第 8 章 - 使用 AngularJS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC-9-%E7%AB%A0-Angular-2-%E6%B8%AC%E8%A9%A6%E9%A9%85%E5%8B%95%E9%96%8B%E7%99%BC"><span class="nav-number">5.</span> <span class="nav-text">第 9 章 - Angular 2 測試驅動開發</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC-10-%E7%AB%A0-%E9%9B%86%E6%88%90%E6%B8%AC%E8%A9%A6%E5%92%8C%E7%AB%AF%E5%88%B0%E7%AB%AF%E6%B8%AC%E8%A9%A6"><span class="nav-number">6.</span> <span class="nav-text">第 10 章 - 集成測試和端到端測試</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC-11-%E7%AB%A0-%E6%B8%AC%E8%A9%A6%E9%A9%85%E5%8B%95%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E6%87%89%E7%94%A8"><span class="nav-number">7.</span> <span class="nav-text">第 11 章 - 測試驅動你自己的應用</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/javascript-tdd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="讀書心得-JavaScript測試驅動開發 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          讀書心得-JavaScript測試驅動開發
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2020-02-26 11:31:27" itemprop="dateCreated datePublished" datetime="2020-02-26T11:31:27+08:00">2020-02-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/%E5%BF%83%E5%BE%97/" itemprop="url" rel="index"><span itemprop="name">心得</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/javascript-tdd/" class="post-meta-item leancloud_visitors" data-flag-title="讀書心得-JavaScript測試驅動開發" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/javascript-tdd/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/javascript-tdd/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>紀錄一下讀書心得，這本書因為是在說 Javascript 的 TDD，我對於這個還挺有興趣的，雖然是簡體中文書，但翻閱了一下就決定買回家閱讀了，主要是因為翻閱到異步測試這個章節，寫得還蠻不錯的，不過我應該會略過 AngularJS 的部份，畢竟沒研究過也不打算深入。</p>
+<span id="more"></span>
+
+<p>基於偷懶的大原則，以及本人技能樹的加點與後續章節不太符合，後面的幾個章節直接被我略過了<br>原因如下：</p>
+<ol>
+<li>暫時不會接觸 node.js 更深入的東西</li>
+<li>前端的東西未來如果會使用到測試，也應該會採用框架的方式去做，屆時再研究<code>vue.js</code>或是<code>react.js</code>等其他前端框架的測試</li>
+<li>AngularJS，因技能點、工作上都用不到，基本上不考慮使用此框架</li>
+<li>本人打內生態系</li>
+</ol>
+<p>先說感想吧：技術很多、有些你用的上，有些你用不上，<strong>絕對絕對不要學起來放著</strong>，這只是再浪費時間、精力；沒有在實務上持續運用的技術，並不能為你自己帶來價值。<br>或許可以借鑑，但現在資訊取得較十幾二十年前方便許多，那些時間可以讓你直接去找相關的資訊還比較有效益</p>
+<p>軟體設計師最重要的是時間，不會在實務上用到的技術上不要花太多時間，就像是<code>node.js</code>那一章節，我也不用 node.js 啊，但我仍舊收穫良多，因為我看的是它解題的流程，思考的過程，而且…<code>node.js</code>那章節我看得懂，(笑)</p>
+<p>我沒有太多美國時間去浪費，把時間花在家人、生活、讓自己快樂的事情上都比這些有效益。這很重要！</p>
+<h3 id="第-1-章-自動化測試讓你重獲自由"><a href="#第-1-章-自動化測試讓你重獲自由" class="headerlink" title="第 1 章 - 自動化測試讓你重獲自由"></a>第 1 章 - 自動化測試讓你重獲自由</h3><p>大概論述了一下測試的重要性，因為很多書都有類似的東西，闡述為甚麼要測試的緣由等等，大致翻閱了一下，這個章節學到的東西是一個專有名詞：spike 解決方案，這名詞我拿去 google 找到的都是翻譯，譯者給出的解釋是：如果在設計中碰到困難，那麼就立刻為這個部分建立一次性的可執行原型</p>
+<p>如果與第四章搭配起來閱讀，我就把他理解為，一個能夠完成需求，但是沒有經過重構設計的原始解決方案，簡單來說就是<strong>爛 CODE，但有效</strong>。</p>
+<h2 id="第一部分-創建自動化測試"><a href="#第一部分-創建自動化測試" class="headerlink" title="第一部分 創建自動化測試"></a>第一部分 創建自動化測試</h2><h3 id="第-2-章-測試驅動設計"><a href="#第-2-章-測試驅動設計" class="headerlink" title="第 2 章 - 測試驅動設計"></a>第 2 章 - 測試驅動設計</h3><p>一般的軟體安裝、套件說明後，這邊提到了金絲雀測試，大概就是確認測試框架是否可以正確運行的測試，這個步驟其實在做測試的時候一定會先做一次，但通常我是將它當成準備工作，這個可以快速驗證開發環境是否正確安裝安裝，步驟其實也很簡單，就是撰寫一個很單純的測試，內容就是直接<code>expect(true).to.be.eql(true)</code>這樣的東西</p>
+<p>這個測試雖然只要確保一開始正確運作之後就沒有價值了，但保留他也有好處；如果變更了測試框架、或是在別的電腦執行，或是變更了環境變數，那麼仍舊需要重新驗證最基本的測試是否可運作，以確保測試環境是正常的。</p>
+<p>另外也以範例、一步步地展示 TDD 的開發過程，將正向測試、反向測試、異常測試的觀念帶入；這裡也特別提醒了，我們需要關注的是行為，而不是狀態，用我的理解其實就是我們在撰寫測試的時候，不太需要去為了單純的 getter、setter 撰寫測試，我們應該將目光放在那些包含了邏輯的行為，那才是我們要測試的部分</p>
+<p>接著讓我覺得很棒的是，書中用同一個問題，撰寫回文的 function，以 TDD 的方式在 server 端、client 端都實作一次；在 client 端透過 karma 的部份，是我很薄弱的地方，經由這個範例讓我學習了在 client 端的程式碼，透過 tdd 開發測試的方式，雖然還只是很基本的範例，還沒有牽涉到 babel,webpack 等實務應用，但是起碼知道是怎麼一回事了</p>
+<h3 id="第-3-章-異步測試"><a href="#第-3-章-異步測試" class="headerlink" title="第 3 章 - 異步測試"></a>第 3 章 - 異步測試</h3><p>很久以前曾經上過小風的測試課程，當中有一段是 promise，記得當時就像是聽天書一樣，這個章節其實讓我很清楚地明白了為甚麼會有非同步測試這件事情，並且應該如何測試，測試過程的手法及演進，最後透過額外的第三方套件讓測試撰寫的更優雅，更語意化，這個章節給我的最大感觸是，上完課後要好好溫習，不懂得要趕緊查資料，如果是因為程度只有入門，卻上了進階班導致跟不上，那就…要有心理準備，去長見識的。學習還是先把基礎補起來吧。</p>
+<p>不過還是沒有後悔去上課啦，因為沒有時間就是花錢買人家的經驗，吸收不了細節其實觀念還是有學到，在努力的方向上就跟別人有區別了，還是很值得。</p>
+<h3 id="第-4-章-巧妙處理依賴"><a href="#第-4-章-巧妙處理依賴" class="headerlink" title="第 4 章 - 巧妙處理依賴"></a>第 4 章 - 巧妙處理依賴</h3><p>我們都知道測試最困難的，是解依賴，這個章節的範例其實我覺得很經典，功能簡單，很容易理解，但是又依賴很多東西，透過這個例子可以學到怎麼把爛 Code 分離職責，逐一擊破，並為這些程式撰寫測試。<br>這裡有一個很棒的部分是，範例程式碼給了兩份，一份是 spike 解決方案，然後書中解析這份 spike 方案，分離職責給出一個模組化設計的圖，而在另外一個範例程式碼，將這些模組化都預先建立了一個 test 程式。這意味著，我只要能夠學習這套方法，能夠<strong>將 spike 解決方案轉化為模組化設計的圖</strong>，就可以撰寫測試了</p>
+<p>這章節在解釋知識點的時機也很不錯，依據情境撰寫測試，發現要做的事情缺少某些知識，這時候再進行補充，這樣做少了教科書式的條列式重點，但只要是認真看過作筆記，倒是能吸收的不錯。<br>關於測試替身的定義我倒是第一次看到 martin fowler 的解釋版本，可能是簡體中文的關係看不是很懂他的意思，但是看範例程式碼自己理解再對照一下，還是能夠懂的，就是累了點。</p>
+<blockquote>
+<p>這一章節含金量很高，每一段的說明、解釋、範例都很重要，值得細心研讀</p>
+</blockquote>
+<h2 id="第二部分-真實的自動化測試"><a href="#第二部分-真實的自動化測試" class="headerlink" title="第二部分 真實的自動化測試"></a>第二部分 真實的自動化測試</h2><h3 id="第-5-章-Node-js-測試驅動開發"><a href="#第-5-章-Node-js-測試驅動開發" class="headerlink" title="第 5 章 - Node.js 測試驅動開發"></a>第 5 章 - Node.js 測試驅動開發</h3><p>這一個章節大概就遵循著常見的開發流程，給出了一個示範</p>
+<ol>
+<li>需求說明：簡單的介紹了一下當前遇到的需求是甚麼，我們需要完成甚麼</li>
+<li>概念設計：基於需求而提出的一個解決方案概念，將問題拆解成一個個較小的環節，並明確各自的職責</li>
+<li>測試開發：針對各步驟進行測試驅動開發</li>
+</ol>
+<p>這一章節一開始就說我們要來做一點東西，先介紹了目標，接著將程式的整體邏輯做一個概念性的設計，歸納程式流程的同時，也明確界定了職責，產生出來的圖就像是上一章節的模組化設計的圖一樣。<br>在這個圖裡面，可以看到問題再次被分解成一個個小步驟，並且明確的定義了各自的職責，其實也就是輸入、輸出。</p>
+<p>到了測試驅動開發的這個階段，首先要做的是先將想到的測試記錄下來，而暫時先不要考慮是否正確，畢竟隨著時間經過，這些東西很有可能會隨著改變</p>
+<blockquote>
+<p>隨著 TDD 的開發，第一個測試的目的是為了釐清我們會用到的介面、簽章方法，暫時不需要去實作他，後續的測試才是幫助我們實現 production code。</p>
+</blockquote>
+<p>這章的重點應該在於如何在 TDD 的開發流程中，逐漸完善測試案例；其次，在面對較為複雜的步驟，為它單獨建立一個 spike 去實現概念，獲得較為具體的想法之後，再將 spike 拋棄，回歸到 TDD 開發流程。<br>簡單的說就是當你發現某個步驟太複雜，做不出來、無從下手的時候，先不要管什麼 TDD 了，直接用最髒的方式去完成它，然後，再根據你做出來的程式碼去分析、釐清裡面的邏輯、依賴關係，最後幫它加上測試案例。</p>
+<p>再往後就是一個完整的思考、撰寫、實現 TDD 的過程範例，直到這一章節結束，在最後面有最終的設計圖，與一開始的概念設計相比較，應該會有一些感覺</p>
+<h3 id="第-6-章-Express-測試驅動開發"><a href="#第-6-章-Express-測試驅動開發" class="headerlink" title="第 6 章 - Express 測試驅動開發"></a>第 6 章 - Express 測試驅動開發</h3><p>略</p>
+<h3 id="第-7-章-與-DOM-和-jQuery-協作"><a href="#第-7-章-與-DOM-和-jQuery-協作" class="headerlink" title="第 7 章 - 與 DOM 和 jQuery 協作"></a>第 7 章 - 與 DOM 和 jQuery 協作</h3><p>略</p>
+<h3 id="第-8-章-使用-AngularJS"><a href="#第-8-章-使用-AngularJS" class="headerlink" title="第 8 章 - 使用 AngularJS"></a>第 8 章 - 使用 AngularJS</h3><p>略</p>
+<h3 id="第-9-章-Angular-2-測試驅動開發"><a href="#第-9-章-Angular-2-測試驅動開發" class="headerlink" title="第 9 章 - Angular 2 測試驅動開發"></a>第 9 章 - Angular 2 測試驅動開發</h3><p>略</p>
+<h3 id="第-10-章-集成測試和端到端測試"><a href="#第-10-章-集成測試和端到端測試" class="headerlink" title="第 10 章 - 集成測試和端到端測試"></a>第 10 章 - 集成測試和端到端測試</h3><p>e2e 測試這一塊我個人偏好的是<code>testcafe.js</code>，對於其他工具就沒什麼了解了，雖說 e2e 測試在工作上其實也用不到，純粹是個人興趣所以研究，所以其實了解也很粗淺</p>
+<blockquote>
+<p>現在偏好的則是<code>cypress.io</code>，<code>testcafe.js</code>已經成舊愛了</p>
+</blockquote>
+<p>但就書中的範例來看，除了基本的測試撰寫範例，還著重的提了一下啟動服務器的部分，書裡面的範例是透過 mocha 的 hook 在測試開始前，啟動<code>express</code>，應該是想要更方便的測試，而不需要讓人手動的開這開那準備測試環境吧</p>
+<p>這些方法對於.net 生態系的我完全用不上，往後應該也沒什麼機會去搞懂，基本上這個章節我只有快速翻閱過去，談不上甚麼心得</p>
+<p>不過這邊有提到一個觀念很重要：盡量減少 e2e 測試的數量，最好是僅撰寫沒有被其他測試覆蓋到的部分。這是一個易懂難精的東西，程式還好說，花時間學應該能會；但這個就有點玄了，大概就跟怎麼寫好測試案例這個東西是一樣層級的東西，應該也是可以專門弄一本書來說的</p>
+<p>而且 e2e 很花時間，能少最好是少一點</p>
+<p>這邊也特別提到了<code>page-object</code>的概念，這概念其實在 e2e 測試一直被提到，<code>testcafe.js</code> 官網記得也有寫過 page-object 的範例教學，大概就是一個中間層，讓程式碼及測試程式都依賴它，這樣未來 UI 有改，ID 有改，透過 page-object 就可以很快速地調整了，不懂就看<a target="_blank" rel="noopener" href="https://devexpress.github.io/testcafe/documentation/recipes/extract-reusable-test-code/use-page-model.html">參考連結</a>吧</p>
+<blockquote>
+<p>現在寫 e2e test 的新歡是 cypress.io，不再是 testcafe.js 了</p>
+</blockquote>
+<h3 id="第-11-章-測試驅動你自己的應用"><a href="#第-11-章-測試驅動你自己的應用" class="headerlink" title="第 11 章 - 測試驅動你自己的應用"></a>第 11 章 - 測試驅動你自己的應用</h3><p>最後這章節大概就是總結這本書的一些重要概念了，其實大部分都還是在說一些老生常談的知識點，如果你也很喜歡探討觀念、這章節應該可以滿足你。</p>
+<p>我基本上只看標題就直接略過了….簡體中文版的另外一個壞處是，標題都可以翻得很難懂</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/javascript-proxy/" rel="prev" title="Javascript的Proxy">
+                  <i class="fa fa-angle-left"></i> Javascript的Proxy
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/encrypt-connection-string/" rel="next" title="連線字串加密的方式">
+                  連線字串加密的方式 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

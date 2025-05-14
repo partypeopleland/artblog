@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="熔斷機制這個名詞我自己的理解是核心觀念就是類似電路過載保護的概念。家裡面的繼電器負責的就是提供一個保護機制，當同一電流迴路的用電負載超出安全電流，則繼電器就會跳脫，使得電路斷路，達到隔離的作用。原因是連續通過的電流會讓電線過熱(這個有興趣的話好像可以去看看電磁學，我都還給老師了沒有記得很詳細)，容易使電線的絕緣體老化(也就是電線外面那層塑膠皮)，甚至是燃燒的情況，從而有電線走火的危機 上面那個說法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="polly - 熔斷機制">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/polly-library-circuit-breaker/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="熔斷機制這個名詞我自己的理解是核心觀念就是類似電路過載保護的概念。家裡面的繼電器負責的就是提供一個保護機制，當同一電流迴路的用電負載超出安全電流，則繼電器就會跳脫，使得電路斷路，達到隔離的作用。原因是連續通過的電流會讓電線過熱(這個有興趣的話好像可以去看看電磁學，我都還給老師了沒有記得很詳細)，容易使電線的絕緣體老化(也就是電線外面那層塑膠皮)，甚至是燃燒的情況，從而有電線走火的危機 上面那個說法">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/polly-library-circuit-breaker/open-closed-semantics.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/polly-library-circuit-breaker/circuitbreaker.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/polly-library-circuit-breaker/timeout-exception.jpg">
+<meta property="article:published_time" content="2022-04-20T06:11:42.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.450Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="polly">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/polly-library-circuit-breaker/open-closed-semantics.png">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/polly-library-circuit-breaker/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/polly-library-circuit-breaker/","path":"/polly-library-circuit-breaker/","title":"polly - 熔斷機制"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>polly - 熔斷機制 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%B5%B1%E5%8F%AF%E7%94%A8%E6%80%A7%E7%9B%B8%E9%97%9C%E6%96%87%E7%AB%A0"><span class="nav-number">1.</span> <span class="nav-text">系統可用性相關文章</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%AD%E9%81%87%E7%9A%84%E5%95%8F%E9%A1%8C"><span class="nav-number">2.</span> <span class="nav-text">遭遇的問題</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B7%E8%B7%AF%E5%99%A8%E7%8B%80%E6%85%8B"><span class="nav-number">3.</span> <span class="nav-text">斷路器狀態</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B7%E9%AB%94%E7%9A%84%E6%94%B9%E5%96%84%E6%96%B9%E5%BC%8F"><span class="nav-number">4.</span> <span class="nav-text">具體的改善方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BA%96%E5%82%99%E6%96%B7%E8%B7%AF%E5%99%A8"><span class="nav-number">4.1.</span> <span class="nav-text">準備斷路器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Circuit-Breaker"><span class="nav-number">4.2.</span> <span class="nav-text">Circuit Breaker</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Advance-Circuit-Breaker"><span class="nav-number">5.</span> <span class="nav-text">Advance Circuit Breaker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Timeout"><span class="nav-number">6.</span> <span class="nav-text">Timeout</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Policy-Wrap"><span class="nav-number">7.</span> <span class="nav-text">Policy Wrap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BA%90%E7%A2%BC%E6%9F%A5%E7%9C%8B"><span class="nav-number">8.</span> <span class="nav-text">源碼查看</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%A6%E9%9A%9B%E7%AF%84%E4%BE%8B-POC"><span class="nav-number">9.</span> <span class="nav-text">實際範例 POC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2022-08-02-%E8%A3%9C%E5%85%85"><span class="nav-number">10.</span> <span class="nav-text">2022-08-02 補充</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BF%83%E5%BE%97"><span class="nav-number">11.</span> <span class="nav-text">心得</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/polly-library-circuit-breaker/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="polly - 熔斷機制 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          polly - 熔斷機制
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2022-04-20 14:11:42" itemprop="dateCreated datePublished" datetime="2022-04-20T14:11:42+08:00">2022-04-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/SRE/" itemprop="url" rel="index"><span itemprop="name">SRE</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/polly-library-circuit-breaker/" class="post-meta-item leancloud_visitors" data-flag-title="polly - 熔斷機制" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/polly-library-circuit-breaker/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/polly-library-circuit-breaker/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>熔斷機制這個名詞我自己的理解是核心觀念就是類似電路過載保護的概念。家裡面的繼電器負責的就是提供一個保護機制，當同一電流迴路的用電負載超出安全電流，則繼電器就會跳脫，使得電路斷路，達到隔離的作用。原因是連續通過的電流會讓電線過熱(這個有興趣的話好像可以去看看電磁學，我都還給老師了沒有記得很詳細)，容易使電線的絕緣體老化(也就是電線外面那層塑膠皮)，甚至是燃燒的情況，從而有電線走火的危機</p>
+<p>上面那個說法我不確定離開學校那麼久之後有沒有講錯，但大致上的觀念就是這樣：<code>當系統發生問題，透過保護機制將發生問題的系統斷開，不讓問題繼續擴大</code></p>
+<blockquote>
+<p>REF: <a target="_blank" rel="noopener" href="https://www.easyatm.com.tw/wiki/%E9%81%8E%E8%BC%89%E4%BF%9D%E8%AD%B7">過載保護 - 中文百科</a></p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="系統可用性相關文章"><a href="#系統可用性相關文章" class="headerlink" title="系統可用性相關文章"></a>系統可用性相關文章</h2><ol>
+<li>Polly - 熔斷機制</li>
+<li><a href="https://partypeopleland.github.io/artblog/2022/08/03/limiting-algorithm/#more">常見限流策略</a></li>
+</ol>
+<h2 id="遭遇的問題"><a href="#遭遇的問題" class="headerlink" title="遭遇的問題"></a>遭遇的問題</h2><p>而在軟體產業也有類似的情況，也就是網站向外部請求資源失敗後整個卡住，從而破壞使用者體驗。這樣的情況應該很多人都有碰過吧。發生這樣的情況，原因可能有很多，但大致上我們可以想到應該是</p>
+<ol>
+<li>瞬間的故障：指的是發生當下因為種種原因瞬間造成請求失敗，但通常再重試第二次就成功了，例如比較常見的 DB 資源鎖死</li>
+<li>暫時性故障：比較常見的像外部服務故障，即使短時間內重試也沒有辦法解決問題，像是跟第三方請求資源等等</li>
+</ol>
+<p>而發生了這樣的情況，我們當然會希望還是讓使用者體驗好一些，整個網站不要當在那邊，所以期望能夠改善</p>
+<ol>
+<li>當服務失敗的時候，應該要能夠自動使用替代方案</li>
+<li>管理者應該要能夠即時發現問題並處理</li>
+</ol>
+<p>前者是站在使用者的角度來看，我希望就算網站的其他服務失敗了，也不應該破壞我的使用者體驗；就像是我搜尋商品，結果你一直給我卡住畫面在那邊轉圈圈，我寧願你直接回覆我【伺服器發生問題】或者是其他的回應；而後者則是站在維運的角度來看，我期望系統發生問題，我會比顧客早知道情況，這就牽涉到了其他主題，有興趣的話可以透過查詢一些關鍵字像是<code>RUM</code>、<code>APM</code>去學習研究，但在這邊我們的重點不是這個。</p>
+<p><code>C#</code> 有一個 library 叫做 <code>polly</code>，允許在系統服務失敗的時候執行預先定義好一些處理方式</p>
+<h2 id="斷路器狀態"><a href="#斷路器狀態" class="headerlink" title="斷路器狀態"></a>斷路器狀態</h2><p>在說明斷路器之前需要先知道電路的三種狀態：通路、開路、短路。這三種狀態的中文其實是我剛剛查來的，實際上我都是在腦子裡面記電路的圖，再用中文去想，所以我常常把開路說成斷路，因為對我來說就是電路斷開來了</p>
+<ol>
+<li>通路 aka 閉路 aka <code>Closed</code>：通路表示的是『電路暢通』；又因為開關是關閉的，所以又稱之為『閉路』。怕搞錯最好還是直接用 <code>Closed</code>表示開關的狀態是關閉的</li>
+<li>斷路 aka 開路 aka <code>Open</code>：斷路表示『電路中斷』；又因為開關是處於打開的狀態，所以又稱『開路』。當然也可以用英文 <code>Open</code> 來表示開關的狀態是打開的</li>
+<li>短路：由於在電子電路中的短路表示電流沒有經過負載，負載不工作。但因為轉換為軟體的概念的話，就等於沒有呼叫執行程式碼，其實就沒有相對應的部分。</li>
+</ol>
+<blockquote>
+<p>簡單的來說就是記住開關的狀態就是了，開關就是像下面這樣，打開電流過不去就不能用；關閉電流過去才能用</p>
+</blockquote>
+<p><img src="/artblog/polly-library-circuit-breaker/open-closed-semantics.png"></p>
+<p>上面說完了三種傳統的電路狀態，轉換到軟體的話，我們有多一種狀態叫做 <code>Half-Open</code></p>
+<p>在解釋為什麼會有 <code>Half-Open</code>之前，我們需要先理解一下傳統電路的保護機制如何復原電路狀態…</p>
+<p>是的，就是家裡跳電了怎麼辦？我們需要先檢查用電的電器是否能夠使用（跳電後燒壞了原有的電器電路？）然後接著我們要看看繼電器是否有明顯可見的異常，像是溫度過高？繼電器是否有燒焦痕跡等等，這些東西都看過沒問題了之後，我們才手動把跳脫的開關復原（也就是把跳脫的開關關閉後，再重新打開的這個行為）</p>
+<p>現實世界的斷路器我們需要人工手動復原，但軟體的部分我們該怎麼辦？難道也需要手動復原嗎？所以這個時候 <code>Half-Open</code> 概念就出來了，所謂的 <code>Half-Open</code> 其實就是先放一個請求去試試看，其他的請求一樣先給你擋下來：然後我們看看這個放過去的請求回應是成功還是失敗，如果是成功的表示服務正常，後續的請求也可以通過；失敗表示服務還沒恢復，後續的請求還是只能先拒絕。</p>
+<p><img src="/artblog/polly-library-circuit-breaker/circuitbreaker.png"></p>
+<ol>
+<li>CLOSED:正常運行，允許執行動作</li>
+<li>OPEN:電路開關處於打開的狀態，不允許執行動作</li>
+<li>HALF-OPEN:用來測試服務是否正常，同時間只會有一個請求嘗試發出，其餘被拒絕；若執行成功則將電路狀態改為<code>CLOSED</code>；失敗則為<code>OPEN</code></li>
+</ol>
+<blockquote>
+<p>REF:<a target="_blank" rel="noopener" href="https://github.com/App-vNext/Polly/wiki/Circuit-Breaker#how-the-polly-circuitbreaker-works">How the Polly CircuitBreaker works</a></p>
+</blockquote>
+<h2 id="具體的改善方式"><a href="#具體的改善方式" class="headerlink" title="具體的改善方式"></a>具體的改善方式</h2><p>這裡我查了一下熔斷，都說是從股票那邊過來的名詞，但我總認為是從電子電路學那邊的概念，畢竟我就不相信股票有什麼保險絲會因為電流過高而燃燒造成電路中斷從而使的保護機制生效，不過我也沒有那麼閒真的去找一堆資料來證明這件事情，反正我只是打算讓大家比較容易理解這個概念而已。之後提到熔斷大家就能夠理解是這樣的一個過載保護的概念就行了</p>
+<p>我們一開始的期望：當服務失敗不應該破壞使用者的操作體驗，就可以透過實現斷路器來實現熔斷機制，在這邊我們查看一下 <code>Polly Library</code> 的 <code>CircuitBreaker</code> 提供的 API</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Break the circuit after the specified number of consecutive exceptions</span></span><br><span class="line"><span class="comment">// and keep circuit broken for the specified duration.</span></span><br><span class="line">Policy</span><br><span class="line">    .Handle&lt;SomeExceptionType&gt;()</span><br><span class="line">    .CircuitBreaker(<span class="number">2</span>, TimeSpan.FromMinutes(<span class="number">1</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// Break the circuit after the specified number of consecutive exceptions</span></span><br><span class="line"><span class="comment">// and keep circuit broken for the specified duration,</span></span><br><span class="line"><span class="comment">// calling an action on change of circuit state,</span></span><br><span class="line"><span class="comment">// passing a context provided to Execute().</span></span><br><span class="line">Action&lt;Exception, TimeSpan, Context&gt; onBreak = (exception, timespan, context) =&gt; &#123; ... &#125;;</span><br><span class="line">Action&lt;Context&gt; onReset = context =&gt; &#123; ... &#125;;</span><br><span class="line">CircuitBreakerPolicy breaker = Policy</span><br><span class="line">    .Handle&lt;SomeExceptionType&gt;()</span><br><span class="line">    .CircuitBreaker(<span class="number">2</span>, TimeSpan.FromMinutes(<span class="number">1</span>), onBreak, onReset);</span><br></pre></td></tr></table></figure>
+
+<p>大概就是這兩種吧，先是宣告你要處理的例外，然後後面就是使用斷路器，並給予必要的參數，講明白一點就是：發生幾次錯誤之後在某個時間段之內都拒絕請求，直到後續電路狀態復原為止</p>
+<p>所以發生了幾次錯誤，你要告訴他；某個時間段是多久，你也要告訴他；發生哪一種錯誤我們要處理，一開始也要定義。當然當電路狀態改變的時候，他也提供了事件讓我們可以做些事情，也就是電路狀態中斷；復原的時候可以做些事情</p>
+<p>用法很單純，所以我們在用的時候只需要透過他的方法</p>
+<ol>
+<li>先準備好斷路器</li>
+<li>在我們需要保護的程式碼那邊，加上斷路器</li>
+</ol>
+<p>假設我的網站要跟我自己的一個 API Gateway 互相溝通，所以網站跟 API Gateway 中間應該要有一顆斷路器。只要是跟 API Gateway 溝通的請求，都用同一個斷路器就行了</p>
+<blockquote>
+<p>REF: <a target="_blank" rel="noopener" href="https://github.com/App-vNext/Polly/wiki/Statefulness-of-policies#circuitbreaker">Statefulness-of-policies: CircuitBreaker</a></p>
+</blockquote>
+<h3 id="準備斷路器"><a href="#準備斷路器" class="headerlink" title="準備斷路器"></a>準備斷路器</h3><p>.netFramework 的網站，為了要讓網頁的請求都用同一個斷路器，在這邊我用一個靜態類別取得斷路器，下面的程式碼宣告了一個斷路器，當這個斷路器偵測到兩次例外就會變更電路狀態為 <code>Open</code>，同時在十秒鐘之內一律拒絕請求；十秒中之後的第一個請求會讓電路狀態變更為 <code>Half-Open</code></p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">PolicyFactory</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 連續記數斷路器</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;returns&gt;</span><span class="doctag">&lt;/returns&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;remarks&gt;</span>連續失敗兩次則斷路十秒鐘<span class="doctag">&lt;/remarks&gt;</span></span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> ISyncPolicy <span class="title">GetCircuitBreaker</span>&lt;<span class="title">T</span>&gt;()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> logPrefix = <span class="string">$&quot;[<span class="subst">&#123;<span class="keyword">typeof</span>(T)&#125;</span>]&quot;</span>;</span><br><span class="line">        Action&lt;Exception, TimeSpan&gt; onBreak = (exception, timespan) =&gt; &#123; Debug.WriteLine(<span class="string">$&quot;<span class="subst">&#123;logPrefix&#125;</span> CircuitBreaker: Open at <span class="subst">&#123;DateTime.Now&#125;</span>&quot;</span>); &#125;;</span><br><span class="line">        Action onReset = () =&gt; &#123; Debug.WriteLine(<span class="string">$&quot;<span class="subst">&#123;logPrefix&#125;</span> CircuitBreaker: Closed at <span class="subst">&#123;DateTime.Now&#125;</span>&quot;</span>); &#125;;</span><br><span class="line">        Action onHalfOpen = () =&gt; &#123; Debug.WriteLine(<span class="string">$&quot;<span class="subst">&#123;logPrefix&#125;</span> CircuitBreaker: Half-Open at <span class="subst">&#123;DateTime.Now&#125;</span>&quot;</span>); &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> Policy</span><br><span class="line">            .Handle&lt;Exception&gt;()</span><br><span class="line">            .CircuitBreaker(</span><br><span class="line">                <span class="number">2</span>,</span><br><span class="line">                TimeSpan.FromSeconds(<span class="number">10</span>),</span><br><span class="line">                onBreak,</span><br><span class="line">                onReset,</span><br><span class="line">                onHalfOpen</span><br><span class="line">            );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Circuit-Breaker"><a href="#Circuit-Breaker" class="headerlink" title="Circuit Breaker"></a>Circuit Breaker</h3><p><strong>Sample Code</strong></p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> 連續記數斷路器</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;returns&gt;</span><span class="doctag">&lt;/returns&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;remarks&gt;</span>連續失敗兩次則斷路十秒鐘<span class="doctag">&lt;/remarks&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> ISyncPolicy <span class="title">GetCircuitBreaker</span>&lt;<span class="title">T</span>&gt;()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> logPrefix = <span class="string">$&quot;[<span class="subst">&#123;<span class="keyword">typeof</span>(T)&#125;</span>]&quot;</span>;</span><br><span class="line">    Action&lt;Exception, TimeSpan&gt; onBreak = (exception, timespan) =&gt; &#123; Debug.WriteLine(<span class="string">$&quot;<span class="subst">&#123;logPrefix&#125;</span> CircuitBreaker: Open at <span class="subst">&#123;DateTime.Now&#125;</span>&quot;</span>); &#125;;</span><br><span class="line">    Action onReset = () =&gt; &#123; Debug.WriteLine(<span class="string">$&quot;<span class="subst">&#123;logPrefix&#125;</span> CircuitBreaker: Closed at <span class="subst">&#123;DateTime.Now&#125;</span>&quot;</span>); &#125;;</span><br><span class="line">    Action onHalfOpen = () =&gt; &#123; Debug.WriteLine(<span class="string">$&quot;<span class="subst">&#123;logPrefix&#125;</span> CircuitBreaker: Half-Open at <span class="subst">&#123;DateTime.Now&#125;</span>&quot;</span>); &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Policy</span><br><span class="line">        .Handle&lt;Exception&gt;()</span><br><span class="line">        .CircuitBreaker(</span><br><span class="line">            <span class="number">2</span>,</span><br><span class="line">            TimeSpan.FromSeconds(<span class="number">10</span>),</span><br><span class="line">            onBreak,</span><br><span class="line">            onReset,</span><br><span class="line">            onHalfOpen</span><br><span class="line">        );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Advance-Circuit-Breaker"><a href="#Advance-Circuit-Breaker" class="headerlink" title="Advance Circuit Breaker"></a>Advance Circuit Breaker</h2><p>基本上就是連續記數斷路器的進階版，詳情參考<a target="_blank" rel="noopener" href="https://github.com/App-vNext/Polly/wiki/Advanced-Circuit-Breaker">Advanced Circuit Breaker</a></p>
+<p>以下面程式碼的參數來解釋，大致的意思就是：採樣時間內至少有 8 次請求時，異常的發生比例超過 50%，則斷路 30 秒</p>
+<p><strong>Sample Code</strong></p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> Consecutive County Circuit Controller</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;returns&gt;</span><span class="doctag">&lt;/returns&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;remarks&gt;</span>採樣時間內至少有8次請求時，異常的發生比例超過 50%，則斷路 30 秒<span class="doctag">&lt;/remarks&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> ISyncPolicy <span class="title">GetAdvanceCircuitBreaker</span>&lt;<span class="title">T</span>&gt;()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> logPrefix = <span class="string">$&quot;[<span class="subst">&#123;<span class="keyword">typeof</span>(T)&#125;</span>]&quot;</span>;</span><br><span class="line">    Action&lt;Exception, TimeSpan&gt; onBreak = (exception, timespan) =&gt; &#123; Debug.WriteLine(<span class="string">$&quot;<span class="subst">&#123;logPrefix&#125;</span> AdvanceCircuitBreaker: Open at <span class="subst">&#123;DateTime.Now&#125;</span>&quot;</span>); &#125;;</span><br><span class="line">    Action onReset = () =&gt; &#123; Debug.WriteLine(<span class="string">$&quot;<span class="subst">&#123;logPrefix&#125;</span> AdvanceCircuitBreaker: Closed at <span class="subst">&#123;DateTime.Now&#125;</span>&quot;</span>); &#125;;</span><br><span class="line">    Action onHalfOpen = () =&gt; &#123; Debug.WriteLine(<span class="string">$&quot;<span class="subst">&#123;logPrefix&#125;</span> AdvanceCircuitBreaker: Half-Open at <span class="subst">&#123;DateTime.Now&#125;</span>&quot;</span>); &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Policy</span><br><span class="line">        .Handle&lt;Exception&gt;()</span><br><span class="line">        .AdvancedCircuitBreaker(</span><br><span class="line">            <span class="number">0.5</span>,</span><br><span class="line">            TimeSpan.FromSeconds(<span class="number">10</span>),</span><br><span class="line">            <span class="number">8</span>,</span><br><span class="line">            TimeSpan.FromSeconds(<span class="number">30</span>),</span><br><span class="line">            onBreak,</span><br><span class="line">            onReset,</span><br><span class="line">            onHalfOpen</span><br><span class="line">        );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Timeout"><a href="#Timeout" class="headerlink" title="Timeout"></a>Timeout</h2><p>這邊設定了一個測試用的 api，在執行之前會先延遲 10 秒來模擬 timeout 的情況</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">TestController</span> : <span class="title">BaseController</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> test for 10 sec timeout</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;returns&gt;</span><span class="doctag">&lt;/returns&gt;</span></span></span><br><span class="line">    [<span class="meta">HttpPost</span>]</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">AlwaysTimeout</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        Thread.Sleep(<span class="number">10000</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;always timeout for 10 sec&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接著設定好 timeout policy 並測試</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// policyFactory.cs</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> Timeout 斷路器</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;returns&gt;</span><span class="doctag">&lt;/returns&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;remarks&gt;</span>執行超過2秒的請求會直接放棄掉<span class="doctag">&lt;/remarks&gt;</span></span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> ISyncPolicy <span class="title">GetTimeoutBreaker</span>&lt;<span class="title">T</span>&gt;()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> logPrefix = <span class="string">$&quot;[<span class="subst">&#123;<span class="keyword">typeof</span>(T)&#125;</span>]&quot;</span>;</span><br><span class="line">        Action&lt;Context,TimeSpan,Task&gt; onTimeout = (context, timespan, task) =&gt; &#123; Debug.WriteLine(<span class="string">$&quot;<span class="subst">&#123;logPrefix&#125;</span> 逾時時間:<span class="subst">&#123;timespan&#125;</span>&quot;</span>); &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> Policy.Timeout(TimeSpan.FromSeconds(<span class="number">2</span>), TimeoutStrategy.Pessimistic, onTimeout);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 呼叫端</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">Test</span>(<span class="params"><span class="built_in">string</span> str</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">try</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> GetTimeoutBreaker&lt;TestClient&gt;().Execute(() =&gt;</span><br><span class="line">            &#123;</span><br><span class="line">                Debug.WriteLine(<span class="string">&quot;請求網路資源中...&quot;</span>);</span><br><span class="line">                <span class="keyword">var</span> timeoutUri = <span class="string">&quot;http://localhost:4334/api/Test/AlwaysTimeout&quot;</span>;</span><br><span class="line">                <span class="keyword">return</span> _httpClient.Value.PostAsync(timeoutUri,<span class="literal">null</span>).Result.Content.ReadAsStringAsync().Result;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (Exception ex)</span><br><span class="line">        &#123;</span><br><span class="line">            Debug.WriteLine(ex.Message + <span class="string">&quot; Now:&quot;</span> + DateTime.Now);</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> TimeoutException(<span class="string">&quot;發生例外!!&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>測試情境：斷路器設為 2 秒，實際上資源需要 10 秒，實際執行 Test 方法</p>
+<p>斷路器在第二秒就直接放棄等待並直接回應一個例外，但是已經發送出去的請求還是會對 URI 請求資源。<br><img src="/artblog/polly-library-circuit-breaker/timeout-exception.jpg"></p>
+<p>所以單純只套用一個 timeout 的話，實際上對於整個系統來說，並沒有太大的幫助，因為它還是會向後面的服務送出請求而浪費資源。</p>
+<p>關於 timeout 策略有區分悲觀、樂觀這部分可以再詳細察看一下官網說明<a target="_blank" rel="noopener" href="https://github.com/App-vNext/Polly/wiki/Timeout#pessimistic-timeout">Pessimistic timeout</a>，這邊我並沒有深入再研究練習</p>
+<h2 id="Policy-Wrap"><a href="#Policy-Wrap" class="headerlink" title="Policy Wrap"></a>Policy Wrap</h2><p>Polly 有提供一個策略包的方法，使的各種斷路器可以串在一起使用，只需要將剛才提到的各種斷路器實體透過<code>Policy.Wrap()</code>包裝起來就行了</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">PolicyFactory</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 略...</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ISyncPolicy <span class="title">GetInstance</span>&lt;<span class="title">T</span>&gt;()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">typeof</span>(T) == <span class="keyword">typeof</span>(TestClient))</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">var</span> timeout = GetTimeoutBreaker&lt;T&gt;();</span><br><span class="line">            <span class="keyword">var</span> circuitBreaker = GetCircuitBreaker&lt;T&gt;();</span><br><span class="line">            <span class="keyword">return</span> Policy.Wrap(circuitBreaker, timeout);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(<span class="string">$&quot;No Match PolicyWrap For <span class="subst">&#123;<span class="keyword">typeof</span>(T)&#125;</span>&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">TestClient</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> ISyncPolicy _currentPolicyWrap;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> ISyncPolicy CurrentPolicyWrap  =&gt; _currentPolicyWrap ??  (_currentPolicyWrap = PolicyFactory.GetInstance&lt;TestClient&gt;());</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">SendRequest</span>(<span class="params">MyRequest request</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> CurrentPolicyWrap.Execute(() =&gt;</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 略...</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>這樣在呼叫端只要將原先的程式碼，包裝在 <code>Execute()</code> 之內就可以了，上述程式碼會先送出請求，先判斷是否 <code>timeout</code>，接著才判斷 <code>circuitBreaker</code>。也就是說，送出請求如果沒有在兩秒鐘之內完成，就算失敗一次，如果連續失敗兩次，則十秒鐘之內後續送出的請求都會直接被拒絕</p>
+<h2 id="源碼查看"><a href="#源碼查看" class="headerlink" title="源碼查看"></a>源碼查看</h2><p>說是源碼查看，因為我覺得還沒有到源碼解析的程度，大概就是分享一下斷路器這一部份的程式碼心得，首先我們可以看一下斷路器的用法大概像是下面這個樣子</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CircuitBreakerPolicy breaker = Policy.Handle&lt;DivideByZeroException&gt;().CircuitBreaker(<span class="number">1</span>, TimeSpan.MaxValue);</span><br></pre></td></tr></table></figure>
+
+<p>在呼叫端的語法都是先透過 <code>Handle</code> 並給予一個例外的類型，來表示我們要偵測的<code>Exception</code>，而 <code>Handle</code> 會返回一個 <code>PolicyBuilder</code> 類型，同時也會將我們設定的例外，放在裡面一併回傳</p>
+<p>接著後續的 <code>CircuitBreaker()</code> 方法在建立真正的斷路器的時候，才把真正的斷路器以及我們所設定的例外，一起聚合成一個 <code>CircuitBreakerPolicy</code> 類型，實際上只是將一個<code>連續記數斷路器(ConsecutiveCountCircuitController)</code>包裝起來，該類別繼承<code>ICircuitController&lt;TResult&gt;</code></p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">internal</span> <span class="keyword">interface</span> <span class="title">ICircuitController</span>&lt;<span class="title">TResult</span>&gt;</span><br><span class="line">&#123;</span><br><span class="line">    CircuitState CircuitState &#123; <span class="keyword">get</span>; &#125;</span><br><span class="line">    Exception LastException &#123; <span class="keyword">get</span>; &#125;</span><br><span class="line">    TResult LastHandledResult &#123; <span class="keyword">get</span>; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Isolate</span>()</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Reset</span>()</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">OnCircuitReset</span>(<span class="params">Context context</span>)</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">OnActionPreExecute</span>()</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">OnActionSuccess</span>(<span class="params">Context context</span>)</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">OnActionFailure</span>(<span class="params">DelegateResult&lt;TResult&gt; outcome, Context context</span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>這個介面定義了必要的操作，像是執行成功事件、執行失敗事件、電路重置事件；也包含了手動斷路、重置事件。也有當前電路狀態供查驗</p>
+<p>但是這些都是屬於預先定義好的東西，在實際上要呼叫使用，還必須透過斷路器繼承自<code>Policy</code>的<code>Execute()</code>等方法，將原本要執行的程式碼包裝在內</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Execute</span>(<span class="params">Action&lt;Context, CancellationToken&gt; action, Context context, CancellationToken cancellationToken</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (context == <span class="literal">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> ArgumentNullException(<span class="keyword">nameof</span>(context));</span><br><span class="line"></span><br><span class="line">    SetPolicyContext(context, <span class="keyword">out</span> <span class="built_in">string</span> priorPolicyWrapKey, <span class="keyword">out</span> <span class="built_in">string</span> priorPolicyKey);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span></span><br><span class="line">    &#123;</span><br><span class="line">        Implementation(action, context, cancellationToken);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">finally</span></span><br><span class="line">    &#123;</span><br><span class="line">        RestorePolicyContext(context, priorPolicyWrapKey, priorPolicyKey);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>而在這個例子當中，我們使用的是熔斷過載保護開關斷路器，因此根據原始碼，可以看到如下</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">override</span> TResult <span class="title">Implementation</span>&lt;<span class="title">TResult</span>&gt;(<span class="params">Func&lt;Context, CancellationToken, TResult&gt; action, Context context, CancellationToken cancellationToken</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    TResult result = <span class="literal">default</span>;</span><br><span class="line">    CircuitBreakerEngine.Implementation&lt;EmptyStruct&gt;(</span><br><span class="line">        (ctx, ct) =&gt; &#123; result = action(ctx, ct); <span class="keyword">return</span> EmptyStruct.Instance; &#125;,</span><br><span class="line">        context,</span><br><span class="line">        cancellationToken,</span><br><span class="line">        ExceptionPredicates,</span><br><span class="line">        ResultPredicates&lt;EmptyStruct&gt;.None,</span><br><span class="line">        _breakerController);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>具體的行為是由 <code>CircuitBreakerEngine.Implementation()</code>來實現，而其他的策略如 Retry , Timeout 其實都有自己的 <code>Engine</code> 類別</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">CircuitBreakerEngine</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">internal</span> <span class="keyword">static</span> TResult <span class="title">Implementation</span>&lt;<span class="title">TResult</span>&gt;(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">        Func&lt;Context, CancellationToken, TResult&gt; action,</span></span></span><br><span class="line"><span class="params"><span class="function">        Context context,</span></span></span><br><span class="line"><span class="params"><span class="function">        CancellationToken cancellationToken,</span></span></span><br><span class="line"><span class="params"><span class="function">        ExceptionPredicates shouldHandleExceptionPredicates,</span></span></span><br><span class="line"><span class="params"><span class="function">        ResultPredicates&lt;TResult&gt; shouldHandleResultPredicates,</span></span></span><br><span class="line"><span class="params"><span class="function">        ICircuitController&lt;TResult&gt; breakerController</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        cancellationToken.ThrowIfCancellationRequested();</span><br><span class="line">        <span class="comment">// 執行執行之前的事件</span></span><br><span class="line">        breakerController.OnActionPreExecute();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span></span><br><span class="line">        &#123;</span><br><span class="line">            TResult result = action(context, cancellationToken);</span><br><span class="line">            <span class="comment">// 若執行結果符合預先定義的錯誤</span></span><br><span class="line">            <span class="keyword">if</span> (shouldHandleResultPredicates.AnyMatch(result))</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// 斷路器執行失敗事件</span></span><br><span class="line">                breakerController.OnActionFailure(<span class="keyword">new</span> DelegateResult&lt;TResult&gt;(result), context);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// 執行成功事件</span></span><br><span class="line">                breakerController.OnActionSuccess(context);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (Exception ex)</span><br><span class="line">        &#123;</span><br><span class="line">            Exception handledException = shouldHandleExceptionPredicates.FirstMatchOrDefault(ex);</span><br><span class="line">            <span class="keyword">if</span> (handledException == <span class="literal">null</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">throw</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            breakerController.OnActionFailure(<span class="keyword">new</span> DelegateResult&lt;TResult&gt;(handledException), context);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (handledException != ex)</span><br><span class="line">            &#123;</span><br><span class="line">                ExceptionDispatchInfo.Capture(handledException).Throw();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">throw</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>透過這樣的設計，使得呼叫端呈現的是一個語意化的程式碼</p>
+<ol>
+<li>建立斷路器的擴充方法都放在<code>CircuitBreakerSyntax</code>類別內</li>
+<li>斷路器的主要邏輯都放在<code>CircuitBreakerEngine</code></li>
+<li>斷路器的實體類別，實作細節放在<code>ConsecutiveCountCircuitController</code>(連續記數斷路器)</li>
+</ol>
+<blockquote>
+<p>還有比較看不懂的地方，就是<code>Execute</code>方法內的<code>priorPolicyKey</code>還看不懂他的用途</p>
+</blockquote>
+<h2 id="實際範例-POC"><a href="#實際範例-POC" class="headerlink" title="實際範例 POC"></a>實際範例 POC</h2><p>這邊我做了一個簡單的 POC:<a target="_blank" rel="noopener" href="https://github.com/art-Blog/PollyDemo">Github:PollyDemo</a>，用來驗證 Polly 實際上的應用方式，當然這個方式也是我自己想的，沒有正式上線。我本來是想要將 <code>PolicyFactory</code> 從 <code>DataService</code> 搬移到 <code>Core</code>，但是想想這也只是一個簡單的 POC，就不多事了。</p>
+<blockquote>
+<p>這個範例針對的是 <code>.netFramework 4.5.2</code></p>
+</blockquote>
+<p>如果依照這樣的方式，在 nuget 安裝套件完畢後，只要將設定值跟 factory 弄好，應該就很快地可以幫網站加上熔斷機制，但是需要特別注意一下，<code>polly</code> 對於<code>.netFramework</code>、<code>NET6 Core</code>都有不太一樣的支援版本，所以未來可能還是要針對實際情況調整</p>
+<h2 id="2022-08-02-補充"><a href="#2022-08-02-補充" class="headerlink" title="2022-08-02 補充"></a>2022-08-02 補充</h2><p>Polly 也有提供限流，但是在舊的版本並沒有提供，實際測試 7.1.1 也還沒有加入 <code>RateLimit</code>，在 <code>7.2.3</code>版本才有。如果要測試的話可以在先前的 Repo 取得範例。如果是單體應用程式，不涉及分散式部署，可以透過 Polly 來做；但若是分散式部署的情況要實現限流，就需要自己實做，或是用別的套件。</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">RateLimitController</span> : <span class="title">ApiController</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Policy _currentPolicy;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Policy CurrentPolicy =&gt; _currentPolicy ?? (_currentPolicy = PolicyFactory.RateLimitPolicy());</span><br><span class="line"></span><br><span class="line">    [<span class="meta">HttpPost</span>]</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">Post</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> timeStamp = DateTime.Now;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> CurrentPolicy.Execute(() =&gt; DoSomething(timeStamp));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (RateLimitRejectedException ex)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> ex.Message;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="built_in">string</span> <span class="title">DoSomething</span>(<span class="params">DateTime timeStamp</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;This is a POST response from the RateLimitController - &quot;</span> + timeStamp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">PolicyFactory</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> RateLimitPolicy <span class="title">RateLimitPolicy</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> Policy.RateLimit(<span class="number">3</span>, TimeSpan.FromSeconds(<span class="number">1</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="心得"><a href="#心得" class="headerlink" title="心得"></a>心得</h2><p>在實做完斷路器之後，應該就會接著接觸到幾個關鍵字，這些關鍵字通常又會跟著一個 <code>Domain</code> 叫做 <code>Site Reliability Engineering 網站可靠性工程</code> aka <code>SRE</code>，發現我最近其實重點都放在相關領域上，從先前的<code>ELK Stack</code>、<code>Kibana</code>、<code>Serilog</code>，這些大概都是為了要做到能夠監控網站的情況而去學習的工具</p>
+<p>以我自己的開發經驗大概可以分成三個階段</p>
+<ul>
+<li>第一個階段比較單純直白，大概就是拿到需求就動手開幹，也沒有什麼特別好的方法改善</li>
+<li>第二個階段學習目標主要都是在如何將想法變成程式碼，讓這個過程盡量平滑順利，例如學習單元測試，TDD 等開發方法</li>
+<li>第三個階段學習目標都是環繞在監控及自動化，透過數據的量化得知較客觀的數據，並透過數據的比較來決策，例如 APM, CI&#x2F;CD</li>
+</ul>
+<p>而今天學習的這個斷路器的部分，則是比較偏向架構，這應該是我很少涉及到的領域，所以學習過程當中出現很多名詞都沒看過，像是熔斷；降級；重試也是這一次才搞懂，他們的目的也是為了網站可靠性，最終都是為了使用者體驗，先前也看過了一篇網路文章，提到從單體網站逐步演化成微服務架構的改變，很可惜我沒有加入書籤</p>
+<p>在學習的過程中發現越是後面的階段，怎麼去實做功能的程式碼細節，已經越來越不看重；因為程式碼的部分可以透過官網去找用法，網路也能找到文件去看；但是架構上的設計就需要理解才能夠真的拿來用，像是這一次說到的熔斷機制，程式碼反而就比較不重要，重要的是這個熔斷的觀念，後續帶出來的則是其他幾個類似的策略，都是為了一個目標：『可靠性』</p>
+<p>相對的在如何達成網站可靠性，又有很多很多的事情可以做，而且範疇就不僅僅是程式碼，當然也包含了其他幾個領域的知識，只能說學海無涯，隨便聯想到的幾個關鍵字真的要學下去真的是學不完，所以也只能挑工作上用的到，或是較有可能用的到的先學習。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/polly/" rel="tag"># polly</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/NET6-Core-distributed-tracing/" rel="prev" title="NET6 Core distributed tracing">
+                  <i class="fa fa-angle-left"></i> NET6 Core distributed tracing
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/git-ignore-local-file-without-edit-project-gitignore/" rel="next" title="git-忽略本地檔案且不修改專案.gitignore">
+                  git-忽略本地檔案且不修改專案.gitignore <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

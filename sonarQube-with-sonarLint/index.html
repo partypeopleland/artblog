@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="簡單說明 sonarQube 搭配 sonarLint 協助開發">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sonarQube-使用sonarLint協助開發">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/sonarQube-with-sonarLint/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="簡單說明 sonarQube 搭配 sonarLint 協助開發">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarQube-with-sonarLint/2022-12-13-130123.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarQube-with-sonarLint/2022-12-13-130222.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarQube-with-sonarLint/2022-12-13-130631.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarQube-with-sonarLint/2022-12-13-115645.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarQube-with-sonarLint/2022-12-13-115751.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarQube-with-sonarLint/2022-12-13-115857.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarQube-with-sonarLint/2022-12-13-115136.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarQube-with-sonarLint/2022-12-13-121633.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarQube-with-sonarLint/2022-12-13-121851.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarQube-with-sonarLint/2023-01-11-145658.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarQube-with-sonarLint/2022-12-13-120833.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarQube-with-sonarLint/2022-12-13-120923.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarQube-with-sonarLint/2022-12-13-121416.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarQube-with-sonarLint/2022-12-13-122055.jpg">
+<meta property="article:published_time" content="2022-12-13T03:35:54.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.451Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="sonarQube">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/sonarQube-with-sonarLint/2022-12-13-130123.jpg">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/sonarQube-with-sonarLint/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/sonarQube-with-sonarLint/","path":"/sonarQube-with-sonarLint/","title":"sonarQube-使用sonarLint協助開發"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>sonarQube-使用sonarLint協助開發 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D%E5%A5%97%E4%BB%B6"><span class="nav-number">1.</span> <span class="nav-text">安裝套件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#VS2022-%E8%A8%AD%E5%AE%9A"><span class="nav-number">1.1.</span> <span class="nav-text">VS2022 設定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VSCode-%E8%A8%AD%E5%AE%9A"><span class="nav-number">1.2.</span> <span class="nav-text">VSCode 設定</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Rider-%E4%B8%8D%E6%94%AF%E6%8F%B4-js-ts"><span class="nav-number">2.</span> <span class="nav-text">Rider - 不支援 js&#x2F;ts</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VS2022-%E6%94%AF%E6%8F%B4-js-ts"><span class="nav-number">3.</span> <span class="nav-text">VS2022 - 支援 js&#x2F;ts</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VSCode-%E6%94%AF%E6%8F%B4-js-ts"><span class="nav-number">4.</span> <span class="nav-text">VSCode - 支援 js&#x2F;ts</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.</span> <span class="nav-text">結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/sonarQube-with-sonarLint/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="sonarQube-使用sonarLint協助開發 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          sonarQube-使用sonarLint協助開發
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2022-12-13 11:35:54" itemprop="dateCreated datePublished" datetime="2022-12-13T11:35:54+08:00">2022-12-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+
+  
+    <span id="/artblog/sonarQube-with-sonarLint/" class="post-meta-item leancloud_visitors" data-flag-title="sonarQube-使用sonarLint協助開發" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/sonarQube-with-sonarLint/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/sonarQube-with-sonarLint/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>簡單說明 sonarQube 搭配 sonarLint 協助開發</p>
+<span id="more"></span>
+
+<p><a target="_blank" rel="noopener" href="https://www.sonarsource.com/products/sonarlint/">sonarLint</a> 作為官方推出的 IDE 外掛，當然也能夠很好的配合 sonarQube，使用他的主因就是為了針對 sonarQube 所產生的報告，能夠同步顯示於 IDE 中，即刻修復，便能即刻解決掉問題。軟體支援大部分常見的 IDE，當然也包括了 JetBrains 系列、Visual Studio 以及 VSCode。</p>
+<p>sonarLint 在ＩＤＥ的行為都是開箱即用的，只要設定完畢，點開某支程式碼檔案後就會立即掃描分析，並將結果顯示出來，因此使用上沒有特別難的地方，連線模式下，只需要將 sonarQube Server 主機設定好，並給予 token，頂多再指定一下 node.js 16 以上版本的執行檔案路徑，或者再指定一下 java 11 的路徑就可以了</p>
+<h2 id="安裝套件"><a href="#安裝套件" class="headerlink" title="安裝套件"></a>安裝套件</h2><p>詳細的套件設定步驟應該就沒甚麼好提的，套件頁面都有寫得很清楚，這邊大概寫重點，當然跟主機專案連線用的 token 要先準備好(<code>http://&lt;yourSonarQubeServer&gt;/account/security</code>)</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://plugins.jetbrains.com/plugin/7973-sonarlint">SonarLint for Rider</a></li>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=SonarSource.SonarLintforVisualStudio2022">SonarLint for Visual Studio 2022</a></li>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=SonarSource.sonarlint-vscode">SonarLint for VSCode</a></li>
+</ol>
+<blockquote>
+<p>設定連線模式的文件可參考 SonarQube Document:<a target="_blank" rel="noopener" href="https://docs.sonarqube.org/latest/user-guide/sonarlint-connected-mode/">SonarLint connected mode</a></p>
+</blockquote>
+<h3 id="VS2022-設定"><a href="#VS2022-設定" class="headerlink" title="VS2022 設定"></a>VS2022 設定</h3><p>VS2022 要設定連線模式，需要從 Team Explorer 點擊 sonarQube Icon 之後填寫主機資訊<br><img src="/artblog/sonarQube-with-sonarLint/2022-12-13-130123.jpg"><br><img src="/artblog/sonarQube-with-sonarLint/2022-12-13-130222.jpg"></p>
+<p>建議使用 token，這樣只要輸入主機跟 token，密碼就空白即可。接著連線後取得主機上的專案清單，點兩下專案就可以了<br><img src="/artblog/sonarQube-with-sonarLint/2022-12-13-130631.jpg"></p>
+<h3 id="VSCode-設定"><a href="#VSCode-設定" class="headerlink" title="VSCode 設定"></a>VSCode 設定</h3><p>開 setting 把相關該填的寫一寫<br><img src="/artblog/sonarQube-with-sonarLint/2022-12-13-115645.jpg"></p>
+<p>針對 sonarQube server 的設定部分，透過 F1 叫出指令，接著也是照填<br><img src="/artblog/sonarQube-with-sonarLint/2022-12-13-115751.jpg"><br><img src="/artblog/sonarQube-with-sonarLint/2022-12-13-115857.jpg"></p>
+<blockquote>
+<p>如果執行有問題，可以參考一下<a target="_blank" rel="noopener" href="https://www.prplbx.com/resources/blog/how-to-configure-sonarlint-in-visual-studio-code/">How to Configure SonarLint in Visual Studio Code</a>，他還有安裝 VSCode 的 Java 套件</p>
+</blockquote>
+<h2 id="Rider-不支援-js-ts"><a href="#Rider-不支援-js-ts" class="headerlink" title="Rider - 不支援 js&#x2F;ts"></a>Rider - <del>不</del>支援 js&#x2F;ts</h2><p>以分析 CSharp 來說，我當然最喜歡的還是在 Rider 裡面使用，但專案內可不僅僅包含 CSharp，也包含了一堆 javaScript 與 Vue 的原始碼，在這一塊我始終沒有辦法成功取得 sonarQube 主機上專案所掃出來的 js 問題，查了很久，官方一堆回答都是請使用者開啟 Verbose 然後重開 Rider 再去看 LOG<br><img src="/artblog/sonarQube-with-sonarLint/2022-12-13-115136.jpg"></p>
+<p>LOG 裡面我只看到載入了外掛，但它又不使用，最後採用的只有 C# 還有 secret 的兩個外掛去掃 Code，查不到資訊，後來才在一個問答帖子中看到，好像是 Rider 目前還尚未支援 js&#x2F;ts 的分析，我雖然不是很相信但也懶得找了。但如果只有處理 CSharp 的部分的話，我首選還是採用 Rider。</p>
+<p>Rider 的部分外掛視窗這邊有一個手動執行分析的 ICON，點了後可以重新分析當前程式碼<br><img src="/artblog/sonarQube-with-sonarLint/2022-12-13-121633.jpg"></p>
+<p>點選後問題的說明也會列在旁邊<br><img src="/artblog/sonarQube-with-sonarLint/2022-12-13-121851.jpg"></p>
+<blockquote>
+<p>2023&#x2F;01&#x2F;01 補充更新: 目前 7.3 版的 sonarLint 已經支援 js&#x2F;ts，請安心服用<br><img src="/artblog/sonarQube-with-sonarLint/2023-01-11-145658.jpg"></p>
+</blockquote>
+<blockquote>
+<p>套件更新紀錄如下:<br>7.3 - Improved display of rule descriptions. New react performance rules. Analyze CSS files. New Kotlin rules. 6 new C++20 rules. Support Python 3.11. Analyze JS, TS, CSS and HTML in Rider. 1 new rule for C# in Rider. Many rules improvements.</p>
+</blockquote>
+<h2 id="VS2022-支援-js-ts"><a href="#VS2022-支援-js-ts" class="headerlink" title="VS2022 - 支援 js&#x2F;ts"></a>VS2022 - 支援 js&#x2F;ts</h2><p>這是 VS2022 的問題視窗，當中也包含了 eslint 的警告提示<br><img src="/artblog/sonarQube-with-sonarLint/2022-12-13-120833.jpg"></p>
+<p>若選擇了 sonarLint 的錯誤，像這個複雜度的，還會有資訊顯示在旁邊<br><img src="/artblog/sonarQube-with-sonarLint/2022-12-13-120923.jpg"></p>
+<p>當然程式碼編輯器中也有顯示，但就不截圖給大家看了，反正就跟 sonarQube Server 上面顯示的差不多，而滑鼠懸停在有問題的程式碼上面，跳出來的懸浮提視窗，點擊後也會開啟該項規則的線上介紹頁面: <a target="_blank" rel="noopener" href="https://rules.sonarsource.com/javascript/RSPEC-1481">RSPEC-1481</a>頁面<br><img src="/artblog/sonarQube-with-sonarLint/2022-12-13-121416.jpg"></p>
+<h2 id="VSCode-支援-js-ts"><a href="#VSCode-支援-js-ts" class="headerlink" title="VSCode - 支援 js&#x2F;ts"></a>VSCode - 支援 js&#x2F;ts</h2><p>VSCode 的部分當然對我而言重頭戲就是針對 JavaScript 的部分，畢竟 Csharp 我喜歡用 Rider，而 VS2022 又很耗資源，所以會開 VSCode 的話應該也只是針對 js 的問題做修正而已，問題的部分在程式碼區塊及 Problem 視窗都有提示，點兩下 problem 　就跳過去程式碼進行修正，也算方便。<br><img src="/artblog/sonarQube-with-sonarLint/2022-12-13-122055.jpg"></p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>這一篇文章其實只是做為紀錄，動機是因為 Rider 的 sonarLint 沒法分析 js，所以嘗試看看 VS2022 及 VSCode，其他的都可以呢～當然之後可能也會支援，我目前測試的當下是 Rider 2022.3，SonarLint 7.2.1.58118</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/sonarQube/" rel="tag"># sonarQube</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/vitejs-vue3-aspnetcore-intergration/" rel="prev" title="整合vitejs + vue3搭配.NET Core網站開發練習">
+                  <i class="fa fa-angle-left"></i> 整合vitejs + vue3搭配.NET Core網站開發練習
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/learning-record-vue-the-complete-guide/" rel="next" title="學習紀錄-Vue - The Complete Guide (incl. Router & Composition API)">
+                  學習紀錄-Vue - The Complete Guide (incl. Router & Composition API) <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

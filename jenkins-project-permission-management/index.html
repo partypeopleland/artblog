@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="jenkins 的專案權限管理練習，之所以會弄這個是因為專案越來越多的話，針對組織內的使用者及專案之間的權限管理，如果還是一個個的設定，不僅容易出錯，也難以整體的確認當前分配的權限概況。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jenkins-專案權限管理">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/jenkins-project-permission-management/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="jenkins 的專案權限管理練習，之所以會弄這個是因為專案越來越多的話，針對組織內的使用者及專案之間的權限管理，如果還是一個個的設定，不僅容易出錯，也難以整體的確認當前分配的權限概況。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-project-permission-management/2022-11-25-105842.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-project-permission-management/2022-11-25-110453.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-project-permission-management/2022-11-25-111205.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-project-permission-management/2022-11-25-111322.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-project-permission-management/2022-11-25-115715.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-project-permission-management/2022-11-25-115856.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-project-permission-management/2022-11-25-120152.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-project-permission-management/2022-11-25-120313.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-project-permission-management/2022-11-25-120418.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-project-permission-management/2022-11-25-122544.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-project-permission-management/2022-11-25-122359.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-project-permission-management/2022-11-25-122243.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-project-permission-management/2022-11-25-121842.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-project-permission-management/2022-11-25-122443.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-project-permission-management/2022-11-25-121329.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-project-permission-management/2022-11-25-122852.jpg">
+<meta property="article:published_time" content="2022-11-25T02:46:44.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.396Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="jenkins">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/jenkins-project-permission-management/2022-11-25-105842.jpg">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/jenkins-project-permission-management/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/jenkins-project-permission-management/","path":"/jenkins-project-permission-management/","title":"Jenkins-專案權限管理"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Jenkins-專案權限管理 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Intro"><span class="nav-number">1.</span> <span class="nav-text">Intro</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Role-based-Authorization-Strategy"><span class="nav-number">2.</span> <span class="nav-text">Role-based Authorization Strategy</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D%E4%B8%A6%E5%95%9F%E7%94%A8"><span class="nav-number">2.1.</span> <span class="nav-text">安裝並啟用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A8%AD%E5%AE%9A%E8%A7%92%E8%89%B2%E7%BE%A4%E7%B5%84%E5%8F%8A%E8%A7%92%E8%89%B2%E5%B0%8D%E6%87%89"><span class="nav-number">2.2.</span> <span class="nav-text">設定角色群組及角色對應</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A8%AD%E5%AE%9A%E7%AF%84%E4%BE%8B"><span class="nav-number">3.</span> <span class="nav-text">設定範例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A3%9C%E5%85%85%EF%BC%9A%E5%88%87%E6%8F%9B%E5%9B%9E%E3%80%8E%E5%B0%88%E6%A1%88%E5%9E%8B%E7%9F%A9%E9%99%A3%E6%8E%88%E6%AC%8A%E7%AD%96%E7%95%A5%E3%80%8F"><span class="nav-number">4.</span> <span class="nav-text">補充：切換回『專案型矩陣授權策略』</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.</span> <span class="nav-text">結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/jenkins-project-permission-management/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Jenkins-專案權限管理 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Jenkins-專案權限管理
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2022-11-25 10:46:44" itemprop="dateCreated datePublished" datetime="2022-11-25T10:46:44+08:00">2022-11-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/devOps/" itemprop="url" rel="index"><span itemprop="name">devOps</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/jenkins-project-permission-management/" class="post-meta-item leancloud_visitors" data-flag-title="Jenkins-專案權限管理" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/jenkins-project-permission-management/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/jenkins-project-permission-management/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>jenkins 的專案權限管理練習，之所以會弄這個是因為專案越來越多的話，針對組織內的使用者及專案之間的權限管理，如果還是一個個的設定，不僅容易出錯，也難以整體的確認當前分配的權限概況。</p>
+<span id="more"></span>
+
+<h2 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h2><p>專案如果採用的是<code>Matrix Authorization Strategy</code>這個 plugin 所提供的<code>專案型矩陣授權策略</code>的話，應該也很納悶 Role 怎麼設定，據我找到的這篇文章<a target="_blank" rel="noopener" href="https://www.cnblogs.com/grey-wolf/p/8951796.html">Jenkins 权限管理之 Matrix Authorization Strategy</a>來看的話，說是要靠 LDAP 或是 Active Directory 來做，這就牽涉到我不熟悉的網管、主機、域名等等的設定，坦白說這東西對我就是天書。我不可能為了吃一碗麵還去研究要怎麼鑽木取火、把麵團發酵吧。</p>
+<p><img src="/artblog/jenkins-project-permission-management/2022-11-25-105842.jpg"></p>
+<blockquote>
+<p>REF:<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/11855944/how-to-create-and-add-users-to-a-group-in-jenkins-for-authentication">How to create and add users to a group in Jenkins for authentication?</a></p>
+</blockquote>
+<p>在該文章得到另外一個關鍵字：<code>Role-based Authorization Strategy</code>，於是就來研究一下怎麼設定這個 plugin</p>
+<h2 id="Role-based-Authorization-Strategy"><a href="#Role-based-Authorization-Strategy" class="headerlink" title="Role-based Authorization Strategy"></a>Role-based Authorization Strategy</h2><p>在<a target="_blank" rel="noopener" href="https://plugins.jenkins.io/role-strategy/">Role-based Authorization Strategy</a>的介紹網頁中可以看到基本的用法，大致上的流程就是:安裝-&gt;啟用-&gt;設定角色群組-&gt;設定使用者角色對應</p>
+<h3 id="安裝並啟用"><a href="#安裝並啟用" class="headerlink" title="安裝並啟用"></a>安裝並啟用</h3><p>安裝套件這個沒有什麼好說的，啟用也很簡單，不外乎就是到<code>管理jenkins</code>-&gt;<code>設定全域安全性</code>這邊將<code>授權</code>的下拉選單，從原先的<code>專案型矩陣授權</code>改為<code>Role-Based Strategy</code><br><img src="/artblog/jenkins-project-permission-management/2022-11-25-110453.jpg"></p>
+<p>值得一提的是，當你的授權策略改變的話，原先在各個專案的矩陣授權設定，就會一併隱藏起來，若未來調整回來<code>專案型矩陣授權</code>的話，這些被隱藏的授權設定也會回復，至少這個是我測試出來的經驗啦，這樣的話就比較不害怕改壞掉要切回來，然後設定全部消失的窘境，不過因為軟體版本太多，所以最好在調整的時候自己先測試、備份一下原有的專案設定，以免發生了不可挽回的操作，人生跑馬燈就會出現了。</p>
+<h3 id="設定角色群組及角色對應"><a href="#設定角色群組及角色對應" class="headerlink" title="設定角色群組及角色對應"></a>設定角色群組及角色對應</h3><p>接著到<code>管理jenkins</code>-&gt;<code>Security</code>-&gt;<code>Manage and Assign Roles</code><br><img src="/artblog/jenkins-project-permission-management/2022-11-25-111205.jpg"><br>會看到設定角色群組、指派角色的功能<br><img src="/artblog/jenkins-project-permission-management/2022-11-25-111322.jpg"></p>
+<p>設定有一點點的難懂，但是測試了一下發現的確是挺不錯的，他的設定有三個部分，這邊先關注在<code>Global Roles</code>、<code>Item Roles</code>這兩項就可以了，最後一項<code>Node Rules</code>我還是沒看懂，或許有人可以分享一下？</p>
+<h2 id="設定範例"><a href="#設定範例" class="headerlink" title="設定範例"></a>設定範例</h2><p>我覺得用範例來解釋會比較好懂，假設我有專案叫做</p>
+<ol>
+<li><code>pipeline_job_1</code></li>
+<li><code>pipeline_job_2</code></li>
+<li><code>taskProject</code></li>
+</ol>
+<p>我想要達成的效果是</p>
+<ol>
+<li>沒有特別設定的話，一般的使用者就是只能看到<code>pipeline_job</code>任務，但是不能夠操作</li>
+<li>開發人員(develop)可以執行<code>pipeline_job</code>任務，但是看不到建置設定</li>
+<li>管理人員(manager)針對<code>pipeline_job</code>任務具備所有權限</li>
+<li>所有的人都看不到<code>taskProject</code>，除了 admin</li>
+</ol>
+<p>所以整理完需求，描述大概就是像下面這樣</p>
+<table>
+<thead>
+<tr>
+<th>使用者</th>
+<th>權限</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>art</td>
+<td>最高管理者(admin)阿，全部打開！！</td>
+</tr>
+<tr>
+<td>demouser1</td>
+<td>pipeline_job 專案的管理者(manager)</td>
+</tr>
+<tr>
+<td>demouser2</td>
+<td>pipeline_job 專案的開發人員(develop)</td>
+</tr>
+<tr>
+<td>demouser3</td>
+<td>什麼都看不到</td>
+</tr>
+</tbody></table>
+<p>那麼，我就需要</p>
+<ol>
+<li>針對超級管理者 art 給予全域的超級管理者(admin)權限</li>
+<li>針對管理者 demouser1 作一個管理者(manager)，這個設定對應的專案是 pipeline_job_1 跟 2，且權限都開</li>
+<li>針對開發人員 demouser2 作一個開發人員(develop)，這個設定對應的專案是 pipeline_job_1 跟 2，且權限是 build 跟 read</li>
+<li>最後，針對一般使用者給予全域的什麼都看不到(anyone)的權限</li>
+</ol>
+<p>整理一下就是</p>
+<table>
+<thead>
+<tr>
+<th>scope</th>
+<th>role</th>
+<th>permission</th>
+<th>for who?</th>
+<th>result</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>全域</td>
+<td>admin</td>
+<td>全開</td>
+<td>art</td>
+<td>所有權限</td>
+</tr>
+<tr>
+<td>全域</td>
+<td>anyone</td>
+<td>僅給予整體的 read</td>
+<td>沒有特別設定的人</td>
+<td>進來介面什麼都沒有</td>
+</tr>
+<tr>
+<td>pipeline_job_1 跟 2</td>
+<td>Develop</td>
+<td>允許 build , read</td>
+<td>demouser2</td>
+<td>可以執行 pipeline_job_1 跟 2</td>
+</tr>
+<tr>
+<td>pipeline_job_1 跟 2</td>
+<td>Manager</td>
+<td>允許該專案所有操作</td>
+<td>demouser1</td>
+<td>可以執行所有操作</td>
+</tr>
+</tbody></table>
+<p>我們先搞定全域的兩個設定，分別是 admin 跟 anyone<br><img src="/artblog/jenkins-project-permission-management/2022-11-25-115715.jpg"></p>
+<p>接著指派給使用者，因為只有 art 所以只需要指派一個，其他的人就不用特別指派了<br><img src="/artblog/jenkins-project-permission-management/2022-11-25-115856.jpg"></p>
+<p>透過正則表達式去比對我們要符合的<code>pipeline_job_1</code>、<code>pipeline_job_2</code>這兩個專案，所以 <code>pattern</code> 就是 <code>pipeline_job.*</code>，因為這樣很直觀所以我也沒打算寫得很複雜的 pattern，設定的話就像下面這樣<br><img src="/artblog/jenkins-project-permission-management/2022-11-25-120152.jpg"></p>
+<p>可以測試一下 pattern match 哪些專案，點一下就可以看到，如果你屬於 regex 之神的話，可以當我沒說<br><img src="/artblog/jenkins-project-permission-management/2022-11-25-120313.jpg"></p>
+<p>指派使用者，將 demouser1 套用 manager， demouser2 套用 develop<br><img src="/artblog/jenkins-project-permission-management/2022-11-25-120418.jpg"></p>
+<p>這邊的群組名稱可以命名的更清晰一點，方便管理，例如專案叫做 SuperStar，管理者就可以命名為 SuperStarManager，開發人員就可以命名為 SuperStarDevelop；又或者是你們專案有 SuperStar，TravelToday 都是同一組人，這個團隊叫做 TeamA，那其實也可以把群組名稱命名為 TeamA-Manager 之類的，總之就是讓人一看就知道這個群組是誰，責任範疇在哪裡。千萬不要真的傻傻的明明一個團隊要負責十個專案，結果十個專案還都有各自的 Manager 跟 Develop 或是其他一堆有的沒有的權限，然後搞個每次設定那個清單排到 1920 螢幕寬度都還看不完，那就累人了，不過如果真的硬要好像也是可以拉～（笑）</p>
+<p>那麼最後來測試一下每一位使用者登入後的情況，看看是否如我們預期</p>
+<p>art，所有專案功能都開放<br><img src="/artblog/jenkins-project-permission-management/2022-11-25-122544.jpg"></p>
+<p>demo user 1，可以看到 pipeline_job 專案，可以執行且能夠設定建置<br><img src="/artblog/jenkins-project-permission-management/2022-11-25-122359.jpg"><br><img src="/artblog/jenkins-project-permission-management/2022-11-25-122243.jpg"></p>
+<p>demo user 2，可以看到 pipeline_job 專案，可以執行但是不能夠設定建置<br><img src="/artblog/jenkins-project-permission-management/2022-11-25-121842.jpg"><br><img src="/artblog/jenkins-project-permission-management/2022-11-25-122443.jpg"></p>
+<p>demo user 3，應該是什麼都看不到<br><img src="/artblog/jenkins-project-permission-management/2022-11-25-121329.jpg"></p>
+<h2 id="補充：切換回『專案型矩陣授權策略』"><a href="#補充：切換回『專案型矩陣授權策略』" class="headerlink" title="補充：切換回『專案型矩陣授權策略』"></a>補充：切換回『專案型矩陣授權策略』</h2><p>如果設定之後因故，老闆叫你先還原呢？那就直接把一開始提到的<code>管理jenkins</code>-&gt;<code>設定全域安全性</code>這邊將<code>授權</code>的下拉選單，再改回來<code>專案型矩陣授權</code>就好了，以<code>pipeline_job_1</code>為例，我在調整之前有把權限給予好幾個 user，調整回來後，設定也回來了</p>
+<p><img src="/artblog/jenkins-project-permission-management/2022-11-25-122852.jpg"></p>
+<p>當然，這個步驟再次強調，希望還是要在你自己的環境作一下簡單的 POC 測試，但是如果切回來後還想要切過去<code>Role-based</code>，那麼剛剛設定的就會全部清空，需要全部再重新建立了；雖說是全部重新建立，但其實因為設定也就在兩個頁面的地方，其實如果有做好備份、截圖，甚至用 EXCEL 記錄好有哪些權限設定、群組，其實設定也不繁瑣。</p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>作為一個老牌的軟體，jenkins 是真的很多工具可以用，出問題想找資料也很多，這也是我喜歡 jenkins 的原因，好用的東西功能自然複雜，設定自然就困難，瞭解概念再去處理，自然事半功倍。這也是我整理這篇文章的原因，叫我看官方那一串我真的會看半天還是看不懂。自己 RUN 過一次記錄一下，以後我肯定還會碰上這個問題忘記怎麼設定的。也算救救未來的自己了</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/jenkins/" rel="tag"># jenkins</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/sonarQube-analyze-jenkins-pipeline-by-plugin/" rel="prev" title="SonarQube-整合Jenkins Pipeline(使用jenkins套件)">
+                  <i class="fa fa-angle-left"></i> SonarQube-整合Jenkins Pipeline(使用jenkins套件)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/vitejs-vue3-aspnetcore-intergration/" rel="next" title="整合vitejs + vue3搭配.NET Core網站開發練習">
+                  整合vitejs + vue3搭配.NET Core網站開發練習 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

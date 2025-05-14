@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="通常網站都會與資料庫溝通，也因此在 csharp 的專案設定檔，我們大都會將連線字串寫在這裡，便於程式調用，但資料庫連線字串包含了帳號密碼，直接寫在設定組態檔是一個資安漏洞為了不要讓明碼直接暴露出去，我們這裡最好做一些防護措施，利用演算法將明文加密，等到要用的時候再解密出來。 當然這樣的做法還是有風險的，因為加解密的 Key、IV 也還是一樣都放在組態檔內，所以這只能說是一個初步的防護方式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="連線字串加密的方式">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/encrypt-connection-string/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="通常網站都會與資料庫溝通，也因此在 csharp 的專案設定檔，我們大都會將連線字串寫在這裡，便於程式調用，但資料庫連線字串包含了帳號密碼，直接寫在設定組態檔是一個資安漏洞為了不要讓明碼直接暴露出去，我們這裡最好做一些防護措施，利用演算法將明文加密，等到要用的時候再解密出來。 當然這樣的做法還是有風險的，因為加解密的 Key、IV 也還是一樣都放在組態檔內，所以這只能說是一個初步的防護方式">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/encrypt-connection-string/2020-03-04_113723.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/encrypt-connection-string/2020-03-04_121656.png">
+<meta property="article:published_time" content="2020-03-04T01:57:20.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.351Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="web.config">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/encrypt-connection-string/2020-03-04_113723.png">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/encrypt-connection-string/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/encrypt-connection-string/","path":"/encrypt-connection-string/","title":"連線字串加密的方式"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>連線字串加密的方式 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%A3%E7%B7%9A%E5%AD%97%E4%B8%B2%E5%8A%A0%E5%AF%86"><span class="nav-number">1.</span> <span class="nav-text">連線字串加密</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Key%E3%80%81IV"><span class="nav-number">1.1.</span> <span class="nav-text">Key、IV</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A0%E8%A7%A3%E5%AF%86%E5%87%BD%E5%BC%8F"><span class="nav-number">1.2.</span> <span class="nav-text">加解密函式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A4%E6%96%B7%E6%98%AF%E5%90%A6%E9%9C%80%E8%A6%81%E5%9F%B7%E8%A1%8C%E8%A7%A3%E5%AF%86"><span class="nav-number">1.3.</span> <span class="nav-text">判斷是否需要執行解密</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sample-Code"><span class="nav-number">1.4.</span> <span class="nav-text">Sample Code</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%84%E6%85%8B%E6%AA%94%E6%A1%88%E5%8A%A0%E5%AF%86"><span class="nav-number">2.</span> <span class="nav-text">組態檔案加密</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%83%E8%80%83%E8%B3%87%E6%96%99"><span class="nav-number">2.1.</span> <span class="nav-text">參考資料</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/encrypt-connection-string/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="連線字串加密的方式 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          連線字串加密的方式
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2020-03-04 09:57:20" itemprop="dateCreated datePublished" datetime="2020-03-04T09:57:20+08:00">2020-03-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/csharp/" itemprop="url" rel="index"><span itemprop="name">csharp</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/encrypt-connection-string/" class="post-meta-item leancloud_visitors" data-flag-title="連線字串加密的方式" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/encrypt-connection-string/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/encrypt-connection-string/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>通常網站都會與資料庫溝通，也因此在 csharp 的專案設定檔，我們大都會將連線字串寫在這裡，便於程式調用，但資料庫連線字串包含了帳號密碼，直接寫在設定組態檔是一個資安漏洞<br>為了不要讓明碼直接暴露出去，我們這裡最好做一些防護措施，利用演算法將明文加密，等到要用的時候再解密出來。</p>
+<p>當然這樣的做法還是有風險的，因為加解密的 Key、IV 也還是一樣都放在組態檔內，所以這只能說是一個初步的防護方式</p>
+<span id="more"></span>
+
+<h2 id="連線字串加密"><a href="#連線字串加密" class="headerlink" title="連線字串加密"></a>連線字串加密</h2><p>先透過一組金鑰 (public key, private key)來作加密、解密，有興趣的可以透過<a target="_blank" rel="noopener" href="https://www.devglan.com/online-tools/rsa-encryption-decryption">Online RSA Encryption, Decryption And Key Generator Tool</a>來測試一下</p>
+<p>需要先將需要保護的連線字串加密，然後將這個加密過後的字串，放到<code>web.config</code>裡面，等到程式需要資料庫連線的時候，取得加密字串後再針對他進行解密即可，搭配上 web.config 的連線字串<code>lockItem</code>設定使用。思路已經有了，所以具體的步驟大概就是要做</p>
+<ol>
+<li>Key、IV</li>
+<li>加解密函式</li>
+<li>判斷是否需要執行解密</li>
+</ol>
+<h3 id="Key、IV"><a href="#Key、IV" class="headerlink" title="Key、IV"></a>Key、IV</h3><p>這邊直接使用網路上的範例，相關知識可以參考一下這兩篇文章</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10187947">Day14 資料使用安全(保護連接字串)上</a></li>
+<li><a target="_blank" rel="noopener" href="http://vito-note.blogspot.com/2012/05/1.html">資料的加密與解密(1)-對稱金鑰加密演算法</a></li>
+</ol>
+<p>config 設定</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;utf-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">appSettings</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">add</span> <span class="attr">key</span>=<span class="string">&quot;hashKey&quot;</span> <span class="attr">value</span>=<span class="string">&quot;金鑰喔金鑰喔金鑰喔金鑰喔&quot;</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">add</span> <span class="attr">key</span>=<span class="string">&quot;iv&quot;</span> <span class="attr">value</span>=<span class="string">&quot;加密向量初始資料&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">appSettings</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="加解密函式"><a href="#加解密函式" class="headerlink" title="加解密函式"></a>加解密函式</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">Decryption</span>(<span class="params"><span class="built_in">string</span> CipherText,<span class="built_in">string</span> hashKey,<span class="built_in">string</span> iv</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">using</span> (Aes aesAlg = Aes.Create())</span><br><span class="line">    &#123;</span><br><span class="line">        aesAlg.Key = Encoding.Unicode.GetBytes(hashKey);</span><br><span class="line">        aesAlg.IV = Encoding.Unicode.GetBytes(iv);</span><br><span class="line">        ICryptoTransform decrypt = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);</span><br><span class="line">        <span class="built_in">byte</span>[] decrypted = decrypt.TransformFinalBlock(Convert.FromBase64String(CipherText), <span class="number">0</span>, Convert.FromBase64String(CipherText).Length);</span><br><span class="line">        <span class="keyword">return</span> Encoding.Unicode.GetString(decrypted);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">Encryption</span>(<span class="params"><span class="built_in">string</span> PlainText,<span class="built_in">string</span> hashKey, <span class="built_in">string</span> iv</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">using</span> (Aes aesAlg = Aes.Create())</span><br><span class="line">    &#123;</span><br><span class="line">        aesAlg.Key = Encoding.Unicode.GetBytes(hashKey);</span><br><span class="line">        aesAlg.IV = Encoding.Unicode.GetBytes(iv);</span><br><span class="line">        ICryptoTransform encrypt = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);</span><br><span class="line">        <span class="built_in">byte</span>[] encrypted = encrypt.TransformFinalBlock(Encoding.Unicode.GetBytes(PlainText), <span class="number">0</span>,</span><br><span class="line">            Encoding.Unicode.GetBytes(PlainText).Length);</span><br><span class="line">        <span class="keyword">return</span> Convert.ToBase64String(encrypted);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="判斷是否需要執行解密"><a href="#判斷是否需要執行解密" class="headerlink" title="判斷是否需要執行解密"></a>判斷是否需要執行解密</h3><p>直接取得連線字串的 function 當中判斷處理</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="built_in">string</span> <span class="title">GetVersion</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> connectionString = GetConnectionString(<span class="string">&quot;db&quot;</span>);</span><br><span class="line">    <span class="keyword">var</span> commandText = <span class="string">&quot;select @@version&quot;</span>;</span><br><span class="line">    <span class="keyword">using</span> (<span class="keyword">var</span> cnn = <span class="keyword">new</span> MySqlConnection(connectionString))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> cnn.Query&lt;<span class="built_in">string</span>&gt;(commandText).FirstOrDefault();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="built_in">string</span> <span class="title">GetConnectionString</span>(<span class="params"><span class="built_in">string</span> name</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> connectionString = ConfigurationManager.ConnectionStrings[name];</span><br><span class="line">    <span class="keyword">var</span> source = connectionString.ConnectionString;</span><br><span class="line">    <span class="keyword">if</span> (connectionString.LockItem)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> hashKey = ConfigurationManager.AppSettings[<span class="string">&quot;hashKey&quot;</span>];</span><br><span class="line">        <span class="keyword">var</span> iv = ConfigurationManager.AppSettings[<span class="string">&quot;iv&quot;</span>];</span><br><span class="line">        source = Decryption(source, hashKey, iv);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> source;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Sample-Code"><a href="#Sample-Code" class="headerlink" title="Sample Code"></a>Sample Code</h3><p><img src="/artblog/encrypt-connection-string/2020-03-04_113723.png"><br><a target="_blank" rel="noopener" href="https://github.com/art-Blog/CryptoConnStrDemo">Github</a></p>
+<h2 id="組態檔案加密"><a href="#組態檔案加密" class="headerlink" title="組態檔案加密"></a>組態檔案加密</h2><p>透過 aspnet_regiis.exe 來處理，需要透過管理員權限來執行喔</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">透過 aspnet_regiis將 指定目錄下的 web.config 當中的 appSettings 區段加密</span></span><br><span class="line">aspnet_regiis -pef appSettings D:\code\Github\Repos\CryptoConnStrDemo\CryptoConnStrDemo</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">同上，參數改為 pdf 則為解密</span></span><br><span class="line">aspnet_regiis -pdf appSettings D:\code\Github\Repos\CryptoConnStrDemo\CryptoConnStrDemo</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/encrypt-connection-string/2020-03-04_121656.png"></p>
+<p>如果要在本機測試的話，需要先將 Visual Studio 在建置的時候使用 local 的 IIS，而非 IISExpress</p>
+<p>如果需要將本機的 RSA 金鑰容器給別台主機使用，則需要先將金鑰容器匯出，再由別的主機匯入使用</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">匯出</span></span><br><span class="line">aspnet_regiis -px &quot;NetFrameworkConfigurationKey&quot; D:/RSAkeys.xml -pri</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">匯入</span></span><br><span class="line">aspnet_regiis -pi &quot;NetFrameworkConfigurationKey&quot; D:/RSAkeys.xml</span><br></pre></td></tr></table></figure>
+
+<h3 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h3><ol>
+<li><a target="_blank" rel="noopener" href="https://www.itread01.com/content/1549832402.html">配置檔案（Web.Config）加密解密詳細說明</a></li>
+<li><a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10188072">Day15 資料使用安全(保護連接字串)下</a></li>
+<li><a target="_blank" rel="noopener" href="https://dotblogs.com.tw/wasichris/2016/01/01/235040">ASP.NET 使用相同 RSA 金鑰容器幫 web.config 連線字串加密</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/web-config/" rel="tag"># web.config</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/javascript-tdd/" rel="prev" title="讀書心得-JavaScript測試驅動開發">
+                  <i class="fa fa-angle-left"></i> 讀書心得-JavaScript測試驅動開發
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/dotnet-core-identity/" rel="next" title="dotnet core identity">
+                  dotnet core identity <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

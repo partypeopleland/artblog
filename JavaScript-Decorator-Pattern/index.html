@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="在原有的事物上，一點一滴地加上一些裝飾，這樣的概念套用在程式設計上，其實就是裝飾模式。 以計算金額來看，最終的計算結果是一個價格。但是這個價格也許還要再經過一些加工，例如markup、稅額等等，最終呈現的金額可能會因為各種條件而有所不同，這就可以利用裝飾模式來處理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript Decorator Pattern">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/JavaScript-Decorator-Pattern/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="在原有的事物上，一點一滴地加上一些裝飾，這樣的概念套用在程式設計上，其實就是裝飾模式。 以計算金額來看，最終的計算結果是一個價格。但是這個價格也許還要再經過一些加工，例如markup、稅額等等，最終呈現的金額可能會因為各種條件而有所不同，這就可以利用裝飾模式來處理">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2018-06-19T06:54:15.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.164Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="decorator">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/JavaScript-Decorator-Pattern/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/JavaScript-Decorator-Pattern/","path":"/JavaScript-Decorator-Pattern/","title":"JavaScript Decorator Pattern"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>JavaScript Decorator Pattern | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/JavaScript-Decorator-Pattern/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="JavaScript Decorator Pattern | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JavaScript Decorator Pattern
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2018-06-19 14:54:15" itemprop="dateCreated datePublished" datetime="2018-06-19T14:54:15+08:00">2018-06-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/pattern/" itemprop="url" rel="index"><span itemprop="name">pattern</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/JavaScript-Decorator-Pattern/" class="post-meta-item leancloud_visitors" data-flag-title="JavaScript Decorator Pattern" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/JavaScript-Decorator-Pattern/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/JavaScript-Decorator-Pattern/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在原有的事物上，一點一滴地加上一些裝飾，這樣的概念套用在程式設計上，其實就是裝飾模式。</p>
+<p>以計算金額來看，最終的計算結果是一個價格。但是這個價格也許還要再經過一些加工，例如markup、稅額等等，最終呈現的金額可能會因為各種條件而有所不同，這就可以利用裝飾模式來處理</p>
+<span id="more"></span>
+
+<p>一樣是從書中範例開始模仿學習，書中的範例提供了兩種方式，都能夠達到目的，這邊練習選擇比較簡單易懂的方式。</p>
+<blockquote>
+<p>範例取自JavaScript設計模式</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// /src/Sale.js</span></span><br><span class="line"><span class="keyword">var</span> decorators = <span class="built_in">require</span>(<span class="string">&#x27;./Decorators&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Sale</span> &#123;</span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params">price</span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">price</span> = price &gt; <span class="number">0</span> ? price : <span class="number">100</span></span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">decorators_list</span> = []</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">decorators</span> = decorators</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="title function_">decorate</span>(<span class="params">decorator</span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">decorators_list</span>.<span class="title function_">push</span>(decorator)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="title class_">GetPrice</span>() &#123;</span><br><span class="line">        <span class="keyword">let</span> price = <span class="variable language_">this</span>.<span class="property">price</span></span><br><span class="line">        <span class="keyword">let</span> max = <span class="variable language_">this</span>.<span class="property">decorators_list</span>.<span class="property">length</span></span><br><span class="line">        <span class="keyword">let</span> name</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; max; i++) &#123;</span><br><span class="line">            name = <span class="variable language_">this</span>.<span class="property">decorators_list</span>[i]</span><br><span class="line">            price = <span class="variable language_">this</span>.<span class="property">decorators</span>[name].<span class="title class_">GetPrice</span>(price)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> price</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = <span class="title class_">Sale</span></span><br></pre></td></tr></table></figure>
+
+<p>這邊的重點在於定義流程，介面。並不實作細節。也就是說，Sale這個類別(姑且讓我這樣稱呼吧)，他本身提供了兩個方法，一個方法是用來記錄有多少個decorator要使用。將他放在陣列裡面等候GetPrice()呼叫使用；而GetPrice()就更簡單了，將每一個decorator抓出來，然後把一開始的price經過剛才所設定的每一個decorator處理，最終再return這個結果。再更簡單的說，GetPrice()她只是將我們剛才設定要用的decorator，拿出來用而已。(實際的decorator部分，則是透過ctor的時候，從另外一隻檔案把資料抓過來，然後等著GetPrice()用this.decorators[name]這個方式去呼叫。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// /src/Decorators.js</span></span><br><span class="line"><span class="keyword">var</span> decorators = &#123;&#125;</span><br><span class="line">decorators.<span class="property">fedtax</span> = &#123;</span><br><span class="line">    <span class="title class_">GetPrice</span>: <span class="keyword">function</span> (<span class="params">price</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> price + price * <span class="number">5</span> / <span class="number">100</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">decorators.<span class="property">quebec</span> = &#123;</span><br><span class="line">    <span class="title class_">GetPrice</span>: <span class="keyword">function</span> (<span class="params">price</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> price + price * <span class="number">7.5</span> / <span class="number">100</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">decorators.<span class="property">money</span> = &#123;</span><br><span class="line">    <span class="title class_">GetPrice</span>: <span class="keyword">function</span> (<span class="params">price</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> price.<span class="title function_">toFixed</span>(<span class="number">2</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = decorators</span><br></pre></td></tr></table></figure>
+
+<p>裝飾模式的各種實作細節，都被放在這個物件裡面，如果是較為複雜的實作細節，那就可以再考慮針對這個部分來進行重構設計，不過目前為止，維持這樣就可以了。</p>
+<p>這裡的重點在於將各種裝飾方法的名稱與實作方法這對key-value，放在這個decorators的物件內，方便我們定義的Sale物件來呼叫。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// /test/Sale.test.js</span></span><br><span class="line"><span class="keyword">var</span> mocha = <span class="built_in">require</span>(<span class="string">&#x27;mocha&#x27;</span>)</span><br><span class="line"><span class="keyword">var</span> chai = <span class="built_in">require</span>(<span class="string">&#x27;chai&#x27;</span>)</span><br><span class="line">chai.<span class="title function_">should</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> <span class="title class_">SaleObj</span> = <span class="built_in">require</span>(<span class="string">&#x27;../src/Sale&#x27;</span>)</span><br><span class="line"><span class="title function_">describe</span>(<span class="string">&#x27;Sale&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">it</span>(<span class="string">&#x27;#GetPrice()&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> expected = <span class="string">&#x27;112.88&#x27;</span></span><br><span class="line">        <span class="keyword">let</span> sale = <span class="keyword">new</span> <span class="title class_">SaleObj</span>(<span class="number">100</span>)</span><br><span class="line">        sale.<span class="title function_">decorate</span>(<span class="string">&#x27;fedtax&#x27;</span>)</span><br><span class="line">        sale.<span class="title function_">decorate</span>(<span class="string">&#x27;quebec&#x27;</span>)</span><br><span class="line">        sale.<span class="title function_">decorate</span>(<span class="string">&#x27;money&#x27;</span>)</span><br><span class="line">        <span class="keyword">let</span> actual = sale.<span class="title class_">GetPrice</span>()</span><br><span class="line">        actual.<span class="property">should</span>.<span class="property">be</span>.<span class="title function_">equal</span>(expected)</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>最終的程式碼與書上的並沒有太多改變，從測試程式中可以看到，模擬Client端呼叫使用的時候是透過一行一行的sale.decorate()呼叫，選擇不一樣的裝飾方法。這樣的方式在未來調整程式碼時，抽換演算法或是讓其他人瀏覽這份程式碼，都可以盡快的理解程式碼的意圖。</p>
+<p>Code在文章都貼出來了….不過還是一樣照慣例附上<a target="_blank" rel="noopener" href="https://github.com/partypeopleland/js-decorator-pattern">程式碼</a>….</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/decorator/" rel="tag"># decorator</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/JavaScript-Factory-Pattern/" rel="prev" title="JavaScript Factory Pattern">
+                  <i class="fa fa-angle-left"></i> JavaScript Factory Pattern
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/Facade-Pattern/" rel="next" title="Facade Pattern">
+                  Facade Pattern <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

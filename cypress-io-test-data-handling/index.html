@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="實際上撰寫 e2e 測試的時候，我們常常會需要做一些預設的測試資料在資料庫內，假設我今天想要測試會員在網站上購物的流程，那麼網站一定會需要有商品、會員、訂單等等資料結構。在這樣的情況下，為了確保測試的可重複性，通常會在測試開始之前做測試資料的初始化；測試完畢之後做測試資料的清除。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cypress.io 測試資料的處理">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/cypress-io-test-data-handling/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="實際上撰寫 e2e 測試的時候，我們常常會需要做一些預設的測試資料在資料庫內，假設我今天想要測試會員在網站上購物的流程，那麼網站一定會需要有商品、會員、訂單等等資料結構。在這樣的情況下，為了確保測試的可重複性，通常會在測試開始之前做測試資料的初始化；測試完畢之後做測試資料的清除。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-test-data-handling/2020-07-23-171258.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-test-data-handling/20210930-2.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-test-data-handling/20210930-3.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-test-data-handling/20210930-4.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-test-data-handling/20210930-1.jpg">
+<meta property="article:published_time" content="2020-07-23T08:36:33.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.258Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="cypress">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/cypress-io-test-data-handling/2020-07-23-171258.png">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/cypress-io-test-data-handling/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/cypress-io-test-data-handling/","path":"/cypress-io-test-data-handling/","title":"Cypress.io 測試資料的處理"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Cypress.io 測試資料的處理 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hook"><span class="nav-number">1.</span> <span class="nav-text">Hook</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-node-js-%E5%9F%B7%E8%A1%8C%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">2.</span> <span class="nav-text">使用 node.js 執行初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%91%E4%B8%8D%E6%83%B3%E4%B8%B2%E7%9C%9F%E5%AF%A6%E8%B3%87%E6%96%99%E6%80%8E%E9%BA%BC%E8%BE%A6"><span class="nav-number">3.</span> <span class="nav-text">我不想串真實資料怎麼辦</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E6%93%AC%E4%B8%80%E5%80%8B%E5%81%87%E8%B3%87%E6%96%99%E5%9B%9E%E6%87%89"><span class="nav-number">3.1.</span> <span class="nav-text">模擬一個假資料回應</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E6%93%AC%E5%A4%9A%E5%80%8B%E5%81%87%E8%B3%87%E6%96%99%E5%9B%9E%E6%87%89"><span class="nav-number">3.2.</span> <span class="nav-text">模擬多個假資料回應</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9C%E6%85%8B%E6%B8%AC%E8%A9%A6%E8%B3%87%E6%96%99-fixture"><span class="nav-number">3.3.</span> <span class="nav-text">靜態測試資料 (fixture)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">4.</span> <span class="nav-text">結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/cypress-io-test-data-handling/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Cypress.io 測試資料的處理 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Cypress.io 測試資料的處理
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2020-07-23 16:36:33" itemprop="dateCreated datePublished" datetime="2020-07-23T16:36:33+08:00">2020-07-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/e2e/" itemprop="url" rel="index"><span itemprop="name">e2e</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/cypress-io-test-data-handling/" class="post-meta-item leancloud_visitors" data-flag-title="Cypress.io 測試資料的處理" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/cypress-io-test-data-handling/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/cypress-io-test-data-handling/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>實際上撰寫 e2e 測試的時候，我們常常會需要做一些預設的測試資料在資料庫內，假設我今天想要測試會員在網站上購物的流程，那麼網站一定會需要有商品、會員、訂單等等資料結構。<br>在這樣的情況下，為了確保測試的可重複性，通常會在測試開始之前做測試資料的初始化；測試完畢之後做測試資料的清除。</p>
+<span id="more"></span>
+
+<h2 id="Hook"><a href="#Hook" class="headerlink" title="Hook"></a>Hook</h2><p>如果有寫過前端測試，像是<code>jest</code>、<code>mocha</code>，那這部分應該很輕鬆就能理解，<a target="_blank" rel="noopener" href="https://docs.cypress.io/guides/core-concepts/writing-and-organizing-tests.html#Hooks">官網</a>上也有說明，其實也沒有很困難，這些東西就只是代表，跑測試的時候，什麼時機點會觸發這些對應的事件，我們可以透過這些 Hook 來將我們要處理的事情，插入在這些時間點，通常在每個測試開始之前，我們會插入該測試所需要初始化的事件</p>
+<p>官方的例子就已經蠻清楚的，如果還是有問題，其實就直接跑看看，觀察一下 Log 就行了；在下面的例子裡面，注意到<code>hook</code>可以放在最外層，也可以放在<code>describe</code>區段之內，兩者的意義是不同的</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">beforeEach</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// root-level hook</span></span><br><span class="line">  <span class="comment">// runs before every test</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="title function_">describe</span>(<span class="string">&quot;Hooks&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="title function_">before</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// runs once before all tests in the block</span></span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="title function_">beforeEach</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// runs before each test in the block</span></span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="title function_">afterEach</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// runs after each test in the block</span></span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="title function_">after</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// runs once after all tests in the block</span></span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用-node-js-執行初始化"><a href="#使用-node-js-執行初始化" class="headerlink" title="使用 node.js 執行初始化"></a>使用 node.js 執行初始化</h2><p><a target="_blank" rel="noopener" href="https://docs.cypress.io/api/commands/exec.html#Syntax">文件</a>有寫到使用的情境；我們目前希望在測試程式裡面要去影響到資料庫的內容，所以透過<code>cy.exec()</code>這個指令去執行<code>node.js</code>的指令</p>
+<p>假設我的資料庫用的是<code>mariaDB</code>，因此先安裝好套件<code>npm install mariaDB</code>，再依照<a target="_blank" rel="noopener" href="https://github.com/mariadb-corporation/mariadb-connector-nodejs/blob/master/documentation/promise-api.md">官方文件</a>說明進行修改，就可以操作資料庫了</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// appConfig.js</span></span><br><span class="line"><span class="built_in">exports</span>.<span class="property">orderId</span> = <span class="number">1234567890</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// dbConfig.js</span></span><br><span class="line"><span class="built_in">exports</span>.<span class="property">dbConfig</span> = &#123;</span><br><span class="line">  <span class="attr">host</span>: <span class="string">&quot;127.0.0.1&quot;</span>,</span><br><span class="line">  <span class="attr">port</span>: <span class="number">4006</span>,</span><br><span class="line">  <span class="attr">user</span>: <span class="string">&quot;admin&quot;</span>,</span><br><span class="line">  <span class="attr">password</span>: <span class="string">&quot;admin&quot;</span>,</span><br><span class="line">  <span class="attr">database</span>: <span class="string">&quot;mydb&quot;</span>,</span><br><span class="line">  <span class="attr">connectionLimit</span>: <span class="number">5</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// mariaDBHelper.js</span></span><br><span class="line"><span class="keyword">const</span> mariaDb = <span class="built_in">require</span>(<span class="string">&quot;mariadb&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> config = <span class="built_in">require</span>(<span class="string">&quot;../_config/dbConfig&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> pool = mariaDb.<span class="title function_">createPool</span>(config.<span class="property">dbConfig</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">clearAsync</span>(<span class="params">orderId</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> conn = <span class="keyword">await</span> pool.<span class="title function_">getConnection</span>();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> response = <span class="keyword">await</span> conn.<span class="title function_">query</span>(<span class="string">&quot;select id from order where orderId = ?&quot;</span>, [</span><br><span class="line">    orderId,</span><br><span class="line">  ]);</span><br><span class="line">  <span class="keyword">if</span> (response[<span class="number">0</span>] !== <span class="literal">undefined</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> qaId = response[<span class="number">0</span>].<span class="property">id</span>;</span><br><span class="line">    response = <span class="keyword">await</span> conn.<span class="title function_">query</span>(<span class="string">&quot;delete from order where Id= ?&quot;</span>, [qaId]);</span><br><span class="line">    response = <span class="keyword">await</span> conn.<span class="title function_">query</span>(<span class="string">&quot;delete from order_comment where qa_id=?&quot;</span>, [</span><br><span class="line">      qaId,</span><br><span class="line">    ]);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;cleanup qaId:&quot;</span> + qaId);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (conn) &#123;</span><br><span class="line">    conn.<span class="title function_">end</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">exports</span>.<span class="property">clearDB</span> = <span class="keyword">async</span> <span class="keyword">function</span> (<span class="params">appConfig</span>) &#123;</span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">clearAsync</span>(appConfig.<span class="property">orderId</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// db_clear.js</span></span><br><span class="line"><span class="keyword">const</span> appConfig = <span class="built_in">require</span>(<span class="string">&quot;./_config/appConfig.js&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> mariaDBHelper = <span class="built_in">require</span>(<span class="string">&quot;./helper/mariaDBHelper.js&quot;</span>);</span><br><span class="line"></span><br><span class="line">mariaDBHelper.<span class="title function_">clearDB</span>(appConfig).<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  process.<span class="title function_">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// package.json</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="comment">//... 略</span></span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;db:init&quot;</span><span class="punctuation">:</span> <span class="string">&quot;node ./db/init.js&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>實際在測試程式就利用<code>beforeEach</code>的<code>hook</code>來執行初始化的動作</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">describe</span>(<span class="string">&#x27;質檢單&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">	<span class="title function_">beforeEach</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">		cy.<span class="title function_">exec</span>(<span class="string">&#x27;npm run db:init&#x27;</span>);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">	<span class="title function_">it</span>(<span class="string">&#x27;myTest&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">		<span class="comment">//...some test code</span></span><br><span class="line"></span><br><span class="line">	&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>執行測試後，會發現左側有<code>Hook</code>的名稱<br><img src="/artblog/cypress-io-test-data-handling/2020-07-23-171258.png"></p>
+<h2 id="我不想串真實資料怎麼辦"><a href="#我不想串真實資料怎麼辦" class="headerlink" title="我不想串真實資料怎麼辦"></a>我不想串真實資料怎麼辦</h2><p>那就用假資料來做測試吧，可能有一些情境是你不想再跑測試的時候，讓他去吃到 API 過來的資料，而是想要模擬一個固定的回傳結果來測試；這樣的做法就是讓測試與外部相依隔離開來，所以會這樣做的情況，一般來說就已經不會再是整合測試的範疇，而是逐漸往單元測試靠攏了，當然具體如何還是要看實際的程式碼與應用情境</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cy.<span class="title function_">route</span>(url);</span><br><span class="line">cy.<span class="title function_">route</span>(url, response);</span><br><span class="line">cy.<span class="title function_">route</span>(method, url);</span><br><span class="line">cy.<span class="title function_">route</span>(method, url, response);</span><br><span class="line">cy.<span class="title function_">route</span>(callbackFn);</span><br><span class="line">cy.<span class="title function_">route</span>(options);</span><br></pre></td></tr></table></figure>
+
+<h3 id="模擬一個假資料回應"><a href="#模擬一個假資料回應" class="headerlink" title="模擬一個假資料回應"></a>模擬一個假資料回應</h3><p><code>cypress.io</code>提供<a target="_blank" rel="noopener" href="https://docs.cypress.io/api/commands/route.html">route</a>語法，因此可以將指定的<code>url</code>，替換為預先指定好的回應結果</p>
+<p>例如下列的指令，將會監聽符合條件的網址請求，並回應一個 name 為 Phoebe 的使用者資料</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cy.<span class="title function_">route</span>(<span class="regexp">/users\/\d+/</span>, &#123; <span class="attr">id</span>: <span class="number">1</span>, <span class="attr">name</span>: <span class="string">&quot;Phoebe&quot;</span> &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>當請求網址符合剛才的正則表達式，實際取得的回應結果就會是剛才的假資料</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$.<span class="title function_">get</span>(<span class="string">&quot;https://localhost:7777/users/1337&quot;</span>, <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(data); <span class="comment">// =&gt; &#123;id: 1, name: &quot;Phoebe&quot;&#125;</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="模擬多個假資料回應"><a href="#模擬多個假資料回應" class="headerlink" title="模擬多個假資料回應"></a>模擬多個假資料回應</h3><p>在下面這個範例透過<code>as()</code>、<code>cy.wait()</code>的方式，先幫<code>route</code>設定一個別名，然後透過<code>wait</code>去等候這個指令的執行結果，然後我們可以再次透過<code>route</code>去重複指定相同 url 的回應結果；透過相同的別名就可以取得新的回應結果了</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">cy.<span class="title function_">server</span>();</span><br><span class="line">cy.<span class="title function_">route</span>(<span class="string">&quot;/beetles&quot;</span>, []).<span class="title function_">as</span>(<span class="string">&quot;getBeetles&quot;</span>);</span><br><span class="line">cy.<span class="title function_">get</span>(<span class="string">&quot;#search&quot;</span>).<span class="title function_">type</span>(<span class="string">&quot;Weevil&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// wait for the first response to finish</span></span><br><span class="line">cy.<span class="title function_">wait</span>(<span class="string">&quot;@getBeetles&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// the results should be empty because we</span></span><br><span class="line"><span class="comment">// responded with an empty array first</span></span><br><span class="line">cy.<span class="title function_">get</span>(<span class="string">&quot;#beetle-results&quot;</span>).<span class="title function_">should</span>(<span class="string">&quot;be.empty&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// now re-define the /beetles response</span></span><br><span class="line">cy.<span class="title function_">route</span>(<span class="string">&quot;/beetles&quot;</span>, [&#123; <span class="attr">name</span>: <span class="string">&quot;Geotrupidae&quot;</span> &#125;]);</span><br><span class="line"></span><br><span class="line">cy.<span class="title function_">get</span>(<span class="string">&quot;#search&quot;</span>).<span class="title function_">type</span>(<span class="string">&quot;Geotrupidae&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// now when we wait for &#x27;getBeetles&#x27; again, Cypress will</span></span><br><span class="line"><span class="comment">// automatically know to wait for the 2nd response</span></span><br><span class="line">cy.<span class="title function_">wait</span>(<span class="string">&quot;@getBeetles&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// we responded with 1 beetle item so now we should</span></span><br><span class="line"><span class="comment">// have one result</span></span><br><span class="line">cy.<span class="title function_">get</span>(<span class="string">&quot;#beetle-results&quot;</span>).<span class="title function_">should</span>(<span class="string">&quot;have.length&quot;</span>, <span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="靜態測試資料-fixture"><a href="#靜態測試資料-fixture" class="headerlink" title="靜態測試資料 (fixture)"></a>靜態測試資料 (fixture)</h3><p>上面的做法都是將假資料寫在程式內，但為了方便管理，透過指定將靜態資料讀取進來，在將它設定為回應結果，應該是比較實務的做法，我們可以透過<code>cy.fixture()</code>做到這件事情，語法的細節可以參考<a target="_blank" rel="noopener" href="https://docs.cypress.io/api/commands/fixture.html">官網文件</a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cy.<span class="title function_">fixture</span>(filePath);</span><br><span class="line">cy.<span class="title function_">fixture</span>(filePath, encoding);</span><br><span class="line">cy.<span class="title function_">fixture</span>(filePath, options);</span><br><span class="line">cy.<span class="title function_">fixture</span>(filePath, encoding, options);</span><br></pre></td></tr></table></figure>
+
+<p>一種方式是先用<code>fixture</code>接著再<code>route</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cy.<span class="title function_">fixture</span>(<span class="string">&quot;user&quot;</span>).<span class="title function_">then</span>(<span class="function">(<span class="params">user</span>) =&gt;</span> &#123;</span><br><span class="line">  user.<span class="property">firstName</span> = <span class="string">&quot;Jane&quot;</span>;</span><br><span class="line">  <span class="comment">// work with the users array here</span></span><br><span class="line"></span><br><span class="line">  cy.<span class="title function_">route</span>(<span class="string">&quot;GET&quot;</span>, <span class="string">&quot;**/user/123&quot;</span>, user);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>另外一種方式是直接一行解決掉，使用<code>route</code>的時候跟他說資料來自<code>fixture</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cy.<span class="title function_">server</span>();</span><br><span class="line">cy.<span class="title function_">route</span>(<span class="string">&quot;**/posts/*&quot;</span>, <span class="string">&quot;fixture:logo.png&quot;</span>).<span class="title function_">as</span>(<span class="string">&quot;getLogo&quot;</span>);</span><br><span class="line">cy.<span class="title function_">route</span>(<span class="string">&quot;**/users&quot;</span>, <span class="string">&quot;fixture:users/all.json&quot;</span>).<span class="title function_">as</span>(<span class="string">&quot;getUsers&quot;</span>);</span><br><span class="line">cy.<span class="title function_">route</span>(<span class="string">&quot;**/admin&quot;</span>, <span class="string">&quot;fx:users/admin.json&quot;</span>).<span class="title function_">as</span>(<span class="string">&quot;getAdmin&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>當然也可以透過別名來串聯這兩個指令，具體還是看自己喜歡哪種方式</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cy.<span class="title function_">fixture</span>(<span class="string">&quot;user&quot;</span>).<span class="title function_">as</span>(<span class="string">&quot;fxUser&quot;</span>);</span><br><span class="line">cy.<span class="title function_">route</span>(<span class="string">&quot;POST&quot;</span>, <span class="string">&quot;**/users&quot;</span>, <span class="string">&quot;@fxUser&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>上述的所有範例都取自<a target="_blank" rel="noopener" href="https://docs.cypress.io/api/commands/route.html">官網</a></p>
+</blockquote>
+<blockquote>
+<ol>
+<li><code>cy.route()</code>可以拿來做假資料，也可以直接發出請求</li>
+<li><code>cy.request()</code>會真的跟指定<code>end-point</code>發出請求，<code>cy.route()</code>則不一定</li>
+</ol>
+</blockquote>
+<p>此外，需要特別補充的是，在<code>/fixtures/</code>底下的 json 檔案，如果發生了無法解析<code>JSON</code>的錯誤，可以檢查一下是否檔案的編碼格式有沒有包含<code>BOM</code>，能夠正常運作的是不包含<code>BOM</code>的，所以記得要將<code>BOM</code>移除掉<br><img src="/artblog/cypress-io-test-data-handling/20210930-2.jpg"><br><img src="/artblog/cypress-io-test-data-handling/20210930-3.jpg"><br><img src="/artblog/cypress-io-test-data-handling/20210930-4.jpg"></p>
+<p>如果使用<code>VSCode</code>做編輯器，可以在下方資訊點選後選擇<code>Save with Encoding</code>，並選擇<code>UTF-8</code>的格式；如果使用<code>Rider</code>的話，也可以點選<code>Remove BOM</code><br><img src="/artblog/cypress-io-test-data-handling/20210930-1.jpg"></p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>測試資料的初始化、清除。要做到怎樣的程度，應該還是要看環境決定，如果只是在工程師自己開發環境在練習可能還無所謂，能跑就好；但是，如果不是在開發環境內，可能就要考慮一下，如果資料庫有髒資料的話會不會有甚麼影響，最好能夠避免這些副作用，<code>cypress</code>能夠做到整合測試資料的初始化與清除，但它也能夠用<code>stub</code>的方式模擬回應結果來隔絕外部相依，這些應該是看情境搭配，相輔相成的</p>
+<p>如果我想要完全模擬使用者的操作行為，也做好了測試資料的初始化與清除作業，但是偏偏流程當中有一個環節是跟其他公司的服務串接的，例如串接外部金流，但是對方卻沒有提供測試信用卡給你刷，可是你卻又要測試刷卡購物流程，難道你會每次測試都拿自己的卡出來真的刷嗎？肯定不會嘛，所以勢必要針對這個服務做隔離，當然目的還是再整合測試，但是卻隔絕了外部環境的相依，畢竟我們要測試的是刷卡購物的流程，而不是這張卡到底能不能刷過；如果我們要測試刷卡不過的購物流程，那就再寫一個模擬刷卡失敗的情境就好了</p>
+<p>對於<code>cypress</code>的使用我還在摸著石頭過河，文章若有錯誤的地方，請不吝指正，謝謝</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/cypress/" rel="tag"># cypress</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/npoi-asp-net-export-excel/" rel="prev" title="NPOI-ASP.net網站匯出Excel範例">
+                  <i class="fa fa-angle-left"></i> NPOI-ASP.net網站匯出Excel範例
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/cypress-io-cucumber-testing/" rel="next" title="Cypress.io 搭配 cucumber 進行測試">
+                  Cypress.io 搭配 cucumber 進行測試 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

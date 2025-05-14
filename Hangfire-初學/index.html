@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="以下範例使用 dotnet core mvc 專案，參考 hangfire 官網文件:ASP.NET Core Applications及其他參考資料練習，相關連結隨附於後不再贅述">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hangfire 初學">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/Hangfire-%E5%88%9D%E5%AD%B8/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="以下範例使用 dotnet core mvc 專案，參考 hangfire 官網文件:ASP.NET Core Applications及其他參考資料練習，相關連結隨附於後不再贅述">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Hangfire-%E5%88%9D%E5%AD%B8/hangfire-workflow.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Hangfire-%E5%88%9D%E5%AD%B8/2020-05-02_16-51-30.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Hangfire-%E5%88%9D%E5%AD%B8/2020-05-02_17-37-52.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Hangfire-%E5%88%9D%E5%AD%B8/2020-05-02_17-39-37.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/Hangfire-%E5%88%9D%E5%AD%B8/2020-05-05_15-49-46.png">
+<meta property="article:published_time" content="2020-05-02T08:39:55.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.271Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="hangfire">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/Hangfire-%E5%88%9D%E5%AD%B8/hangfire-workflow.png">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/Hangfire-%E5%88%9D%E5%AD%B8/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/Hangfire-%E5%88%9D%E5%AD%B8/","path":"/Hangfire-初學/","title":"Hangfire 初學"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hangfire 初學 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%83%E8%80%83%E9%80%A3%E7%B5%90"><span class="nav-number">1.</span> <span class="nav-text">參考連結</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OverView"><span class="nav-number">2.</span> <span class="nav-text">OverView</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#How-to-Start"><span class="nav-number">3.</span> <span class="nav-text">How to Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B-dotnet-core-mvc-%E5%B0%88%E6%A1%88"><span class="nav-number">3.1.</span> <span class="nav-text">建立 dotnet core mvc 專案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-nuget-%E5%A5%97%E4%BB%B6"><span class="nav-number">3.2.</span> <span class="nav-text">安裝 nuget 套件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%95%9F%E7%94%A8-hangfire-dashboard"><span class="nav-number">3.3.</span> <span class="nav-text">啟用 hangfire dashboard</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A8%AD%E5%AE%9A-dashboard-%E4%B8%A6%E5%BB%BA%E7%AB%8B%E7%AC%AC%E4%B8%80%E5%80%8B-job"><span class="nav-number">3.4.</span> <span class="nav-text">設定 dashboard 並建立第一個 job</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Job-%E9%A1%9E%E5%9E%8B"><span class="nav-number">4.</span> <span class="nav-text">Job 類型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Fire-and-forget-jobs"><span class="nav-number">4.1.</span> <span class="nav-text">Fire-and-forget jobs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Delayed-jobs"><span class="nav-number">4.2.</span> <span class="nav-text">Delayed jobs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Recurring-jobs"><span class="nav-number">4.3.</span> <span class="nav-text">Recurring jobs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Batches-Batch-Continuations"><span class="nav-number">4.4.</span> <span class="nav-text">Batches &amp; Batch Continuations</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A0%E5%85%A5%E9%A0%90%E8%A8%AD%E5%84%80%E9%8C%B6%E6%9D%BF%E8%B3%87%E8%A8%8A"><span class="nav-number">5.</span> <span class="nav-text">加入預設儀錶板資訊</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6"><span class="nav-number">6.</span> <span class="nav-text">單元測試</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/Hangfire-%E5%88%9D%E5%AD%B8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hangfire 初學 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hangfire 初學
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2020-05-02 16:39:55" itemprop="dateCreated datePublished" datetime="2020-05-02T16:39:55+08:00">2020-05-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+
+  
+    <span id="/artblog/Hangfire-%E5%88%9D%E5%AD%B8/" class="post-meta-item leancloud_visitors" data-flag-title="Hangfire 初學" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/Hangfire-%E5%88%9D%E5%AD%B8/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/Hangfire-初學/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>以下範例使用 dotnet core mvc 專案，參考 hangfire 官網文件:<a target="_blank" rel="noopener" href="https://docs.hangfire.io/en/latest/getting-started/aspnet-core-applications.html">ASP.NET Core Applications</a>及其他參考資料練習，相關連結隨附於後不再贅述</p>
+<span id="more"></span>
+
+<p>Sample Code:<a target="_blank" rel="noopener" href="https://github.com/art-Blog/hangfireLab">Github</a></p>
+<h2 id="參考連結"><a href="#參考連結" class="headerlink" title="參考連結"></a>參考連結</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://docs.hangfire.io/en/latest/getting-started/aspnet-core-applications.html">ASP.NET Core Applications</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.kkbruce.net/2015/09/hangfire-aspnet-mvc-webapi.html">使用 HANGFIRE 處理 ASP.NET MVC&#x2F;WEB API 長時間與排程工作</a></li>
+<li><a target="_blank" rel="noopener" href="https://xpy.gofa.cloud/2019/07/03/aspnetcore_use_hangfire/">ASP.NET Core 使用 Hangfire 做排程</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.hangfire.io/en/latest/background-methods/writing-unit-tests.html">Hangfire: Writing unit tests</a></li>
+<li><a target="_blank" rel="noopener" href="https://dotblogs.com.tw/yc421206/2020/03/05/how_to_do_test_at_hangfire_job">如何對 Hangfire Job 撰寫測試</a></li>
+</ol>
+<h2 id="OverView"><a href="#OverView" class="headerlink" title="OverView"></a>OverView</h2><p><img src="/artblog/Hangfire-%E5%88%9D%E5%AD%B8/hangfire-workflow.png"></p>
+<p>從上圖可以看到 hangfire 的三種腳色</p>
+<ol>
+<li>Client：負責建立各種任務，可藉由 hangfire 提供的方法建立即時、延遲、重複任務。由 Client 負責將其序列化之後儲存於<code>Storage</code></li>
+<li>Storage：儲存任務資料用，有很多 Storage 套件可供選擇，支援 SQL、Redis 等常見主流的 storage 方案</li>
+<li>Server：從<code>storage</code>中取得任務並執行</li>
+</ol>
+<h2 id="How-to-Start"><a href="#How-to-Start" class="headerlink" title="How to Start"></a>How to Start</h2><h3 id="建立-dotnet-core-mvc-專案"><a href="#建立-dotnet-core-mvc-專案" class="headerlink" title="建立 dotnet core mvc 專案"></a>建立 dotnet core mvc 專案</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dotnet new mvc</span><br></pre></td></tr></table></figure>
+
+<h3 id="安裝-nuget-套件"><a href="#安裝-nuget-套件" class="headerlink" title="安裝 nuget 套件"></a>安裝 nuget 套件</h3><ol>
+<li><code>Hangfire.AspNetCore</code></li>
+<li><code>Hangfire.MemoryStorage</code></li>
+</ol>
+<blockquote>
+<p>此處因為練習而採用 memory storage，production 記得要改用持久化的 storage 解決方案</p>
+</blockquote>
+<h3 id="啟用-hangfire-dashboard"><a href="#啟用-hangfire-dashboard" class="headerlink" title="啟用 hangfire dashboard"></a>啟用 hangfire dashboard</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//startup.cs</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Configure</span>(<span class="params">IApplicationBuilder app, IWebHostEnvironment env</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//...略</span></span><br><span class="line">    <span class="comment">// 加入 hangfire 的server實體，可重複此行加入多個實體</span></span><br><span class="line">    app.UseHangfireServer();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 加入 hangfire 控制面板</span></span><br><span class="line">    app.UseHangfireDashboard(</span><br><span class="line">        pathMatch: <span class="string">&quot;/hangfire&quot;</span>,</span><br><span class="line">        options: <span class="keyword">new</span> DashboardOptions() &#123;</span><br><span class="line">            <span class="comment">// 進入 hangfire dashboard 的授權規則 (有沒有權限看 dashboard 就看這個邏輯怎麼設定)</span></span><br><span class="line">            Authorization = <span class="keyword">new</span>[] &#123; <span class="keyword">new</span> MyAuthFilter() &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    app.UseEndpoints(endpoints =&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        endpoints.MapControllerRoute(</span><br><span class="line">            name: <span class="string">&quot;default&quot;</span>,</span><br><span class="line">            pattern: <span class="string">&quot;&#123;controller=Home&#125;/&#123;action=Index&#125;/&#123;id?&#125;&quot;</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ConfigureServices</span>(<span class="params">IServiceCollection services</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    services.AddControllersWithViews();</span><br><span class="line">    services.AddHangfire(config =&gt; &#123;</span><br><span class="line">        <span class="comment">// 使用 memory storage</span></span><br><span class="line">        config.UseMemoryStorage();</span><br><span class="line">        <span class="comment">// 使用 console</span></span><br><span class="line">        config.UseConsole();</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">MyAuthFilter</span> : <span class="title">IDashboardAuthorizationFilter</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="built_in">bool</span> <span class="title">Authorize</span>(<span class="params">[NotNull] DashboardContext context</span>)</span> &#123;</span><br><span class="line">        <span class="comment">// 後面可以改別的邏輯，例如判斷session是否存在，或是identity claim等等</span></span><br><span class="line">        <span class="comment">// 此處測試直接讓任何人都可以瀏覽</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="設定-dashboard-並建立第一個-job"><a href="#設定-dashboard-並建立第一個-job" class="headerlink" title="設定 dashboard 並建立第一個 job"></a>設定 dashboard 並建立第一個 job</h3><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Configure</span>(<span class="params">IApplicationBuilder app, IWebHostEnvironment env, IBackgroundJobClient backgroundJobs</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// ...略...</span></span><br><span class="line">    <span class="comment">// 測試需要，直接在startup.cs裡面加入即時任務</span></span><br><span class="line">    backgroundJobs.Enqueue(() =&gt; Console.WriteLine(<span class="string">&quot;Hello world from Hangfire!&quot;</span>));</span><br><span class="line">    <span class="comment">// ...略...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>這樣一來就會可以在網站路由<code>/hangfire</code>底下看到剛剛建立的<code>Console.WriteLine</code>已經完成<br><img src="/artblog/Hangfire-%E5%88%9D%E5%AD%B8/2020-05-02_16-51-30.png"></p>
+<h2 id="Job-類型"><a href="#Job-類型" class="headerlink" title="Job 類型"></a>Job 類型</h2><h3 id="Fire-and-forget-jobs"><a href="#Fire-and-forget-jobs" class="headerlink" title="Fire-and-forget jobs"></a>Fire-and-forget jobs</h3><p>依照<a target="_blank" rel="noopener" href="https://docs.hangfire.io/en/latest/background-methods/calling-methods-in-background.html">Calling methods in background</a>一文說明，我們在上一個步驟執行的就是背景調用方法</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> jobId = BackgroundJob.Enqueue(() =&gt; Console.WriteLine(<span class="string">&quot;Fire-and-forget!&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<p>實際上他並不是當下就執行那個任務，而是轉為下列行為：</p>
+<ol>
+<li>序列化方法及參數</li>
+<li>根據序列化的內容建立一個新的<code>背景執行任務</code></li>
+<li>將這個<code>背景執行任務</code>儲存於我們所設定的持久化儲存機制內，也就是<code>storage</code></li>
+<li>將<code>背景執行任務</code>放在 Queue 的執行隊列中排隊</li>
+</ol>
+<p>做完了這些事情後，程式返回原先的地方依序往下執行</p>
+<p>上面這一段有點饒舌，簡單來說就是，當我們使用<code>Enqueue</code>這個方法執行 Console.WriteLine 的時候，其實是把這個東西轉變成一個背景任務，放到 hangfire 的 Queue 裡面排隊。</p>
+<p>那他什麼時候才會執行呢？這就要靠另外一個腳色<code>hangfire server</code>來檢查 Queue 裡面還有沒有任務要執行，有的話它會先把這個任務隱藏，這樣其他的人就沒辦法看到這個任務，這個是為了避免同一個任務被多次執行，接著就是執行任務了，等到執行完成，他才會把這個任務從 Queue 裡面刪除</p>
+<h3 id="Delayed-jobs"><a href="#Delayed-jobs" class="headerlink" title="Delayed jobs"></a>Delayed jobs</h3><p>中文有點難理解，英文原文反而很清楚，所以其實學 IT 的人應該還是要習慣看英文啦~</p>
+<p>官網文件介紹這個情境是，假設有新會員註冊，也許你會希望在會員註冊的第二天發送一封 Email 給他們。我覺得這樣的介紹很不錯，看其他人的 Blog 都說有好幾種排程，我就在想那什麼時候會用到這些東西呢？果然官網沒有讓我失望啊。正好呼應了學新東西最好的方式，就是看官網文件</p>
+<p>下面就是建立一個延遲調用的語法範例，看起來很好懂啊</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> jobId = BackgroundJob.Schedule(() =&gt; Console.WriteLine(<span class="string">&quot;Delayed!&quot;</span>), TimeSpan.FromDays(<span class="number">7</span>));</span><br></pre></td></tr></table></figure>
+
+<p>但是其實這邊暴露了另外一個重要資訊喔，那就是<code>hangfire server</code>要多久來檢查定期任務呢？所以其實是有提供設定方式的</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> options = <span class="keyword">new</span> BackgroundJobServerOptions</span><br><span class="line">&#123;</span><br><span class="line">    SchedulePollingInterval = TimeSpan.FromMinutes(<span class="number">1</span>)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> server = <span class="keyword">new</span> BackgroundJobServer(options);</span><br></pre></td></tr></table></figure>
+
+<p>這裡還有特別提到如果是在 ASP.NET 應用程式的話，還需要做一些額外的事情，詳情就看一下<a target="_blank" rel="noopener" href="https://docs.hangfire.io/en/latest/background-methods/calling-methods-with-delay.html">官網說明</a>囉</p>
+<h3 id="Recurring-jobs"><a href="#Recurring-jobs" class="headerlink" title="Recurring jobs"></a>Recurring jobs</h3><p>官網範例只有一行，Cron 類別看來是跟 linux crontab 一樣的東西，可以看一下鳥哥的文章<a target="_blank" rel="noopener" href="http://linux.vbird.org/linux_basic/0430cron.php">第十五章、例行性工作排程(crontab)</a>，或者是<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Cron#CRON_expression">wiki 說明</a></p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">RecurringJob.AddOrUpdate(() =&gt; Console.WriteLine(<span class="string">&quot;Recurring!&quot;</span>), Cron.Daily);</span><br><span class="line"><span class="comment">// 或是使用Cron表達式</span></span><br><span class="line">RecurringJob.AddOrUpdate(() =&gt; Console.Write(<span class="string">&quot;Powerful!&quot;</span>), <span class="string">&quot;0 12 * */2&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>加入識別 ID 語法如下</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 給予周期性任務一個識別ID</span></span><br><span class="line">RecurringJob.AddOrUpdate(<span class="string">&quot;some-id&quot;</span>, () =&gt; Console.WriteLine(<span class="string">&quot;wow!!&quot;</span>), Cron.Hourly);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>識別 ID 在某些 Storage 可能會區分大小寫；識別 ID 應為 Unique 值</p>
+</blockquote>
+<p>實際上會在 dashboard 顯示</p>
+<p><img src="/artblog/Hangfire-%E5%88%9D%E5%AD%B8/2020-05-02_17-37-52.png"></p>
+<p><img src="/artblog/Hangfire-%E5%88%9D%E5%AD%B8/2020-05-02_17-39-37.png"></p>
+<p>那為甚麼要有識別 ID 咧？因為要方便我們操作啊。我們可以透過識別 ID 去觸發執行，或是移除</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 移除某個周期性任務，如果不存在也不會報錯</span></span><br><span class="line">RecurringJob.RemoveIfExists(<span class="string">&quot;some-id&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 觸發執行某個周期性任務，不影響原先設定的執行任務時間間隔</span></span><br><span class="line">RecurringJob.Trigger(<span class="string">&quot;some-id&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>想看原文的請 follow<a target="_blank" rel="noopener" href="https://docs.hangfire.io/en/latest/background-methods/performing-recurrent-tasks.html">這裡</a></p>
+<h3 id="Batches-Batch-Continuations"><a href="#Batches-Batch-Continuations" class="headerlink" title="Batches &amp; Batch Continuations"></a>Batches &amp; Batch Continuations</h3><p>付費功能，有興趣請自行瀏覽官網說明</p>
+<h2 id="加入預設儀錶板資訊"><a href="#加入預設儀錶板資訊" class="headerlink" title="加入預設儀錶板資訊"></a>加入預設儀錶板資訊</h2><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ConfigureServices</span>(<span class="params">IServiceCollection services</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//...略...</span></span><br><span class="line">    services.AddHangfire(config =&gt; &#123;</span><br><span class="line">        <span class="comment">// 使用 memory storage</span></span><br><span class="line">        config.UseMemoryStorage();</span><br><span class="line">        <span class="comment">// 使用 console</span></span><br><span class="line">        config.UseConsole();</span><br><span class="line">        config.UseDashboardMetric(Hangfire.Dashboard.DashboardMetrics.ServerCount) <span class="comment">//服务器数量</span></span><br><span class="line">            .UseDashboardMetric(Hangfire.Dashboard.DashboardMetrics.RecurringJobCount) <span class="comment">//任务数量</span></span><br><span class="line">            .UseDashboardMetric(Hangfire.Dashboard.DashboardMetrics.RetriesCount) <span class="comment">//重试次数</span></span><br><span class="line">            <span class="comment">//.UseDashboardMetric(Hangfire.Dashboard.DashboardMetrics.EnqueuedCountOrNull)//队列数量</span></span><br><span class="line">            <span class="comment">//.UseDashboardMetric(Hangfire.Dashboard.DashboardMetrics.FailedCountOrNull)//失败数量</span></span><br><span class="line">            .UseDashboardMetric(Hangfire.Dashboard.DashboardMetrics.EnqueuedAndQueueCount) <span class="comment">//队列数量</span></span><br><span class="line">            .UseDashboardMetric(Hangfire.Dashboard.DashboardMetrics.ScheduledCount) <span class="comment">//计划任务数量</span></span><br><span class="line">            .UseDashboardMetric(Hangfire.Dashboard.DashboardMetrics.ProcessingCount) <span class="comment">//执行中的任务数量</span></span><br><span class="line">            .UseDashboardMetric(Hangfire.Dashboard.DashboardMetrics.SucceededCount) <span class="comment">//成功作业数量</span></span><br><span class="line">            .UseDashboardMetric(Hangfire.Dashboard.DashboardMetrics.FailedCount) <span class="comment">//失败数量</span></span><br><span class="line">            .UseDashboardMetric(Hangfire.Dashboard.DashboardMetrics.DeletedCount) <span class="comment">//删除数量</span></span><br><span class="line">            .UseDashboardMetric(Hangfire.Dashboard.DashboardMetrics.AwaitingCount); <span class="comment">//等待任务数量</span></span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="comment">//...略...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/Hangfire-%E5%88%9D%E5%AD%B8/2020-05-05_15-49-46.png"></p>
+<h2 id="單元測試"><a href="#單元測試" class="headerlink" title="單元測試"></a>單元測試</h2><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">MyJob</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">protected</span> IBackgroundJobClient JobClient</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span> =&gt; <span class="keyword">this</span>._jobClient ?? (<span class="keyword">this</span>._jobClient = <span class="keyword">new</span> BackgroundJobClient());</span><br><span class="line">        <span class="keyword">set</span> =&gt; <span class="keyword">this</span>._jobClient = <span class="keyword">value</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">private</span> IBackgroundJobClient _jobClient;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyJob</span>() : <span class="title">this</span>(<span class="params"><span class="keyword">new</span> BackgroundJobClient(</span>))</span></span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyJob</span>(<span class="params">IBackgroundJobClient jobClient</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">this</span>.JobClient = jobClient;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    [<span class="meta">Hangfire.Dashboard.Management.Support.Job</span>]</span><br><span class="line">    [<span class="meta">DisplayName(<span class="string">&quot;呼叫內部方法&quot;</span>)</span>]</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SomeWork01</span>(<span class="params">PerformContext context = <span class="literal">null</span>, IJobCancellationToken cancellationToken = <span class="literal">null</span></span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (cancellationToken.ShutdownToken.IsCancellationRequested)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        context.WriteLine(<span class="string">$&quot;測試用，Now:<span class="subst">&#123;DateTime.Now&#125;</span>&quot;</span>);</span><br><span class="line">        Thread.Sleep(<span class="number">30000</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">EnqueueJob</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">this</span>.JobClient.Enqueue(() =&gt; <span class="keyword">this</span>.SomeWork01(<span class="literal">null</span>, JobCancellationToken.Null));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>production 的部分，MyJob 的 EnqueueJob 方法，負責的事情就是將某一件任務進行排程；而我們的單元測試，也只是要驗證這一件事情。</p>
+<p>因此在單元測試的部分，我們首先建立一個 Mock，並透過建構式注入，稍後才可以透過 mock 物件檢查是否有接收到參數，檢查的部分我們僅驗證任務的名稱是否正確</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">TestClass</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">UnitTest1</span></span><br><span class="line">&#123;</span><br><span class="line">    [<span class="meta">TestMethod</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> Enqueue驗證有呼叫Create方法()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">//arrange</span></span><br><span class="line">        <span class="keyword">var</span> mockJobClient = Substitute.For&lt;IBackgroundJobClient&gt;();</span><br><span class="line">        <span class="keyword">var</span> demoJob = <span class="keyword">new</span> MyJob(mockJobClient);</span><br><span class="line">        <span class="comment">//act</span></span><br><span class="line">        demoJob.EnqueueJob();</span><br><span class="line">        <span class="comment">//assert</span></span><br><span class="line">        mockJobClient.Received().Create(</span><br><span class="line">            Arg.Is&lt;Job&gt;(p =&gt; p.Method.Name == <span class="keyword">nameof</span>(MyJob.SomeWork01)),</span><br><span class="line">            Arg.Any&lt;EnqueuedState&gt;()</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/hangfire/" rel="tag"># hangfire</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/auto-format-file-with-eslint-in-ide/" rel="prev" title="如何在IDE中使用ESLint自動格式化文件">
+                  <i class="fa fa-angle-left"></i> 如何在IDE中使用ESLint自動格式化文件
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/cypress-io-e2e-testing/" rel="next" title="Cypress.io E2E測試">
+                  Cypress.io E2E測試 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

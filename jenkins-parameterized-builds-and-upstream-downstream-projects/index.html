@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="介紹 Jenkins 參數化建置的設定方式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jenkins參數化建置與上下游專案">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="介紹 Jenkins 參數化建置的設定方式">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_101604.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_101843.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_102700.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_103243.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_103420.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_103642.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_104350.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_104602.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_104807.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_105516.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_105118.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_105606.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_105720.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_105754.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_105817.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2022-11-24-162819.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2022-11-24-163601.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2022-11-24-163715.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2022-11-24-163854.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2022-11-24-163411.jpg">
+<meta property="article:published_time" content="2020-02-25T02:02:26.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.275Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="jenkins">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_101604.png">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/","path":"/jenkins-parameterized-builds-and-upstream-downstream-projects/","title":"Jenkins參數化建置與上下游專案"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Jenkins參數化建置與上下游專案 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E7%BD%AE"><span class="nav-number">1.</span> <span class="nav-text">參數化建置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88-%E5%BE%9E%E4%B8%8A%E6%B8%B8%E5%B0%88%E6%A1%88%E8%A8%AD%E5%AE%9A"><span class="nav-number">2.</span> <span class="nav-text">上下游專案 從上游專案設定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8A%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88-%E5%BE%9E%E4%B8%8B%E6%B8%B8%E5%B0%88%E6%A1%88%E8%A8%AD%E5%AE%9A"><span class="nav-number">3.</span> <span class="nav-text">上下游專案 從下游專案設定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8B%89%E6%8B%89%E4%BD%9C%E4%BC%99%E3%84%9F%E9%98%BF%E5%A8%9C%EF%BC%9F"><span class="nav-number">4.</span> <span class="nav-text">拉拉作伙ㄟ阿娜？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A3%9C%E5%85%85-%E8%A7%B8%E7%99%BC%E5%8F%A6%E4%B8%80%E5%80%8B%E4%BB%BB%E5%8B%99%E4%B8%A6%E5%82%B3%E9%81%9E%E5%8F%83%E6%95%B8%E7%AF%84%E4%BE%8B"><span class="nav-number">5.</span> <span class="nav-text">補充:觸發另一個任務並傳遞參數範例</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Jenkins參數化建置與上下游專案 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Jenkins參數化建置與上下游專案
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2020-02-25 10:02:26" itemprop="dateCreated datePublished" datetime="2020-02-25T10:02:26+08:00">2020-02-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/devOps/" itemprop="url" rel="index"><span itemprop="name">devOps</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/" class="post-meta-item leancloud_visitors" data-flag-title="Jenkins參數化建置與上下游專案" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/jenkins-parameterized-builds-and-upstream-downstream-projects/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>介紹 Jenkins 參數化建置的設定方式</p>
+<span id="more"></span>
+
+<h2 id="參數化建置"><a href="#參數化建置" class="headerlink" title="參數化建置"></a>參數化建置</h2><p>假設我目前有兩個 Jenkins Job，第一個 Job 執行成功後，才執行第二個 Job</p>
+<p>第一個 Job 我們假設叫做【job01】；第二個 Job 我們把它叫做【job02】；這兩個專案都透過參數化建置與 Git Parameter 來控制檔案來源為哪一個 Branch，這邊先定義變數名稱為 Branch<br><img src="/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_101604.png"></p>
+<p>在版控來源指定分支就可以將參數帶過來用了<br><img src="/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_101843.png"></p>
+<p>執行也很簡單，透過<code>Build with parameter</code>就可以選擇 branch<br><img src="/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_102700.png"></p>
+<p>透過參數化建置其他專案<br><img src="/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_103243.png"><br><img src="/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_103420.png"></p>
+<p>這樣執行 Job1 之後，就會自動觸發 Job2<br><img src="/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_103642.png"></p>
+<p>透過上面的方式，Job02 被觸發的原因是因為 Job01 我們有設定建置後動作，觸發其他專案的參數化建置，其實並不是上下游專案的設定</p>
+<h2 id="上下游專案-從上游專案設定"><a href="#上下游專案-從上游專案設定" class="headerlink" title="上下游專案 從上游專案設定"></a>上下游專案 從上游專案設定</h2><p>建立 Job03、Job04 兩個任務，其中 Job03 設定建置後動作：建置其他專案<br><img src="/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_104350.png"><br>這樣子回到 Job03 就會看到他的下游專案為 Job04<br><img src="/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_104602.png"></p>
+<p>而回到 Job04，也會看到它的上游專案為 Job03</p>
+<h2 id="上下游專案-從下游專案設定"><a href="#上下游專案-從下游專案設定" class="headerlink" title="上下游專案 從下游專案設定"></a>上下游專案 從下游專案設定</h2><p>也可以直接在下游專案中設定<code>build after other project are built</code><br><img src="/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_104807.png"></p>
+<p>效果是一樣的</p>
+<h2 id="拉拉作伙ㄟ阿娜？"><a href="#拉拉作伙ㄟ阿娜？" class="headerlink" title="拉拉作伙ㄟ阿娜？"></a>拉拉作伙ㄟ阿娜？</h2><p>比較妙的是，如果我上游、下游專案都設定，那會發生甚麼事情？<br>答案是實際的任務仍舊觸發一次，但是 Log 紀錄會顯示兩次<br><img src="/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_105516.png"><br><img src="/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_105118.png"></p>
+<p>那如果加上參數化建置呢？</p>
+<p><img src="/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_105606.png"></p>
+<p>答案是，任務觸發兩次</p>
+<p><img src="/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_105720.png"><br><img src="/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_105754.png"><br><img src="/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2020-02-25_105817.png"></p>
+<p>透過任務的上下游設置，會觸發一次；而透過參數化建置其他專案，也會觸發一次；這兩者是分開計算的<br>所以如果是需要傳遞參數的場合，不要再設定任務的上下游依賴關係，避免多次觸發執行</p>
+<h2 id="補充-觸發另一個任務並傳遞參數範例"><a href="#補充-觸發另一個任務並傳遞參數範例" class="headerlink" title="補充:觸發另一個任務並傳遞參數範例"></a>補充:觸發另一個任務並傳遞參數範例</h2><p><img src="/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2022-11-24-162819.jpg"><br>如圖，新增 Git Parameter 還有字串參數， Git Parameter 之前有去抓 GIT 資料所以有清單可以選，但下方範例我註解掉了，想要實際練習的人請自行修改一下</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Job 1</span></span><br><span class="line">node &#123;</span><br><span class="line">    <span class="comment">// stage(&#x27;git&#x27;) &#123;</span></span><br><span class="line">    <span class="comment">//    checkout([$class: &#x27;GitSCM&#x27;, branches: [[name: &#x27;$Branch&#x27;]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: &#x27;credentials-id&#x27;, url: &#x27;xxx@git.fake.net:myProject/myProject.git&#x27;]]])</span></span><br><span class="line">    <span class="comment">// &#125;</span></span><br><span class="line"></span><br><span class="line">    stage(<span class="string">&#x27;echo parameter&#x27;</span>) &#123;</span><br><span class="line">        echo <span class="string">&quot;$&#123;Branch&#125;&quot;</span></span><br><span class="line">        echo <span class="string">&quot;$&#123;Greeting&#125;&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    stage(<span class="string">&#x27;Trigger Job 2&#x27;</span>) &#123;</span><br><span class="line">        build <span class="attr">wait:</span> <span class="literal">false</span>, <span class="attr">job:</span> <span class="string">&#x27;pipeline_job_2&#x27;</span>, <span class="attr">parameters:</span> [</span><br><span class="line">            gitParameter(<span class="attr">name:</span> <span class="string">&#x27;Branch&#x27;</span>, <span class="attr">value:</span> Branch),</span><br><span class="line">            string(<span class="attr">name:</span> <span class="string">&#x27;Greeting&#x27;</span>, <span class="attr">value:</span> Greeting),</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Job 2</span></span><br><span class="line">node &#123;</span><br><span class="line">    stage(<span class="string">&#x27;echo parameter&#x27;</span>) &#123;</span><br><span class="line">        echo <span class="string">&quot;$&#123;Branch&#125;&quot;</span></span><br><span class="line">        echo <span class="string">&quot;$&#123;Greeting&#125;&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>第二個任務的設定也要新增一樣的參數<br><img src="/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2022-11-24-163601.jpg"></p>
+<p>執行一下 pipeline，看看他有沒有正確傳遞參數跟觸發下一個任務<br><img src="/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2022-11-24-163715.jpg"></p>
+<p>看起來是正確的<br><img src="/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2022-11-24-163854.jpg"><br><img src="/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/2022-11-24-163411.jpg"></p>
+<p>因為其他類型的參數好像要一個一個試，我沒有用到就懶了，這邊列出三個應該夠用了</p>
+<table>
+<thead>
+<tr>
+<th>類型</th>
+<th>範例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Secret</td>
+<td><code>build job:&#39;pipeline_job_2&#39;, parameters: [ credentials(&#39;parameter-name&#39;, &#39;credentials-id&#39;) ]</code></td>
+</tr>
+<tr>
+<td>Git Parameter</td>
+<td><code>build job:&#39;pipeline_job_2&#39;, parameters: [ gitParameter(name: &#39;Branch&#39;, value: Branch) ]</code></td>
+</tr>
+<tr>
+<td>字串參數</td>
+<td><code>build job:&#39;pipeline_job_2&#39;, parameters: [ string(name: &#39;Greeting&#39;, value: Greeting) ]</code></td>
+</tr>
+</tbody></table>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/jenkins/" rel="tag"># jenkins</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/jenkins-pipeline-sonarqube/" rel="prev" title="如何於Jenkins Pipeline專案整合sonarQube">
+                  <i class="fa fa-angle-left"></i> 如何於Jenkins Pipeline專案整合sonarQube
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/jenkins-check-frontend-compiled-code/" rel="next" title="Jenkins檢查前端編譯程式有無簽入版控">
+                  Jenkins檢查前端編譯程式有無簽入版控 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

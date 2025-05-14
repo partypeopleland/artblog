@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="之前的專案採用ASP.NET MVC5的方式建立，當時沒有採用webpack編譯前端程式碼，使用的方式是透過script tag 載入vue.js使用，在 component 的部分則是利用字串模板的方式，以Vue.component()的方式全域註冊，嘗試透過webpack將前端程式編譯，並改用 single file component 的方式撰寫 vue 元件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="webpack-編譯vue single file component">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/webpack-compile-vue-single-file-component/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="之前的專案採用ASP.NET MVC5的方式建立，當時沒有採用webpack編譯前端程式碼，使用的方式是透過script tag 載入vue.js使用，在 component 的部分則是利用字串模板的方式，以Vue.component()的方式全域註冊，嘗試透過webpack將前端程式編譯，並改用 single file component 的方式撰寫 vue 元件">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/webpack-compile-vue-single-file-component/2021-11-09-142259.jpg">
+<meta property="article:published_time" content="2020-09-09T07:53:55.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.324Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="vue">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/webpack-compile-vue-single-file-component/2021-11-09-142259.jpg">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/webpack-compile-vue-single-file-component/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/webpack-compile-vue-single-file-component/","path":"/webpack-compile-vue-single-file-component/","title":"webpack-編譯vue single file component"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>webpack-編譯vue single file component | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E9%8C%84%E6%9E%B6%E6%A7%8B"><span class="nav-number">1.</span> <span class="nav-text">目錄架構</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D%E7%9B%B8%E9%97%9C%E5%A5%97%E4%BB%B6"><span class="nav-number">2.</span> <span class="nav-text">安裝相關套件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#webpack-%E8%A8%AD%E5%AE%9A"><span class="nav-number">3.</span> <span class="nav-text">webpack 設定</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#webpack-common-js"><span class="nav-number">3.1.</span> <span class="nav-text">webpack.common.js</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#webpack-dev-js"><span class="nav-number">3.2.</span> <span class="nav-text">webpack.dev.js</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#webpack-prod-js"><span class="nav-number">3.3.</span> <span class="nav-text">webpack.prod.js</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AF%84%E4%BE%8B%E9%A0%81%E9%9D%A2"><span class="nav-number">4.</span> <span class="nav-text">範例頁面</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CSHTML"><span class="nav-number">4.1.</span> <span class="nav-text">CSHTML</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#js"><span class="nav-number">4.2.</span> <span class="nav-text">js</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#split-Chunks"><span class="nav-number">5.</span> <span class="nav-text">split Chunks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E8%A4%87%E7%9A%84-vendors"><span class="nav-number">6.</span> <span class="nav-text">重複的 vendors</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8B%95%E6%85%8B%E6%B3%A8%E5%85%A5-js-%E7%B5%A6-cshtml"><span class="nav-number">7.</span> <span class="nav-text">動態注入 js 給 cshtml</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8B%95%E6%85%8B%E6%B3%A8%E5%85%A5-js-%E7%B5%A6-cshtml-%E6%9B%B4%E6%96%B0%E4%BD%9C%E6%B3%95"><span class="nav-number">8.</span> <span class="nav-text">動態注入 js 給 cshtml 更新作法</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/webpack-compile-vue-single-file-component/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="webpack-編譯vue single file component | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          webpack-編譯vue single file component
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2020-09-09 15:53:55" itemprop="dateCreated datePublished" datetime="2020-09-09T15:53:55+08:00">2020-09-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/webpack/" itemprop="url" rel="index"><span itemprop="name">webpack</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/webpack-compile-vue-single-file-component/" class="post-meta-item leancloud_visitors" data-flag-title="webpack-編譯vue single file component" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/webpack-compile-vue-single-file-component/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/webpack-compile-vue-single-file-component/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>之前的專案採用<code>ASP.NET MVC5</code>的方式建立，當時沒有採用<code>webpack</code>編譯前端程式碼，使用的方式是透過<code>script</code> tag 載入<code>vue.js</code>使用，在 component 的部分則是利用字串模板的方式，以<code>Vue.component()</code>的方式全域註冊，嘗試透過<code>webpack</code>將前端程式編譯，並改用 single file component 的方式撰寫 vue 元件</p>
+<span id="more"></span>
+
+<h2 id="目錄架構"><a href="#目錄架構" class="headerlink" title="目錄架構"></a>目錄架構</h2><table>
+<thead>
+<tr>
+<th>目錄</th>
+<th>版控</th>
+<th>加入專案</th>
+<th>備註</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/Scripts/Page/**/*.js</code></td>
+<td>Y</td>
+<td>Y</td>
+<td>global</td>
+<td>放置各個頁面的主要 js 程式</td>
+</tr>
+<tr>
+<td><code>/Source/Page/**/*.js</code></td>
+<td>Y</td>
+<td>N</td>
+<td>ESModule</td>
+<td>同上，但是是 ESModule 版本</td>
+</tr>
+<tr>
+<td><code>/Source/Component/**/*.vue</code></td>
+<td>Y</td>
+<td>N</td>
+<td>ESModule</td>
+<td>各功能所用到的 Vue Single File Component</td>
+</tr>
+<tr>
+<td><code>/Source/Enums/**.js</code></td>
+<td>Y</td>
+<td>N</td>
+<td>ESModule</td>
+<td>放置相關的列舉</td>
+</tr>
+<tr>
+<td><code>/Views/Bundle/Page/**/*.cshtml</code></td>
+<td>Y</td>
+<td>Y</td>
+<td>webpack 產出</td>
+<td>用來取代<code>cshtml</code>檔案內的 script 標籤</td>
+</tr>
+<tr>
+<td><code>/Views/BundleTemp/_Js_Bundle.cshtml</code></td>
+<td>Y</td>
+<td>N</td>
+<td>ejs</td>
+<td>產生<code>partial view</code>的<code>template</code>檔案</td>
+</tr>
+</tbody></table>
+<p>改寫原有功能的步驟，以首頁<code>/Home/Index</code>的範例來解說，流程大概就是</p>
+<ol>
+<li><code>/Views/Home/Index.cshtml</code>：將後端 Bundle 的 script 移除，替換為<code>@Html.Partial(&quot;~/Views/Bundle/Page/Home/Index_Js.cshtml&quot;)</code></li>
+<li><code>/Scripts/Page/Home/Index.js</code>：將檔案複製到<code>/Source/Page/Home/Index.js</code>，並針對內容改寫為<code>ESModule</code>寫法，用到的外部檔案比照辦理，複製後改寫</li>
+<li>將用到的<code>Vue Component</code>改寫為<code>SFC</code>，並放置於<code>/Source/Component</code>目錄下，依照元件功能分類</li>
+<li>移除<code>BundleConfig.cs</code>未使用的 bundle 設定</li>
+<li><code>webpack.common.js</code>：修改進入點 pattern：<code>Source/Page/&#123;Home&#125;/*.js</code>，代表會抓<code>/Source/Page/Home/*.js</code>作為 entry</li>
+</ol>
+<h2 id="安裝相關套件"><a href="#安裝相關套件" class="headerlink" title="安裝相關套件"></a>安裝相關套件</h2><p>直接列出<code>package.json</code>依賴套件，直接看比較快，需要注意的是<code>vue</code>的版本需要與<code>vue-template-compiler</code>一致，因為之前的文章用的是<code>webpack@3 + html-webpack-plugin@3.2.0</code>，已經有點久了，現在都到<code>webpack5</code>了，所以重新更新了一下內容</p>
+<blockquote>
+<ol>
+<li>HMR 指令不用再呼叫<code>webpack-dev-server</code>，直接用<code>webpack serve</code>呼叫</li>
+<li>因為用了<code>webpack5</code>，所以 <code>html-webpack-plugin</code>也要重新調整<code>template</code>的 ejs 語法</li>
+</ol>
+</blockquote>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// package.json</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;start&quot;</span><span class="punctuation">:</span> <span class="string">&quot;webpack serve --config webpack.dev.js&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;watch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;webpack --config webpack.dev.js --watch&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;build:prod&quot;</span><span class="punctuation">:</span> <span class="string">&quot;webpack --config webpack.prod.js&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;build:dev&quot;</span><span class="punctuation">:</span> <span class="string">&quot;webpack --config webpack.dev.js&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;keywords&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;author&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;license&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ISC&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;devDependencies&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;@babel/core&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^7.13.10&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;babel-eslint&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^10.1.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;babel-loader&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^8.2.2&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;clean-webpack-plugin&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^3.0.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;css-loader&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^5.1.1&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;eslint&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^7.21.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;eslint-plugin-vue&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^7.7.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;glob&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^7.1.6&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;html-webpack-plugin&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^5.3.1&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;less-loader&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^8.0.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;sass-loader&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^11.0.1&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;style-loader&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^2.0.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;terser-webpack-plugin&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^5.1.1&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;url-loader&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^4.1.1&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;vue-hot-reload-api&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^2.3.4&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;vue-loader&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^15.9.6&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;vue-template-compiler&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^2.5.22&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;webpack&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^5.24.4&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;webpack-cli&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^4.5.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;webpack-dev-server&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^3.11.2&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;webpack-merge&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^5.7.3&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;dependencies&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;vue&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^2.5.22&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="webpack-設定"><a href="#webpack-設定" class="headerlink" title="webpack 設定"></a>webpack 設定</h2><p>因為希望編譯的時候可以選擇開發環境或是正式環境，參考官網採用<code>webpack-merge</code>的方式，並透過指令列給予設定檔參數，藉此決定執行哪一份設定；具體的步驟是將設定區分為共用(webpack.common.js)、開發環境(webpack.dev.js)、正式環境(webpack.prod.js)，細節請直接參考設定檔案內容。</p>
+<p>因為是 ASP.NET MVC 專案，前提條件是將進入點 js 檔案的路徑，都是這個 pattern：<code>/Scripts/Page/&#123;Controller&#125;/&#123;Action&#125;.js</code>，取得進入點的部分為了可以漸進的調整各個頁面，因此採用 glob 的方式去產生進入點的 js 路徑，透過<code>getEntry()</code>將每一隻程式的進入點變成一對 key-value-pair，這樣也可以在隨後的<code>output</code>設定處，利用<code>[name].js</code>的方式輸出檔名；配合 output.path 的設定，將輸出目錄定義在<code>Dist</code>路徑下，所以在<code>.cshtml</code>頁面裡面，載入的 Pattern 也會是<code>Dist/Page/&#123;Controller&#125;/&#123;Action&#125;.js</code></p>
+<h3 id="webpack-common-js"><a href="#webpack-common-js" class="headerlink" title="webpack.common.js"></a>webpack.common.js</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//webpack.common.js</span></span><br><span class="line"><span class="keyword">const</span> <span class="title class_">HtmlWebpackPlugin</span> = <span class="built_in">require</span>(<span class="string">&#x27;html-webpack-plugin&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="title class_">VueLoaderPlugin</span> = <span class="built_in">require</span>(<span class="string">&#x27;vue-loader/lib/plugin&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> glob = <span class="built_in">require</span>(<span class="string">&#x27;glob&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">getEntryFiles</span> = (<span class="params"></span>) =&gt; glob.<span class="title function_">sync</span>(path.<span class="title function_">join</span>(__dirname, <span class="string">&#x27;Source/Page/&#123;Home&#125;/*.js&#x27;</span>));</span><br><span class="line"><span class="keyword">const</span> getEntry = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="title class_">Entries</span> = &#123;&#125;;</span><br><span class="line">    <span class="title function_">getEntryFiles</span>().<span class="title function_">forEach</span>(<span class="keyword">function</span> (<span class="params">f</span>) &#123;</span><br><span class="line">        <span class="keyword">let</span> bundleName = <span class="regexp">/.*\/(Page\/.*?)\.js/</span>.<span class="title function_">exec</span>(f)[<span class="number">1</span>];</span><br><span class="line">        <span class="title class_">Entries</span>[bundleName] ? <span class="title class_">Entries</span>[bundleName].<span class="title function_">push</span>(f) : (<span class="title class_">Entries</span>[bundleName] = [f]);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Entries</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="title class_">CommonConfig</span> = &#123;</span><br><span class="line">    <span class="attr">entry</span>: <span class="title function_">getEntry</span>(),</span><br><span class="line">    <span class="attr">output</span>: &#123;</span><br><span class="line">        <span class="attr">path</span>: path.<span class="title function_">join</span>(__dirname, <span class="string">&#x27;Dist&#x27;</span>),</span><br><span class="line">        <span class="attr">filename</span>: <span class="string">&#x27;[name].js&#x27;</span>,</span><br><span class="line">        <span class="attr">clean</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="attr">publicPath</span>: <span class="string">&#x27;/Dist&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">module</span>: &#123;</span><br><span class="line">        <span class="attr">rules</span>: [</span><br><span class="line">            &#123;<span class="attr">test</span>: <span class="regexp">/\.js$/</span>, <span class="attr">use</span>: <span class="string">&#x27;babel-loader&#x27;</span>, <span class="attr">exclude</span>: <span class="regexp">/node_modules/</span>&#125;,</span><br><span class="line">            &#123;<span class="attr">test</span>: <span class="regexp">/\.vue$/</span>, <span class="attr">use</span>: <span class="string">&#x27;vue-loader&#x27;</span>&#125;,</span><br><span class="line">            &#123;<span class="attr">test</span>: <span class="regexp">/\.css$/</span>, <span class="attr">use</span>: [<span class="string">&#x27;style-loader&#x27;</span>, <span class="string">&#x27;css-loader&#x27;</span>]&#125;, =</span><br><span class="line">            &#123;<span class="attr">test</span>: <span class="regexp">/\.less$/</span>, <span class="attr">use</span>: [<span class="string">&#x27;style-loader&#x27;</span>, <span class="string">&#x27;css-loader&#x27;</span>, <span class="string">&#x27;less-loader&#x27;</span>]&#125;,</span><br><span class="line">            &#123;<span class="attr">test</span>: <span class="regexp">/\.scss$/</span>, <span class="attr">use</span>: [<span class="string">&#x27;style-loader&#x27;</span>, <span class="string">&#x27;css-loader&#x27;</span>, <span class="string">&#x27;sass-loader&#x27;</span>]&#125;,</span><br><span class="line">            &#123;<span class="attr">test</span>: <span class="regexp">/\.(jpg|png|gif|bmp|jpeg)$/</span>, <span class="attr">use</span>: <span class="string">&#x27;url-loader?limit=8000&#x27;</span>&#125;,</span><br><span class="line">            &#123;<span class="attr">test</span>: <span class="regexp">/\.(tff|eot|svg|woff|woff2)$/</span>, <span class="attr">use</span>: <span class="string">&#x27;url-loader&#x27;</span>&#125;,</span><br><span class="line">        ],</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">resolve</span>: &#123;</span><br><span class="line">        <span class="attr">alias</span>: &#123;</span><br><span class="line">            <span class="attr">vue</span>: <span class="string">&#x27;vue/dist/vue.js&#x27;</span>, <span class="comment">//指定 vue 對應使用的真實 js 檔案</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">extensions</span>: [<span class="string">&#x27;.js&#x27;</span>, <span class="string">&#x27;.vue&#x27;</span>],</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">plugins</span>: [</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">VueLoaderPlugin</span>()</span><br><span class="line">    ],</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = <span class="title class_">CommonConfig</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="webpack-dev-js"><a href="#webpack-dev-js" class="headerlink" title="webpack.dev.js"></a>webpack.dev.js</h3><p>開發環境設定主要多了<code>devServer</code>區段的設定，可以參考<a target="_blank" rel="noopener" href="https://webpack.docschina.org/configuration/dev-server/">开发服务器(DevServer)</a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; merge &#125; = <span class="built_in">require</span>(<span class="string">&quot;webpack-merge&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> common = <span class="built_in">require</span>(<span class="string">&quot;./webpack.common.js&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = <span class="title function_">merge</span>(common, &#123;</span><br><span class="line">  <span class="attr">mode</span>: <span class="string">&quot;development&quot;</span>,</span><br><span class="line">  <span class="attr">devtool</span>: <span class="string">&quot;inline-source-map&quot;</span>,</span><br><span class="line">  <span class="attr">target</span>: <span class="string">&quot;web&quot;</span>,</span><br><span class="line">  <span class="attr">devServer</span>: &#123;</span><br><span class="line">    <span class="attr">hot</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">inline</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">port</span>: <span class="number">8888</span>,</span><br><span class="line">    <span class="attr">open</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">proxy</span>: [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">context</span>: <span class="function">() =&gt;</span> <span class="literal">true</span>,</span><br><span class="line">        <span class="attr">target</span>: <span class="string">&quot;http://localhost:8898&quot;</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="webpack-prod-js"><a href="#webpack-prod-js" class="headerlink" title="webpack.prod.js"></a>webpack.prod.js</h3><p>正式環境設定相對地較為簡單，主要多了一個輸出目錄清空的動作，至於套件<code>terser-webpack-plugin</code>，則是為了<code>production</code>的時候，不要產生版權的文字檔</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//webpack.prod.js</span></span><br><span class="line"><span class="keyword">const</span> &#123; merge &#125; = <span class="built_in">require</span>(<span class="string">&quot;webpack-merge&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> &#123; <span class="title class_">CleanWebpackPlugin</span> &#125; = <span class="built_in">require</span>(<span class="string">&quot;clean-webpack-plugin&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="title class_">TerserPlugin</span> = <span class="built_in">require</span>(<span class="string">&quot;terser-webpack-plugin&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> common = <span class="built_in">require</span>(<span class="string">&quot;./webpack.common.js&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = <span class="title function_">merge</span>(common, &#123;</span><br><span class="line">  <span class="attr">mode</span>: <span class="string">&quot;production&quot;</span>,</span><br><span class="line">  <span class="attr">plugins</span>: [</span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">CleanWebpackPlugin</span>(&#123;</span><br><span class="line">      <span class="attr">cleanAfterEveryBuildPatterns</span>: [<span class="string">&quot;Dist&quot;</span>],</span><br><span class="line">      <span class="attr">verbose</span>: <span class="literal">true</span>,</span><br><span class="line">    &#125;),</span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">optimization</span>: &#123;</span><br><span class="line">    <span class="attr">minimize</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">minimizer</span>: [</span><br><span class="line">      <span class="keyword">new</span> <span class="title class_">TerserPlugin</span>(&#123;</span><br><span class="line">        <span class="attr">terserOptions</span>: &#123;</span><br><span class="line">          <span class="attr">format</span>: &#123;</span><br><span class="line">            <span class="attr">comments</span>: <span class="literal">false</span>,</span><br><span class="line">          &#125;,</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">extractComments</span>: <span class="literal">false</span>,</span><br><span class="line">      &#125;),</span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="範例頁面"><a href="#範例頁面" class="headerlink" title="範例頁面"></a>範例頁面</h2><h3 id="CSHTML"><a href="#CSHTML" class="headerlink" title="CSHTML"></a>CSHTML</h3><p>範例頁面原本採用<code>script</code>標籤載入其他的第三方套件，還有自己撰寫的 js 程式，原本的第三方程式碼一樣用 script 載入，自己撰寫的程式改用<code>webpack</code>打包，包含<code>.vue</code> file</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">my-list</span>&gt;</span><span class="tag">&lt;/<span class="name">my-list</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">@section scripts&#123;</span><br><span class="line"><span class="comment">&lt;!--ckeditor 5 basic editor and ckeditor vue support--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;~/Scripts/Plugins/ckeditor5/build/ckeditor.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;~/Scripts/Plugins/CKEditor/ckeditor.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;~/Scripts/Plugins/Vue-Table-2/vue-tables-2.min.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- my own code --&gt;</span></span><br><span class="line">@Html.Partial(&quot;~/Views/Bundle/Page/Home/Index_Js.cshtml&quot;) &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="js"><a href="#js" class="headerlink" title="js"></a>js</h3><p>這裡的目錄結構可以自己定義好，也有人會用<code>webpack</code>設定裡面的<code>resolve.alias</code>區段去 mapping 實際的路徑，像是下面這樣在<code>webpack</code>設定</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  <span class="attr">resolve</span>: &#123;</span><br><span class="line">      <span class="attr">alias</span>:&#123;</span><br><span class="line">          <span class="string">&#x27;@Enums&#x27;</span>: path.<span class="title function_">join</span>(__dirname,<span class="string">&#x27;Source/Enums&#x27;</span>),</span><br><span class="line">          <span class="string">&#x27;@Page&#x27;</span>: path.<span class="title function_">join</span>(__dirname,<span class="string">&#x27;Source/Page&#x27;</span>),</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">extensions</span>: [<span class="string">&#x27;.js&#x27;</span>, <span class="string">&#x27;.vue&#x27;</span>],</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>而要讓<code>Rider</code>支援，只要指定好設定檔案就好<br><img src="/artblog/webpack-compile-vue-single-file-component/2021-11-09-142259.jpg"></p>
+<p>下面的則是進入點的範例程式碼</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// /Source/Page/Home/Index.js sample code</span></span><br><span class="line"><span class="comment">/* global CKEditor, VueTables */</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Vue</span> <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="title class_">MyList</span> <span class="keyword">from</span> <span class="string">&quot;../../Component/MyList&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="title class_">Vue</span>.<span class="title function_">use</span>(<span class="title class_">CKEditor</span>);</span><br><span class="line"><span class="title class_">Vue</span>.<span class="title function_">use</span>(<span class="title class_">VueTables</span>.<span class="property">ServerTable</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="title class_">Vue</span>(&#123;</span><br><span class="line">  <span class="attr">el</span>: <span class="string">&quot;#app&quot;</span>,</span><br><span class="line">  <span class="attr">components</span>: &#123;</span><br><span class="line">    <span class="string">&quot;my-list&quot;</span>: <span class="title class_">MyList</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>另外要注意的是，如果要讓<code>jest</code>也看的懂<code>alias</code>，也需要另外在<code>jest</code>的設定或<code>package.json</code>內設定相關路由</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// package.json</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  <span class="attr">&quot;jest&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;testResultsProcessor&quot;</span><span class="punctuation">:</span> <span class="string">&quot;jest-junit&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;moduleNameMapper&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;^@Enums(.*)$&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&lt;rootDir&gt;/Source/Enums$1&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;^@Page(.*)$&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&lt;rootDir&gt;/Source/Page$1&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;moduleFileExtensions&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;js&quot;</span><span class="punctuation">,</span> <span class="string">&quot;vue&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;transform&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;.*\\.(vue)$&quot;</span><span class="punctuation">:</span> <span class="string">&quot;vue-jest&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;.*\\.(js)$&quot;</span><span class="punctuation">:</span> <span class="string">&quot;babel-jest&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="split-Chunks"><a href="#split-Chunks" class="headerlink" title="split Chunks"></a>split Chunks</h2><p>所有的程式都打包在同一個檔案，無疑會造成一個大檔案，為了網頁速度通常會將這些東西切割出來，通常會將自己寫的東西包一包，引用的套件切出來，下列的設定會將 vue 都打包，放在<code>Dist/libs/vue.js</code>內，所以記得也要在有用到的<code>cshtml</code>頁面載入</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.common.js</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">output</span>: &#123;</span><br><span class="line">        <span class="attr">path</span>: path.<span class="title function_">join</span>(__dirname, <span class="string">&#x27;Dist&#x27;</span>),</span><br><span class="line">        <span class="attr">filename</span>: <span class="string">&#x27;[name].js&#x27;</span>,</span><br><span class="line">        <span class="attr">clean</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="attr">publicPath</span>: <span class="string">&#x27;/Dist&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">optimization</span>: &#123;</span><br><span class="line">        <span class="attr">splitChunks</span>: &#123;</span><br><span class="line">            <span class="attr">cacheGroups</span>: &#123;</span><br><span class="line">                <span class="attr">vue</span>: &#123;</span><br><span class="line">                    <span class="attr">name</span>: <span class="string">&#x27;libs/vue&#x27;</span>,</span><br><span class="line">                    <span class="attr">test</span>: <span class="function"><span class="params">module</span> =&gt;</span> <span class="regexp">/vue/</span>.<span class="title function_">test</span>(<span class="variable language_">module</span>.<span class="property">context</span>),</span><br><span class="line">                    <span class="attr">chunks</span>: <span class="string">&#x27;initial&#x27;</span>,</span><br><span class="line">                    <span class="attr">priority</span>: <span class="number">10</span></span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="attr">vendors</span>: &#123;</span><br><span class="line">                    <span class="attr">name</span>: <span class="string">&#x27;libs/all&#x27;</span>,</span><br><span class="line">                    <span class="attr">test</span>: <span class="regexp">/[\\/]node_modules[\\/]/</span>,</span><br><span class="line">                    <span class="attr">priority</span>: -<span class="number">10</span>,</span><br><span class="line">                &#125;,</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="重複的-vendors"><a href="#重複的-vendors" class="headerlink" title="重複的 vendors"></a>重複的 vendors</h2><p>實際運作後，發現在打包出來的檔案內，包含了重複的<code>vue.js</code>，一開始我以為是版本不一樣的關係，vueTables 依賴<code>2.6.12</code>，我使用的是<code>2.5.22</code>，所以調整<code>package.json</code>到<code>2.6.12</code>，再編譯一次仍舊重複打包。最終我透過一個工具網頁:<a target="_blank" rel="noopener" href="https://www.npmjs.com/package/inspectpack">inspectpack</a>上面的解決方案<a target="_blank" rel="noopener" href="https://github.com/FormidableLabs/inspectpack/#fixing-bundle-duplicates">Fixing bundle duplicates</a>，改用<code>yarn</code>管理專案，並且加入<code>package.json</code>的設定，接著再透過指令<code>yarn build:dev</code>，打包的結果就沒有重複了</p>
+<p>後來又重複測試了幾次，似乎用哪一套管理工具並沒有差別，重點只是在<code>node_modules</code>目錄底下是否為扁平化或是傳統的樹狀結構，只要是扁平化的我自己測試用<code>npm</code>或是<code>yarn</code>都可以</p>
+<h2 id="動態注入-js-給-cshtml"><a href="#動態注入-js-給-cshtml" class="headerlink" title="動態注入 js 給 cshtml"></a>動態注入 js 給 cshtml</h2><p>webpack 編譯的時候，自動產生相關片段，並且在 cshtml 當中直接引用，如下</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@section scripts&#123; @Html.Partial(&quot;~/Views/Bundle/Page/Home/Index_Js.cshtml&quot;) &#125;</span><br></pre></td></tr></table></figure>
+
+<p>因此我們需要讓 webpack 依據 entry 自動產生相關檔案，透過<code>HtmlWebpackPlugin</code>套件，給予一個<code>template</code>讓他自動產生 partial view</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> setHtmlTemplates = <span class="keyword">function</span> (<span class="params">entryFiles</span>) &#123;</span><br><span class="line">  entryFiles.<span class="title function_">forEach</span>(<span class="function">(<span class="params">filePath</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> path = <span class="regexp">/.*\/(Source\/Page\/.*?)\.js/</span>.<span class="title function_">exec</span>(filePath)[<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">let</span> <span class="title class_">BundleName</span> = path.<span class="title function_">split</span>(<span class="string">&quot;/&quot;</span>).<span class="title function_">splice</span>(<span class="number">1</span>).<span class="title function_">join</span>(<span class="string">&quot;/&quot;</span>);</span><br><span class="line">    <span class="title class_">CommonConfig</span>.<span class="property">plugins</span>.<span class="title function_">push</span>(</span><br><span class="line">      <span class="keyword">new</span> <span class="title class_">HtmlWebpackPlugin</span>(&#123;</span><br><span class="line">        <span class="attr">template</span>: <span class="string">&quot;Views/BundleTemp/_Js_Bundle.cshtml&quot;</span>,</span><br><span class="line">        <span class="attr">filename</span>: <span class="string">`./../Views/Bundle/<span class="subst">$&#123;BundleName&#125;</span>_Js.cshtml`</span>,</span><br><span class="line">        <span class="attr">chunks</span>: [<span class="string">&quot;libs/vue&quot;</span>, <span class="title class_">BundleName</span>],</span><br><span class="line">        <span class="attr">inject</span>: <span class="literal">false</span>,</span><br><span class="line">      &#125;)</span><br><span class="line">    );</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="title function_">setHtmlTemplates</span>(<span class="title function_">getEntryFiles</span>());</span><br></pre></td></tr></table></figure>
+
+<p>將進入點丟給 function，讓 fn 對每個進入點都處理一次 html 的 partial view，這些東西主要都是針對 <code>CommonConfig</code> 操作，而<code>CommonConfig</code>就是我們 webpack 的設定物件；也就是說，我們其實就是在 webpack 設定的<code>plugin</code>節點，重複的加入了很多個<code>HtmlWebpackPlugin</code>的設定</p>
+<p>拿來當作<code>template</code>的 partiview 內容如下</p>
+<p>Views&#x2F;BundleTemp&#x2F;_Js_Bundle.cshtml</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;% for (var chunk in htmlWebpackPlugin.options.chunks) &#123; %&gt;</span><br><span class="line">&lt;script src=&quot;~/Dist/&lt;%=htmlWebpackPlugin.options.chunks[chunk] %&gt;.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">&lt;%&#125;%&gt;</span><br></pre></td></tr></table></figure>
+
+<p>內容是用 ejs 語法寫成，產出的結果會是這樣</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;script src=&quot;~/Dist/libs/vue.js&quot;&gt;&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;script src=&quot;~/Dist/Page/Home/index.js&quot;&gt;&lt;/script&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="動態注入-js-給-cshtml-更新作法"><a href="#動態注入-js-給-cshtml-更新作法" class="headerlink" title="動態注入 js 給 cshtml 更新作法"></a>動態注入 js 給 cshtml 更新作法</h2><p>後來因為想要在瀏覽器 cache 上有比較好的體驗，所以希望在 js 的 querystring 後面加上 hash，又研究了一下，發現以我的需求，其實不需要用到 ejs 的 template，直接透過設定即可，在下面的部分重點就在於<code>inject</code>我改為<code>body</code>，讓外掛幫我把 script 注入，然後我給的範本是空字串，所以它直接在空字串內注入</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> setHtmlTemplates = <span class="keyword">function</span> (<span class="params">entryFiles</span>) &#123;</span><br><span class="line">  entryFiles.<span class="title function_">forEach</span>(<span class="function">(<span class="params">filePath</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> path = <span class="regexp">/.*\/(Source\/Page\/.*?)\.js/</span>.<span class="title function_">exec</span>(filePath)[<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">let</span> <span class="title class_">BundleName</span> = path.<span class="title function_">split</span>(<span class="string">&quot;/&quot;</span>).<span class="title function_">splice</span>(<span class="number">1</span>).<span class="title function_">join</span>(<span class="string">&quot;/&quot;</span>);</span><br><span class="line">    <span class="title class_">CommonConfig</span>.<span class="property">plugins</span>.<span class="title function_">push</span>(</span><br><span class="line">      <span class="keyword">new</span> <span class="title class_">HtmlWebpackPlugin</span>(&#123;</span><br><span class="line">        <span class="attr">templateContent</span>: <span class="string">``</span>,</span><br><span class="line">        <span class="attr">filename</span>: <span class="string">`./../Views/Bundle/<span class="subst">$&#123;BundleName&#125;</span>_Js.cshtml`</span>,</span><br><span class="line">        <span class="attr">chunks</span>: [<span class="title class_">BundleName</span>],</span><br><span class="line">        <span class="attr">inject</span>: <span class="string">&quot;body&quot;</span>,</span><br><span class="line">      &#125;)</span><br><span class="line">    );</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="title function_">setHtmlTemplates</span>(<span class="title function_">getEntryFiles</span>());</span><br></pre></td></tr></table></figure>
+
+<p>另外在 <code>webpack</code> 的 <code>output</code> 設定，調整使用 <code>hashcontent</code> 即可根據內容變動產出 hash 在檔案路徑後方</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">output: &#123;</span><br><span class="line">     path: path.join(__dirname, &#x27;Dist&#x27;, &#x27;Scripts&#x27;),</span><br><span class="line">     filename: &#x27;[name].js?v=[contenthash]&#x27;,</span><br><span class="line">     chunkFilename: &#x27;[name].js?v=[contenthash]&#x27;,</span><br><span class="line">     clean: true,</span><br><span class="line">     publicPath: &#x27;/Dist/Scripts&#x27;</span><br><span class="line"> &#125;,</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/vue/" rel="tag"># vue</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/what-is-stub-and-mock/" rel="prev" title="Stub, Mock是甚麼？">
+                  <i class="fa fa-angle-left"></i> Stub, Mock是甚麼？
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/selenium-e2e-testing/" rel="next" title="selenium-E2E測試">
+                  selenium-E2E測試 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

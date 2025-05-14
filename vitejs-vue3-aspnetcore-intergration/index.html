@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="這篇文章主要在練習如何整合前後端網站，在開發時期階段的體驗及發佈出去的方法，最終將網站容器化的一個範例">
+<meta property="og:type" content="article">
+<meta property="og:title" content="整合vitejs + vue3搭配.NET Core網站開發練習">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="這篇文章主要在練習如何整合前後端網站，在開發時期階段的體驗及發佈出去的方法，最終將網站容器化的一個範例">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-113627.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-113827.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-114215.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-120638.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-121420.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-122007.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-122627.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-123159.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-125100.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-131758.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-2131907.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-132051.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-132110.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-133658.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-134152.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-134845.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-134512.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-143203.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-143319.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-143733.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-144204.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-142622.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-144429.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-144849.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-145133.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-145421.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-145618.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-150906.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-151210.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-151640.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-151948.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-152334.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-153922.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-154029.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-154232.jpg">
+<meta property="article:published_time" content="2022-11-29T01:51:42.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.472Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="vue3">
+<meta property="article:tag" content="vitejs">
+<meta property="article:tag" content="netCore">
+<meta property="article:tag" content="rider">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-113627.jpg">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/","path":"/vitejs-vue3-aspnetcore-intergration/","title":"整合vitejs + vue3搭配.NET Core網站開發練習"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>整合vitejs + vue3搭配.NET Core網站開發練習 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Intro"><span class="nav-number">1.</span> <span class="nav-text">Intro</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#example-repos"><span class="nav-number">1.1.</span> <span class="nav-text">example repos</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B6%B2%E7%AB%99%E9%96%8B%E7%99%BC%E6%A1%86%E6%9E%B6%E7%9A%84%E9%81%B8%E6%93%87"><span class="nav-number">2.</span> <span class="nav-text">網站開發框架的選擇</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#vite-js-%E8%83%BD%E5%B9%B9%E5%98%9B"><span class="nav-number">2.1.</span> <span class="nav-text">vite.js 能幹嘛</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vue3-js-%E7%9A%84%E5%A5%BD%E8%99%95"><span class="nav-number">2.2.</span> <span class="nav-text">vue3.js 的好處</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E5%BE%8C%E7%AB%AF%E5%88%86%E9%9B%A2%E9%96%8B%E7%99%BC"><span class="nav-number">3.</span> <span class="nav-text">前後端分離開發</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Microsoft-AspNetCore-SpaServices-Extensions"><span class="nav-number">3.1.</span> <span class="nav-text">Microsoft.AspNetCore.SpaServices.Extensions</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LAB-%E5%BB%BA%E7%AB%8B%E5%89%8D%E5%BE%8C%E7%AB%AF%E7%B6%B2%E7%AB%99"><span class="nav-number">4.</span> <span class="nav-text">LAB:建立前後端網站</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E5%89%8D%E7%AB%AF%E7%B6%B2%E7%AB%99"><span class="nav-number">4.1.</span> <span class="nav-text">建立前端網站</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E5%BE%8C%E7%AB%AF%E7%B6%B2%E7%AB%99"><span class="nav-number">4.2.</span> <span class="nav-text">建立後端網站</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LAB-%E5%89%8D%E7%AB%AF%E7%B4%A2%E5%8F%96%E8%B3%87%E6%96%99"><span class="nav-number">5.</span> <span class="nav-text">LAB:前端索取資料</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%8C%E7%AB%AF%E7%B5%A6%E4%BA%88%E8%B3%87%E6%96%99"><span class="nav-number">5.1.</span> <span class="nav-text">後端給予資料</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E7%AB%AF%E5%8F%96%E5%BE%97%E8%B3%87%E6%96%99"><span class="nav-number">5.2.</span> <span class="nav-text">前端取得資料</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LAB-Microsoft-AspNetCore-SpaServices-Extensions"><span class="nav-number">6.</span> <span class="nav-text">LAB:Microsoft.AspNetCore.SpaServices.Extensions</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B0%E5%A2%9E%E5%A5%97%E4%BB%B6%E4%B8%A6%E8%A8%AD%E5%AE%9A"><span class="nav-number">6.1.</span> <span class="nav-text">新增套件並設定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E5%89%8D%E7%AB%AF-fetch-%E7%B6%B2%E5%9D%80"><span class="nav-number">6.2.</span> <span class="nav-text">修改前端 fetch 網址</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%99%BC%E4%BD%88%E7%B6%B2%E7%AB%99"><span class="nav-number">7.</span> <span class="nav-text">發佈網站</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%AC%E8%A9%A6%E7%99%BC%E4%BD%88%E7%89%88%E6%9C%AC"><span class="nav-number">8.</span> <span class="nav-text">測試發佈版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%87%E6%87%89%E7%94%A8%E7%A8%8B%E5%BC%8F%E5%AE%B9%E5%99%A8%E5%8C%96"><span class="nav-number">9.</span> <span class="nav-text">將應用程式容器化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B-dockerfile"><span class="nav-number">9.1.</span> <span class="nav-text">建立 dockerfile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A2%E7%94%9F-image"><span class="nav-number">9.2.</span> <span class="nav-text">產生 image</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A2%E7%94%9F-container"><span class="nav-number">9.3.</span> <span class="nav-text">產生 container</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">10.</span> <span class="nav-text">結論</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A3%9C%E5%85%85-%E5%A6%82%E6%9E%9C%E4%BD%A0%E4%B9%9F%E5%96%9C%E6%AD%A1%E7%94%A8-Rider"><span class="nav-number">11.</span> <span class="nav-text">補充:如果你也喜歡用 Rider</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%91%E6%83%B3%E8%A6%81%E5%88%A9%E7%94%A8-IDE-%E7%9A%84%E6%90%9C%E5%B0%8B%E5%8A%9F%E8%83%BD%EF%BC%8C%E6%89%BE%E5%88%B0%E5%89%8D%E7%AB%AF%E6%AA%94%E6%A1%88"><span class="nav-number">11.1.</span> <span class="nav-text">我想要利用 IDE 的搜尋功能，找到前端檔案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%AC%E8%A9%A6%E5%89%8D%E5%BE%8C%E7%AB%AF%E9%83%BD%E8%A6%81%E5%88%86%E5%88%A5%E5%9F%B7%E8%A1%8C%EF%BC%8C%E6%9C%89%E6%B2%92%E6%9C%89-one-click-%E6%90%9E%E5%AE%9A%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">11.2.</span> <span class="nav-text">測試前後端都要分別執行，有沒有 one click 搞定的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A2%E7%84%B6%E9%83%BD%E6%9C%89%E4%B8%80%E9%8D%B5%E5%9F%B7%E8%A1%8C%E4%BA%86%EF%BC%8C%E9%82%A3%E4%B8%80%E9%8D%B5%E7%99%BC%E4%BD%88%E5%91%A2"><span class="nav-number">11.3.</span> <span class="nav-text">既然都有一鍵執行了，那一鍵發佈呢</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%82%A3%E5%AE%B9%E5%99%A8%E5%8C%96%E4%B9%9F%E4%BE%86%E4%B8%80%E5%80%8B%E5%90%A7%EF%BC%8C%E6%88%91%E7%9C%9F%E7%9A%84%E6%87%B6%E5%BE%97%E6%89%93%E6%8C%87%E4%BB%A4%E4%BA%86"><span class="nav-number">11.4.</span> <span class="nav-text">那容器化也來一個吧，我真的懶得打指令了</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/vitejs-vue3-aspnetcore-intergration/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="整合vitejs + vue3搭配.NET Core網站開發練習 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          整合vitejs + vue3搭配.NET Core網站開發練習
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2022-11-29 09:51:42" itemprop="dateCreated datePublished" datetime="2022-11-29T09:51:42+08:00">2022-11-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/practice/" itemprop="url" rel="index"><span itemprop="name">practice</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/vitejs-vue3-aspnetcore-intergration/" class="post-meta-item leancloud_visitors" data-flag-title="整合vitejs + vue3搭配.NET Core網站開發練習" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/vitejs-vue3-aspnetcore-intergration/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/vitejs-vue3-aspnetcore-intergration/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>這篇文章主要在練習如何整合前後端網站，在開發時期階段的體驗及發佈出去的方法，最終將網站容器化的一個範例</p>
+<span id="more"></span>
+
+<h2 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h2><p>這篇文章主要是針對 Youtube:<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=opHbgp2f128">AspNetCore Api + Vitejs + Vuejs Setup for Dev &amp; Prod</a> - <a target="_blank" rel="noopener" href="https://www.youtube.com/@RawCoding">Anton Wieslander</a>所做的練習及心得，建議有時間的人可以花 20 分鐘看一下</p>
+<h3 id="example-repos"><a href="#example-repos" class="headerlink" title="example repos"></a>example repos</h3><ol>
+<li><a target="_blank" rel="noopener" href="https://github.com/partypeopleland/LAB-vite">LAB-vite</a>: 因為喜歡在 rider 開發，因此新建一個方案檔將前後端專案都拉進來</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/partypeopleland/Lab-vite-vue-dotnetcore">Lab-vite-vue-dotnetcore</a>: 多了 dockerfile 的部分，其餘大同小異</li>
+</ol>
+<h2 id="網站開發框架的選擇"><a href="#網站開發框架的選擇" class="headerlink" title="網站開發框架的選擇"></a>網站開發框架的選擇</h2><p><code>webpack</code> 很好沒錯，但專案變大後，不管是在產生 <code>production build</code> 還是在開發時期的編譯時間，都需要很久的時間才能運作，如果再加上開發較複雜的專案，可能同時主機就會需要開好幾個 IDE，有時為了做 <code>PoC</code> 還會需要弄個 <code>docker</code> 架架資料庫<br>在這樣的背景之下如果還要等待 <code>webpack</code> 是非常難以忍受的事情；同理，在先前就已經了解到了 <code>vue2</code> 與 <code>vue3</code> 的差異，並且希望能夠練習一下 <code>vue3</code> 所帶來的開發體驗，而我又是慣常開發 <code>C#</code> 的人，採用<code>.NET6 mvc</code>也是很自然的一件事情，因此就有了下列的技術架構</p>
+<ol>
+<li>前端採用 <code>vite.js</code> + <code>vue3.js</code></li>
+<li>後端採用 <code>.NET6 mvc</code></li>
+</ol>
+<h3 id="vite-js-能幹嘛"><a href="#vite-js-能幹嘛" class="headerlink" title="vite.js 能幹嘛"></a>vite.js 能幹嘛</h3><ol>
+<li>可以拿來打包程式碼</li>
+<li>開發模式的時候，速度挺快 (利用 <strong>瀏覽器支援</strong>的<strong>Native ESM</strong>進行運作)</li>
+<li>正式環境的時候，打包程式碼跟 <code>webpack</code> 一樣，都是將所需要的模組全部包在一起 (為了避免因依賴鍊過長，造成瀏覽器持續的請求資源，這當中前端 JS 是停在那邊等待的，畫面會卡)</li>
+</ol>
+<h3 id="vue3-js-的好處"><a href="#vue3-js-的好處" class="headerlink" title="vue3.js 的好處"></a>vue3.js 的好處</h3><p>相比於 vue2 的差異，最主要的感受應該是提供了 <code>Composition API</code> 的寫法，還有效能的提升，差異的部分網路上很多，我覺得這一篇<a target="_blank" rel="noopener" href="https://www.gushiciku.cn/pl/pnlJ/zh-tw">vue3 對比 Vue2.x 差異性、注意點、整體梳理，與 React hook 比又如何</a>挺不錯，專業的評比還是交給專業的來，我轉發一下就好</p>
+<p>對我而言，最主要的就是一系列的效能優化改善，以及最直觀的語法上提供了 <code>Composition API</code> 所帶來的優點，也就是關注點分離，使邏輯、資料可以集中存放維護，也便於 <code>reUse</code></p>
+<h2 id="前後端分離開發"><a href="#前後端分離開發" class="headerlink" title="前後端分離開發"></a>前後端分離開發</h2><p>因為實際上佈署出去的環境，也會影響到開發網站的選擇，這邊因為只是練習，所以打算是將前後端 <code>deploy</code> 到同一個站台發佈出去，之後可以再包裝成 <code>docker</code> 直接容器化，感覺想法還行，那麼就是實作來驗證看看開發體驗順不順，因為是前後端分離專案，兩邊開發，之所以這麼考量，主要還是覺得前端後端其實都有其專業程度，一個專案內如果前後端包在一起，那勢必就會需要開始學習自己不熟悉的部分，有些人喜歡這樣，但也有的人不喜歡，認為為甚麼開發前端，我還要去了解後端的 <code>razor</code> 頁面、生命週期阿啥的東西；或者是反過來開發後端，我還需要去學習 <code>webpack</code>、<code>npm</code>、指令列那些的東西，不能就用 <code>VS2022 IDE</code> 介面上點一點就好了嗎？</p>
+<p>我覺得有興趣的話，東西都放在同一個 sln 內，想看可以去看；如果不感興趣，直接開自己的頁面，前端就確定好假資料的 API 自己刻；後端因為也只提供前端呼叫，所以確認好 API 介面後自己單元測試做一做，都挺好的，反正不管怎麼說，前後端始終都有自己的技術堆疊，切割開來會是比較好的選擇</p>
+<p>但是兩個專案跑起來兩個站台，假設前端 <code>3000</code>後端<code>5000</code>好了，前端跟後端索取資料，很自然地就會需要 <code>fetch</code> 給網址，像是 <code>http://localhost:5000/Api/Test</code>，但是最終又是會放在一起 <code>deploy</code> 出去的，所以 <code>production</code> 出去的時候，網址應該是打<code>/Api/Test</code>，那有沒有辦法可以解決呢</p>
+<p>應該有吧，說不定可以弄一個設定檔之類的東西，看 <code>deploy</code> 出去是 <code>development</code> 還是 <code>production</code> 來切換吧？嗯，可能吧，但想想就有點累，有沒有更方便一點的？</p>
+<h3 id="Microsoft-AspNetCore-SpaServices-Extensions"><a href="#Microsoft-AspNetCore-SpaServices-Extensions" class="headerlink" title="Microsoft.AspNetCore.SpaServices.Extensions"></a>Microsoft.AspNetCore.SpaServices.Extensions</h3><p>還真的有，這東西就叫做 <a target="_blank" rel="noopener" href="https://www.nuget.org/packages/Microsoft.AspNetCore.SpaServices.Extensions">Microsoft.AspNetCore.SpaServices.Extensions</a>，但是必須要抱歉的是，我對它不熟悉，而且似乎網上的介紹很少，但藉由一些練習我大概摸索出來的用途如下</p>
+<ol>
+<li>它能夠將發給後端的請求，代理轉發到 SPA 那邊去，所以我們必須要再判斷當前為開發時期的時候才這樣做，因為在正式環境，東西都被我們佈署在一起了，就不需要做代理這件事情</li>
+<li>它能夠指定網站的<code>RootPath</code>，所以當佈署在一起的時候，網站吃的首頁就是該路徑</li>
+</ol>
+<h2 id="LAB-建立前後端網站"><a href="#LAB-建立前後端網站" class="headerlink" title="LAB:建立前後端網站"></a>LAB:建立前後端網站</h2><p>準備工作大概完成了，底下就列出練習的步驟及重點</p>
+<h3 id="建立前端網站"><a href="#建立前端網站" class="headerlink" title="建立前端網站"></a>建立前端網站</h3><p>建立目錄並利用<a target="_blank" rel="noopener" href="https://vitejs.dev/guide/#getting-started">官方 Getting Started</a>的指令建立一個快速的啟動專案</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> Lab-vite-vue-dotnetcore</span><br><span class="line"><span class="built_in">cd</span> Lab-vite-vue-dotnetcore</span><br><span class="line">npm create vite@latest</span><br></pre></td></tr></table></figure>
+
+<p>接著會要求輸入專案名稱，選擇技術框架、採用的語言<br><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-113627.jpg"></p>
+<p>完成後可以進入該目錄先安裝套件，並跑一次看看網站是否正常啟動</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> front-end</span><br><span class="line">npm install</span><br><span class="line">npm run dev</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-113827.jpg"></p>
+<h3 id="建立後端網站"><a href="#建立後端網站" class="headerlink" title="建立後端網站"></a>建立後端網站</h3><p>回到上層目錄接著開始透過 dotnet cli 建立新的 mvc 專案，完成後一樣測試看看網站是否正常啟動</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dotnet new web -n back-end</span><br><span class="line"><span class="built_in">cd</span> back-end</span><br><span class="line">dotnet run</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-114215.jpg"></p>
+<h2 id="LAB-前端索取資料"><a href="#LAB-前端索取資料" class="headerlink" title="LAB:前端索取資料"></a>LAB:前端索取資料</h2><p>這邊我們練習從 Vue Component 裡面去撈後端資料，重點在 fetch 之後，要透過 reactive 包裝，這樣資料才會響應式的隨著變動</p>
+<p>底下就列出關鍵的部分</p>
+<h3 id="後端給予資料"><a href="#後端給予資料" class="headerlink" title="後端給予資料"></a>後端給予資料</h3><p>做一個 API 提供前端呼叫，當路由符合 <code>/api/test</code>就回應一個字串，因此做一個測試的 <code>TestController</code></p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Controller/TestController.cs</span></span><br><span class="line"><span class="keyword">using</span> Microsoft.AspNetCore.Mvc;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">back_end.Controller</span>;</span><br><span class="line"></span><br><span class="line">[<span class="meta">Route(<span class="string">&quot;/api/[controller]&quot;</span>)</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">TestController</span> : <span class="title">Microsoft.AspNetCore.Mvc.Controller</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> IActionResult <span class="title">Index</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> Ok(<span class="string">&quot;Test Result&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>當然也因為測試環境是兩個站台，所以後端為了測試要允許<code>CORS</code></p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// program.cs</span></span><br><span class="line"><span class="keyword">var</span> builder = WebApplication.CreateBuilder(args);</span><br><span class="line">builder.Services.AddControllers();</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> app = builder.Build();</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (app.Environment.IsDevelopment())</span><br><span class="line">&#123;</span><br><span class="line">    app.UseCors(b =&gt; b.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">app.UseRouting();</span><br><span class="line">app.UseEndpoints(e =&gt; e.MapDefaultControllerRoute());</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">app.Run();</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-120638.jpg"></p>
+<h3 id="前端取得資料"><a href="#前端取得資料" class="headerlink" title="前端取得資料"></a>前端取得資料</h3><p>在前端 SFC 透過 fetch 拿資料後將結果指派回資料，經由 vue 渲染於畫面上，後端路由:<code>https://localhost:7156/api/Test</code></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// /src/components/HelloWorld.vue</span></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">import</span> &#123; reactive, ref &#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="title function_">defineProps</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">msg</span>: <span class="title class_">String</span>,</span></span><br><span class="line"><span class="language-javascript">  &#125;)</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">const</span> count = <span class="title function_">ref</span>(<span class="number">0</span>)</span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// === new code begin</span></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">const</span> state = <span class="title function_">reactive</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">message</span>: <span class="string">&quot;empty&quot;</span>,</span></span><br><span class="line"><span class="language-javascript">  &#125;)</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="title function_">fetch</span>(<span class="string">&quot;https://localhost:7156/api/Test&quot;</span>)</span></span><br><span class="line"><span class="language-javascript">    .<span class="title function_">then</span>(<span class="function">(<span class="params">r</span>) =&gt;</span> r.<span class="title function_">text</span>())</span></span><br><span class="line"><span class="language-javascript">    .<span class="title function_">then</span>(<span class="function">(<span class="params">t</span>) =&gt;</span> (state.<span class="property">message</span> = t))</span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// === new code end</span></span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-121420.jpg"></p>
+<h2 id="LAB-Microsoft-AspNetCore-SpaServices-Extensions"><a href="#LAB-Microsoft-AspNetCore-SpaServices-Extensions" class="headerlink" title="LAB:Microsoft.AspNetCore.SpaServices.Extensions"></a>LAB:Microsoft.AspNetCore.SpaServices.Extensions</h2><h3 id="新增套件並設定"><a href="#新增套件並設定" class="headerlink" title="新增套件並設定"></a>新增套件並設定</h3><p>後端加入套件<code>Microsoft.AspNetCore.SpaServices.Extensions</code>並設置，因為目前我採用.NET6，所以安裝的版本是 6.0.11 版</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dotnet add package Microsoft.AspNetCore.SpaServices.Extensions --version 6.0.11</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-122007.jpg"></p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// program.cs</span></span><br><span class="line"><span class="keyword">var</span> builder = WebApplication.CreateBuilder(args);</span><br><span class="line">builder.Services.AddControllers();</span><br><span class="line"><span class="comment">// 此處指定 dist 是因為之後我們要佈署的時候，前端是把 build 目錄 dist 整個都複製過來</span></span><br><span class="line">builder.Services.AddSpaStaticFiles(config =&gt; config.RootPath = <span class="string">&quot;dist&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> app = builder.Build();</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (app.Environment.IsDevelopment())</span><br><span class="line">&#123;</span><br><span class="line">    app.UseDeveloperExceptionPage();</span><br><span class="line">    <span class="comment">// 因為採用套件，開發時期用 proxy 代理，已經不再需要 CORS</span></span><br><span class="line">    <span class="comment">// app.UseCors(b =&gt; b.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">app.UseRouting();</span><br><span class="line">app.UseEndpoints(e =&gt; e.MapDefaultControllerRoute());</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用 SPA 的靜態檔案</span></span><br><span class="line">app.UseSpaStaticFiles();</span><br><span class="line">app.UseSpa(b =&gt;</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (app.Environment.IsDevelopment())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 開發階段採用 proxy 指定前端網站</span></span><br><span class="line">        b.UseProxyToSpaDevelopmentServer(<span class="string">&quot;http://localhost:5173/&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line">app.Run();</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改前端-fetch-網址"><a href="#修改前端-fetch-網址" class="headerlink" title="修改前端 fetch 網址"></a>修改前端 fetch 網址</h3><p>因為請求已經被代理，所以路由就改成相對路徑</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">fetch</span>(<span class="string">&quot;/api/Test&quot;</span>)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">(<span class="params">r</span>) =&gt;</span> r.<span class="title function_">text</span>())</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">(<span class="params">t</span>) =&gt;</span> (state.<span class="property">message</span> = t))</span><br></pre></td></tr></table></figure>
+
+<p>接著直接開啟後端網站，就可以看到前端ＳＰＡ，呼叫後端ＡＰＩ的結果</p>
+<p><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-122627.jpg"></p>
+<p>這個時候，如果你同時有開啟 Hot Reload , HMR，前後端的程式碼修改後都可以直接看到瀏覽器會去自動更新畫面，當然後端的部分 Hot Reload 有一些條件，但到目前為止整體的開發流程無疑被改善很多了</p>
+<h2 id="發佈網站"><a href="#發佈網站" class="headerlink" title="發佈網站"></a>發佈網站</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 發布後端網站到上層的output目錄</span><br><span class="line">dotnet publish -c Release -o ..\output</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-123159.jpg"></p>
+<p>前端的部分直接讓他發佈到 output 就好</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vite.config.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&quot;vite&quot;</span></span><br><span class="line"><span class="keyword">import</span> vue <span class="keyword">from</span> <span class="string">&quot;@vitejs/plugin-vue&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>(&#123;</span><br><span class="line">  <span class="attr">plugins</span>: [<span class="title function_">vue</span>()],</span><br><span class="line">  <span class="attr">build</span>: &#123;</span><br><span class="line">    <span class="attr">outDir</span>: <span class="string">&quot;../output/dist&quot;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run build</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-125100.jpg"></p>
+<h2 id="測試發佈版本"><a href="#測試發佈版本" class="headerlink" title="測試發佈版本"></a>測試發佈版本</h2><p>目前專案目錄如下<br><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-131758.jpg"></p>
+<p>進入 output 目錄，這邊存放的是剛才前後端輸出的結果<br><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-2131907.jpg"></p>
+<p>直接透過 <code>dotnet back-end.dll</code>執行<br><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-132051.jpg"><br><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-132110.jpg"></p>
+<h2 id="將應用程式容器化"><a href="#將應用程式容器化" class="headerlink" title="將應用程式容器化"></a>將應用程式容器化</h2><h3 id="建立-dockerfile"><a href="#建立-dockerfile" class="headerlink" title="建立 dockerfile"></a>建立 dockerfile</h3><p>因為不想要把建立搞得太麻煩，所以 <code>build</code> 都在外面先做好，<code>image</code> 就是直接拿 <code>output</code> 複製進去，所以指令變得很單純</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> mcr.microsoft.com/dotnet/aspnet:<span class="number">6.0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> output .</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">80</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="string">&quot;dotnet&quot;</span>, <span class="string">&quot;back-end.dll&quot;</span>]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="產生-image"><a href="#產生-image" class="headerlink" title="產生 image"></a>產生 image</h3><p>在專案根目錄下執行指令建立 <code>docker image</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t demo .</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-133658.jpg"></p>
+<h3 id="產生-container"><a href="#產生-container" class="headerlink" title="產生 container"></a>產生 container</h3><p>當然還需要將 <code>image</code> 透過指令來產生 <code>container</code>，並且測試將 <code>port:7000</code> 指給 <code>container</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name=lab -p 7000:80 demo</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-134152.jpg"><br><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-134845.jpg"><br><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-134512.jpg"></p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>經由這一次的練習，大概可以學到，或者說是複習了</p>
+<ol>
+<li>Vite.js + Vue3.js 的威力展示 (HMR)</li>
+<li>.NET6 mvc</li>
+<li>前後端整合開發</li>
+<li>production 發佈方式</li>
+<li>容器化</li>
+</ol>
+<p>可以為之後日益複雜的軟體架構打一些基礎，而過去幾年的技術與現在相比，在開發時期階段更是進步了很多，但是如果舊網站跟不上技術迭代的腳步，可以想見的是維護的人力會越來越辛苦，也越來越少。像是以前的 <code>classic asp</code> 應該已經不會有人想要維護，而傳統的 js 開發方式也很難被現在的開發者接受，舊專案除非已經穩定沒有維護需求那就還好，技術背景停滯在開發當下的階段，如果還要求持續更新專案功能或是除錯維護，無疑是非常挑戰開發人員的一件事情，要嘛弄一些 <code>workAround</code> 避掉，透過增加整體架構的複雜度、犧牲可維護性；要嘛就是乖乖地想辦法把應用程式的技術棧一層層慢慢更新上去，但這其中也有很大的可能性會受限於<br>客戶端硬體、系統。只能說真的看運氣了，不論如何，軟體開發的演進總是越來越進步，身為開發人員也必須要能夠持續學習成長，才能說是專業從業人員啊 (技術沒有很強至少要有學習心態啊~)</p>
+<h2 id="補充-如果你也喜歡用-Rider"><a href="#補充-如果你也喜歡用-Rider" class="headerlink" title="補充:如果你也喜歡用 Rider"></a>補充:如果你也喜歡用 Rider</h2><p>我非常喜歡使用 Rider 來開發，所以我做了另外一個 Repo:LAB-vite，主要就是為了在 Rider 裡面可以方便的開發，這邊列出一些我碰到的問題還有解法，下面的步驟我就再做一次在新的練習專案:<code>Lab-vite-vue-dotnetcore</code>中</p>
+<h3 id="我想要利用-IDE-的搜尋功能，找到前端檔案"><a href="#我想要利用-IDE-的搜尋功能，找到前端檔案" class="headerlink" title="我想要利用 IDE 的搜尋功能，找到前端檔案"></a>我想要利用 IDE 的搜尋功能，找到前端檔案</h3><p>首先幫前端專案複製一個專案檔過去，並修改一下，檔案命名為 <code>front-end.csproj</code></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Project</span> <span class="attr">Sdk</span>=<span class="string">&quot;Microsoft.NET.Sdk&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">PropertyGroup</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">TargetFramework</span>&gt;</span>net6.0<span class="tag">&lt;/<span class="name">TargetFramework</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">RootNamespace</span>&gt;</span>front_end<span class="tag">&lt;/<span class="name">RootNamespace</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">ImplicitUsings</span>&gt;</span>enable<span class="tag">&lt;/<span class="name">ImplicitUsings</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">Nullable</span>&gt;</span>enable<span class="tag">&lt;/<span class="name">Nullable</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">PropertyGroup</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">Project</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>根目錄下建立方案檔，並將專案加入</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dotnet new sln</span><br><span class="line">dotnet sln .\Lab-vite-vue-dotnetcore.sln add .\back-end\back-end.csproj</span><br><span class="line">dotnet sln .\Lab-vite-vue-dotnetcore.sln add .\front-end\front-end.csproj</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-143203.jpg"><br><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-143319.jpg"><br><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-143733.jpg"></p>
+<p>最後透過開啟方案檔的方式，就可以透過 <code>Search EveryWhere</code> 找到前端檔案了<br><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-144204.jpg"></p>
+<h3 id="測試前後端都要分別執行，有沒有-one-click-搞定的方法"><a href="#測試前後端都要分別執行，有沒有-one-click-搞定的方法" class="headerlink" title="測試前後端都要分別執行，有沒有 one click 搞定的方法"></a>測試前後端都要分別執行，有沒有 one click 搞定的方法</h3><p>有的，但是仍舊需要做一些前置作業，前端需要一個任務去執行 <code>npm run dev</code>、後端需要一個任務去執行<code>dotnet watch</code>，最後在透過內建的<code>Compound</code>執行兩個任務，</p>
+<p>首先我們設定前端的部分，指定好前端路徑<br><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-142622.jpg"></p>
+<p>後端的部分則透過<a target="_blank" rel="noopener" href="https://plugins.jetbrains.com/plugin/17951--net-watch-run-configuration">.NET Watch Run Configuration</a>，可以很方便的執行<br><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-144429.jpg"></p>
+<blockquote>
+<p>如果一開始是用開啟目錄的方式打開，而不是透過開啟解決方案、專案的話，是沒有辦法設定 <code>dotnet watch</code>外掛的</p>
+</blockquote>
+<p>新增 <code>Compound</code> 任務如下，選擇另外兩個任務就好<br><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-144849.jpg"></p>
+<p>點一下之後等待兩個任務跑完，瀏覽器自動開出來<br><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-145133.jpg"></p>
+<p>測試一下前端修改之後，<code>HMR</code> 正確執行<br><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-145421.jpg"></p>
+<p>後端的部分修改完畢後會自動重載頁面<br><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-145618.jpg"></p>
+<h3 id="既然都有一鍵執行了，那一鍵發佈呢"><a href="#既然都有一鍵執行了，那一鍵發佈呢" class="headerlink" title="既然都有一鍵執行了，那一鍵發佈呢"></a>既然都有一鍵執行了，那一鍵發佈呢</h3><p>本質都是一樣的東西啊，把指令包裝一下就好了<br><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-150906.jpg"><br><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-151210.jpg"></p>
+<p>再新增一個執行 <code>output</code> 目錄下 exe 的任務<br><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-151640.jpg"><br>測試一下發佈的網站結果</p>
+<p><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-151948.jpg"></p>
+<h3 id="那容器化也來一個吧，我真的懶得打指令了"><a href="#那容器化也來一個吧，我真的懶得打指令了" class="headerlink" title="那容器化也來一個吧，我真的懶得打指令了"></a>那容器化也來一個吧，我真的懶得打指令了</h3><p>新增任務照圖設定<br><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-152334.jpg"></p>
+<p>如果想要順便把容器也建立起來，就填一下必要的設定值<br><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-153922.jpg"><br><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-154029.jpg"></p>
+<p>測試一下 docker container 的網站<br><img src="/artblog/vitejs-vue3-aspnetcore-intergration/2022-11-29-154232.jpg"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/vue3/" rel="tag"># vue3</a>
+              <a href="/artblog/tags/vitejs/" rel="tag"># vitejs</a>
+              <a href="/artblog/tags/netCore/" rel="tag"># netCore</a>
+              <a href="/artblog/tags/rider/" rel="tag"># rider</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/jenkins-project-permission-management/" rel="prev" title="Jenkins-專案權限管理">
+                  <i class="fa fa-angle-left"></i> Jenkins-專案權限管理
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/sonarQube-with-sonarLint/" rel="next" title="sonarQube-使用sonarLint協助開發">
+                  sonarQube-使用sonarLint協助開發 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

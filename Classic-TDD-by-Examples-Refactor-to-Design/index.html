@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="這幾天的碎片時間幾乎都在看 ClassicTDD 課程影片，每一個段落每一個章節都能夠給我觀念上的糾正與實際的解決思路，我越來越覺得其實我根本就不會寫 Code…..其實收穫最大的除了這個以外，我常常就是想到一句話，學習從模仿開始，問題是，你要能夠找的到對的模仿對象">
+<meta property="og:type" content="article">
+<meta property="og:title" content="心得 - Classic TDD by Examples Refactor to Design">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/Classic-TDD-by-Examples-Refactor-to-Design/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="這幾天的碎片時間幾乎都在看 ClassicTDD 課程影片，每一個段落每一個章節都能夠給我觀念上的糾正與實際的解決思路，我越來越覺得其實我根本就不會寫 Code…..其實收穫最大的除了這個以外，我常常就是想到一句話，學習從模仿開始，問題是，你要能夠找的到對的模仿對象">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2021-07-20T03:19:09.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.392Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="TDD">
+<meta property="article:tag" content="refactor">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/Classic-TDD-by-Examples-Refactor-to-Design/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/Classic-TDD-by-Examples-Refactor-to-Design/","path":"/Classic-TDD-by-Examples-Refactor-to-Design/","title":"心得 - Classic TDD by Examples Refactor to Design"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>心得 - Classic TDD by Examples Refactor to Design | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%A8-TDD-%E7%9A%84%E4%B8%96%E7%95%8C%E4%B8%AD%E6%9C%89%E5%85%A9%E7%A8%AE%E4%BA%BA"><span class="nav-number">1.</span> <span class="nav-text">在 TDD 的世界中有兩種人</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%91%E7%9A%84%E5%AD%B8%E7%BF%92%E6%96%B9%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">我的學習方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AA%B2%E7%A8%8B%E8%B3%87%E8%A8%8A"><span class="nav-number">1.2.</span> <span class="nav-text">課程資訊</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E9%86%92"><span class="nav-number">1.3.</span> <span class="nav-text">提醒</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BF%83%E5%BE%97"><span class="nav-number">2.</span> <span class="nav-text">心得</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2021-07"><span class="nav-number">2.1.</span> <span class="nav-text">2021-07</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#0714"><span class="nav-number">2.1.1.</span> <span class="nav-text">0714</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0715"><span class="nav-number">2.1.2.</span> <span class="nav-text">0715</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0716"><span class="nav-number">2.1.3.</span> <span class="nav-text">0716</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0717"><span class="nav-number">2.1.4.</span> <span class="nav-text">0717</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0718"><span class="nav-number">2.1.5.</span> <span class="nav-text">0718</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0719"><span class="nav-number">2.1.6.</span> <span class="nav-text">0719</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0720"><span class="nav-number">2.1.7.</span> <span class="nav-text">0720</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0722"><span class="nav-number">2.1.8.</span> <span class="nav-text">0722</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0723"><span class="nav-number">2.1.9.</span> <span class="nav-text">0723</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0726"><span class="nav-number">2.1.10.</span> <span class="nav-text">0726</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0727"><span class="nav-number">2.1.11.</span> <span class="nav-text">0727</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2021-08"><span class="nav-number">2.2.</span> <span class="nav-text">2021-08</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#0805"><span class="nav-number">2.2.1.</span> <span class="nav-text">0805</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0809"><span class="nav-number">2.2.2.</span> <span class="nav-text">0809</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0813"><span class="nav-number">2.2.3.</span> <span class="nav-text">0813</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0817"><span class="nav-number">2.2.4.</span> <span class="nav-text">0817</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0919"><span class="nav-number">2.2.5.</span> <span class="nav-text">0919</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2024-05"><span class="nav-number">2.3.</span> <span class="nav-text">2024-05</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/Classic-TDD-by-Examples-Refactor-to-Design/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="心得 - Classic TDD by Examples Refactor to Design | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          心得 - Classic TDD by Examples Refactor to Design
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2021-07-20 11:19:09" itemprop="dateCreated datePublished" datetime="2021-07-20T11:19:09+08:00">2021-07-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/%E5%BF%83%E5%BE%97/" itemprop="url" rel="index"><span itemprop="name">心得</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/Classic-TDD-by-Examples-Refactor-to-Design/" class="post-meta-item leancloud_visitors" data-flag-title="心得 - Classic TDD by Examples Refactor to Design" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/Classic-TDD-by-Examples-Refactor-to-Design/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/Classic-TDD-by-Examples-Refactor-to-Design/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>這幾天的碎片時間幾乎都在看 <code>ClassicTDD</code> 課程影片，每一個段落每一個章節都能夠給我觀念上的糾正與實際的解決思路，我越來越覺得其實我根本就不會寫 Code…..<br>其實收穫最大的除了這個以外，我常常就是想到一句話，學習從模仿開始，問題是，你要能夠找的到<strong>對</strong>的模仿對象</p>
+<span id="more"></span>
+
+<h1 id="在-TDD-的世界中有兩種人"><a href="#在-TDD-的世界中有兩種人" class="headerlink" title="在 TDD 的世界中有兩種人"></a>在 TDD 的世界中有兩種人</h1><p>一種是上過 <code>91</code> 課程的人，都是一面倒的好評<br>一種是沒有上過 <code>91</code> 課程的人，可能是因為價格卻步、又可能是擔心不值得</p>
+<p>我希望能夠以過來人的經驗，提供一點心得給他們參考，至於我為什麼這樣做？因為資訊量太過龐大，而我想把學習過程中的心得、感受記錄下來</p>
+<p>一方面是因為方便自己未來複習的時候，可以快速抓到重點，一方面也想要透過這樣的方式，讓其他的人也了解這樣的課程有甚麼幫助</p>
+<blockquote>
+<p>我其實想要推薦的對象，是像我一樣，對 Coding 有一點點熱忱，但對於技術並沒有那麼厲害的普通人</p>
+</blockquote>
+<h2 id="我的學習方式"><a href="#我的學習方式" class="headerlink" title="我的學習方式"></a>我的學習方式</h2><p>我的習慣是將每個段落理解到一個階段後，再往下個段落學習；然後全部看完之後，如果還沒辦法內化的話，那就再來一次</p>
+<p>我也上過不少實體課程，講師其實都很優秀，東西也都很棒，但我吸收的效果卻不是很好，我自認對於學習還算有熱忱，但礙於天資、年紀與精力，我很難在實體課程中真正的吸收到甚麼東西</p>
+<p>所以我逐漸將實體課程的學習方式，轉為閱讀與影音課程，期望能透過反覆觀看的方式，可以比較輕鬆自在的學習，但是實際的情況是，我買了課程、買了書，安排了時間閱讀與學習，效果卻不盡理想</p>
+<ol>
+<li>年紀漸長，很難有一段時間能專心做事情，晚上能準時睡覺就該偷笑了</li>
+<li>影片的語言不是中文，或者是大陸口音，在學習過程中往往還要分心在理解講師要表達的意思，對於我有點吃力</li>
+<li>有些老師很有料，但其實口條並不清楚，或者是不會教學，反而很容易讓我直接放棄，因為那不是個好的學習體驗</li>
+</ol>
+<p>也因此，能夠找到自己適合的課程，選擇其實很少，就在這樣的情況下，<code>91</code>開始準備著手影音課程，讓我很期待</p>
+<h2 id="課程資訊"><a href="#課程資訊" class="headerlink" title="課程資訊"></a>課程資訊</h2><p>這一次的課程<a target="_blank" rel="noopener" href="https://tdd.best/courses/classic-tdd-by-example-video-training/">Classic TDD by Examples - Refactor to Design</a>就是我很想要的一門課程<br>主要的誘因</p>
+<ol>
+<li>講師在 TDD 領域非常專業</li>
+<li>課程採用 Rider 示範，學習如何善用開發工具</li>
+<li>想 Refactor 但不知道怎樣做比較好</li>
+<li>我曾經上過講師的實體課程，雖未能完全理解，但很多我還記得的觀念，到今天還受用</li>
+</ol>
+<h2 id="提醒"><a href="#提醒" class="headerlink" title="提醒"></a>提醒</h2><p>跟讀書心得不一樣，我並不打算在這邊暴露任何關於課程的細節<br>一方面是因為一門課程的準備與設計都是很耗費心力的，沒有接觸過的人很難理解，講師在準備一門課程所花費的心力有多少<br>一方面是我認同付出需要回報，才能夠持續成長，所以我不想要破壞這件事情</p>
+<p>如果想了解課程細節，上面有連結；如果想看我的心得，就放在下面，心得會隨著我的學習進度持續更新，但大致上也就是這樣的形式</p>
+<blockquote>
+<p>寫到後面好像已經有點不太像是學習心得了，感覺像是個學習日記一樣，哈哈，我應該不會每天更新，其實我很懶惰的</p>
+</blockquote>
+<h1 id="心得"><a href="#心得" class="headerlink" title="心得"></a>心得</h1><h2 id="2021-07"><a href="#2021-07" class="headerlink" title="2021-07"></a>2021-07</h2><h3 id="0714"><a href="#0714" class="headerlink" title="0714"></a>0714</h3><p>拿到影片課程了，非常開心。先看了幾份文件，知道大概有那些東西後，將影片下載回來，查看了一下影片長度，有 11 小時多，應該之後的時間都會花在這上面了，既期待影片內容，又怕不符合自己期待值，懷著忐忑的心情，睡覺去</p>
+<h3 id="0715"><a href="#0715" class="headerlink" title="0715"></a>0715</h3><p>利用碎片時間先看過一遍題目講解、分析，文件中有提到最好是自己先寫一次，寫完之後再來開始學習比較，效果會比較明顯。嗯，我很認真地看了 20 分鐘開始思考這件事情，然後決定放棄了，因為我好像短時間做不出來，做出來應該也很髒；這效果應該不用比了，我直接就開始上課了。</p>
+<p>果然從第一步就開始打臉，細緻的分析與邏輯，明確的列出已知資訊及待辦事項，我覺得今天學習的第一件事情就是這個了，我可能沒辦法像講師一樣能這麼厲害的分析，但這個方法我能學起來，用久了這個習慣也就養成了</p>
+<blockquote>
+<p>透過工具，在分析題目的當下，整理資訊，而這份資訊會是我們後續作業的依據</p>
+</blockquote>
+<h3 id="0716"><a href="#0716" class="headerlink" title="0716"></a>0716</h3><p>因為之前的分析有些地方我還是會忘記，希望至少能夠在聽熟一點，知道全貌<br>所以透過手機隨身撥放，聽分析的影片度過一天</p>
+<h3 id="0717"><a href="#0717" class="headerlink" title="0717"></a>0717</h3><p>開始照著影片建立測試專案，一開始的行為就是，邊聽講師說明，然後同步跟著操作 IDE 做一模一樣的事情<br>我以為剛開始而已，應該沒有甚麼值得記憶的點，但事隔三天，我現在還能記起來，從一開始操作 IDE，我就決定直接改變我的使用習慣<br>所有的熱健全部改用跟影片相同的，也就是<code>VisualStudio</code>，少部分自己加入的熱鍵再去新增就好</p>
+<ol>
+<li>講師的影片有裝顯示熱鍵的外掛，想知道操作可以暫停影片，觀看熱鍵顯示，如果熱鍵組設定相同，可以省去心力</li>
+<li>每個人的熱鍵最好自己設定，但前提是你要先熟練使用了功能，再去改，未熟練之前，看影片有時會直接打上熱鍵，這些都是加深記憶，所以這些熱鍵最好先相同</li>
+<li><code>Alt+PageUp</code>、<code>Alt+PageDown</code>值得記錄一下，這是個我忽略了的超好用熱鍵</li>
+</ol>
+<p>今天的收穫是，開發習慣的建立</p>
+<ol>
+<li>熱鍵</li>
+<li>使用鍵盤操作單元測試、Git Commit</li>
+</ol>
+<h3 id="0718"><a href="#0718" class="headerlink" title="0718"></a>0718</h3><p>開始寫測試了，學習到如何從一開始我們整理好的資訊，怎麼樣照著它做事情，這邊很多時候都會有講師說明，比較屬於觀念上的東西，讓我們清楚為什麼在這個階段要做這件事情</p>
+<h3 id="0719"><a href="#0719" class="headerlink" title="0719"></a>0719</h3><p>在重構的部分，開始有<code>pattern</code>的感覺了，講師在影片重構完畢後，我有時候都覺得應該 OK 了，但就又開始重構，並解說為什麼這樣做的原因。<br>比較記憶深刻的點是<code>feature envy</code>，但我對於這個東西怎麼應用在現有的公司專案上有點困惑，這個就等之後有想法再說吧。</p>
+<p>在觀看影片的時候注意到<code>Ctrl+comma</code>的這個熱鍵組合，但因為使用中文輸入的關係無法輸入這個熱鍵，這算是很困擾我的一點，因此參考了 slack 的講師回答跟其他人的建議，我最終還是選擇將系統加入一個英文語系，如此一來，我可以透過<code>Alt+Shift</code>切換英文跟中文輸入法，也可以採用<code>Win+Space</code>切換，透過這樣的方式取代原來<code>Ctrl+Space</code>切換輸入法的習慣</p>
+<h3 id="0720"><a href="#0720" class="headerlink" title="0720"></a>0720</h3><p>好用的<code>Rider</code>熱鍵組，今天開始有意識的查熱鍵，練習如何熟練使用</p>
+<ol>
+<li>移動到下一個方法的熱鍵 <code>Alt+Down</code>、<code>Alt+Up</code></li>
+<li>頁籤之間切換 <code>Alt+Left</code>、<code>Alt+Right</code></li>
+<li>自己建立一個測試 Session <code>Ctrl+U, N</code></li>
+<li>添加測試進入 Session <code>Ctrl+U, A</code></li>
+<li>執行當前 Session 所有測試 <code>Ctrl+U, Y</code></li>
+</ol>
+<h3 id="0722"><a href="#0722" class="headerlink" title="0722"></a>0722</h3><p>先前半夜睡前聽影片的時候，發現有一些前面的細節我沒有補充，但想想應該我至少會整個重聽幾次，前面沒記錄下來表示我還沒有 GET 到點，那就以後聽到再補吧</p>
+<p>今天接續新進度繼續下去，影片中講師不厭其煩的再次解釋了 out 的問題，以及解決方案，在這邊反覆提及的是<code>職責</code>這件事情，從一個我們暴露出去的方法中，不應該包含太多實作上的細節，這些細節都是應該要再被抽象出去的。</p>
+<p>這也呼應了先前所說的<code>呈現意圖</code>這件事情，這個真的很重要，以後看程式碼好不好維護、 容不容易理解就靠這個了</p>
+<p>而從單元測試案例的設計開始，也反覆地提到關鍵字：<code>代表性</code><br>透過測試失敗來明確目標，然後透過綠燈的過程去完成目標，最後透過重構整理；後面的紅燈綠燈重構應該大家都很熟悉了，但是更重要的事情是測試案例的代表性，而不是隨便抓一個案例就開工了，我想這個影片示範，對我的確是有警示作用，而且也提供了一個實際的思路如何去正確的設計測試案例</p>
+<p>但是如果要做的事情太多，那還是需要先將其拆解成顆粒度較小的測試才行，至於單元測試的測試案例重構，我個人是偏向保留代表性足夠的案例即可，畢竟越多案例就需要越多精力去理解，執行也要更多時間</p>
+<blockquote>
+<p>本日影片金句：骯髒無恥的綠燈就出來了</p>
+</blockquote>
+<p>可能是因為已經很習慣講師以前一直強調的開發方式，所以也都很習慣用 IDE 來產還沒有產生出來的 Code，而是先將我們要做的事情先描述出來，在這邊也特別花了點時間介紹這樣的觀念，姑且稱之為<code>Intention Driven</code>，這也是我覺得改變開發習慣的第一步，透過重構功能能夠很方便地做到這些事情，入門也不難，值得嘗試</p>
+<p>綠燈之後就是重構，在這邊我會先猜測等等的重構行為，會是做哪些事情，然後用意圖的方式去思考，很開心的猜中了</p>
+<h3 id="0723"><a href="#0723" class="headerlink" title="0723"></a>0723</h3><p>接著昨天的進度繼續往下看，還好接續的部分剛好是講師告一段落，後面開始往下做的時候，也順帶的前情提要了之前做的事情，讓我隔了一天接著看也能快速地進入狀況，昨天我猜的重構步驟只猜到前半段，後半段整個就是超出我想像的方式，但一步步走來卻又那麼理所當然。這種震撼我很難表達出來，連續的幾個巧思直接將我原本預想中困難的部分輕而易舉的就用我所熟知的東西幹掉了，所以這一段我今天看了不少次，而剩下的零碎時間，我打算在回顧一下之前的內容，這次透過的是<code>91</code>哥在報名成功後，就同時給予的一個 dropbox paper 文件來複習已經看過的部分。</p>
+<p>是的，<code>91</code>哥用寫書的概念在寫這份文件，將開發過程當中一些重要的資訊也寫在這份文件內，方便同學回顧，一開始我是沒有仔細看內容，還是事後在 slack 頻道中，無意間看到同學說他怎麼卷軸拉不到底，原來是好像有十五萬字….<br>恩，所以就沒什麼好提供心得的了，這兩天就好好複習一下到目前為止的進度，希望能夠在腦子裏面順順地跳出來，下一步應該要做什麼，怎麼做。</p>
+<h3 id="0726"><a href="#0726" class="headerlink" title="0726"></a>0726</h3><p>用了一些時間再次重溫了先前被震撼到的重構，這次著重在<strong>為什麼會想到要這樣重構</strong><br>如何將原本近似的兩個類別，透過重構的方式先將不同的方法簽章處理成相同的，然後再提取共同的介面，再次精簡主要方法的邏輯，並使其完整地呈現意圖，而細節都被封裝，而這一切都有<code>91</code>哥同步解釋思路，這一段真的是精華</p>
+<h3 id="0727"><a href="#0727" class="headerlink" title="0727"></a>0727</h3><p>想起了自己很久前亂寫的一個分頁小工具，趁著最近學到的需求分析方法，也弄個心智圖來分析歸納一下，不整理不知道，一整理之後發現我一直在改 testcase，然後改著改著，整個需求越來越明確，我也越來越清楚整個脈絡，要做哪些事情，在整理的當下，也順手將一些規則直接定義完畢，整個與先前的狀況就是天壤之別，雖然還沒開始寫 CODE，但我感覺這次如果開始寫的話，會順利很多</p>
+<h2 id="2021-08"><a href="#2021-08" class="headerlink" title="2021-08"></a>2021-08</h2><h3 id="0805"><a href="#0805" class="headerlink" title="0805"></a>0805</h3><p>距離上次練習已經有些時間了，今天又抓到一點時間重新溫習並往下繼續，影片遵循著紅燈、綠燈、重構的循環，在每個階段開始前，<code>91</code>哥會先大致上簡單分析需求並解釋思路，有了概念後才開始動工；看著程式碼逐漸產生最後又是利用先前提過的重構技巧，一套組合拳下來，發現程式碼已經打完了。我想大概是因為解說教學的關係，再加上刻意的<code>BabyStep</code>練習，程式碼的撰寫實際上花費很少時間，大部分都是利用 IDE 產生再去調整、重構，如果想好好善用<code>Rider</code>進行開發，透過<code>91</code>的課程來學習我想比起自己悶著頭練習會很好多。</p>
+<p>原先我以為這一段要綠燈的話，會寫得很複雜，但影片中<code>91</code>用一種非常優雅輕鬆的方式完成了，然後程式碼能夠很清晰的表達意圖，過程中連續幾次的重點提醒有 Code Smell，也能夠加深印象，讓我組合技也能打得有模有樣</p>
+<blockquote>
+<p><code>91</code>邊解說邊敲代碼，講完了也敲完了，沒看過的人應該有點難想像，因為很難跟得上<code>91</code>的速度，我大概每個片段都是反覆看好幾次</p>
+</blockquote>
+<p>影片看到目前，剛好在六小時左右，才看到一半，慢慢來吧</p>
+<h3 id="0809"><a href="#0809" class="headerlink" title="0809"></a>0809</h3><p>今天於公司專案重構時，刻意運用小步快跑的概念，既有專案非常的複雜且骯髒，想要先嘗試重構，將 razor 接收的後端資料改用別的方式給值，替換掉 global 變數，調整後立即重開 iis express 驗證頁面功能是否正常，速度雖然比較慢，但每次只改一點點，也不要重構改過的程式碼，先驗證重構的方向與概念是否可行，OK 後再進行優化，重複這樣執行，速度雖然比較慢，但勝在很穩健。確認 OK 的部分馬上先用 Git 加入 Stash，出錯了也可以立即還原，這個概念雖然很簡單，但其實是真的有用。尤其是在不熟悉的狀況下，想要驗證自己的想法時，可以有效地建立一個安全地帶，讓重構無後顧之憂。</p>
+<blockquote>
+<p>這也是以前就知道，但沒有多刻意重視。藉由這次影片的觀念解說，嚴格遵守這樣的概念其實是有幫助的。</p>
+</blockquote>
+<h3 id="0813"><a href="#0813" class="headerlink" title="0813"></a>0813</h3><p>影片持續進行，今天練習的進度是將一段邏輯重構為責任鍊的方式，其實寫 CODE 寫久的人大概可以知道程式碼最終應該可以長成什麼樣子，但如何利用 IDE 的功能，讓 IDE 幫你重構成那個樣子就是壓箱底的絕招了，這兩天就都在看這一塊，先完整的看過一次，隔天再手動跟著練一次，感覺還不識很熟悉，我想我會需要將這一段落的目標寫起來，然後下面條列出細節的重點，之後複習的時候可以不用看影片，需要提示的時候稍微看一下這個筆記就好了。</p>
+<p>然後我這樣想的時候，就想到，好像講師早就把這件事情做完了，放在 dropbox paper 上了，越來越覺得這份影片處處用心，都埋了很多細節，以前也曾經上過 OO 課程，也有講到責任鍊，但透過重構完成反而更能讓我體會到這個 Pattern 是怎樣演變出來的，我覺得對我個人是很有效果的</p>
+<p>今天最重要的部分就是學到了如何透過 IDE 重構並提取父類別，原來是這樣做到的，我也像講師說的那樣，看到不熟悉我就 <code>UNDO</code> 回去了，然後還是傻傻地用手 KEY。能夠學到這招的確能夠省很多時間，也期望未來自己能在實戰中應用上。</p>
+<h3 id="0817"><a href="#0817" class="headerlink" title="0817"></a>0817</h3><p>今天的影片進度看完了，也跟著做了一次；過程中感觸很深的是，假設我們不採用<code>TDD</code>方式開發，通常我們會選擇用<code>XXXHelper</code>的方式來處理，而這就是一個災難，試想好像真的如此，而這就會造成後續接手維護的困難，就像寫小說一樣，後面的結果已經被安排得好好的了，就是一個噩夢</p>
+<p>反覆地提及壞味道的辨別方式，讓我感知壞味道的功力似乎也提升了一點點，而一再提起的東西都與物件導向的內聚有關係，看完這邊，我的感想又跟第一天看影片的心情一樣，我真的一點都不會寫 Code，希望被狂打臉後能將養分吸收起來。</p>
+<p>另外我覺得很棒的是：當新增一個紅燈測試案例後，照理說一定會錯，但在還沒有執行測試看到結果之前，<code>91</code>會先預測這個紅燈跑出來的行為是甚麼，然後去比對程式真正的結果，用來看看我們對於程式碼的掌握是否足夠，而這也是我目前主管曾經告誡過我的一個很重要的能力，果然厲害的人習慣都差不多。</p>
+<p>重構完畢後，會回顧這一小步做了哪些事情，這也相當於復盤我們這一 ROUND 做了哪些東西來滿足新的測試案例，我還蠻喜歡這個步驟的</p>
+<h3 id="0919"><a href="#0919" class="headerlink" title="0919"></a>0919</h3><p>時隔一個月的這段期間，已經將影片看完，雖然看完了，但因為時間跨度很長，其實也缺少了一鼓作氣連貫的練習，回想起整個課程，目前我第一次破關的感覺是，懵懵懂懂。91哥在影片最後特別給予了自學這份影音的學員一些建議，記得比較有感觸的是：那些DIFF才是寶貴的地方。原句忘記了，但仔細想想，其實就是這些DIFF被我們內化後的知識、經驗，能夠比別人有更多的優勢。</p>
+<p>至於學習上的部份，我只能說從這份課程中我得到很多東西，不管是技術上還是心態上。感覺就像是一個人剛進社會寫程式，這部影片扮演的就是一個很棒的mentor腳色，或者是說，有個老手帶你pair programming，寫完之後順便帶你Code Review一次，如果我能在十年前上過這門課，那會是很幸福的事情。</p>
+<p>從技術上來說，我得到的是</p>
+<ol>
+<li>如何辨識壞味道：這也是影片中被91哥重點提及的，這個題目很棒的原因之一，因為除了某一個壞味道，其餘的幾個都重複出現過好幾次，這能夠讓我們對於壞味道的辨識、處理，更有記憶點。</li>
+<li>藉由測試保護並開始TDD：是的，這是一句老話，而且我原本也知道，但看了影片之後，每一次的commit，都有個節奏，讓你慢慢習慣那個tempo，模仿那個節奏是很棒的事情。</li>
+<li>善用工具：不管是從IDE的重構支援、還是VIM、或者是熱鍵，甚至是其他工具的應用，包含Excel或是影片所使用的心智圖，了解工具並善用他，能夠讓開發行為更順利，一開始的心智圖+需求分析更是重點。但我說的重點是，用工具怎麼幫助你，而不是一昧地追求工具，如果習慣手繪，那或許筆記本+幾個有色鉛筆會更適合你。</li>
+</ol>
+<p>從心態上來說，學到的是</p>
+<ol>
+<li>所有看起來行雲流水的操作，背後都是一次次的練習換來的：你必須投入練習，才能夠看起來游刃有餘毫不費力。</li>
+<li>沒有最完美的解法，所有的嘗試都是養份，讓這些養份成就你</li>
+</ol>
+<p>或許還有很多知識點被我遺漏，但很棒的是91哥已經做好了各位同學二刷、三刷的課題。甚至也設計了一個簡易版的題目，讓各位學員也能夠將簡易版的題目，作為個人練習，也允許內部分享。在我看來是很佛心的事情，只是以我第一輪破關就花那麼久時間來說，我想我有空餘的時間都會花在二刷三刷上，要等我內化到足以分享的地步，可能會很久吧，這個機會我想還是讓給其他厲害的學員吧。</p>
+<h2 id="2024-05"><a href="#2024-05" class="headerlink" title="2024-05"></a>2024-05</h2><p>睽違已久的心得，繼續接著寫，最近一周花了一些時間，從頭到尾再做一次練習，這一次我從開始的部分看影片看到約莫六小時多的地方，邊看邊寫作一次，然後重新開一個 branch練習，將所有的測試案例保留下來，一步步地透過 TDD的方式開始做</p>
+<p>這樣做的好處是，對於大框架都有印象，細節的部份因為也才剛瀏覽過也會有部分記憶，所以我終於可以享受到順暢的，紅燈、綠燈、重構的節奏，之所以覺得很重要的點，是因為保持在這個節奏下，所有的東西步調比較快，你才會比較明顯的感受到，為甚麼要用這個測試案例，它代表的是甚麼意思；過程中的重構演化，則是針對程式碼的架構、可讀性開始做優化的階段，主要的工都在這一個階段，影片中為了講解，所以把每一個步驟切得很細，但實際上在這一次的練習過程，將這一個部份快速的帶過，更能夠感受到每一個綠燈之後的重構所帶來的差異，對於可讀性及架構有甚麼改變</p>
+<p>練習完畢後，趁著記憶還鮮明，這一次我開始挑戰附加的練習作業，也就是<code>十八拉</code>，整體來說大概的解題思路跟教學的KATA很像，但因為他畢竟是比較小的一個練習，所以有些地方就不需要完全照搬影片的解法，設計太多不必要的類別也是壞味道之一；影片中有一段是為了示範責任鍊的重構，在練習反而不太需要。而依照點數的牌型比較，我也自行調整，透過繼承與子類別代表各種牌型，並透過實作 ICompare 去實作比較，這樣就不需要將比較的實作，放在 XXXCompare裡面，這樣的做法我相信應該也是原先<code>91</code>哥有考慮過的，只是因為要讓我們多接觸一個重構責任鍊的範例，所以才會在影片中也特別提及這一個部分實際上是不需要用到這樣的方式重構。</p>
+<p>在實作練習的時候，其實還是有點卡，主要就是沒想好案例的部分，導致常常就是改完案例改實作，重構完後發現又需要改案例，紅燈綠燈重構的節奏整個跑掉，而最後手動重構的部分，沒有用IDE介面，因為實在不知道怎麼弄，我想應該是在設計規劃的階段就要比較明確應該往哪個方向走，這樣才會逐漸重構成自己想要的架構，但那應該就是二刷、三刷練習題的時候再慢慢嘗試吧</p>
+<p>這一份教材其實隔很久之後再看也還是有溫故知新的感覺，真的很超值喔。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/TDD/" rel="tag"># TDD</a>
+              <a href="/artblog/tags/refactor/" rel="tag"># refactor</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/Jenkins-pipeline-unittest-report/" rel="prev" title="Jenkins-pipeline-加入單元測試報告">
+                  <i class="fa fa-angle-left"></i> Jenkins-pipeline-加入單元測試報告
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/axios-error-handle/" rel="next" title="axios Error Handle">
+                  axios Error Handle <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="這篇文章在介紹如何在 Rider 中將 Sass、Less、SCSS 編譯為 css 的實際做法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rider-利用檔案監控來編譯scss">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/rider-file-watchers-for-scss/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="這篇文章在介紹如何在 Rider 中將 Sass、Less、SCSS 編譯為 css 的實際做法">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/rider-file-watchers-for-scss/2020-07-16_110256.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/rider-file-watchers-for-scss/2020-07-16_110358.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/rider-file-watchers-for-scss/2020-07-16_111022.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/rider-file-watchers-for-scss/2020-07-16_111127.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/rider-file-watchers-for-scss/2020-07-16_113728.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/rider-file-watchers-for-scss/2020-07-16_111650.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/rider-file-watchers-for-scss/2020-07-16_112021.png">
+<meta property="article:published_time" content="2020-07-16T02:37:31.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.291Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="file watchers">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/rider-file-watchers-for-scss/2020-07-16_110256.png">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/rider-file-watchers-for-scss/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/rider-file-watchers-for-scss/","path":"/rider-file-watchers-for-scss/","title":"Rider-利用檔案監控來編譯scss"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Rider-利用檔案監控來編譯scss | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BA%96%E5%82%99%E5%B7%A5%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">準備工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%8B%95%E7%B7%A8%E8%AD%AF"><span class="nav-number">3.</span> <span class="nav-text">自動編譯</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Program-%E8%A6%81%E5%9F%B7%E8%A1%8C%E7%9A%84%E6%8C%87%E4%BB%A4"><span class="nav-number">3.1.</span> <span class="nav-text">Program 要執行的指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Arguments-%E6%8C%87%E4%BB%A4%E7%9A%84%E5%8F%83%E6%95%B8"><span class="nav-number">3.2.</span> <span class="nav-text">Arguments 指令的參數</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Output-paths-to-refresh"><span class="nav-number">3.3.</span> <span class="nav-text">Output paths to refresh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Working-directory-%E5%B7%A5%E4%BD%9C%E7%9B%AE%E9%8C%84"><span class="nav-number">3.4.</span> <span class="nav-text">Working directory 工作目錄</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Advenced-Options"><span class="nav-number">3.5.</span> <span class="nav-text">Advenced Options</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">4.</span> <span class="nav-text">結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/rider-file-watchers-for-scss/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Rider-利用檔案監控來編譯scss | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Rider-利用檔案監控來編譯scss
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2020-07-16 10:37:31" itemprop="dateCreated datePublished" datetime="2020-07-16T10:37:31+08:00">2020-07-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/rider/" itemprop="url" rel="index"><span itemprop="name">rider</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/rider-file-watchers-for-scss/" class="post-meta-item leancloud_visitors" data-flag-title="Rider-利用檔案監控來編譯scss" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/rider-file-watchers-for-scss/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/rider-file-watchers-for-scss/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>這篇文章在介紹如何在 Rider 中將 Sass、Less、SCSS 編譯為 css 的實際做法</p>
+<span id="more"></span>
+
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>Rider 監控檔案變更，呼叫 node.js 的套件執行編譯工作</p>
+<h2 id="準備工作"><a href="#準備工作" class="headerlink" title="準備工作"></a>準備工作</h2><p>需要安裝 node.js 及相關的套件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安裝sass</span></span><br><span class="line">npm install -g sass</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安裝less</span></span><br><span class="line">npm install -g less</span><br></pre></td></tr></table></figure>
+
+<p>確保 Rider 的外掛已經安裝好相關的套件，透過快捷鍵 Ctrl + Alt + S 叫出設定視窗，並於 Plugins 頁籤中，選擇已安裝的套件並查看是否已經包含 <code>File Watchers</code>、<code>Less</code>、<code>Sass</code>。<br><img src="/artblog/rider-file-watchers-for-scss/2020-07-16_110256.png"><br><img src="/artblog/rider-file-watchers-for-scss/2020-07-16_110358.png"></p>
+<h2 id="自動編譯"><a href="#自動編譯" class="headerlink" title="自動編譯"></a>自動編譯</h2><p>首先開啟設定( Ctrl + Alt + S)，找到<code>File Wachers</code><br><img src="/artblog/rider-file-watchers-for-scss/2020-07-16_111022.png"></p>
+<p>接著新增一個新的監控設定，並選擇我們要監控的對象，此處我選擇 scss<br><img src="/artblog/rider-file-watchers-for-scss/2020-07-16_111127.png"></p>
+<p>預設的設定像這樣<br><img src="/artblog/rider-file-watchers-for-scss/2020-07-16_113728.png"></p>
+<p>首先我們需要先指定要監控的範圍(scope)，選擇…出現設定視窗，可以在此處設定好 Scope，此處我選擇硬碟的某個目錄，選擇該目錄及底下的子目錄，符合條件的目錄會變色<br><img src="/artblog/rider-file-watchers-for-scss/2020-07-16_111650.png"></p>
+<p>之後的幾個設定，包含了</p>
+<h3 id="Program-要執行的指令"><a href="#Program-要執行的指令" class="headerlink" title="Program 要執行的指令"></a>Program 要執行的指令</h3><p>因為我們剛才有安裝了 node.js 的套件 sass，所以在指令列輸入 sass 就可以執行<br><img src="/artblog/rider-file-watchers-for-scss/2020-07-16_112021.png"></p>
+<h3 id="Arguments-指令的參數"><a href="#Arguments-指令的參數" class="headerlink" title="Arguments 指令的參數"></a>Arguments 指令的參數</h3><p>如果你的輸出檔案跟原始檔案想要不同的路徑，這邊就需要做一些調整</p>
+<h3 id="Output-paths-to-refresh"><a href="#Output-paths-to-refresh" class="headerlink" title="Output paths to refresh"></a>Output paths to refresh</h3><p>預設的設定也會一起輸出 map 檔案，不需要的話刪除即可</p>
+<h3 id="Working-directory-工作目錄"><a href="#Working-directory-工作目錄" class="headerlink" title="Working directory 工作目錄"></a>Working directory 工作目錄</h3><p>預設的 FileDir 指的是該 sass 檔案的路徑，也就是說在這一個地方去呼叫 Program 並給予 Arguments</p>
+<h3 id="Advenced-Options"><a href="#Advenced-Options" class="headerlink" title="Advenced Options"></a>Advenced Options</h3><p>依照英文應該都不太需要解釋，但是 File Watcher 會監控檔案的改變，此時如果是外部的程式異動了檔案的話，例如 Git 切換分支造成檔案變更，在這樣的情況下如果不要觸發，就把<code>Trigger the watcher on external changes</code>拿掉</p>
+<p>而<code>Show console</code>的部分在剛開始建立設定，測試的時候我都會開啟<code>always</code>，只要設定正常之後我通常會關閉</p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>上述就是透過 Rider 即時編譯的方式，當然也可以不要透過檔案監控，而是透過外部指令的方式去做，這一套流程不只可以用在編譯，當然也可以配合其他需要監控檔案處理事情的需求來做</p>
+<p>順便備份一下自己在用的設定</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">File type: SCSS style sheet</span><br><span class="line">Scope: &lt;myScope&gt;</span><br><span class="line"></span><br><span class="line">Program: sass</span><br><span class="line">Arguments: $FileName$:$SolutionDir$\MyProject\Content\CSS\$FileNameWithoutExtension$.css --embed-source-map --quiet</span><br><span class="line">Output paths to refresh: $FileNameWithoutExtension$.css:$FileNameWithoutExtension$.css.map</span><br><span class="line">Working directory: $FileDir$</span><br></pre></td></tr></table></figure>
+
+<p>這樣在專案目錄下，例如 <code>D:\MySolution\MyWeb\SCSS</code> 修改檔案後，就會將該檔案產生的 css 及 map 放到 <code>D:\MySolution\MyWeb\CSS</code> 目錄下</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/file-watchers/" rel="tag"># file watchers</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/cypress-io-login-test-case/" rel="prev" title="Cypress.io 登入的測試案例">
+                  <i class="fa fa-angle-left"></i> Cypress.io 登入的測試案例
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/npoi-asp-net-export-excel/" rel="next" title="NPOI-ASP.net網站匯出Excel範例">
+                  NPOI-ASP.net網站匯出Excel範例 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

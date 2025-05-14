@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="繼上一篇文章:如何建立 Jenkins Pipeline 專案 ，於 Jenkins Pipeline 專案內，加入 sonarQube 程式碼分析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何於Jenkins Pipeline專案整合sonarQube">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/jenkins-pipeline-sonarqube/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="繼上一篇文章:如何建立 Jenkins Pipeline 專案 ，於 Jenkins Pipeline 專案內，加入 sonarQube 程式碼分析">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-pipeline-sonarqube/2020-01-15_14-15-23.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-pipeline-sonarqube/2020-01-15_14-17-58.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-pipeline-sonarqube/2020-01-15_14-19-26.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-pipeline-sonarqube/2020-01-15_14-20-31.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-pipeline-sonarqube/2020-01-15_14-21-20.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-pipeline-sonarqube/2020-01-15_14-39-52.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-pipeline-sonarqube/2020-01-15_14-42-39.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-pipeline-sonarqube/2020-01-15_14-43-44.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-pipeline-sonarqube/2020-01-15_14-45-17.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-pipeline-sonarqube/2020-01-15_14-48-35.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-pipeline-sonarqube/2020-01-15_14-53-00.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-pipeline-sonarqube/2020-01-15_15-14-51.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-pipeline-sonarqube/2020-08-10_112158.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-pipeline-sonarqube/2020-01-15_15-32-24.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/jenkins-pipeline-sonarqube/2020-01-15_15-33-37.png">
+<meta property="article:published_time" content="2020-01-15T06:12:36.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.343Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="jenkins">
+<meta property="article:tag" content="sonarQube">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/jenkins-pipeline-sonarqube/2020-01-15_14-15-23.png">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/jenkins-pipeline-sonarqube/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/jenkins-pipeline-sonarqube/","path":"/jenkins-pipeline-sonarqube/","title":"如何於Jenkins Pipeline專案整合sonarQube"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>如何於Jenkins Pipeline專案整合sonarQube | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-SonarQube-%E6%9C%8D%E5%8B%99"><span class="nav-number">1.</span> <span class="nav-text">安裝 SonarQube 服務</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E5%BB%BA-sonarqube-%E5%B0%88%E6%A1%88"><span class="nav-number">2.</span> <span class="nav-text">新建 sonarqube 專案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%93-SonarQube-%E6%AD%A3%E7%A2%BA%E9%A1%AF%E7%A4%BA%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E8%A6%86%E8%93%8B%E7%8E%87"><span class="nav-number">2.1.</span> <span class="nav-text">讓 SonarQube 正確顯示單元測試覆蓋率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%87%E5%A0%B1%E5%91%8A%E7%B5%90%E6%9E%9C%E5%8A%A0%E5%85%A5-sonarqube-%E9%A1%AF%E7%A4%BA"><span class="nav-number">2.2.</span> <span class="nav-text">將報告結果加入 sonarqube 顯示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%A6%E9%9A%9B%E7%AF%84%E4%BE%8B"><span class="nav-number">2.3.</span> <span class="nav-text">實際範例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%BC-Pipeline-%E5%B0%88%E6%A1%88%E7%95%B6%E4%B8%AD%E8%A8%AD%E5%AE%9A"><span class="nav-number">3.</span> <span class="nav-text">於 Pipeline 專案當中設定</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Jenkins-Console-%E4%BA%82%E7%A2%BC"><span class="nav-number">3.1.</span> <span class="nav-text">Jenkins Console 亂碼</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/jenkins-pipeline-sonarqube/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="如何於Jenkins Pipeline專案整合sonarQube | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何於Jenkins Pipeline專案整合sonarQube
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2020-01-15 14:12:36" itemprop="dateCreated datePublished" datetime="2020-01-15T14:12:36+08:00">2020-01-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/devOps/" itemprop="url" rel="index"><span itemprop="name">devOps</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/jenkins-pipeline-sonarqube/" class="post-meta-item leancloud_visitors" data-flag-title="如何於Jenkins Pipeline專案整合sonarQube" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/jenkins-pipeline-sonarqube/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/jenkins-pipeline-sonarqube/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>繼上一篇文章:<a href="https://partypeopleland.github.io/artblog/2020/01/14/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8BJenkins-Pipeline-%E5%B0%88%E6%A1%88/">如何建立 Jenkins Pipeline 專案 </a>，於 Jenkins Pipeline 專案內，加入 sonarQube 程式碼分析</p>
+<span id="more"></span>
+
+<blockquote>
+<p>關於 sonarQube 的部分，請參考:<a href="https://partypeopleland.github.io/artblog/2022/06/15/sonarqube-analyze-2022/">SonarQube 程式碼分析工具 - 2022</a></p>
+</blockquote>
+<h2 id="安裝-SonarQube-服務"><a href="#安裝-SonarQube-服務" class="headerlink" title="安裝 SonarQube 服務"></a>安裝 SonarQube 服務</h2><p>透過 docker-compose 安裝服務<br>REF:<a target="_blank" rel="noopener" href="https://gist.github.com/Warchant/0d0f0104fe7adf3b310937d2db67b512">sonarQube-docker-compose.yml</a></p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;3&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">sonarqube:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">sonarqube</span></span><br><span class="line">    <span class="attr">expose:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">9000</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;127.0.0.1:9000:9000&quot;</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">sonarnet</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">SONARQUBE_JDBC_URL=jdbc:postgresql://db:5432/sonar</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">SONARQUBE_JDBC_USERNAME=sonar</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">SONARQUBE_JDBC_PASSWORD=sonar</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">sonarqube_conf:/opt/sonarqube/conf</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">sonarqube_data:/opt/sonarqube/data</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">sonarqube_extensions:/opt/sonarqube/extensions</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">sonarqube_bundled-plugins:/opt/sonarqube/lib/bundled-plugins</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">db:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">postgres</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">sonarnet</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">POSTGRES_USER=sonar</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">POSTGRES_PASSWORD=sonar</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">postgresql:/var/lib/postgresql</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">postgresql_data:/var/lib/postgresql/data</span></span><br><span class="line"></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line">  <span class="attr">sonarnet:</span></span><br><span class="line"></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">sonarqube_conf:</span></span><br><span class="line">  <span class="attr">sonarqube_data:</span></span><br><span class="line">  <span class="attr">sonarqube_extensions:</span></span><br><span class="line">  <span class="attr">sonarqube_bundled-plugins:</span></span><br><span class="line">  <span class="attr">postgresql:</span></span><br><span class="line">  <span class="attr">postgresql_data:</span></span><br></pre></td></tr></table></figure>
+
+<p>執行即可，sonarQube 網站將會在<code>http://127.0.0.1:9000</code>，帳密預設皆為<code>admin</code></p>
+<h2 id="新建-sonarqube-專案"><a href="#新建-sonarqube-專案" class="headerlink" title="新建 sonarqube 專案"></a>新建 sonarqube 專案</h2><p>於網站右上角點選新增專案的按鈕，並指定好專案名稱<br><img src="/artblog/jenkins-pipeline-sonarqube/2020-01-15_14-15-23.png"></p>
+<p>這邊需要產生一個 token 讓後續步驟使用，指定一個名稱即可，token 內容會被產生出來<br><img src="/artblog/jenkins-pipeline-sonarqube/2020-01-15_14-17-58.png"></p>
+<p>這個密碼只會出現一次，但是如果之後忘記了，可以在個人的帳號底下管理 token<br><img src="/artblog/jenkins-pipeline-sonarqube/2020-01-15_14-19-26.png"></p>
+<p>這邊因為我的範例項目是 c-sharp，所以當然就選 c-sharp，其他語言的話，點選也會有指示<br><img src="/artblog/jenkins-pipeline-sonarqube/2020-01-15_14-20-31.png"></p>
+<p>下面的步驟就照著做<br><img src="/artblog/jenkins-pipeline-sonarqube/2020-01-15_14-21-20.png"></p>
+<p>在<a target="_blank" rel="noopener" href="https://sonarcloud.io/documentation/analysis/scan/sonarscanner-for-msbuild/">這個頁面</a>下載合適的版本<br>解壓縮後將目錄加入系統環境變數 Path 之內，省的每次都要打完整路徑執行</p>
+<p>畫面的指令碼有三段，其實就是做三件事情</p>
+<ol>
+<li>準備蒐集資訊，這裡需要告訴 scanner 要分析的專案名稱、還有剛剛的 token，另外也跟 sacnner 說，我們所建立的 sonarqube 網站在哪裡</li>
+<li>透過 msbuild 重建專案，讓 scanner 蒐集資訊</li>
+<li>分析剛剛所蒐集到的資訊並傳送給 sonarqube</li>
+</ol>
+<blockquote>
+<p>因為我在截圖的時候沒有把 token 複製下來，所以下面的指令是我產生新的 token</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment"># 啟動SonarScanner</span></span></span><br><span class="line">SonarScanner.MSBuild.exe begin /k:&quot;taskproject&quot; /d:sonar.host.url=&quot;http://127.0.0.1:9000&quot; /d:sonar.login=&quot;9ef26bd5d79f1893a0bfe91d572a04a04b12908a&quot; /d:sonar.cs.dotcover.reportsPaths=&quot;report.html&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment"># Msbuild</span></span></span><br><span class="line">MSBuild.exe /t:Rebuild</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment"># 結束分析</span></span></span><br><span class="line">SonarScanner.MSBuild.exe end /d:sonar.login=&quot;9ef26bd5d79f1893a0bfe91d572a04a04b12908a&quot;</span><br></pre></td></tr></table></figure>
+
+<p>執行完上述步驟，應該可以在網站上面看到分析結果<br><img src="/artblog/jenkins-pipeline-sonarqube/2020-01-15_14-39-52.png"></p>
+<p>但是，測試覆蓋率的地方是不是有點問題？怎麼都是 0 呢？</p>
+<h3 id="讓-SonarQube-正確顯示單元測試覆蓋率"><a href="#讓-SonarQube-正確顯示單元測試覆蓋率" class="headerlink" title="讓 SonarQube 正確顯示單元測試覆蓋率"></a>讓 SonarQube 正確顯示單元測試覆蓋率</h3><p>依照先前的步驟，應該可以看到一些指標數據，但是在單元測試的覆蓋率應該都是看不到的，因為 sonarQube 還必須要經過其他的方式取得單元測試的數據才能正確顯示，更詳細一點的文件可以參考<a target="_blank" rel="noopener" href="https://docs.sonarqube.org/display/SONARQUBE45/Unit+Tests%2C+Integration+Tests+and+Code+Coverage">官方文章</a>、<a target="_blank" rel="noopener" href="https://docs.sonarqube.org/display/SONARQUBE45/C%23+Plugin">C# Plugin</a>，這兩篇文章的內容大致上就是說明了一下官方建議的做法，有興趣可以研究一下</p>
+<p>官方文件的重點有</p>
+<ol>
+<li>需要用工具產生報告，工具可以選擇 dotCover, NCover, OpenCover, PartCover 其中一個</li>
+<li>每一種工具所支援的報告格式不太一樣，使用前須詳閱說明書，以 dotCover 為例，需要給 html 格式報告，並透過<code>sonar.cs.dotcover.reportsPaths</code>參數指定</li>
+</ol>
+<p>因為 sonar 支援的三種工具，我已經有購買了 dotCover，所以當然首選使用它作為覆蓋率的工具，在使用上需要注意的是，從官方下載記得要選<a target="_blank" rel="noopener" href="https://www.jetbrains.com/dotcover/download/#section=commandline">Command Line Tools</a>，因為已經有授權，所以我也不是很清楚沒有授權的話會發生甚麼事情，但應該也可以用<a target="_blank" rel="noopener" href="https://archive.codeplex.com/?p=opencover">OpenCover</a>代替</p>
+<p>查閱了 dotCover 的文件，產生單一單元測試專案的報告可透過指令，當然指令也支援設定檔(xml)</p>
+<p>可透過<code>dotCover.exe help analyse cover.xml</code> 指令產生一個範例設定檔，將正確設定填入即可<br><img src="/artblog/jenkins-pipeline-sonarqube/2020-01-15_14-42-39.png"></p>
+<p>將設定檔設定如下<br><img src="/artblog/jenkins-pipeline-sonarqube/2020-01-15_14-43-44.png"></p>
+<p>這樣子就可以直接透過指令進行分析、並產生報告<br><img src="/artblog/jenkins-pipeline-sonarqube/2020-01-15_14-45-17.png"></p>
+<p>如果想要用指令列參數替代上面這個設定檔，可改寫成下列型式</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dotCover cover /TargetExecutable=&quot;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe&quot; /TargetArguments=&quot;TaskProjectTests.dll&quot; /TargetWorkingDir=&quot;TaskProjectTests\bin\debug&quot; /Output=&quot;report.html&quot; /ReportType=&quot;HTML&quot;</span><br></pre></td></tr></table></figure>
+
+<p>產生完畢報告之後，可以透過瀏覽器觀看<br><img src="/artblog/jenkins-pipeline-sonarqube/2020-01-15_14-48-35.png"></p>
+<p>但是分析居然連測試專案都一起顯示了，我希望能夠聚焦在我的 lib，而不要顯示測試專案的數據</p>
+<p>這當然也是可以透過排除的方式來設定；而如果有多個專案要合併測試結果，則需要為每一個測試專案先產生報告的快照，再將這些快照合併，最終將合併的結果轉換為 Html 格式的報告才可以用</p>
+<p>更多細節就請參考文件<a target="_blank" rel="noopener" href="https://www.jetbrains.com/help/dotcover/Running_Coverage_Analysis_from_the_Command_LIne.html">Coverage Analysis from the Command Line</a></p>
+<p>將專案根目錄下的<code>coverage.xml</code>加入 Filter 區段的設置如下</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;utf-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">CoverageParams</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">TargetExecutable</span>&gt;</span>C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe<span class="tag">&lt;/<span class="name">TargetExecutable</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">TargetArguments</span>&gt;</span>TaskProjectTests.dll<span class="tag">&lt;/<span class="name">TargetArguments</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">TargetWorkingDir</span>&gt;</span>TaskProjectTests\bin\debug<span class="tag">&lt;/<span class="name">TargetWorkingDir</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Output</span>&gt;</span>report.html<span class="tag">&lt;/<span class="name">Output</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">ReportType</span>&gt;</span>HTML<span class="tag">&lt;/<span class="name">ReportType</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">InheritConsole</span>&gt;</span>True<span class="tag">&lt;/<span class="name">InheritConsole</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">AnalyzeTargetArguments</span>&gt;</span>True<span class="tag">&lt;/<span class="name">AnalyzeTargetArguments</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Filters</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">ExcludeFilters</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">FilterEntry</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">ModuleMask</span>&gt;</span>TaskProjectTests<span class="tag">&lt;/<span class="name">ModuleMask</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">ClassMask</span>&gt;</span>*<span class="tag">&lt;/<span class="name">ClassMask</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">FunctionMask</span>&gt;</span>*<span class="tag">&lt;/<span class="name">FunctionMask</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">FilterEntry</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">ExcludeFilters</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">Filters</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">CoverageParams</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>這次就只有 lib 的數據了<br><img src="/artblog/jenkins-pipeline-sonarqube/2020-01-15_14-53-00.png"></p>
+<h3 id="將報告結果加入-sonarqube-顯示"><a href="#將報告結果加入-sonarqube-顯示" class="headerlink" title="將報告結果加入 sonarqube 顯示"></a>將報告結果加入 sonarqube 顯示</h3><p>依照官方的說法，我們必須將 dotCover 的 HTML 格式報告，透過參數指定讓 sonarScanner 取得，加入參數<code>/d:sonar.cs.dotcover.reportsPaths=&quot;report.html&quot;</code><br>之後的語法如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment"># 啟動SonarScanner</span></span></span><br><span class="line">SonarScanner.MSBuild.exe begin /k:&quot;taskproject&quot; /d:sonar.host.url=&quot;http://127.0.0.1:9000&quot; /d:sonar.login=&quot;9ef26bd5d79f1893a0bfe91d572a04a04b12908a&quot; /d:sonar.cs.dotcover.reportsPaths=&quot;report.html&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment"># Msbuild</span></span></span><br><span class="line">MSBuild.exe /t:Rebuild</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment"># 結束分析</span></span></span><br><span class="line">SonarScanner.MSBuild.exe end /d:sonar.login=&quot;9ef26bd5d79f1893a0bfe91d572a04a04b12908a&quot;</span><br></pre></td></tr></table></figure>
+
+<p>測試覆蓋率已經能正確顯示了<br><img src="/artblog/jenkins-pipeline-sonarqube/2020-01-15_15-14-51.png"></p>
+<h3 id="實際範例"><a href="#實際範例" class="headerlink" title="實際範例"></a>實際範例</h3><p>下面這個是我實際的執行指令，專案是<code>.netCore 2.1</code>的</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">產生測試報告</span></span><br><span class="line">dotCover cover --TargetExecutable=&quot;C:\\Program Files\\dotnet\\dotnet.exe&quot; --TargetWorkingDir=&quot;myproject.Tests&quot; --TargetArguments=&quot;test \\&quot;myproject.Tests.csproj\\&quot;&quot; --Filters=-:myproject.Tests --output=AppCoverageReport.html --reportType=HTML</span><br></pre></td></tr></table></figure>
+
+<p>利用<code>dotnet tool install --global dotnet-sonarscanner</code>的指令安裝 dotnet 外掛</p>
+<p><img src="/artblog/jenkins-pipeline-sonarqube/2020-08-10_112158.png"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dotnet sonarscanner begin /d:sonar.host.url=&quot;http://127.0.0.1:9090&quot; /k:&quot;myproject&quot; /d:sonar.login=&quot;2c244539263ac8b5c4b4414b2b8c190a8ca873d9&quot; /d:sonar.cs.dotcover.reportsPaths=&quot;AppCoverageReport.html&quot;</span><br><span class="line"></span><br><span class="line">dotnet build project.sln</span><br><span class="line"></span><br><span class="line">dotnet sonarscanner end /d:sonar.login=&quot;2c244539263ac8b5c4b4414b2b8c190a8ca873d9&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="於-Pipeline-專案當中設定"><a href="#於-Pipeline-專案當中設定" class="headerlink" title="於 Pipeline 專案當中設定"></a>於 Pipeline 專案當中設定</h2><p>手動執行成功後，將其透過 jenkins 的 pipeline syntax 的幫助，我們可以將需要執行的指令透過 groovy 語法寫出來</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">stage(<span class="string">&#x27;build + SonarQube&#x27;</span>) &#123;</span><br><span class="line">   steps &#123;</span><br><span class="line">      bat <span class="attr">label:</span> <span class="string">&#x27;&#x27;</span>, <span class="attr">script:</span> <span class="string">&#x27;D:\\art\\programs\\sonar-scanner-msbuild-4.7.1.2311-net46\\SonarScanner.MSBuild.exe begin /k:&quot;taskproject&quot; /d:sonar.host.url=&quot;http://127.0.0.1:9000&quot; /d:sonar.login=&quot;9ef26bd5d79f1893a0bfe91d572a04a04b12908a&quot; /d:sonar.cs.dotcover.reportsPaths=&quot;report.html&quot;&#x27;</span></span><br><span class="line"></span><br><span class="line">      bat <span class="attr">label:</span> <span class="string">&#x27;&#x27;</span>, <span class="attr">script:</span> <span class="string">&#x27;MSBuild.exe /t:Rebuild&#x27;</span></span><br><span class="line"></span><br><span class="line">      bat <span class="attr">label:</span> <span class="string">&#x27;&#x27;</span>, <span class="attr">script:</span> <span class="string">&#x27;D:\\art\\programs\\sonar-scanner-msbuild-4.7.1.2311-net46\\SonarScanner.MSBuild.exe end /d:sonar.login=&quot;9ef26bd5d79f1893a0bfe91d572a04a04b12908a&quot;&#x27;</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>而整個 pipeline 需要執行的動作分別是</p>
+<ol>
+<li>取得原始檔案</li>
+<li>nuget 還原套件</li>
+<li>先建置第一次產生測試專案的 dll 給 dotCover 產生報告用</li>
+<li>呼叫 dotCover 產生報告</li>
+<li>啟用 sonarScanner 準備蒐集資訊，同時給予測試報告</li>
+<li>專案重新建置</li>
+<li>關閉 sonarScanner，分析資訊</li>
+</ol>
+<p>所以整體的<code>jenkinsFile</code>設定如下</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">pipeline &#123;</span><br><span class="line">    agent any</span><br><span class="line"></span><br><span class="line">    stages &#123;</span><br><span class="line">        stage(<span class="string">&#x27;git&#x27;</span>) &#123;</span><br><span class="line">            steps &#123;</span><br><span class="line">                git <span class="attr">credentialsId:</span> <span class="string">&#x27;e3b7e18a-ea0f-48be-8d8f-a1d214c3c351&#x27;</span>, <span class="attr">url:</span> <span class="string">&#x27;https://github.com/partypeopleland/TaskProject&#x27;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        stage(<span class="string">&#x27;nuget&#x27;</span>) &#123;</span><br><span class="line">            steps &#123;</span><br><span class="line">                bat <span class="attr">label:</span> <span class="string">&#x27;&#x27;</span>, <span class="attr">script:</span> <span class="string">&#x27;nuget restore TaskProject.sln&#x27;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        stage(<span class="string">&#x27;build for testDLL&#x27;</span>) &#123;</span><br><span class="line">            steps &#123;</span><br><span class="line">                bat <span class="attr">label:</span> <span class="string">&#x27;&#x27;</span>, <span class="attr">script:</span> <span class="string">&#x27;msbuild /p:Configuration=Debug&#x27;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        stage(<span class="string">&#x27;analyse + unittest&#x27;</span>) &#123;</span><br><span class="line">            steps &#123;</span><br><span class="line">                bat <span class="attr">label:</span> <span class="string">&#x27;&#x27;</span>, <span class="attr">script:</span> <span class="string">&#x27;&quot;D:\\art\\programs\\JetBrains.dotCover.CommandLineTools.2019.3.1\\dotCover.exe&quot; analyse coverage.xml&#x27;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        stage(<span class="string">&#x27;build + SonarQube&#x27;</span>) &#123;</span><br><span class="line">            steps &#123;</span><br><span class="line">                bat <span class="attr">label:</span> <span class="string">&#x27;&#x27;</span>, <span class="attr">script:</span> <span class="string">&#x27;D:\\art\\programs\\sonar-scanner-msbuild-4.7.1.2311-net46\\SonarScanner.MSBuild.exe begin /k:&quot;taskproject&quot; /d:sonar.host.url=&quot;http://127.0.0.1:9000&quot; /d:sonar.login=&quot;9ef26bd5d79f1893a0bfe91d572a04a04b12908a&quot; /d:sonar.cs.dotcover.reportsPaths=&quot;report.html&quot;&#x27;</span></span><br><span class="line">                bat <span class="attr">label:</span> <span class="string">&#x27;&#x27;</span>, <span class="attr">script:</span> <span class="string">&#x27;MSBuild.exe /t:Rebuild&#x27;</span></span><br><span class="line">                bat <span class="attr">label:</span> <span class="string">&#x27;&#x27;</span>, <span class="attr">script:</span> <span class="string">&#x27;D:\\art\\programs\\sonar-scanner-msbuild-4.7.1.2311-net46\\SonarScanner.MSBuild.exe end /d:sonar.login=&quot;9ef26bd5d79f1893a0bfe91d572a04a04b12908a&quot;&#x27;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/jenkins-pipeline-sonarqube/2020-01-15_15-32-24.png"><br><img src="/artblog/jenkins-pipeline-sonarqube/2020-01-15_15-33-37.png"></p>
+<h3 id="Jenkins-Console-亂碼"><a href="#Jenkins-Console-亂碼" class="headerlink" title="Jenkins Console 亂碼"></a>Jenkins Console 亂碼</h3><p>參考保哥的文章<a target="_blank" rel="noopener" href="https://blog.miniasp.com/post/2015/12/24/Jenkins-on-Windows-03-Avoid-messy-words-in-log-messages">Jenkins on Windows 心得分享 (03)：有效避免記錄檔或訊息出現亂碼的方法</a></p>
+<ol>
+<li>將 Java 的預設字集修改為 UTF-8 編碼：<code>SETX /M JAVA_TOOL_OPTIONS -Dfile.encoding=UTF8</code></li>
+<li>將自訂的「執行 Windows 批次指令」的第一行都加上以下命令：<code>chcp 65001</code></li>
+</ol>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">stage(<span class="string">&#x27;sonar end&#x27;</span>) &#123;</span><br><span class="line">    steps &#123;</span><br><span class="line">        bat <span class="attr">label:</span> <span class="string">&#x27;&#x27;</span>, <span class="attr">script:</span> <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">        chcp 65001</span></span><br><span class="line"><span class="string">        SonarScanner.MSBuild.exe end /d:sonar.login=&quot;32aafa7ac56a55dae90d0891487e7af98506ed33&quot;</span></span><br><span class="line"><span class="string">        &#x27;&#x27;&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/jenkins/" rel="tag"># jenkins</a>
+              <a href="/artblog/tags/sonarQube/" rel="tag"># sonarQube</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/jenkins-pipeline-project/" rel="prev" title="如何建立Jenkins Pipeline 專案">
+                  <i class="fa fa-angle-left"></i> 如何建立Jenkins Pipeline 專案
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/jenkins-parameterized-builds-and-upstream-downstream-projects/" rel="next" title="Jenkins參數化建置與上下游專案">
+                  Jenkins參數化建置與上下游專案 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

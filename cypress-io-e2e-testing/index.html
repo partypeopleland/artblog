@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="會開始學習cypress.io的原因是因為看到[Cypress 2] 看官方文件學習 Command &amp; Assertion這篇，另外 Joey 也推薦這一套工具，在這一篇文章中介紹的是cypress.io的一些基礎用法，更深入的部分：Cli、CI 整合都還沒有辦法介紹給大家，後續如果還有機會的話再撰寫成系列文章跟大家分享。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cypress.io E2E測試">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/cypress-io-e2e-testing/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="會開始學習cypress.io的原因是因為看到[Cypress 2] 看官方文件學習 Command &amp; Assertion這篇，另外 Joey 也推薦這一套工具，在這一篇文章中介紹的是cypress.io的一些基礎用法，更深入的部分：Cli、CI 整合都還沒有辦法介紹給大家，後續如果還有機會的話再撰寫成系列文章跟大家分享。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-e2e-testing/2020-05-15_14-13-46.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-e2e-testing/2020-05-15_10-10-13.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-e2e-testing/2020-05-15_15-49-05.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-e2e-testing/2020-05-15_12-22-11.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-e2e-testing/2020-05-15_12-26-26.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-e2e-testing/2020-05-15_14-04-52.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-e2e-testing/2020-05-15_12-29-31.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-e2e-testing/2021-09-30-105817.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/cypress-io-e2e-testing/2020-05-15_15-14-28.png">
+<meta property="article:published_time" content="2020-05-15T01:36:27.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.243Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="cypress">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/cypress-io-e2e-testing/2020-05-15_14-13-46.png">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/cypress-io-e2e-testing/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/cypress-io-e2e-testing/","path":"/cypress-io-e2e-testing/","title":"Cypress.io E2E測試"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Cypress.io E2E測試 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#End-To-End-Testing"><span class="nav-number">1.</span> <span class="nav-text">End To End Testing</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%82%B3%E7%B5%B1%E6%89%8B%E5%B7%A5%E6%B8%AC%E8%A9%A6%E4%BA%BA%E5%93%A1"><span class="nav-number">1.1.</span> <span class="nav-text">傳統手工測試人員</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88%E5%B8%AB"><span class="nav-number">1.2.</span> <span class="nav-text">程式設計師</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%AC%E8%A9%A6%E4%BA%BA%E5%93%A1"><span class="nav-number">1.3.</span> <span class="nav-text">測試人員</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%89%E4%BB%80%E9%BA%BC%E5%B7%A5%E5%85%B7%E5%8F%AF%E4%BB%A5%E5%B9%AB%E5%8A%A9%E6%88%91%E5%80%91%E5%AE%8C%E6%88%90-E2E-Testing%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">有什麼工具可以幫助我們完成 E2E Testing？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Katalon-Recorder-Selenium-tests-generator"><span class="nav-number">2.1.</span> <span class="nav-text">Katalon Recorder (Selenium tests generator)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#testcafe-js"><span class="nav-number">2.2.</span> <span class="nav-text">testcafe.js</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cypress-io"><span class="nav-number">2.3.</span> <span class="nav-text">cypress.io</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%98%E6%96%B9%E8%87%AA%E5%B7%B1%E8%AA%AA%E7%9A%84%E5%84%AA%E9%BB%9E"><span class="nav-number">2.3.1.</span> <span class="nav-text">官方自己說的優點</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%88%91%E8%A6%BA%E5%BE%97%E6%98%AF%E5%84%AA%E9%BB%9E%E7%9A%84%E5%84%AA%E9%BB%9E"><span class="nav-number">2.3.2.</span> <span class="nav-text">我覺得是優點的優點</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IDE%E6%95%B4%E5%90%88"><span class="nav-number">2.3.3.</span> <span class="nav-text">ＩＤＥ整合</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#VSCode"><span class="nav-number">2.3.3.1.</span> <span class="nav-text">VSCode</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Intelli-J"><span class="nav-number">2.3.3.2.</span> <span class="nav-text">Intelli J</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#How-To-Start"><span class="nav-number">3.</span> <span class="nav-text">How To Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%95%9F%E5%8B%95-local-%E7%B6%B2%E7%AB%99"><span class="nav-number">3.1.</span> <span class="nav-text">啟動 local 網站</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A8%AA%E5%95%8F-local-%E7%B6%B2%E7%AB%99"><span class="nav-number">3.2.</span> <span class="nav-text">訪問 local 網站</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cypress-%E8%A8%AD%E5%AE%9A"><span class="nav-number">3.3.</span> <span class="nav-text">cypress 設定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Intelligent-code-completion"><span class="nav-number">3.4.</span> <span class="nav-text">Intelligent code completion</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B8%AC%E8%A9%A6%E7%AD%96%E7%95%A5"><span class="nav-number">4.</span> <span class="nav-text">測試策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Seeding-Data"><span class="nav-number">4.1.</span> <span class="nav-text">Seeding Data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stubbing-the-server"><span class="nav-number">4.2.</span> <span class="nav-text">Stubbing the server</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/cypress-io-e2e-testing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Cypress.io E2E測試 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Cypress.io E2E測試
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2020-05-15 09:36:27" itemprop="dateCreated datePublished" datetime="2020-05-15T09:36:27+08:00">2020-05-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/e2e/" itemprop="url" rel="index"><span itemprop="name">e2e</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/cypress-io-e2e-testing/" class="post-meta-item leancloud_visitors" data-flag-title="Cypress.io E2E測試" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/cypress-io-e2e-testing/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/cypress-io-e2e-testing/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>會開始學習<code>cypress.io</code>的原因是因為看到<a target="_blank" rel="noopener" href="https://medium.com/hannah-lin/cypress-2-%E7%9C%8B%E5%AE%98%E6%96%B9%E6%96%87%E4%BB%B6%E5%AD%B8%E7%BF%92%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95-76606c4420be">[Cypress 2] 看官方文件學習 Command &amp; Assertion</a>這篇，另外 Joey 也推薦這一套工具，在這一篇文章中介紹的是<code>cypress.io</code>的一些基礎用法，更深入的部分：Cli、CI 整合都還沒有辦法介紹給大家，後續如果還有機會的話再撰寫成系列文章跟大家分享。</p>
+<span id="more"></span>
+
+<h2 id="End-To-End-Testing"><a href="#End-To-End-Testing" class="headerlink" title="End To End Testing"></a>End To End Testing</h2><p>e2e 測試其實就是模擬真實用戶情境、驗證被測試系統及其組件是否能順利工作、驗證所產生的資料是否正確。不論是在軟體開發的哪個生命週期裡面，通常會有一些角色會去執行 e2e 測試，用來驗證產品是否如預期般運作</p>
+<h3 id="傳統手工測試人員"><a href="#傳統手工測試人員" class="headerlink" title="傳統手工測試人員"></a>傳統手工測試人員</h3><p>在程式設計師開發完畢之後進行驗收的人員，他們大概的特色就是不會寫程式，都是用手動的方式去驗證功能是否正確；通常這樣的人員對於領域知識都很了解，但是對於程式設計的背景知識相對薄弱；恰好與程式設計師相反、互補。通常這個角色在公司不會只有這一項工作要做，往往都是兼職測試；實務上它們可能的身份還會有<code>專案經理</code>、<code>產品經理</code>、<code>客服人員</code>、<code>產品教育訓練講師</code>…等等</p>
+<h3 id="程式設計師"><a href="#程式設計師" class="headerlink" title="程式設計師"></a>程式設計師</h3><p>在程式設計師開發完畢之後，也會有一些人會對自己開發的成果進行測試。通常它們的手段就是在 local，或者是所謂的開發機上面直接手動測試。對於這個角色而言，e2e 測試的確不是他們的重點，它們更多的時間、精力會放在單元測試上面。</p>
+<h3 id="測試人員"><a href="#測試人員" class="headerlink" title="測試人員"></a>測試人員</h3><p>在規模比較大的公司裡面才會有可能存在的專職測試人員，因為是全職投入測試的關係，往往他們會需要用到自動化測試工具來協助它們完成測試任務。也因此它們會需要有程式設計的知識，以及動手實作的能力；相比於程式設計師較重視單元測試，他們會更著重於使用各種測試技術和方法來測試和發現軟體中存在的軟體缺陷，而 e2e 測試只是幫助他們完成他們任務的其中一環而已</p>
+<h2 id="有什麼工具可以幫助我們完成-E2E-Testing？"><a href="#有什麼工具可以幫助我們完成-E2E-Testing？" class="headerlink" title="有什麼工具可以幫助我們完成 E2E Testing？"></a>有什麼工具可以幫助我們完成 E2E Testing？</h2><h3 id="Katalon-Recorder-Selenium-tests-generator"><a href="#Katalon-Recorder-Selenium-tests-generator" class="headerlink" title="Katalon Recorder (Selenium tests generator)"></a>Katalon Recorder (Selenium tests generator)</h3><p><a target="_blank" rel="noopener" href="https://chrome.google.com/webstore/detail/katalon-recorder-selenium/ljdobmomdgdljniojadhoplhkpialdid">Katalon Recorder (Selenium tests generator)</a></p>
+<p>作為初學 e2e 測試的人，我會推薦先使用這一套上手，大概了解一下 e2e 測試是怎麼一回事</p>
+<p>因為用這一套可以錄影，也就是將你操作瀏覽器的步驟給錄下來，事後也可以針對每一個步驟進行修改；而且可以透過匯出程式碼的功能，將錄影下來的步驟透過程式碼執行；對於入門應該算蠻有效的。</p>
+<p>這一套適合的對象應該是初學者、或是比較不需要撰寫程式的手動測試人員會較合適，至於付費軟體 katalon studio 就不予置評了，因為我沒有用過。</p>
+<h3 id="testcafe-js"><a href="#testcafe-js" class="headerlink" title="testcafe.js"></a>testcafe.js</h3><p>之前寫過一篇<a href="https://partypeopleland.github.io/artblog/2019/06/24/%E4%BD%BF%E7%94%A8testcafe%E5%81%9AE2E%E6%B8%AC%E8%A9%A6/">使用 testcafe 做 E2E 測試</a>，現在看來當時感覺不錯的優點，現今應該都算標準配備了，是胃口被養刁了嗎？總覺得時至今日，<code>testcafe.js</code> 的優勢跟人相比，記憶點只剩下支援<code>typescript</code>、官方提供三大框架支援。</p>
+<p>這一套適合的對象應該是喜歡使用<code>typescript</code>的開發人員、或者是前端三大框架(React, Vue, Angular)的使用者，因為可以直接在測試程式中透過官方提供的框架 Selector 去指定框架的元件，這個很加分</p>
+<h3 id="cypress-io"><a href="#cypress-io" class="headerlink" title="cypress.io"></a>cypress.io</h3><h4 id="官方自己說的優點"><a href="#官方自己說的優點" class="headerlink" title="官方自己說的優點"></a>官方自己說的優點</h4><p>基本上官方自己有說<a target="_blank" rel="noopener" href="https://docs.cypress.io/zh-cn/guides/overview/key-differences.html">他們的優勢</a>在哪邊，老實說我有很多東西看不太懂，或者是說沒能真正理解。</p>
+<p>所以底下我就節錄我看得懂，或是說我覺得這應該不錯的部分</p>
+<p>因为 Cypress 是本地安装的, 它可以从系统层提供对自动化任务的服务. 也就是说，比如截图或录屏, 一般的命令执行和请求成为可能.</p>
+<blockquote>
+<p>在 CI 過程提供截圖快照，或者是錄影，在某些時候是很有用的</p>
+</blockquote>
+<p>你的测试代码可以访问任何只要是你应用能访问的东西。</p>
+<blockquote>
+<p>所以我可以很直覺的撰寫測試代碼，這應該是優點吧</p>
+</blockquote>
+<p>通过修改响应状态码为 500 测试你的应用如何对错误做出响应的。</p>
+<blockquote>
+<p>這個是說我能夠修改回應的結果(狀態)？ 如果可以的話，不就是像 mock 那樣的東西了嗎？</p>
+</blockquote>
+<p>你不再需要使用 UI 来构建状态；这意味着你不必访问登录页面，输入用户名和密码，并等待页面加载和&#x2F;或重定向到你运行的每个测试；Cypress 让你能够快捷方式并以编程方式登录</p>
+<blockquote>
+<p>這意味著我如果有一些狀態是需要經由繁瑣的 UI 互動完成之後才能測試的功能，我可以透過其他的方式做到，聽起來很不錯。</p>
+</blockquote>
+<p>测试运行时使用开发者工具，你可以看到每个控制台消息，每个网络请求。 你可以检查元素，甚至可以在规范代码或应用程序代码中使用调试器语句。 不会有信息丢失 - 你可以使用你已经熟悉的所有工具。 这使你可以同时测试和开发所有内容。</p>
+<blockquote>
+<p>這絕對是優點，透過 cypress 執行測試時，我可以使用<code>cy.pause()</code>暫停下來，並悠閒地開啟 F12 利用 Chrome Develop tools 來查看請求、回應，試用了一下真的很不錯</p>
+</blockquote>
+<h4 id="我覺得是優點的優點"><a href="#我覺得是優點的優點" class="headerlink" title="我覺得是優點的優點"></a>我覺得是優點的優點</h4><ol>
+<li>官網有中文文件</li>
+<li>Cypress 是免費、開源的</li>
+<li>安裝方便：只需要透過一行指令就整個裝好，不需要再安裝其他別的東西</li>
+<li>圖形化介面及完整的指令列工具</li>
+</ol>
+<p>官網文件並沒有 100%都是中文，但起碼基本的文件都已經是簡體中文了。如果你的英文再好一點，官方的英文文件應該對你不是問題。<br><a target="_blank" rel="noopener" href="https://docs.cypress.io/zh-cn/guides/overview/why-cypress.html#">Cypress Document</a></p>
+<p>但還是有一些文件看起來是用機器翻譯的，文法非常地不通順，這種時候還是看英文的會比較好，例如下面這個例子<br><img src="/artblog/cypress-io-e2e-testing/2020-05-15_14-13-46.png"></p>
+<h4 id="IDE整合"><a href="#IDE整合" class="headerlink" title="ＩＤＥ整合"></a>ＩＤＥ整合</h4><p>這些資訊在官方文件都有<a target="_blank" rel="noopener" href="https://docs.cypress.io/guides/tooling/IDE-integration">說明</a>介紹，因此這邊就略過說明，請自行前往觀看。在 IDE 整合的這一塊，最好是仔細的看過一次照著做一遍，會對開發很有幫助。</p>
+<h5 id="VSCode"><a href="#VSCode" class="headerlink" title="VSCode"></a>VSCode</h5><ol>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=JosefBiehler.cypress-fixture-intellisense">Cypress Fixture-IntelliSense</a></li>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=Shelex.vscode-cy-helper">Cypress Helper</a></li>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=andrew-codes.cypress-snippets">Cypress Snippets</a></li>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=tnrich.vscode-extension-open-cypress">Open Cypress</a></li>
+<li><a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=chrisbreiding.test-utils">Test Utils</a></li>
+</ol>
+<h5 id="Intelli-J"><a href="#Intelli-J" class="headerlink" title="Intelli J"></a>Intelli J</h5><ol>
+<li><a target="_blank" rel="noopener" href="https://plugins.jetbrains.com/plugin/13819-cypress">Intellij-Cypress</a></li>
+</ol>
+<p>在 Rider 的 plugin 裡面，我直接安裝了<code>cypress</code>的 plugin，並且依照官網指示，在專案的套件中，也安裝了<a target="_blank" rel="noopener" href="https://www.npmjs.com/package/cypress-intellij-reporter">cypress-intellij-reporter</a>，隨後在 Rider 的測試檔案內，就可以直接透過點擊 Icon 的方式去執行 e2e 測試了<br><img src="/artblog/cypress-io-e2e-testing/2020-05-15_10-10-13.png"></p>
+<p>看樣子其實也只是幫你把特定的測試透過指令列的方式去執行，如果執行某一個測試，會發現在測試執行之前，<code>it</code>的後面會幫你自動加上去<code>only</code>，測試完再改回來</p>
+<p><img src="/artblog/cypress-io-e2e-testing/2020-05-15_15-49-05.png"></p>
+<h2 id="How-To-Start"><a href="#How-To-Start" class="headerlink" title="How To Start"></a>How To Start</h2><h3 id="啟動-local-網站"><a href="#啟動-local-網站" class="headerlink" title="啟動 local 網站"></a>啟動 local 網站</h3><p>雖然你可以測試已經<code>deploy</code>出去的應用程式，但官方比較推薦的是測試<code>local</code>的應用程式，對此官方文件解釋原因</p>
+<ol>
+<li>cypress 在整個開發流程當中都很有用</li>
+<li>你可以同時進行測試、開發，其實就是利用 cypress 透過 TDD 方法開發你的應用程式</li>
+<li>你可以控制 local 的應用程式、但你無法控制 deploy 出去的應用程式</li>
+</ol>
+<blockquote>
+<p>cypress 官方文件提到：许多 Cypress 的用户都选择在本地运行绝大多数的集成测试，而在生产环境上运行少数的冒烟测试。</p>
+</blockquote>
+<blockquote>
+<p>節錄 wiki<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%86%92%E7%83%9F%E6%B5%8B%E8%AF%95_(%E8%BD%AF%E4%BB%B6)">冒煙測試</a>：冒煙測試僅僅是在短時間廣泛地覆蓋產品功能。如果關鍵功能無法正常工作或關鍵 bug 尚未修復，那麼你們的團隊就不需要浪費更多時間去安裝部署以及測試</p>
+</blockquote>
+<p>講白一點就是，大部分的整合測試都在 local 做，你只需要在 production 作一些關鍵性的測試即可</p>
+<h3 id="訪問-local-網站"><a href="#訪問-local-網站" class="headerlink" title="訪問 local 網站"></a>訪問 local 網站</h3><p>當然要先安裝好<code>cypress</code>，安裝完畢後會在專案目錄下自動建立<code>cypress</code>子目錄；然後把 cypress 提供的範例測試程式<code>cypress/integration/examples</code>清掉，接著建立自己的測試程式，此處我們就命名為<code>cypress/integration/myTest/my.spec.js</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// cypress GUI</span></span><br><span class="line">npx cypress open</span><br></pre></td></tr></table></figure>
+
+<p>這個時候你可以先開啟 cypress GUI，會發現我們建立的測試檔案已經存在了</p>
+<p><img src="/artblog/cypress-io-e2e-testing/2020-05-15_12-22-11.png"></p>
+<p>接著撰寫測試內容</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// cypress/integration/myTest/my.spec.js</span></span><br><span class="line"><span class="title function_">describe</span>(<span class="string">&quot;The Home Page&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title function_">it</span>(<span class="string">&quot;successfully loads&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 訪問網址，請替換為你自己的開發網站網址</span></span><br><span class="line">    cy.<span class="title function_">visit</span>(<span class="string">&quot;http://localhost:4351&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="cypress-設定"><a href="#cypress-設定" class="headerlink" title="cypress 設定"></a>cypress 設定</h3><p>cypress 有提供設定，可以將測試網站的網址記錄在這邊<br><img src="/artblog/cypress-io-e2e-testing/2020-05-15_12-26-26.png"></p>
+<p>這樣，就可以在測試程式中直接以相對路徑來撰寫網址</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// cypress/integration/myTest/my.spec.js</span></span><br><span class="line"><span class="title function_">describe</span>(<span class="string">&quot;The Home Page&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title function_">it</span>(<span class="string">&quot;successfully loads&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    cy.<span class="title function_">visit</span>(<span class="string">&quot;/&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/cypress-io-e2e-testing/2020-05-15_14-04-52.png"></p>
+<p>當然這邊只是示範一下有這個設定檔，其他設定項目當然還是請參考網站<a target="_blank" rel="noopener" href="https://docs.cypress.io/zh-cn/guides/references/configuration.html#Cypress-config">介紹</a>囉</p>
+<p>另外，在 GUI 介面，你也可以瀏覽這些資訊，這個介面甚至用顏色告訴你，目前吃的設定值是甚麼，設定的來源是哪裡<br>這個是我第一次看到這樣的概念跟設計，感覺很不錯<br><img src="/artblog/cypress-io-e2e-testing/2020-05-15_12-29-31.png"></p>
+<h3 id="Intelligent-code-completion"><a href="#Intelligent-code-completion" class="headerlink" title="Intelligent code completion"></a>Intelligent code completion</h3><p>在<code>/Cypress</code>目錄下新增<code>tsconfig.json</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;compilerOptions&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;allowJs&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">&quot;baseUrl&quot;</span>: <span class="string">&quot;../node_modules&quot;</span>,</span><br><span class="line">    <span class="string">&quot;types&quot;</span>: [</span><br><span class="line">      <span class="string">&quot;cypress&quot;</span></span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">&quot;include&quot;</span>: [</span><br><span class="line">    <span class="string">&quot;**/*.*&quot;</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在<code>VSCode</code>底下就會有智慧標籤提示<code>cypress</code>的語法，對於開發速度上也有很大的提升<br><img src="/artblog/cypress-io-e2e-testing/2021-09-30-105817.jpg"></p>
+<h2 id="測試策略"><a href="#測試策略" class="headerlink" title="測試策略"></a>測試策略</h2><p>前幾個中文文件應該都是人工翻譯的對吧，後面講到一些專有名詞怎麼感覺就是非常地不通順呢？所以，我覺得還是用我能夠理解的文法稍微說明一下好了</p>
+<h3 id="Seeding-Data"><a href="#Seeding-Data" class="headerlink" title="Seeding Data"></a>Seeding Data</h3><p>在即將撰寫 e2e 測試之前，通常我們為了測試順利進行，會需要做一些準備工作，例如：如果我們想要測是一個登入的行為，那麼我們至少會需要在後端資料庫有一個測試的帳號用來驗證。<br>在測試執行之前，先一步建立好這些需要的數據資料，並且在測試完畢後清除，這就是<code>set up</code>、<code>tear down</code></p>
+<p><code>cypress</code>提供了<code>cy.exec()</code>、<code>cy.task()</code>、<code>cy.request()</code>，搭配<code>before()</code>、<code>beforeEach()</code>這兩個<code>hooks</code>來做到這件事情</p>
+<blockquote>
+<p>所謂的 Hooks 就是在測試前後會觸發的事件，具體要看測試框架提供那些。</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">describe</span>(<span class="string">&quot;The Home Page&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title function_">beforeEach</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    cy.<span class="title function_">exec</span>(<span class="string">&quot;npm run db:reset &amp;&amp; npm run db:seed&quot;</span>);</span><br><span class="line"></span><br><span class="line">    cy.<span class="title function_">request</span>(<span class="string">&quot;POST&quot;</span>, <span class="string">&quot;/test/seed/post&quot;</span>, &#123;</span><br><span class="line">      <span class="attr">title</span>: <span class="string">&quot;First Post&quot;</span>,</span><br><span class="line">      <span class="attr">authorId</span>: <span class="number">1</span>,</span><br><span class="line">      <span class="attr">body</span>: <span class="string">&quot;...&quot;</span>,</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    cy.<span class="title function_">request</span>(<span class="string">&quot;POST&quot;</span>, <span class="string">&quot;/test/seed/user&quot;</span>, &#123; <span class="attr">name</span>: <span class="string">&quot;Jane&quot;</span> &#125;)</span><br><span class="line">      .<span class="title function_">its</span>(<span class="string">&quot;body&quot;</span>)</span><br><span class="line">      .<span class="title function_">as</span>(<span class="string">&quot;currentUser&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="title function_">it</span>(<span class="string">&quot;successfully loads&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    cy.<span class="title function_">visit</span>(<span class="string">&quot;/&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>以官網的範例來看，在測試執行之前，可以透過<code>cy.exec()</code>用 npm 去執行那些你已經寫好的<code>scripts</code>，或者是為了省去實際測試程式的前置動作，將必要的互動直接打到後端 API 去執行。<br>但是官網也有提到，雖然不是錯誤的做法，但這樣的確是會影響到程式的可讀性、維護性；另外也因為所有的東西都是實際與後端溝通，再加上初始化的動作等等，這樣的一個測試會很慢</p>
+<h3 id="Stubbing-the-server"><a href="#Stubbing-the-server" class="headerlink" title="Stubbing the server"></a>Stubbing the server</h3><p>以前的應用程式大概都是從後端直接吐整個頁面，所有的操作行為都直接返回<code>HTML</code>，這樣的話的確是沒甚麼好改的；但現代化的應用程式大部分都已經改用 json 與後端交換資料，我們可以強制 server 端回傳我們想要的資料內容</p>
+<p>直接看具體的範例來學習怎麼使用<code>stub</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">describe</span>(<span class="string">&quot;首頁&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="title function_">it</span>(<span class="string">&quot;登入失敗測試&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 建立 stub：此處回傳 1 表示登入失敗</span></span><br><span class="line">    cy.<span class="title function_">server</span>();</span><br><span class="line">    cy.<span class="title function_">route</span>(<span class="string">&quot;POST&quot;</span>, <span class="string">&quot;Account/SignIn&quot;</span>, &#123;</span><br><span class="line">      <span class="attr">logonStatus</span>: <span class="number">1</span>,</span><br><span class="line">      <span class="attr">message</span>: <span class="string">&quot;假資料&quot;</span>,</span><br><span class="line">    &#125;).<span class="title function_">as</span>(<span class="string">&quot;signIn&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 測試程式</span></span><br><span class="line">    cy.<span class="title function_">visit</span>(<span class="string">&quot;/&quot;</span>);</span><br><span class="line">    cy.<span class="title function_">get</span>(<span class="string">&quot;#basic_loginId&quot;</span>).<span class="title function_">type</span>(<span class="string">&quot;fakeUser@notExist.com&quot;</span>);</span><br><span class="line">    cy.<span class="title function_">get</span>(<span class="string">&quot;#basic_password&quot;</span>).<span class="title function_">type</span>(<span class="string">&quot;fakePassword&quot;</span>);</span><br><span class="line">    cy.<span class="title function_">get</span>(<span class="string">&quot;[type=submit]&quot;</span>).<span class="title function_">click</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 驗證結果</span></span><br><span class="line">    cy.<span class="title function_">get</span>(<span class="string">&quot;.ant-modal-confirm-content&quot;</span>).<span class="title function_">should</span>(</span><br><span class="line">      <span class="string">&quot;contain&quot;</span>,</span><br><span class="line">      <span class="string">&quot;登入失敗！請確認您的帳號與密碼。&quot;</span></span><br><span class="line">    );</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/cypress-io-e2e-testing/2020-05-15_15-14-28.png"></p>
+<p>可以看到在<code>Routes</code>的部份有顯示我們模擬了一個 Route 的 stub，然後再下方的<code>XHR STUB</code>也表示這個請求，是由我們設定好的 Stub 提供回應結果；在右側也可以看到模擬接收的<code>Response</code>內容就是我們在測試程式中撰寫的資料</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/cypress/" rel="tag"># cypress</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/Hangfire-%E5%88%9D%E5%AD%B8/" rel="prev" title="Hangfire 初學">
+                  <i class="fa fa-angle-left"></i> Hangfire 初學
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/dotnet-core-shared-cookie-by-redis/" rel="next" title="dotnet core shared cookie by redis">
+                  dotnet core shared cookie by redis <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

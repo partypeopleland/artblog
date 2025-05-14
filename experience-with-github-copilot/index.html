@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="最近看了很糟糕的 github copilot 分享，所以我也來分享一下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 github copilot 心得">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/experience-with-github-copilot/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="最近看了很糟糕的 github copilot 分享，所以我也來分享一下">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/experience-with-github-copilot/20240703183037.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/experience-with-github-copilot/20240705103223.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/experience-with-github-copilot/20240705103241.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/experience-with-github-copilot/20240705101738.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/experience-with-github-copilot/20240705102029.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/experience-with-github-copilot/20240705102126.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/experience-with-github-copilot/20240705102217.png">
+<meta property="article:published_time" content="2024-07-09T08:02:59.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.569Z">
+<meta property="article:author" content="art">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/experience-with-github-copilot/20240703183037.png">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/experience-with-github-copilot/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/experience-with-github-copilot/","path":"/experience-with-github-copilot/","title":"使用 github copilot 心得"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>使用 github copilot 心得 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E5%80%8B%E9%83%A8%E5%88%86%EF%BC%9A%E5%8D%94%E5%8A%A9%E8%A8%8E%E8%AB%96%E9%87%90%E6%B8%85%E6%83%B3%E6%B3%95%E3%80%81%E8%AA%BF%E6%95%B4%E6%96%B9%E5%90%91"><span class="nav-number">1.</span> <span class="nav-text">第一個部分：協助討論釐清想法、調整方向</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E5%80%8B%E9%83%A8%E5%88%86%EF%BC%9A%E8%87%AA%E6%88%91%E6%8F%90%E5%8D%87"><span class="nav-number">2.</span> <span class="nav-text">第二個部分：自我提升</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">3.</span> <span class="nav-text">結論</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/experience-with-github-copilot/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="使用 github copilot 心得 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用 github copilot 心得
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2024-07-09 16:02:59" itemprop="dateCreated datePublished" datetime="2024-07-09T16:02:59+08:00">2024-07-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+
+  
+    <span id="/artblog/experience-with-github-copilot/" class="post-meta-item leancloud_visitors" data-flag-title="使用 github copilot 心得" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/experience-with-github-copilot/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/experience-with-github-copilot/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>最近看了很糟糕的 github copilot 分享，所以我也來分享一下</p>
+<span id="more"></span>
+
+<p>內文中的 <code>github copilot</code> 只是一個代稱，相似的工具有 OPEN AI 的 <code>chatGPT</code>，或是 jetbrains 的 <code>AI Assistiant</code>，我都是指它們的聊天功能，但如果文中明顯指的是程式碼自動建議功能，那當然就是 <code>copilot</code> 了。</p>
+<h2 id="第一個部分：協助討論釐清想法、調整方向"><a href="#第一個部分：協助討論釐清想法、調整方向" class="headerlink" title="第一個部分：協助討論釐清想法、調整方向"></a>第一個部分：協助討論釐清想法、調整方向</h2><p>其實最主要的就是為了想要分享一下這些生產力工具的使用方法，或者說心得，但又不是很想講別人講過的東西，那些怎麼安裝，給予提示詞的技巧等等，我覺得應用起來就是那樣而已，沒甚麼特別好提的，於是寫著寫著，我發現好像把重點放在別的地方會更有趣一點，比如互動討論，從而提升自己的部分反而我比較有共鳴</p>
+<p>所以我就模擬一下，我想要寫一份關於 Github Copilot 如何幫助我們的日常工作這個情境<br>我一開始沒有想太多，就是覺得日常工作有 Github Copilot 的協助可以幫助我提高工作效率，所以我打算從這邊開始著手，然後詢問意見，我列出了下面的表格，然後從這邊當出發點開始討論</p>
+<hr>
+<table>
+<thead>
+<tr>
+<th>工作類型</th>
+<th>描述</th>
+<th>時間比例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>重要且緊急</td>
+<td>正式環境的異常狀況處理，如訂單、信用卡等等之類；又或與公司商譽相關的任務處理</td>
+<td>約 10-15%</td>
+</tr>
+<tr>
+<td>重要且不緊急</td>
+<td>日常的例行任務，如上版需求開發測試</td>
+<td>超過 50-60%</td>
+</tr>
+<tr>
+<td>不重要但緊急</td>
+<td>需要即時回應的事情，如長官或客戶對某些問題的詢問</td>
+<td>約 10-15%</td>
+</tr>
+<tr>
+<td>不重要也不緊急</td>
+<td>研究新技術或重構優化任務</td>
+<td>約 10-15%</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>這四種任務的大致參考時間，前提是在健康的工作環境下</p>
+</blockquote>
+<p>想法不錯，但感覺好像沒有那麼好寫，畢竟感覺範圍有點大了，我就去問了 AI，請他給我一些寫作上的建議，於是它回復了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">您的草稿已經有了很好的結構和規劃，很明顯地將資訊人員的工作分成了四個主要部分，並准備針對每個部分詳細描述 AI 如何提升效率和生產力，我認為這個框架極好。這種針對性的方式可以讓讀者更具體地理解 AI 如何在日常工作中幫助他們。</span><br><span class="line">以下是我對逐一討論的一些建議：</span><br><span class="line">&quot;重要且緊急&quot;：您可以討論AI如何快速識別和解決這種任務的問題。例如，AI可以識別出模式，預測可能的問題，並在問題發生前給出警告。也可以使用機器學習來優化問題的解決方法，從而縮短解決問題的時間。</span><br><span class="line">&quot;重要且不緊急&quot;：AI可以自動化許多日常任務，從而節省時間。例如，AI可以協助进行代码审核，找到可能的錯誤和改進點；或自動完成某些測試和驗證工作。</span><br><span class="line">&quot;不重要但緊急&quot;：AI可以協助排序這些任務的優先級，確保能夠有效地回應。此外，一些 AI 工具可以自動回复一些常見問題，減少了人工回答的需要。</span><br><span class="line">&quot;不重要也不緊急&quot;：透過AI進行資料分析和預測，可以提前找出可能的問題，提早開始對策，直接降低問題嚴重性，給予預警。</span><br></pre></td></tr></table></figure>
+
+<p>但這跟我希望強調 <code>Github Copilot</code> 工具的目標是不符合的，所以我又問它了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">我希望能夠聚焦在 Github Copilot 或者是 JetBrains AI Assistant 這類的工具上，而不是更大範圍的AI，所以你給的建議對我這份文件的目標，並不符合</span><br></pre></td></tr></table></figure>
+
+<p>緊接著它又回復了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;重要且緊急&quot;：這些工具可以幫助寫更高效的代碼。例如，它們可以提供實時的代碼建議來解決編程問題，從而減少解決代碼問題的時間。</span><br><span class="line">&quot;重要且不緊急&quot;：Github Copilot和JetBrains AI Assistant可以進行代碼審核，提供清晰正確的代碼建議來改進和優化現有的代碼，這對於項目維護和重構工作非常有幫助。</span><br><span class="line">&quot;不重要但緊急&quot;：這些工具能夠快速回覆常見的代碼問題，例如語法錯誤、未定義的變量等，從而提高開發者的解抖速度。</span><br><span class="line">&quot;不重要也不緊急&quot;: 工具如Github Copilot和JetBrains AI Assistant能協助初步的開發和研究新技術，提供編程語言或框架的使用建議，使得學習和適應新的技術變得更為輕鬆。</span><br></pre></td></tr></table></figure>
+
+<p>然後我越看越奇怪，怎麼這幾件事情講的都是在寫程式碼，我好像一開始想法就有點大了，畢竟 AI 能做很多事情，但是 <code>Github Copilot</code> 主要針對的還是程式碼寫作這一塊，所以我好像應該要改變一下我的文件結構，為此，我又再次請 AI 給我點意見</p>
+<p><img src="/artblog/experience-with-github-copilot/20240703183037.png"></p>
+<p>那麼我換一個思維，我想著重強調在軟體開發過程當中，該如何有效地去運用 <code>Github Copilot</code> 這類的工具，目前主要的使用方式不外乎就是直接編寫的過程中透過一些技巧讓工具自動產生程式碼，又或者是直接透過聊天的方式讓工具提供資訊或程式碼，當然，我還是請 AI 針對我的大綱給出建議</p>
+<p><img src="/artblog/experience-with-github-copilot/20240705103223.png"><br><img src="/artblog/experience-with-github-copilot/20240705103241.png"></p>
+<p>於是我又很偷懶的把題目丟給它，請它發揮給我瞧瞧，這個時候就感覺自己是甲方，然後跟乙方提：你先做一版出來看看感覺如何，大概就是這樣的概念</p>
+<p><img src="/artblog/experience-with-github-copilot/20240705101738.png"><br><img src="/artblog/experience-with-github-copilot/20240705102029.png"><br><img src="/artblog/experience-with-github-copilot/20240705102126.png"><br><img src="/artblog/experience-with-github-copilot/20240705102217.png"></p>
+<p>一般情況下，到這邊為止就是一個不錯的 ending 了，我只要照著他的框架，填充一下細節就能夠完成這份簡報、或者是文件了</p>
+<p>在剛剛這一連串的過程當中，我主要透過聊天的方式，將我的需求丟給 AI，並請它給我回饋，而我與 AI 來來回回的溝通，正是為了要完成某一個目標而逐漸修正結果的一個過程<br>當然這只是為了示範，我是怎麼將一個很模糊的想法，逐步透過 AI 討論將它轉變為一個較有條理的內容，可以看到我最初的想法其實是不 OK 的，在討論的過程當中再逐漸修正想法，等到比較確實可行的概念出現後，開始填充並完善細節</p>
+<p>我之所以示範這個過程，目的是為了要著重呈現這樣的模式</p>
+<p>表面上看到的：<code>提出想法，討論並修正這樣的概念</code><br>但我想強調的是：<code>解釋你的目標跟概念，溝通取得回饋，並隨時調整</code></p>
+<h2 id="第二個部分：自我提升"><a href="#第二個部分：自我提升" class="headerlink" title="第二個部分：自我提升"></a>第二個部分：自我提升</h2><p>在大部分的情況下，你都可以初步相信 AI 給你的建議，就把 AI 當成一個書看很多，甚麼都懂一些的新進員工，只是剛到公司缺少一些經驗，然後讓自己跟他 pair programming</p>
+<ol>
+<li>請對答案持有基本的懷疑</li>
+<li>要能夠驗證回饋的資訊是否正確、是否可行</li>
+</ol>
+<p>如果可以的話，問問它給出解決方案的理由是什麼，也順便告知它你否決掉某些設計的理由是什麼，在這個過程當中也可以增強自己的專業知識，是很好的方式</p>
+<p>通常針對程式碼細節的部分，參考資料來自於網路公開資訊，時常會有神來一筆的狀況，但不可否認也會有給出錯誤解答的時候，因此在得到 AI 給予的回饋時，必須具備驗證答案的能力。因為種種原因，AI 給出的建議大多數時候不會完全滿足使用者的需求，這就是為甚麼需要給 AI 足夠的上下文判斷，在自動完成程式碼編寫的時候，這些上下文會透過工具本身去從你的專案裡面尋找，透過各種小技巧來提供更多的上下文，例如畫面上顯示的文字，同時開啟的分頁，專案類型中某些關鍵的設定檔等等，但是光是這樣還不能夠滿足我們實際使用上的需求，所以還有第二種方式，也就是透過互動的方式提供足夠的上下文，並以聊天的方式回饋，而這就不僅僅是侷限在程式碼的撰寫了，應該說，用聊天的方式來討論需求，這才是 AI 真正強大的部分</p>
+<p>因為只要你提供了足夠多的上下文，他就能夠針對問題給出較細緻的回答，而過程中回饋的資訊有誤，或是有新的調整因子，也可以透過聊天來逐步優化設計，聊天的方式除了回饋， AI 也能夠透過這樣的方式，適當的引導使用者該如何給予資訊，所以該如何有效率的使用這個工具，則是取決於良好的溝通能力與抽象化問題的能力</p>
+<p>有些人總是會詢問 copilot 關於實作的細節，但是我認為比較好的方式，是再更進一步去問問為甚麼採用這樣的方式來實作？跟原先的方法來比較差別在哪裡？有沒有其他辦法可以做到一樣的事情？每一種解決方案的優缺點在哪裡？我很難舉出一個具體的例子，所以只能拋出這些範例式的問題，我看過一些例子有一些人在建議大家學習這個 copilot 之類的生產力工具時，都著重在說他怎麼利用他解決了甚麼問題，節省了他多少查閱文件資料的時間，這當然很棒，我也常常用，但我更想幫他們補充的是，你要把這部分節省下來的時間，拿去多問一些類似上面這些問題，問自己或者問 copilot 都好，去多思考一下影響你做這些決定的原因，這樣才能讓 AI 去做低階工程師的事情，節省了你的時間，則拿去做更有意義跟生產力的事情</p>
+<p>畢竟程式碼細節的部份可以請 AI 協助提供，我們需要做的事情是驗證並確認其可行性<br>將低階的工作交由 AI 輔助，我們才能夠將注意力移到高階設計這個範疇</p>
+<p>所以長久下來，關於程式碼的實作細節可能會逐漸淡忘，但取而代之的是培養自己的高階設計能力，這對於軟體設計是很重要的。</p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><ol>
+<li>把 AI 當成 pair programming 的隊友</li>
+<li>這個隊友有時候腦子怪怪的，你要有能力驗證他的回答</li>
+<li>如果他給予的建議不夠好，想想看是什麼原因讓它忽略了你認為理所當然的事情</li>
+<li>試著把自己的角色提升到更高的維度，去看原先困擾你的問題，你會在意的是實作細節嗎？還是這樣做帶來的影響？以及為甚麼這樣做？</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/unicode-character-convert-to-utf16/" rel="prev" title="Unicode 字元轉換為 UTF16">
+                  <i class="fa fa-angle-left"></i> Unicode 字元轉換為 UTF16
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/sonarqube-analyze-azure-project/" rel="next" title="sonarqube分析azure專案">
+                  sonarqube分析azure專案 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="介紹一下 jwt token 是怎麼一回事，並提供範例">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Json web token">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/Json-web-token/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="介紹一下 jwt token 是怎麼一回事，並提供範例">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/images/2019-11-01_13-56-46.png">
+<meta property="article:published_time" content="2019-11-04T01:42:43.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.212Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="JWT">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/images/2019-11-01_13-56-46.png">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/Json-web-token/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/Json-web-token/","path":"/Json-web-token/","title":"Json web token"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Json web token | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#JWT-Token-format"><span class="nav-number">1.</span> <span class="nav-text">JWT Token format</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Part01-header"><span class="nav-number">1.1.</span> <span class="nav-text">Part01 - header</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Part02-payload"><span class="nav-number">1.2.</span> <span class="nav-text">Part02 - payload</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#part03-signature"><span class="nav-number">1.3.</span> <span class="nav-text">part03 - signature</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JWT-Token-in-CSharp"><span class="nav-number">2.</span> <span class="nav-text">JWT Token in CSharp</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HMAC-key"><span class="nav-number">2.1.</span> <span class="nav-text">HMAC key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%99%84%E5%8A%A0%E8%BA%AB%E4%BB%BD%E8%B3%87%E8%A8%8A"><span class="nav-number">2.2.</span> <span class="nav-text">附加身份資訊</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E7%94%A2%E7%94%9F-Token"><span class="nav-number">2.3.</span> <span class="nav-text">如何產生 Token</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%A9%97%E8%AD%89-Token"><span class="nav-number">2.4.</span> <span class="nav-text">如何驗證 Token</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%80%8F%E9%81%8E-Attribute-%E9%A9%97%E8%AD%89-JWT-Token"><span class="nav-number">2.5.</span> <span class="nav-text">如何透過 Attribute 驗證 JWT Token</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%96%BC-Controller-%E4%B8%AD%E5%A5%97%E7%94%A8-Attribute-%E9%80%B2%E8%A1%8C-JWT-token-%E7%9A%84%E9%A9%97%E8%AD%89"><span class="nav-number">2.6.</span> <span class="nav-text">如何於 Controller 中套用 Attribute 進行 JWT token 的驗證</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%B8%AC%E8%A9%A6"><span class="nav-number">3.</span> <span class="nav-text">如何測試</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%8F%E9%81%8E-OWIN-SelfHost"><span class="nav-number">3.1.</span> <span class="nav-text">透過 OWIN SelfHost</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%8B%E5%8B%95%E5%95%9F%E5%8B%95"><span class="nav-number">3.2.</span> <span class="nav-text">手動啟動</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%AC%E8%A9%A6%E6%A1%88%E4%BE%8B%E6%92%B0%E5%AF%AB"><span class="nav-number">3.3.</span> <span class="nav-text">測試案例撰寫</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%A2%E7%94%9F-Token"><span class="nav-number">3.3.1.</span> <span class="nav-text">產生 Token</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A7%A3%E6%9E%90-token"><span class="nav-number">3.3.2.</span> <span class="nav-text">解析 token</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%91%BC%E5%8F%AB-API"><span class="nav-number">3.3.3.</span> <span class="nav-text">呼叫 API</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E6%80%A7"><span class="nav-number">4.</span> <span class="nav-text">安全性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.</span> <span class="nav-text">結論</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Github-Sample-Code"><span class="nav-number">6.</span> <span class="nav-text">Github Sample Code</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/Json-web-token/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Json web token | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Json web token
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2019-11-04 09:42:43" itemprop="dateCreated datePublished" datetime="2019-11-04T09:42:43+08:00">2019-11-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/javascript/" itemprop="url" rel="index"><span itemprop="name">javascript</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/Json-web-token/" class="post-meta-item leancloud_visitors" data-flag-title="Json web token" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/Json-web-token/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/Json-web-token/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>介紹一下 jwt token 是怎麼一回事，並提供範例</p>
+<span id="more"></span>
+
+<h2 id="JWT-Token-format"><a href="#JWT-Token-format" class="headerlink" title="JWT Token format"></a>JWT Token format</h2><p>可以先到介紹 JWT 的網站<a target="_blank" rel="noopener" href="https://jwt.io/">https://jwt.io/</a>，試玩一下 JWT token<br><img src="/artblog/./images/2019-11-01_13-56-46.png"></p>
+<p>Token 分為三部份，<span color="blue">header</span>.<span color="yellow">payload</span>.<span color="green">signature</span></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0 NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9. TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ</span><br></pre></td></tr></table></figure>
+
+<h3 id="Part01-header"><a href="#Part01-header" class="headerlink" title="Part01 - header"></a>Part01 - header</h3><table>
+<thead>
+<tr>
+<th>屬性</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>alg</td>
+<td>加密採用何種演算法</td>
+</tr>
+<tr>
+<td>typ</td>
+<td>定義類型</td>
+</tr>
+</tbody></table>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span> <span class="attr">&quot;alg&quot;</span><span class="punctuation">:</span> <span class="string">&quot;HS256&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;typ&quot;</span><span class="punctuation">:</span> <span class="string">&quot;JWT&quot;</span> <span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>透過<code>base64</code>編碼結果為<code>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</code>，這就是第一部份</p>
+<h3 id="Part02-payload"><a href="#Part02-payload" class="headerlink" title="Part02 - payload"></a>Part02 - payload</h3><p>實際上我們拿來存放資料的地方，當然也可以放自行定義的資料內容。例如：帳號、會員等級、暱稱等，RFC 7519 文件中也有預先定義，可以參考看看<br>REF:</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc7519">https://tools.ietf.org/html/rfc7519</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.iana.org/assignments/jwt/jwt.xhtml">https://www.iana.org/assignments/jwt/jwt.xhtml</a></li>
+</ol>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;sub&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1234567890&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;John Doe&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;admin&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>透過<code>base64</code>編碼結果為：<code>eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9</code></p>
+<h3 id="part03-signature"><a href="#part03-signature" class="headerlink" title="part03 - signature"></a>part03 - signature</h3><p>將<code>header</code>與<code>payload</code>兩部份的資料以<code>.</code>串接之後，透過設定之加密演算法使用金鑰產生簽章</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HMACSHA256( base64UrlEncode(header) + &quot;.&quot; + base64UrlEncode(payload), &quot;secret&quot;)</span><br></pre></td></tr></table></figure>
+
+<p>簽章為<code>TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ</code></p>
+<h2 id="JWT-Token-in-CSharp"><a href="#JWT-Token-in-CSharp" class="headerlink" title="JWT Token in CSharp"></a>JWT Token in CSharp</h2><p>此處使用的是微軟的 JWT，使用之前需要先安裝 package</p>
+<blockquote>
+<p>Install-Package System.IdentityModel.Tokens.Jwt</p>
+</blockquote>
+<h3 id="HMAC-key"><a href="#HMAC-key" class="headerlink" title="HMAC key"></a>HMAC key</h3><p>在這邊會需要使用到 HMAC 的 Key，對於 HMAC 這部分有興趣的人可以參考一下網路上的文章<br>此處所需要使用的 secret，直接透過隨機產生</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> hmac = <span class="keyword">new</span> HMACSHA256();</span><br><span class="line"><span class="keyword">var</span> key = Convert.ToBase64String(hmac.Key);</span><br><span class="line">Console.WriteLine(key);</span><br></pre></td></tr></table></figure>
+
+<p>如果想要自行產生，請注意幾個要點</p>
+<ol>
+<li>將金鑰儲存起來，必須使用<code>base64</code>格式</li>
+<li>金鑰的內容必須要先經過編碼，編碼格式與你採用的 JWT 編碼相同</li>
+</ol>
+<p>例如我想要設定我的金鑰是<code>secret</code>，所以經過<code>base64</code>之後，得到<code>c2VjcmV0</code>，因為我 JWT 採用 SHA256 編碼，所以接著將它再透過 SHA-256 hash 之後，結果為<code>1c1185e02ff3e23b3e5a1c5bc86cf15d4126caa3dcde0fdb6e93adc4deec119e</code>，最終就將這個字串放到 app.config 內就可以了</p>
+<p>REF:</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="http://zake7749.github.io/2015/08/06/message_auth/">訊息鑑別技術</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.freeformatter.com/hmac-generator.html">HMAC Generator &#x2F; Tester Tool</a></li>
+</ol>
+<h3 id="附加身份資訊"><a href="#附加身份資訊" class="headerlink" title="附加身份資訊"></a>附加身份資訊</h3><p><code>Claim</code>這個類別可以用來存放一些我們想要在使用者身上綁定的一些相關資訊，MS 已經有做<code>ClaimTypes Class</code>提供常用的項目，所以我們可以直接拿來用就可以了<br>如果需要自己增添資訊，<code>Claim</code>的建構式也支援字串</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> identity = <span class="keyword">new</span> ClaimsIdentity(<span class="keyword">new</span>[]</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">new</span> Claim(ClaimTypes.NameIdentifier, <span class="string">&quot;art&quot;</span>)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>REF:</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/dotnet/api/system.security.claims.claim?view=netframework-4.8">.NET Framework 4.8: Claim Class</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/dotnet/api/system.security.claims.claimtypes?view=netframework-4.8">.NET Framework 4.8: ClaimTypes Class</a></li>
+</ol>
+<h3 id="如何產生-Token"><a href="#如何產生-Token" class="headerlink" title="如何產生 Token"></a>如何產生 Token</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">readonly</span> <span class="built_in">string</span> _secret = <span class="string">&quot;SjuXhiUgltqTPgJSBLn6Il2IsNN0WUydRVpjb8BkwoHcrEjQveFSNdBVW1NovijJXi1yFIlZxDbrm2ROMC8Fjw==&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">string</span> <span class="title">GenerateToken</span>(<span class="params">ClaimsIdentity identity, <span class="built_in">int</span> expireMinutes = <span class="number">20</span></span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> symmetricKey = Convert.FromBase64String(_secret);</span><br><span class="line">    <span class="keyword">var</span> tokenHandler = <span class="keyword">new</span> JwtSecurityTokenHandler();</span><br><span class="line">    <span class="keyword">var</span> now = DateTime.UtcNow;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> tokenDescriptor = <span class="keyword">new</span> SecurityTokenDescriptor</span><br><span class="line">    &#123;</span><br><span class="line">        Subject = identity,</span><br><span class="line">        Expires = now.AddMinutes(expireMinutes),</span><br><span class="line">        SigningCredentials = <span class="keyword">new</span> SigningCredentials(</span><br><span class="line">            <span class="keyword">new</span> SymmetricSecurityKey(symmetricKey),</span><br><span class="line">            SecurityAlgorithms.HmacSha256Signature</span><br><span class="line">        )</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> stoken = tokenHandler.CreateToken(tokenDescriptor);</span><br><span class="line">    <span class="keyword">var</span> token = tokenHandler.WriteToken(stoken);</span><br><span class="line">    <span class="keyword">return</span> token;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>利用<code>SecurityTokenDescriptor</code>類別，準備相關資料<ol>
+<li>使用者身份資訊(<code>ClaimsIdentity</code>)</li>
+<li>Token 的有效期限</li>
+<li>設定簽名憑證資料(<code>SigningCredentials</code>)：<strong>在這一個步驟，需要使用金鑰，並且指定要採用何種加密演算法</strong></li>
+</ol>
+</li>
+<li>利用<code>JwtSecurityTokenHandler</code>類別<code>CreateToke()</code>，產生 token</li>
+<li>利用<code>JwtSecurityTokenHandler</code>類別<code>WriteToken()</code>取得緊湊的序列化格式的 Token，產生出來的 token 就會是像下面這樣的格式</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ</span><br></pre></td></tr></table></figure>
+
+<p>REF:</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://dotblogs.com.tw/yc421206/2019/01/08/authentication_via_ms_system_identitymodel_tokens_jwt">[ASP.NET Web API] 實作 System.IdentityModel.Tokens.Jwt 進行身分驗證</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/dotnet/api/system.identitymodel.tokens.jwt.jwtsecuritytokenhandler?view=azure-dotnet">Azure SDK for .NET: JwtSecurityTokenHandler Class</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/dotnet/api/microsoft.identitymodel.tokens.securitytokendescriptor?view=azure-dotnet">Azure SDK for .NET: SecurityTokenDescriptor Class</a></li>
+</ol>
+<h3 id="如何驗證-Token"><a href="#如何驗證-Token" class="headerlink" title="如何驗證 Token"></a>如何驗證 Token</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">readonly</span> <span class="built_in">string</span> _secret = <span class="string">&quot;SjuXhiUgltqTPgJSBLn6Il2IsNN0WUydRVpjb8BkwoHcrEjQveFSNdBVW1NovijJXi1yFIlZxDbrm2ROMC8Fjw==&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">bool</span> <span class="title">TryValidateToken</span>(<span class="params"><span class="built_in">string</span> token, <span class="keyword">out</span> ClaimsPrincipal principal</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    principal = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">try</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> tokenHandler = <span class="keyword">new</span> JwtSecurityTokenHandler();</span><br><span class="line">        <span class="keyword">var</span> jwtToken = tokenHandler.ReadToken(token);</span><br><span class="line">        <span class="keyword">if</span> (jwtToken == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> symmetricKey = Convert.FromBase64String(_secret);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> validationParameters = <span class="keyword">new</span> TokenValidationParameters()</span><br><span class="line">        &#123;</span><br><span class="line">            RequireExpirationTime = <span class="literal">true</span>,</span><br><span class="line">            ValidateIssuer = <span class="literal">false</span>,</span><br><span class="line">            ValidateAudience = <span class="literal">false</span>,</span><br><span class="line">            IssuerSigningKey = <span class="keyword">new</span> SymmetricSecurityKey(symmetricKey)</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        SecurityToken securityToken;</span><br><span class="line">        principal = tokenHandler.ValidateToken(token, validationParameters, <span class="keyword">out</span> securityToken);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">catch</span> (Exception)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>先讀取 token 內容，看看有沒有東西，此步驟可透過<code>ReadToken()</code>或是<code>ReadJwtToken()</code>來判斷回傳值是否為<code>null</code></li>
+<li>利用<code>TokenValidationParameters</code>類別，準備相關資料<ol>
+<li>需要驗證 token 是否必須具備<code>時效(expirationTime)</code></li>
+<li>不針對 token 進行發行者(<code>iss</code>)的驗證，因為我們在產生 token 的時候也沒有建立發行者的資訊，iss 為可選項目</li>
+<li>不針對 token 進行 Audience 的驗證</li>
+<li>設定簽名驗證所使用的金鑰</li>
+</ol>
+</li>
+<li>利用<code>JwtSecurityTokenHandler</code>類別<code>ValidateToken()</code>方法對 Token 進行驗證，回傳值為類別<code>ClaimsPrincipal</code></li>
+</ol>
+<p>最終取得的<code>claimsPrincipal</code>，就可以透過<code>Identity.IsAuthenticated</code>屬性，取得是否經過授權等等的資訊了</p>
+<p>REF:</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc7519">RFC 7519</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/dotnet/api/microsoft.identitymodel.tokens.tokenvalidationparameters?view=azure-dotnet">Azure SDK for .NET: TokenValidationParameters Class</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/dotnet/api/system.security.claims.claimsprincipal?view=netframework-4.8">Azure SDK for .NET: ClaimsPrincipal Class</a></li>
+</ol>
+<h3 id="如何透過-Attribute-驗證-JWT-Token"><a href="#如何透過-Attribute-驗證-JWT-Token" class="headerlink" title="如何透過 Attribute 驗證 JWT Token"></a>如何透過 Attribute 驗證 JWT Token</h3><p>如果採用的是 WebAPI 專案，應該是透過繼承<code>AuthorizationFilterAttribute</code>類別，並複寫其中的<code>OnAuthorization</code>方法實作；如果是一般的 MVC 網站，那麼繼承<code>AuthorizeAttribute</code>後，複寫<code>OnAuthorization</code>即可</p>
+<p>有一種情況是，nuget 已經有安裝了 <code>Microsoft aspnet.WebApi.Core 5.2.3</code>，但是在參考那邊卻沒有引用到<code>System.Web.Http</code>，解決辦法是重新安裝該套件，或者是直接從 nuget 安裝 <code>System.Web.http</code> 這個套件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">PM&gt; </span><span class="language-bash">Update-Package Microsoft.AspNet.WebApi.Core -reinstall</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">JWTAuthAttribute</span> : <span class="title">AuthorizeAttribute</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> 系統權限Module</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="keyword">private</span> ISystemAuthorityModule _systemAuthorityModule;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> ISystemAuthorityModule SystemAuthorityModule</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span> =&gt; <span class="keyword">this</span>._systemAuthorityModule ?? (<span class="keyword">this</span>._systemAuthorityModule = ModuleFactory.GetSystemAuthorityModule());</span><br><span class="line">        <span class="keyword">set</span> =&gt; <span class="keyword">this</span>._systemAuthorityModule = <span class="keyword">value</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">override</span> <span class="built_in">bool</span> <span class="title">AuthorizeCore</span>(<span class="params">HttpContextBase httpContext</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 解析header取得principal</span></span><br><span class="line">        <span class="keyword">var</span> principal = ParseAuthorizeHeader(httpContext);</span><br><span class="line">        <span class="keyword">if</span> (principal == <span class="literal">null</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 取得員工編號</span></span><br><span class="line">        <span class="keyword">var</span> employeeNo = <span class="built_in">int</span>.Parse(principal.FindFirst(ClaimTypes.NameIdentifier).Value);</span><br><span class="line">        <span class="keyword">if</span> (employeeNo == <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 驗證權限</span></span><br><span class="line">        <span class="keyword">var</span> controller = Convert.ToString(httpContext.Request.RequestContext.RouteData.Values[<span class="string">&quot;controller&quot;</span>]);</span><br><span class="line">        <span class="keyword">var</span> action = Convert.ToString(httpContext.Request.RequestContext.RouteData.Values[<span class="string">&quot;action&quot;</span>]);</span><br><span class="line">        <span class="keyword">var</span> urls = <span class="keyword">new</span>[] &#123; <span class="string">$&quot;/<span class="subst">&#123;controller&#125;</span>&quot;</span>, <span class="string">$&quot;/<span class="subst">&#123;controller&#125;</span>/<span class="subst">&#123;action&#125;</span>&quot;</span> &#125;;</span><br><span class="line">        <span class="keyword">var</span> result = <span class="keyword">this</span>.SystemAuthorityModule.ValidateUserFunction(employeeNo, urls);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> ClaimsPrincipal <span class="title">ParseAuthorizeHeader</span>(<span class="params">HttpContextBase httpContext</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> token = httpContext.Request.Headers[<span class="string">&quot;Authorization&quot;</span>];</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">string</span>.IsNullOrEmpty(token)) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">        token = token.Replace(<span class="string">&quot;Bearer &quot;</span>, <span class="built_in">string</span>.Empty);</span><br><span class="line">        <span class="keyword">var</span> principal = JWTHelper.GetPrincipal(token);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> principal;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="如何於-Controller-中套用-Attribute-進行-JWT-token-的驗證"><a href="#如何於-Controller-中套用-Attribute-進行-JWT-token-的驗證" class="headerlink" title="如何於 Controller 中套用 Attribute 進行 JWT token 的驗證"></a>如何於 Controller 中套用 Attribute 進行 JWT token 的驗證</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">JWTController</span> : <span class="title">Controller</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> 使用者Module</span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">readonly</span> Lazy&lt;IUserModule&gt; _userModule = <span class="keyword">new</span> Lazy&lt;IUserModule&gt;(ModuleFactory.GetUserModule);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">protected</span> IUserModule UserModule =&gt; <span class="keyword">this</span>._userModule.Value;</span><br><span class="line"></span><br><span class="line">        [<span class="meta">HttpPost</span>]</span><br><span class="line">        <span class="function"><span class="keyword">public</span> JsonResult <span class="title">GetToken</span>(<span class="params">LoginForm loginForm</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 輸入驗證</span></span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">string</span>.IsNullOrEmpty(loginForm.Account) || <span class="built_in">string</span>.IsNullOrEmpty(loginForm.Password))</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">return</span> Json(<span class="keyword">new</span> APIResult() &#123; Message = <span class="string">&quot;請輸入帳號密碼&quot;</span>, IsSuccess = <span class="literal">false</span> &#125;);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 驗證使用者</span></span><br><span class="line">            <span class="keyword">var</span> user = UserModule.VerifyUser(loginForm.Account, loginForm.Password);</span><br><span class="line">            <span class="keyword">if</span> (user == <span class="literal">null</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">return</span> Json(<span class="keyword">new</span> APIResult() &#123; Message = <span class="string">&quot;帳號密碼錯誤&quot;</span>, IsSuccess = <span class="literal">false</span> &#125;);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 產生token</span></span><br><span class="line">            <span class="keyword">var</span> identity = <span class="keyword">new</span> ClaimsIdentity(</span><br><span class="line">               <span class="keyword">new</span>[]</span><br><span class="line">                 &#123;</span><br><span class="line">                      <span class="keyword">new</span> Claim(ClaimTypes.NameIdentifier, user.EmployeeNo.ToString()),</span><br><span class="line">                      <span class="keyword">new</span> Claim(ClaimTypes.Name, user.UserName),</span><br><span class="line">                      <span class="keyword">new</span> Claim(<span class="string">&quot;Account&quot;</span>, user.Account),</span><br><span class="line">                      <span class="keyword">new</span> Claim(ClaimTypes.Email, user.EmailAccount),</span><br><span class="line">                 &#125;);</span><br><span class="line">            <span class="keyword">var</span> token = JWTHelper.GenerateToken(identity);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> Json(<span class="keyword">new</span> APIResult() &#123; Data = token, IsSuccess = <span class="literal">true</span>, Message = <span class="built_in">string</span>.Empty &#125;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        [<span class="meta">HttpPost</span>]</span><br><span class="line">        [<span class="meta">JWTAuth</span>]</span><br><span class="line">        <span class="function"><span class="keyword">public</span> JsonResult <span class="title">FeatureA</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> Json(<span class="keyword">new</span> APIResult() &#123; IsSuccess = <span class="literal">true</span>, Message = <span class="string">&quot;允許執行&quot;</span> &#125;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        [<span class="meta">HttpPost</span>]</span><br><span class="line">        [<span class="meta">JWTAuth</span>]</span><br><span class="line">        <span class="function"><span class="keyword">public</span> JsonResult <span class="title">FeatureB</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> Json(<span class="keyword">new</span> APIResult() &#123; IsSuccess = <span class="literal">true</span>, Message = <span class="string">&quot;不允許執行&quot;</span> &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>REF:</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://blog.yowko.com/unit-test-need-systemwebhttp/">ASP.NET Web API Unit Test 出現需要加入 System.Web.Http 參考錯誤</a></li>
+<li><a target="_blank" rel="noopener" href="https://weblog.west-wind.com/posts/2013/apr/18/a-webapi-basic-authentication-authorization-filter">A WebAPI Basic Authentication Authorization Filter</a></li>
+</ol>
+<h2 id="如何測試"><a href="#如何測試" class="headerlink" title="如何測試"></a>如何測試</h2><p>對於完成的功能，如果需要進行測試，當然會希望知道實際上運作是否正確，一般來說撰寫單元測試的目的是為了確保某一個類別、方法的職責如我們預期般運作，但如果是要測試網站真的能不能用 jwt，當然最實際的做法就是把網站真的跑起來測試看看</p>
+<h3 id="透過-OWIN-SelfHost"><a href="#透過-OWIN-SelfHost" class="headerlink" title="透過 OWIN SelfHost"></a>透過 OWIN SelfHost</h3><p>透過 OWIN 可以利用程式啟動你的 WebAPI 網站，細節可以看一下外部參考連結，因為這個方式我並沒有實作，所以也就無法分享一些實際經驗了，特別推薦一下余小章的相關文章，這系列含金量很高，而且都貼心的包含了 Sample Code</p>
+<p>REF:</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://dotblogs.com.tw/yc421206/2019/01/05/webapi_test_via_owin">[Web API] 使用 OWIN 進行單元測試</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-tw/aspnet/web-api/overview/hosting-aspnet-web-api/use-owin-to-self-host-web-api">使用 OWIN 自我裝載 ASP.NET Web API</a></li>
+</ol>
+<h3 id="手動啟動"><a href="#手動啟動" class="headerlink" title="手動啟動"></a>手動啟動</h3><p>另外的方式當然就是在跑測試的時候將網站先手動啟動，然後再去執行測試，這樣的方式僅適合用來開發時期驗證一下，以現在專案大多都與 CI Server 整合在一起的情況，應該是不太能夠在 CI Server 上還在每次 Build 都先手動掛載網站；不過測試程式還有一個很棒的意義，就是提供人家理解，怎麼去使用你所開發的程式，相當於使用說明書了，如果你的程式介面沒有高竿到讓人一看簽章方法就能用，還是提供一下說明書比較好些</p>
+<h3 id="測試案例撰寫"><a href="#測試案例撰寫" class="headerlink" title="測試案例撰寫"></a>測試案例撰寫</h3><h4 id="產生-Token"><a href="#產生-Token" class="headerlink" title="產生 Token"></a>產生 Token</h4><p>因為執行後產生的 token 之中，在每一次執行都不一樣，因為 payload 的值透過 MS 的 JWT 類別處理都會加上<code>nbf</code>、<code>iat</code>，再加上我們設定的<code>exp</code>，這幾個都是每次都不同的，所以也很難對他執行單元測試(除非改用別的 nuget 套件應該可以完全自訂要產生哪些內容)，所以這裡的測試程式其實比較像是一個說明書，並沒有驗證任何東西，只是單純地將結果 Console 出來而已</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">TestMethod()</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">GenerateToken</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> user = GetTestUser();</span><br><span class="line">    <span class="keyword">var</span> identity = <span class="keyword">new</span> ClaimsIdentity(</span><br><span class="line">        <span class="keyword">new</span> [] &#123;</span><br><span class="line">            <span class="keyword">new</span> Claim(ClaimTypes.NameIdentifier, user.EmployeeNo.ToString()),</span><br><span class="line">            <span class="keyword">new</span> Claim(ClaimTypes.Name, user.UserName),</span><br><span class="line">            <span class="keyword">new</span> Claim(<span class="string">&quot;Account&quot;</span>,user.UserName),</span><br><span class="line">            <span class="keyword">new</span> Claim(ClaimTypes.Email, user.EmailAccount),</span><br><span class="line">        &#125;);</span><br><span class="line">    <span class="keyword">var</span> token = JWTHelper.GenerateToken(identity);</span><br><span class="line">    Console.WriteLine(token);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> User <span class="title">GetTestUser</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> User()</span><br><span class="line">    &#123;</span><br><span class="line">        Account = <span class="string">&quot;spiderman&quot;</span>,</span><br><span class="line">        EmailAccount = <span class="string">&quot;spiderman@email.com&quot;</span>,</span><br><span class="line">        UserName = <span class="string">&quot;蜘蛛人&quot;</span>,</span><br><span class="line">        EmployeeNo = <span class="number">123456</span></span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;alg&quot;</span><span class="punctuation">:</span><span class="string">&quot;HS256&quot;</span><span class="punctuation">,</span><span class="attr">&quot;typ&quot;</span><span class="punctuation">:</span><span class="string">&quot;JWT&quot;</span><span class="punctuation">&#125;</span>.<span class="punctuation">&#123;</span><span class="attr">&quot;nameid&quot;</span><span class="punctuation">:</span><span class="string">&quot;123456&quot;</span><span class="punctuation">,</span><span class="attr">&quot;unique_name&quot;</span><span class="punctuation">:</span><span class="string">&quot;蜘蛛人&quot;</span><span class="punctuation">,</span><span class="attr">&quot;Account&quot;</span><span class="punctuation">:</span><span class="string">&quot;spiderman&quot;</span><span class="punctuation">,</span><span class="attr">&quot;email&quot;</span><span class="punctuation">:</span><span class="string">&quot;spiderman@email.com&quot;</span><span class="punctuation">,</span><span class="attr">&quot;nbf&quot;</span><span class="punctuation">:</span><span class="number">1573090246</span><span class="punctuation">,</span><span class="attr">&quot;exp&quot;</span><span class="punctuation">:</span><span class="number">1573091446</span><span class="punctuation">,</span><span class="attr">&quot;iat&quot;</span><span class="punctuation">:</span><span class="number">1573090246</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>exp (Expiration Time) - jwt 的過期時間，這個過期時間必須要大於簽發時間<br>nbf (Not Before) - 定義在什麼時間之前，該 jwt 都是不可用的<br>iat (Issued At) - jwt 的簽發時間</p>
+</blockquote>
+<blockquote>
+<p>對於這幾個 payload 的參數可以看一下 RFC 文件</p>
+</blockquote>
+<h4 id="解析-token"><a href="#解析-token" class="headerlink" title="解析 token"></a>解析 token</h4><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">TestMethod</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ParseToken</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> expected = GetTestUser();</span><br><span class="line">    <span class="keyword">var</span> token = GenerateTestToken();</span><br><span class="line">    <span class="keyword">var</span> principal = JWTHelper.GetPrincipal(token);</span><br><span class="line">    Assert.AreEqual(expected.UserName, principal.Identity.Name);</span><br><span class="line">    Assert.AreEqual(expected.EmployeeNo.ToString(), principal.FindFirst(ClaimTypes.NameIdentifier).Value);</span><br><span class="line">    Assert.AreEqual(expected.Account, principal.FindFirst(<span class="string">&quot;Account&quot;</span>).Value);</span><br><span class="line">    Assert.AreEqual(expected.EmailAccount, principal.FindFirst(ClaimTypes.Email).Value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="built_in">string</span> <span class="title">GenerateTestToken</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> user = GetTestUser();</span><br><span class="line">    <span class="keyword">var</span> identity = <span class="keyword">new</span> ClaimsIdentity(</span><br><span class="line">    <span class="keyword">new</span>[]</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">new</span> Claim(ClaimTypes.NameIdentifier, user.EmployeeNo.ToString()),</span><br><span class="line">            <span class="keyword">new</span> Claim(ClaimTypes.Name, user.UserName),</span><br><span class="line">            <span class="keyword">new</span> Claim(<span class="string">&quot;Account&quot;</span>, user.Account),</span><br><span class="line">            <span class="keyword">new</span> Claim(ClaimTypes.Email, user.EmailAccount),</span><br><span class="line">        &#125;);</span><br><span class="line">    <span class="keyword">var</span> token = JWTHelper.GenerateToken(identity);</span><br><span class="line">    <span class="keyword">return</span> token;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> User <span class="title">GetTestUser</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> User()</span><br><span class="line">    &#123;</span><br><span class="line">        Account = <span class="string">&quot;spiderman&quot;</span>,</span><br><span class="line">        EmailAccount = <span class="string">&quot;spiderman@email.com&quot;</span>,</span><br><span class="line">        UserName = <span class="string">&quot;蜘蛛人&quot;</span>,</span><br><span class="line">        EmployeeNo = <span class="number">123456</span></span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="呼叫-API"><a href="#呼叫-API" class="headerlink" title="呼叫 API"></a>呼叫 API</h4><p>這邊是實際去利用 HttpClient 呼叫網站的方法，所以網站要先啟起來，而透過 HttpClient 若要帶 token，則可以利用<code>_client.DefaultRequestHeaders.Add(&quot;Authorization&quot;, $&quot;Bearer &#123;token&#125;&quot;);</code>的方式附加於 Header</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> API測試</span></span><br><span class="line"><span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">[<span class="meta">TestClass</span>]</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">ApiTest</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 參考文章:https://dotblogs.com.tw/yc421206/2019/01/07/authentication_via_jwt-dotnet</span></span><br><span class="line">    <span class="comment">// Code：https://github.com/yaochangyu/sample.dotblog/blob/master/WebAPI/JWT/MsJwt/Client/UnitTest1.cs</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">const</span> <span class="built_in">string</span> Host = <span class="string">&quot;http://localhost:17459&quot;</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> HttpClient _client;</span><br><span class="line"></span><br><span class="line">    [<span class="meta">TestInitialize</span>]</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">BeforeEach</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        _client = <span class="keyword">new</span> HttpClient &#123; BaseAddress = <span class="keyword">new</span> Uri(Host) &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    [<span class="meta">TestMethod</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> 無token執行回應unauthorized()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> queryUrl = <span class="string">&quot;JWT/FeatureB&quot;</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> queryResponse = _client.PostAsync(queryUrl, <span class="literal">null</span>).Result;</span><br><span class="line">        Assert.AreEqual(HttpStatusCode.Unauthorized, queryResponse.StatusCode);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    [<span class="meta">TestMethod</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> 有token無權限執行回應unauthorized()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> queryUrl = <span class="string">&quot;JWT/FeatureB&quot;</span>;</span><br><span class="line">        <span class="keyword">var</span> token = GenerateToken();</span><br><span class="line">        _client.DefaultRequestHeaders.Add(<span class="string">&quot;Authorization&quot;</span>, <span class="string">$&quot;Bearer <span class="subst">&#123;token&#125;</span>&quot;</span>);</span><br><span class="line">        <span class="keyword">var</span> queryResponse = _client.PostAsync(queryUrl, <span class="literal">null</span>).Result;</span><br><span class="line">        Assert.AreEqual(HttpStatusCode.Unauthorized, queryResponse.StatusCode);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    [<span class="meta">TestMethod</span>]</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> 有權限執行回應ok()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> queryUrl = <span class="string">&quot;JWT/FeatureA&quot;</span>;</span><br><span class="line">        <span class="keyword">var</span> token = GenerateToken();</span><br><span class="line">        _client.DefaultRequestHeaders.Add(<span class="string">&quot;Authorization&quot;</span>, <span class="string">$&quot;Bearer <span class="subst">&#123;token&#125;</span>&quot;</span>);</span><br><span class="line">        <span class="keyword">var</span> queryResponse = _client.PostAsync(queryUrl, <span class="literal">null</span>).Result;</span><br><span class="line">        Assert.AreEqual(HttpStatusCode.OK, queryResponse.StatusCode);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="built_in">string</span> <span class="title">GenerateToken</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> identity = <span class="keyword">new</span> ClaimsIdentity(</span><br><span class="line">        <span class="keyword">new</span>[]</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">new</span> Claim(ClaimTypes.NameIdentifier, <span class="string">&quot;123456&quot;</span>),</span><br><span class="line">                <span class="keyword">new</span> Claim(ClaimTypes.Name, <span class="string">&quot;蜘蛛人&quot;</span>),</span><br><span class="line">                <span class="keyword">new</span> Claim(<span class="string">&quot;Account&quot;</span>, <span class="string">&quot;spiderman&quot;</span>),</span><br><span class="line">                <span class="keyword">new</span> Claim(ClaimTypes.Email, <span class="string">&quot;spiderman@email.com&quot;</span>),</span><br><span class="line">            &#125;);</span><br><span class="line">        <span class="keyword">var</span> token = JWTHelper.GenerateToken(identity);</span><br><span class="line">        <span class="keyword">return</span> token;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h2><p>最近剛好看到兩篇文章，一篇是關於 JWT 的資安相關的：<a target="_blank" rel="noopener" href="https://medium.com/swlh/hacking-json-web-tokens-jwts-9122efe91e4a">Hacking JSON Web Tokens (JWTs)</a>，另外一篇是<a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10199102">Web API 開發心得 (7) - 使用 Token 進行 API 授權驗證</a>，借鑑 JWT 機制，實作自己的規則，這兩篇都很有趣，我也想動手嘗試一下</p>
+<p>第一篇文章中的<code>Token signed with key A -&gt; Token verified with key B (RSA scenario)</code>這個驗證，我嘗試了一個晚上還是做不出來 POC，我想是因為相關知識太薄弱了，時間有限，我決定放棄這件事情，改為研究第二篇文章所說的，自訂編碼方式將 token 的 payload 加密</p>
+<blockquote>
+<p>對於實作細節想了解的人，可以參考一下連結，文章最後也有附上我的練習 Code</p>
+</blockquote>
+<p>這一篇文章對我而言較為容易理解，在實作的部分程式碼則是全部照搬，概念懂了再透過逐步偵錯來學習一下，最終終於做出來了</p>
+<p>這兩種方式都有其優劣，畢竟使用 jwt 的場合情境很多，也許有的情況就合適採用原版的，像是提供服務給第三方合作夥伴的，JWT 畢竟是一個通用的協議，對於開發人員來說應該也是較容易的，而且在各種語言都有很多已經實作出來的 lib 可以使用，對於快速開發是很有利的，也省去測試、驗證演算法的時間</p>
+<p>不過如果只是小型網站，或是不需要與外部介接的服務，採用自行設計的演算法編碼規則，或許是個不錯的選項 (?)</p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>正如<a target="_blank" rel="noopener" href="http://zake7749.github.io/2015/08/06/message_auth/">訊息鑑別技術</a>一文所說</p>
+<blockquote>
+<p>加密做的是：保證資料的安全性<br>驗證做的是：保證資料的完整性</p>
+</blockquote>
+<p>JWT token 既然是採用<code>base64</code>編碼而已，實際上其實也就相當於明文，使用 jwt 我們只能確保我們所傳送的資料是完整的，沒有被別人竄改過，但是卻不能保證他的機密性，所以在使用 jwt token 的時候，敏感性資訊不要放在裡面，僅提供一些用來識別的 key 值，最後再從後端去資料庫拉所需要的資料比較好</p>
+<h2 id="Github-Sample-Code"><a href="#Github-Sample-Code" class="headerlink" title="Github Sample Code"></a>Github Sample Code</h2><p><a target="_blank" rel="noopener" href="https://github.com/partypeopleland/JWTDemoSite">JWTDemoSite</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/JWT/" rel="tag"># JWT</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/LeetCode-MoveZeroes/" rel="prev" title="LeetCode-MoveZeroes">
+                  <i class="fa fa-angle-left"></i> LeetCode-MoveZeroes
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/deploy-your-own-npm-package/" rel="next" title="如何發布自己的NPM套件">
+                  如何發布自己的NPM套件 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

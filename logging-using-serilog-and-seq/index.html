@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="以往使用 ELK 來記錄資訊，是一件非常複雜繁瑣的事情，與 ELK 還有一堆 beat 打交道，首先要面對的是不熟悉的 linux 系統，接著是聽都沒聽過的一堆設定方式跟眉眉角角，太久沒用我連 SSL 都忘記怎麼用，更別提複雜的設定語法。而使用 Serilog + Seq 就相對簡單很多，查詢語法也比 Kibana 友善。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Serilog和Seq紀錄Log">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/logging-using-serilog-and-seq/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="以往使用 ELK 來記錄資訊，是一件非常複雜繁瑣的事情，與 ELK 還有一堆 beat 打交道，首先要面對的是不熟悉的 linux 系統，接著是聽都沒聽過的一堆設定方式跟眉眉角角，太久沒用我連 SSL 都忘記怎麼用，更別提複雜的設定語法。而使用 Serilog + Seq 就相對簡單很多，查詢語法也比 Kibana 友善。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/logging-using-serilog-and-seq/03.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/logging-using-serilog-and-seq/01.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/logging-using-serilog-and-seq/02.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/logging-using-serilog-and-seq/05.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/logging-using-serilog-and-seq/06.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/logging-using-serilog-and-seq/04.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/logging-using-serilog-and-seq/seq-signal.jpg">
+<meta property="article:published_time" content="2022-03-23T08:36:37.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.461Z">
+<meta property="article:author" content="art">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/logging-using-serilog-and-seq/03.jpg">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/logging-using-serilog-and-seq/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/logging-using-serilog-and-seq/","path":"/logging-using-serilog-and-seq/","title":"使用Serilog和Seq紀錄Log"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>使用Serilog和Seq紀錄Log | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-serilog-%E5%92%8C-seq-%E7%B4%80%E9%8C%84-log"><span class="nav-number">1.</span> <span class="nav-text">使用 serilog 和 seq 紀錄 log</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%83%E8%80%83%E9%80%A3%E7%B5%90"><span class="nav-number">1.1.</span> <span class="nav-text">參考連結</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-Docker-%E6%9E%B6%E8%A8%AD-Seq"><span class="nav-number">1.2.</span> <span class="nav-text">使用 Docker 架設 Seq</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-Serilog-%E6%90%AD%E9%85%8D-Seq"><span class="nav-number">1.3.</span> <span class="nav-text">使用 Serilog 搭配 Seq</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Serilog-%E8%83%BD%E5%A4%A0%E8%A7%A3%E6%B1%BA%E4%BB%80%E9%BA%BC%E5%95%8F%E9%A1%8C"><span class="nav-number">1.3.1.</span> <span class="nav-text">Serilog 能夠解決什麼問題</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D%E5%A5%97%E4%BB%B6"><span class="nav-number">1.3.2.</span> <span class="nav-text">安裝套件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%87%E9%A0%90%E8%A8%AD-Log-%E6%9B%BF%E6%8F%9B%E7%82%BA-Serilog"><span class="nav-number">1.3.3.</span> <span class="nav-text">將預設 Log 替換為 Serilog</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A8%98%E9%8C%84%E7%AF%84%E4%BE%8B"><span class="nav-number">1.4.</span> <span class="nav-text">記錄範例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#LogLevel"><span class="nav-number">1.4.1.</span> <span class="nav-text">LogLevel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%80%E9%8C%84%E9%A1%8D%E5%A4%96%E8%B3%87%E8%A8%8A"><span class="nav-number">1.4.2.</span> <span class="nav-text">紀錄額外資訊</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Serilog-middleware-%E5%85%A8%E7%AB%99%E9%99%84%E5%8A%A0%E7%9A%84%E7%AF%84%E4%BE%8B"><span class="nav-number">1.4.3.</span> <span class="nav-text">Serilog middleware 全站附加的範例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Serilog-middleware-%E6%89%8B%E5%8B%95%E9%99%84%E5%8A%A0%E7%9A%84%E7%AF%84%E4%BE%8B"><span class="nav-number">1.4.4.</span> <span class="nav-text">Serilog middleware 手動附加的範例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%8D%E5%A4%96%E7%B4%80%E9%8C%84-Serilog-%E7%BC%BA%E5%B0%91%E7%9A%84%E8%B3%87%E8%A8%8A-Request-Response"><span class="nav-number">1.4.5.</span> <span class="nav-text">額外紀錄 Serilog 缺少的資訊 - Request &#x2F; Response</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%8D%E5%A4%96%E7%B4%80%E9%8C%84-Serilog-%E7%BC%BA%E5%B0%91%E7%9A%84%E8%B3%87%E8%A8%8A-MVC"><span class="nav-number">1.4.6.</span> <span class="nav-text">額外紀錄 Serilog 缺少的資訊 - MVC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%8E%E6%BF%BE%E4%B8%8D%E9%9C%80%E8%A6%81%E7%9A%84%E8%A8%8A%E6%81%AF"><span class="nav-number">1.4.7.</span> <span class="nav-text">過濾不需要的訊息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%80%E9%8C%84%E5%85%A9%E4%BB%BD%E5%B1%A4%E7%B4%9A%E4%B8%8D%E5%90%8C%E7%9A%84-Log"><span class="nav-number">1.4.8.</span> <span class="nav-text">紀錄兩份層級不同的 Log</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%83%85%E5%A2%83-%E4%B8%8D%E6%83%B3%E8%A8%98%E9%8C%84%E9%9D%9E%E5%BF%85%E8%A6%81%E7%9A%84%E8%AB%8B%E6%B1%82"><span class="nav-number">1.4.9.</span> <span class="nav-text">情境:不想記錄非必要的請求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E7%AF%84%E4%BE%8B"><span class="nav-number">1.4.10.</span> <span class="nav-text">完整範例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A3%9C%E5%85%85"><span class="nav-number">1.5.</span> <span class="nav-text">補充</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/logging-using-serilog-and-seq/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="使用Serilog和Seq紀錄Log | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用Serilog和Seq紀錄Log
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2022-03-23 16:36:37" itemprop="dateCreated datePublished" datetime="2022-03-23T16:36:37+08:00">2022-03-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+
+  
+    <span id="/artblog/logging-using-serilog-and-seq/" class="post-meta-item leancloud_visitors" data-flag-title="使用Serilog和Seq紀錄Log" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/logging-using-serilog-and-seq/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/logging-using-serilog-and-seq/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>以往使用 ELK 來記錄資訊，是一件非常複雜繁瑣的事情，與 ELK 還有一堆 beat 打交道，首先要面對的是不熟悉的 linux 系統，接著是聽都沒聽過的一堆設定方式跟眉眉角角，太久沒用我連 SSL 都忘記怎麼用，更別提複雜的設定語法。而使用 Serilog + Seq 就相對簡單很多，查詢語法也比 Kibana 友善。</p>
+<span id="more"></span>
+
+<p>本次練習專案:<a target="_blank" rel="noopener" href="https://github.com/partypeopleland/serilog-seq-demo">Github:serilog-seq-demo</a></p>
+<h1 id="使用-serilog-和-seq-紀錄-log"><a href="#使用-serilog-和-seq-紀錄-log" class="headerlink" title="使用 serilog 和 seq 紀錄 log"></a>使用 serilog 和 seq 紀錄 log</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://docs.datalust.co/docs">Seq - Documentation</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/serilog/serilog/wiki/Getting-Started">serilog - Documentation</a></li>
+</ul>
+<h2 id="參考連結"><a href="#參考連結" class="headerlink" title="參考連結"></a>參考連結</h2><p>學習過程中下面這幾篇文章幫助很大，特別是<code>Logging MVC properties with Serilog.AspNetCore</code>系列文，介紹的非常詳細。</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://blog.miniasp.com/post/2021/11/29/How-to-use-Serilog-with-NET-6">.NET 6.0 如何使用 Serilog 對應用程式事件進行結構化紀錄</a></li>
+<li><a target="_blank" rel="noopener" href="https://nblumhardt.com/2016/07/serilog-2-minimumlevel-override/">Serilog 2.1 MinimumLevel.Override()</a></li>
+<li><a target="_blank" rel="noopener" href="https://andrewlock.net/using-serilog-aspnetcore-in-asp-net-core-3-reducing-log-verbosity/">Logging MVC properties with Serilog.AspNetCore</a></li>
+</ol>
+<h2 id="使用-Docker-架設-Seq"><a href="#使用-Docker-架設-Seq" class="headerlink" title="使用 Docker 架設 Seq"></a>使用 Docker 架設 Seq</h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># create volume folder</span></span><br><span class="line">mkdir <span class="literal">-p</span> D:\docker<span class="literal">-volumes</span>\seq</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># docker-cli</span></span><br><span class="line">docker run <span class="literal">--name</span> seq <span class="literal">-d</span> <span class="literal">--restart</span> unless<span class="literal">-stopped</span> <span class="literal">-e</span> ACCEPT_EULA=Y <span class="literal">-v</span> D:\docker<span class="literal">-volumes</span>\seq:/<span class="keyword">data</span> <span class="literal">-p</span> <span class="number">8090</span>:<span class="number">80</span> <span class="literal">-p</span> <span class="number">5341</span>:<span class="number">5341</span> datalust/seq</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># docker-compose</span></span><br><span class="line"><span class="attr">version:</span> <span class="string">&quot;3&quot;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">seq_server:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">datalust/seq</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">seq</span></span><br><span class="line">    <span class="attr">hostname:</span> <span class="string">seq</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ACCEPT_EULA=Y</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">8090</span><span class="string">:80</span></span><br><span class="line">      <span class="bullet">-</span> <span class="number">5341</span><span class="string">:5341</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">d:/docker-volumes/seq/data:/data</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="使用-Serilog-搭配-Seq"><a href="#使用-Serilog-搭配-Seq" class="headerlink" title="使用 Serilog 搭配 Seq"></a>使用 Serilog 搭配 Seq</h2><h3 id="Serilog-能夠解決什麼問題"><a href="#Serilog-能夠解決什麼問題" class="headerlink" title="Serilog 能夠解決什麼問題"></a>Serilog 能夠解決什麼問題</h3><p>在 dotnet core 範本預設的日誌設定下，<code>development</code>環境下光是一個頁面請求就會輸出非常多的 Log，但在<code>Production</code>環境下又完全不輸出日誌，雖然可以透過自訂過濾器來精簡日誌，但仍舊是各自獨立的 Log</p>
+<p><code>Serilog.RequestLoggingMiddleware</code>不是為了請求中的每個步驟建立單獨的 Log 紀錄，而是建立一個包含所有相關資訊的摘要 Log，也正是因為它是一個 middleware，所以可以將之後所需要紀錄的資訊都統整在一起，對於檢視、查詢會很有幫助</p>
+<h3 id="安裝套件"><a href="#安裝套件" class="headerlink" title="安裝套件"></a>安裝套件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dotnet add package Serilog.AspNetCore</span><br><span class="line">dotnet add package Serilog.Sinks.Console</span><br><span class="line">dotnet add package Serilog.Sinks.Seq</span><br></pre></td></tr></table></figure>
+
+<h3 id="將預設-Log-替換為-Serilog"><a href="#將預設-Log-替換為-Serilog" class="headerlink" title="將預設 Log 替換為 Serilog"></a>將預設 Log 替換為 Serilog</h3><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 指定 LOG 輸出到 Console 及 Seq</span></span><br><span class="line">Log.Logger = <span class="keyword">new</span> LoggerConfiguration()</span><br><span class="line">    .Enrich.FromLogContext()</span><br><span class="line">    .WriteTo.Console()</span><br><span class="line">    .WriteTo.Seq(<span class="string">&quot;http://localhost:5341&quot;</span>)</span><br><span class="line">    .CreateLogger();</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用 Serilog</span></span><br><span class="line">builder.Host.UseSerilog();</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/logging-using-serilog-and-seq/03.jpg"></p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用 Serilog RequestLoggingMiddleware</span></span><br><span class="line">app.UseSerilogRequestLogging(options =&gt;</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 自訂紀錄的訊息範本格式，修改後並不會影響結構化記錄的屬性</span></span><br><span class="line">    options.MessageTemplate = <span class="string">&quot;Handled  &#123;RequestPath&#125;&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 附加資訊到每一次的請求完成事件，可以從 httpContext 取得 HttpContext 下所有可以取得的資訊</span></span><br><span class="line">    options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        diagnosticContext.Set(<span class="string">&quot;RequestHost&quot;</span>, httpContext.Request.Host.Value);</span><br><span class="line">        diagnosticContext.Set(<span class="string">&quot;RequestScheme&quot;</span>, httpContext.Request.Scheme);</span><br><span class="line">        diagnosticContext.Set(<span class="string">&quot;UserID&quot;</span>, httpContext.User.Identity?.Name);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="記錄範例"><a href="#記錄範例" class="headerlink" title="記錄範例"></a>記錄範例</h2><h3 id="LogLevel"><a href="#LogLevel" class="headerlink" title="LogLevel"></a>LogLevel</h3><p>在 Serilog 共計有六種，列舉值高表示越重要</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> <span class="title">Serilog.Events</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> Specifies the meaning and relative importance of a log event.</span></span><br><span class="line">    <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">enum</span> LogEventLevel</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> Anything and everything you might want to know about</span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> a running block of code.</span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">        Verbose,</span><br><span class="line"></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> Internal system events that aren&#x27;t necessarily</span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> observable from the outside.</span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">        Debug,</span><br><span class="line"></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> The lifeblood of operational intelligence - things</span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> happen.</span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">        Information,</span><br><span class="line"></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> Service is degraded or endangered.</span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">        Warning,</span><br><span class="line"></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> Functionality is unavailable, invariants are broken</span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> or data is lost.</span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">        Error,</span><br><span class="line"></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;summary&gt;</span></span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> If you have a pager, it goes off when one of these</span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> occurs.</span></span><br><span class="line">        <span class="comment"><span class="doctag">///</span> <span class="doctag">&lt;/summary&gt;</span></span></span><br><span class="line">        Fatal</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="紀錄額外資訊"><a href="#紀錄額外資訊" class="headerlink" title="紀錄額外資訊"></a>紀錄額外資訊</h3><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">HomeController</span> : <span class="title">Controller</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> ILogger&lt;HomeController&gt; _logger;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">HomeController</span>(<span class="params">ILogger&lt;HomeController&gt; logger</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        _logger = logger;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> IActionResult <span class="title">Index</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        _logger.LogInformation(<span class="string">&quot;使用者資訊 , &#123;@user&#125;&quot;</span>, <span class="keyword">new</span> &#123; Name = <span class="string">&quot;art&quot;</span>, Role = <span class="string">&quot;Developer&quot;</span> &#125;);</span><br><span class="line">        <span class="keyword">return</span> View();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/logging-using-serilog-and-seq/01.jpg"><br>使用<code>logger</code>可記錄複雜型別物件資訊，</p>
+<h3 id="Serilog-middleware-全站附加的範例"><a href="#Serilog-middleware-全站附加的範例" class="headerlink" title="Serilog middleware 全站附加的範例"></a>Serilog middleware 全站附加的範例</h3><p>於<code>program.cs</code>內設定如下</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 設置 Serilog</span></span><br><span class="line">app.UseSerilogRequestLogging(options =&gt;</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 自訂紀錄的訊息範本格式，修改後並不會影響結構化記錄的屬性</span></span><br><span class="line">    options.MessageTemplate = <span class="string">&quot;Handled  &#123;RequestPath&#125;&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 附加資訊到每一次的請求完成事件，可以從 httpContext 取得 HttpContext 下所有可以取得的資訊</span></span><br><span class="line">    options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        diagnosticContext.Set(<span class="string">&quot;RequestHost&quot;</span>, httpContext.Request.Host.Value);</span><br><span class="line">        diagnosticContext.Set(<span class="string">&quot;RequestScheme&quot;</span>, httpContext.Request.Scheme);</span><br><span class="line">        diagnosticContext.Set(<span class="string">&quot;UserID&quot;</span>, httpContext.User.Identity?.Name);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="Serilog-middleware-手動附加的範例"><a href="#Serilog-middleware-手動附加的範例" class="headerlink" title="Serilog middleware 手動附加的範例"></a>Serilog middleware 手動附加的範例</h3><p>於要附加的地方透過 DI 注入的 <code>IDiagnosticContext</code> 實體附加資訊</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">HomeController</span> : <span class="title">Controller</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> ILogger&lt;HomeController&gt; _logger;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> IDiagnosticContext _diagnosticContext;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">HomeController</span>(<span class="params">ILogger&lt;HomeController&gt; logger, IDiagnosticContext diagnosticContext</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        _logger = logger;</span><br><span class="line">        _diagnosticContext = diagnosticContext;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> IActionResult <span class="title">Index</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        _diagnosticContext.Set(<span class="string">&quot;Params&quot;</span>, <span class="keyword">new</span>[] &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span> &#125;);</span><br><span class="line">        <span class="keyword">return</span> View();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/logging-using-serilog-and-seq/02.jpg"><br>若沒有使用自訂訊息範本，預設顯示範本格式為:<code>HTTP &#123;RequestMethod&#125; &#123;RequestPath&#125; responded &#123;StatusCode&#125; in &#123;Elapsed:0.0000&#125; ms</code></p>
+<p>至此先前 dotnet core 預設各自獨立 LOG 紀錄已經被整合在同一筆 LOG 中，而需要特別記錄下來的資訊也可以透過手動的方式另外建立</p>
+<h3 id="額外紀錄-Serilog-缺少的資訊-Request-Response"><a href="#額外紀錄-Serilog-缺少的資訊-Request-Response" class="headerlink" title="額外紀錄 Serilog 缺少的資訊 - Request &#x2F; Response"></a>額外紀錄 Serilog 缺少的資訊 - Request &#x2F; Response</h3><p>改用 Serilog 之後，原本有的一些資訊也可以透過附加的方式補上</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 設置 Serilog</span></span><br><span class="line">  app.UseSerilogRequestLogging(options =&gt;</span><br><span class="line">  &#123;</span><br><span class="line">      <span class="comment">// 自訂紀錄的訊息模板</span></span><br><span class="line">      <span class="comment">// options.MessageTemplate = &quot;Handled  &#123;RequestPath&#125;&quot;;</span></span><br><span class="line"></span><br><span class="line">      <span class="comment">// 附加資訊到每一次的請求完成事件</span></span><br><span class="line">      options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =&gt;</span><br><span class="line">      &#123;</span><br><span class="line">          <span class="keyword">var</span> request = httpContext.Request;</span><br><span class="line"></span><br><span class="line">          <span class="comment">// Set all the common properties available for every request</span></span><br><span class="line">          diagnosticContext.Set(<span class="string">&quot;Host&quot;</span>, request.Host);</span><br><span class="line">          diagnosticContext.Set(<span class="string">&quot;Protocol&quot;</span>, request.Protocol);</span><br><span class="line">          diagnosticContext.Set(<span class="string">&quot;Scheme&quot;</span>, request.Scheme);</span><br><span class="line"></span><br><span class="line">          <span class="comment">// Only set it if available. You&#x27;re not sending sensitive data in a querystring right?!</span></span><br><span class="line">          <span class="keyword">if</span>(request.QueryString.HasValue)</span><br><span class="line">          &#123;</span><br><span class="line">              diagnosticContext.Set(<span class="string">&quot;QueryString&quot;</span>, request.QueryString.Value);</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">          <span class="comment">// Set the content-type of the Response at this point</span></span><br><span class="line">          diagnosticContext.Set(<span class="string">&quot;ContentType&quot;</span>, httpContext.Response.ContentType);</span><br><span class="line"></span><br><span class="line">          <span class="comment">// Retrieve the IEndpointFeature selected for the request</span></span><br><span class="line">          <span class="keyword">var</span> endpoint = httpContext.GetEndpoint();</span><br><span class="line">          <span class="keyword">if</span> (endpoint <span class="keyword">is</span> <span class="built_in">object</span>) <span class="comment">// endpoint != null</span></span><br><span class="line">          &#123;</span><br><span class="line">              diagnosticContext.Set(<span class="string">&quot;EndpointName&quot;</span>, endpoint.DisplayName);</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;;</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/logging-using-serilog-and-seq/05.jpg"></p>
+<h3 id="額外紀錄-Serilog-缺少的資訊-MVC"><a href="#額外紀錄-Serilog-缺少的資訊-MVC" class="headerlink" title="額外紀錄 Serilog 缺少的資訊 - MVC"></a>額外紀錄 Serilog 缺少的資訊 - MVC</h3><p>在 MVC 框架下，相關資訊可以透過 <code>ActionFilter</code>的 <code>OnActionExecuting()</code>去取得 <code>context</code>物件</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">SerilogLoggingActionFilter</span> : <span class="title">IActionFilter</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> IDiagnosticContext _diagnosticContext;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SerilogLoggingActionFilter</span>(<span class="params">IDiagnosticContext diagnosticContext</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        _diagnosticContext = diagnosticContext;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnActionExecuting</span>(<span class="params">ActionExecutingContext context</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        _diagnosticContext.Set(<span class="string">&quot;RouteData&quot;</span>, context.ActionDescriptor.RouteValues);</span><br><span class="line">        _diagnosticContext.Set(<span class="string">&quot;ActionName&quot;</span>, context.ActionDescriptor.DisplayName);</span><br><span class="line">        _diagnosticContext.Set(<span class="string">&quot;ActionId&quot;</span>, context.ActionDescriptor.Id);</span><br><span class="line">        _diagnosticContext.Set(<span class="string">&quot;ValidationState&quot;</span>, context.ModelState.IsValid);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Required by the interface</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnActionExecuted</span>(<span class="params">ActionExecutedContext context</span>)</span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>註冊 action filter</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Add services to the container.</span></span><br><span class="line">builder.Services.AddControllersWithViews(config =&gt;</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 註冊 serilog action filter</span></span><br><span class="line">    config.Filters.Add(<span class="keyword">typeof</span>(SerilogLoggingActionFilter));</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/logging-using-serilog-and-seq/06.jpg"></p>
+<h3 id="過濾不需要的訊息"><a href="#過濾不需要的訊息" class="headerlink" title="過濾不需要的訊息"></a>過濾不需要的訊息</h3><p>原本 dotnet core 會產生大量的 Log 事件，在使用 Serilog 之後，回顧所有事件會發現有很多類似的事件一直被記錄下來，這個時候可以透過<code>MinimumLevel.Override</code>來過濾掉這類事件</p>
+<p><code>MinimumLevel.Override(&quot;Microsoft.AspNetCore&quot;, LogEventLevel.Warning)</code></p>
+<p>上述程式碼表示:只有在命名空間<code>Microsoft.AspNetCore</code>所發出的<code>Warning</code>層級，或以上層級的事件才會被記錄下來，因此我們可以在設定的部分改寫如下</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Log.Logger = <span class="keyword">new</span> LoggerConfiguration()</span><br><span class="line">    .MinimumLevel.Debug()</span><br><span class="line">    .MinimumLevel.Override(<span class="string">&quot;Microsoft&quot;</span>, LogEventLevel.Information)</span><br><span class="line">    <span class="comment">// Filter out ASP.NET Core infrastructre logs that are Information and below</span></span><br><span class="line">    .MinimumLevel.Override(<span class="string">&quot;Microsoft.AspNetCore&quot;</span>, LogEventLevel.Warning)</span><br><span class="line">    .Enrich.FromLogContext()</span><br><span class="line">    .WriteTo.Console()</span><br><span class="line">    .WriteTo.Seq(<span class="string">&quot;http://localhost:5341&quot;</span>)</span><br><span class="line">    .CreateLogger();</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/logging-using-serilog-and-seq/04.jpg"></p>
+<h3 id="紀錄兩份層級不同的-Log"><a href="#紀錄兩份層級不同的-Log" class="headerlink" title="紀錄兩份層級不同的 Log"></a>紀錄兩份層級不同的 Log</h3><p>有的時候可能會希望記錄兩份不同層級的 LOG 紀錄，例如一份比較精簡的放到 Console，另外一份比較詳細的則輸出到 File</p>
+<p>所有的接收器都提供了<code>restrictedToMinimumLevel</code>可用來至指定層級，參考設定的方式如下</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Log.Logger = <span class="keyword">new</span> LoggerConfiguration()</span><br><span class="line">    .MinimumLevel.Debug()</span><br><span class="line">    .WriteTo.File(<span class="string">&quot;log.txt&quot;</span>)</span><br><span class="line">    .WriteTo.Console(restrictedToMinimumLevel: LogEventLevel.Information)</span><br><span class="line">    .CreateLogger();</span><br></pre></td></tr></table></figure>
+
+<h3 id="情境-不想記錄非必要的請求"><a href="#情境-不想記錄非必要的請求" class="headerlink" title="情境:不想記錄非必要的請求"></a>情境:不想記錄非必要的請求</h3><p>像是 healthy check 的請求，也會被記錄下來，但是這對我們是沒有意義的，所以我們可以透過調整先前所學過的設定方式來指定我們想要紀錄的東西</p>
+<p>關鍵程式碼如下</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">app.UseSerilogRequestLogging(opts =&gt; &#123;</span><br><span class="line">    opts.EnrichDiagnosticContext = LogHelper.EnrichFromRequest;</span><br><span class="line">    opts.GetLevel = LogHelper.ExcludeHealthChecks; <span class="comment">// Use the custom level</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">LogHelper</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> LogEventLevel <span class="title">ExcludeHealthChecks</span>(<span class="params">HttpContext ctx, <span class="built_in">double</span> _, Exception ex</span>)</span> =&gt;</span><br><span class="line">        ex != <span class="literal">null</span></span><br><span class="line">            ? LogEventLevel.Error</span><br><span class="line">            : ctx.Response.StatusCode &gt; <span class="number">499</span></span><br><span class="line">                ? LogEventLevel.Error</span><br><span class="line">                : IsHealthCheckEndpoint(ctx) <span class="comment">// Not an error, check if it was a health check</span></span><br><span class="line">                    ? LogEventLevel.Verbose <span class="comment">// Was a health check, use Verbose</span></span><br><span class="line">                    : LogEventLevel.Information;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="built_in">bool</span> <span class="title">IsHealthCheckEndpoint</span>(<span class="params">HttpContext ctx</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> endpoint = ctx.GetEndpoint();</span><br><span class="line">        <span class="keyword">if</span> (endpoint <span class="keyword">is</span> <span class="built_in">object</span>) <span class="comment">// same as !(endpoint is null)</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">string</span>.Equals(</span><br><span class="line">                endpoint.DisplayName,</span><br><span class="line">                <span class="string">&quot;Health checks&quot;</span>,</span><br><span class="line">                StringComparison.Ordinal);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// No endpoint, so not a health check endpoint</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="完整範例"><a href="#完整範例" class="headerlink" title="完整範例"></a>完整範例</h3><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// program.cs</span></span><br><span class="line"><span class="keyword">using</span> seq_demo.Filters;</span><br><span class="line"><span class="keyword">using</span> seq_demo.Helper;</span><br><span class="line"><span class="keyword">using</span> Serilog;</span><br><span class="line"><span class="keyword">using</span> Serilog.Events;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 指定 LOG 輸出到 Console 及 Seq</span></span><br><span class="line">Log.Logger = <span class="keyword">new</span> LoggerConfiguration()</span><br><span class="line">    .MinimumLevel.Debug()</span><br><span class="line">    .MinimumLevel.Override(<span class="string">&quot;Microsoft&quot;</span>, LogEventLevel.Information)</span><br><span class="line">    <span class="comment">// Filter out ASP.NET Core infrastructre logs that are Information and below</span></span><br><span class="line">    .MinimumLevel.Override(<span class="string">&quot;Microsoft.AspNetCore&quot;</span>, LogEventLevel.Warning)</span><br><span class="line">    .Enrich.FromLogContext()</span><br><span class="line">    .WriteTo.Console()</span><br><span class="line">    .WriteTo.Seq(<span class="string">&quot;http://localhost:5341&quot;</span>)</span><br><span class="line">    .CreateLogger();</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> builder = WebApplication.CreateBuilder(args);</span><br><span class="line">    <span class="comment">// 使用 Serilog</span></span><br><span class="line">    builder.Host.UseSerilog();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Add services to the container.</span></span><br><span class="line">    builder.Services.AddControllersWithViews(config =&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 註冊 serilog action filter</span></span><br><span class="line">        config.Filters.Add(<span class="keyword">typeof</span>(SerilogLoggingActionFilter));</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> app = builder.Build();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Configure the HTTP request pipeline.</span></span><br><span class="line">    <span class="keyword">if</span> (!app.Environment.IsDevelopment())</span><br><span class="line">    &#123;</span><br><span class="line">        app.UseExceptionHandler(<span class="string">&quot;/Home/Error&quot;</span>);</span><br><span class="line">        <span class="comment">// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.</span></span><br><span class="line">        app.UseHsts();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    app.UseHttpsRedirection();</span><br><span class="line"></span><br><span class="line">    app.UseStaticFiles();</span><br><span class="line">    <span class="comment">// 設置 Serilog</span></span><br><span class="line">    app.UseSerilogRequestLogging(options =&gt;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 自訂紀錄的訊息模板</span></span><br><span class="line">        <span class="comment">// options.MessageTemplate = &quot;Handled  &#123;RequestPath&#125;&quot;;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 附加資訊到每一次的請求完成事件</span></span><br><span class="line">        options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =&gt;</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">var</span> request = httpContext.Request;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Set all the common properties available for every request</span></span><br><span class="line">            diagnosticContext.Set(<span class="string">&quot;Host&quot;</span>, request.Host);</span><br><span class="line">            diagnosticContext.Set(<span class="string">&quot;Protocol&quot;</span>, request.Protocol);</span><br><span class="line">            diagnosticContext.Set(<span class="string">&quot;Scheme&quot;</span>, request.Scheme);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Only set it if available. You&#x27;re not sending sensitive data in a querystring right?!</span></span><br><span class="line">            <span class="keyword">if</span>(request.QueryString.HasValue)</span><br><span class="line">            &#123;</span><br><span class="line">                diagnosticContext.Set(<span class="string">&quot;QueryString&quot;</span>, request.QueryString.Value);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Set the content-type of the Response at this point</span></span><br><span class="line">            diagnosticContext.Set(<span class="string">&quot;ContentType&quot;</span>, httpContext.Response.ContentType);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Retrieve the IEndpointFeature selected for the request</span></span><br><span class="line">            <span class="keyword">var</span> endpoint = httpContext.GetEndpoint();</span><br><span class="line">            <span class="keyword">if</span> (endpoint <span class="keyword">is</span> <span class="built_in">object</span>) <span class="comment">// endpoint != null</span></span><br><span class="line">            &#123;</span><br><span class="line">                diagnosticContext.Set(<span class="string">&quot;EndpointName&quot;</span>, endpoint.DisplayName);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        options.GetLevel = LogHelper.CustomGetLevel;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    app.UseRouting();</span><br><span class="line">    app.UseAuthorization();</span><br><span class="line">    app.MapControllerRoute(name: <span class="string">&quot;default&quot;</span>, pattern: <span class="string">&quot;&#123;controller=Home&#125;/&#123;action=Index&#125;/&#123;id?&#125;&quot;</span>);</span><br><span class="line"></span><br><span class="line">    app.Run();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span> (Exception e)</span><br><span class="line">&#123;</span><br><span class="line">    Log.Fatal(e, <span class="string">&quot;Host terminated unexpectedly&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">finally</span></span><br><span class="line">&#123;</span><br><span class="line">    Log.CloseAndFlush();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// LogHelper.cs</span></span><br><span class="line"><span class="keyword">using</span> Serilog.Events;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">seq_demo.Helper</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title">LogHelper</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> LogEventLevel <span class="title">CustomGetLevel</span>(<span class="params">HttpContext ctx, <span class="built_in">double</span> _, Exception? ex</span>)</span> =&gt;</span><br><span class="line">        ex != <span class="literal">null</span></span><br><span class="line">            ? LogEventLevel.Error</span><br><span class="line">            : ctx.Response.StatusCode &gt; <span class="number">499</span></span><br><span class="line">                ? LogEventLevel.Error</span><br><span class="line">                : LogEventLevel.Debug;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SerilogLoggingActionFilter.cs</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">SerilogLoggingActionFilter</span> : <span class="title">IActionFilter</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> IDiagnosticContext _diagnosticContext;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SerilogLoggingActionFilter</span>(<span class="params">IDiagnosticContext diagnosticContext</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        _diagnosticContext = diagnosticContext;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnActionExecuting</span>(<span class="params">ActionExecutingContext context</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        _diagnosticContext.Set(<span class="string">&quot;RouteData&quot;</span>, context.ActionDescriptor.RouteValues);</span><br><span class="line">        _diagnosticContext.Set(<span class="string">&quot;ActionName&quot;</span>, context.ActionDescriptor.DisplayName);</span><br><span class="line">        _diagnosticContext.Set(<span class="string">&quot;ActionId&quot;</span>, context.ActionDescriptor.Id);</span><br><span class="line">        _diagnosticContext.Set(<span class="string">&quot;ValidationState&quot;</span>, context.ModelState.IsValid);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">OnActionExecuted</span>(<span class="params">ActionExecutedContext context</span>)</span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="補充"><a href="#補充" class="headerlink" title="補充"></a>補充</h2><p>在之後的練習，我採用的是透過 <code>zipKin</code> 做分散式追蹤</p>
+<blockquote>
+<p>REF: <a href="https://partypeopleland.github.io/artblog/2022/04/15/NET6-Core-distributed-tracing/">NET6 Core distributed tracing</a></p>
+</blockquote>
+<p>也因此不需要在 <code>Seq</code> 的介面中自行先過濾資料，只需要給定一個時間範圍就可以看到那段期間的請求，查看詳細就可以看到每一個 <code>traceId</code> 底下各個 <code>spanId</code> 的資訊，而 <code>Seq</code> 則是想知道更詳細的其他資訊，再透過語法查詢其他資料，像是將一些查詢條件設定成 <code>Signal</code>，如下所示</p>
+<p><img src="/artblog/logging-using-serilog-and-seq/seq-signal.jpg"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/azure-cognitive-search/" rel="prev" title="azure認知搜尋初學">
+                  <i class="fa fa-angle-left"></i> azure認知搜尋初學
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/NET6-Core-distributed-tracing/" rel="next" title="NET6 Core distributed tracing">
+                  NET6 Core distributed tracing <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

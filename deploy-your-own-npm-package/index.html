@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="發布 npm 套件的紀錄">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何發布自己的NPM套件">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/deploy-your-own-npm-package/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="發布 npm 套件的紀錄">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/deploy-your-own-npm-package/2019-11-13_11-21-38.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/deploy-your-own-npm-package/2019-11-13_11-25-44.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/deploy-your-own-npm-package/2019-11-13_11-27-47.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/deploy-your-own-npm-package/2019-11-13_12-00-15.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/deploy-your-own-npm-package/2019-11-13_12-01-25.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/deploy-your-own-npm-package/2019-11-13_12-18-04.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/deploy-your-own-npm-package/2019-11-13_12-04-23.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/deploy-your-own-npm-package/2019-11-13_12-06-55.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/deploy-your-own-npm-package/2019-11-13_12-10-13.png">
+<meta property="article:published_time" content="2019-11-13T03:16:44.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.234Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="npm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/deploy-your-own-npm-package/2019-11-13_11-21-38.png">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/deploy-your-own-npm-package/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/deploy-your-own-npm-package/","path":"/deploy-your-own-npm-package/","title":"如何發布自己的NPM套件"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>如何發布自己的NPM套件 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%96%8B%E5%A7%8B"><span class="nav-number">1.</span> <span class="nav-text">如何開始</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%88%E6%8E%A7"><span class="nav-number">1.1.</span> <span class="nav-text">版控</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E7%89%88%E6%8E%A7%E5%BF%BD%E7%95%A5%E6%B8%85%E5%96%AE"><span class="nav-number">1.2.</span> <span class="nav-text">建立版控忽略清單</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B-package-json-%E8%A8%AD%E5%AE%9A%E6%AA%94"><span class="nav-number">1.3.</span> <span class="nav-text">建立 package.json 設定檔</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%92%B0%E5%AF%AB%E5%A5%97%E4%BB%B6"><span class="nav-number">2.</span> <span class="nav-text">如何撰寫套件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E7%99%BC%E5%B8%83%E5%A5%97%E4%BB%B6"><span class="nav-number">3.</span> <span class="nav-text">如何發布套件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%9E%B6%E8%A8%AD%E7%A7%81%E6%9C%89-registry"><span class="nav-number">3.1.</span> <span class="nav-text">如何架設私有 registry</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%9B%B4%E6%96%B0%E5%A5%97%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text">如何更新套件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0package-json%E7%9A%84-version-%E7%89%88%E6%9C%AC%E8%99%9F%E7%A2%BC"><span class="nav-number">4.1.</span> <span class="nav-text">更新package.json的 version 版本號碼</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E6%96%B0%E5%9F%B7%E8%A1%8Cnpm-publish"><span class="nav-number">4.2.</span> <span class="nav-text">重新執行npm publish</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E5%A5%97%E4%BB%B6"><span class="nav-number">5.</span> <span class="nav-text">如何使用套件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%8F%96%E6%B6%88%E7%99%BC%E5%B8%83"><span class="nav-number">6.</span> <span class="nav-text">如何取消發布</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/deploy-your-own-npm-package/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="如何發布自己的NPM套件 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何發布自己的NPM套件
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2019-11-13 11:16:44" itemprop="dateCreated datePublished" datetime="2019-11-13T11:16:44+08:00">2019-11-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/javascript/" itemprop="url" rel="index"><span itemprop="name">javascript</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/deploy-your-own-npm-package/" class="post-meta-item leancloud_visitors" data-flag-title="如何發布自己的NPM套件" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/deploy-your-own-npm-package/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/deploy-your-own-npm-package/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>發布 npm 套件的紀錄</p>
+<span id="more"></span>
+
+<h2 id="如何開始"><a href="#如何開始" class="headerlink" title="如何開始"></a>如何開始</h2><h3 id="版控"><a href="#版控" class="headerlink" title="版控"></a>版控</h3><p>初始化一個 Git 版控倉庫</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/deploy-your-own-npm-package/2019-11-13_11-21-38.png"></p>
+<h3 id="建立版控忽略清單"><a href="#建立版控忽略清單" class="headerlink" title="建立版控忽略清單"></a>建立版控忽略清單</h3><p>此處透過<code>VSCode</code>套件<a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=piotrpalarz.vscode-gitignore-generator">.gitignore generator</a>產生，僅需要透過選取即可自動產生相關的清單</p>
+<p><img src="/artblog/deploy-your-own-npm-package/2019-11-13_11-25-44.png"></p>
+<h3 id="建立-package-json-設定檔"><a href="#建立-package-json-設定檔" class="headerlink" title="建立 package.json 設定檔"></a>建立 package.json 設定檔</h3><p>透過預設值建立指令檔，之後再用編輯軟體開啟檔案修改</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm init -y</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/deploy-your-own-npm-package/2019-11-13_11-27-47.png"></p>
+<p>關於發布比較重要的幾個設定，例如：</p>
+<ol>
+<li>程式進入點(main)，在這邊的程式定義了一開始你套件從哪一隻程式開始</li>
+<li>版本(version)，每一次發布的版本都需要更新</li>
+<li>版控(repository)，如果有填寫的話會在 NPM 套件資訊頁面顯示</li>
+</ol>
+<h2 id="如何撰寫套件"><a href="#如何撰寫套件" class="headerlink" title="如何撰寫套件"></a>如何撰寫套件</h2><p>透過 module.exports 匯出<br>利用 require 載入</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// foo.js</span></span><br><span class="line"><span class="keyword">var</span> bar = &#123;</span><br><span class="line">  <span class="attr">message</span>: <span class="string">&quot;hello&quot;</span>,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="attr">getFoo</span>: <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123; ...bar &#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main.js</span></span><br><span class="line"><span class="keyword">var</span> foo = <span class="built_in">require</span>(<span class="string">&quot;./foo.js&quot;</span>);</span><br><span class="line"><span class="keyword">var</span> result = foo.<span class="title function_">getFoo</span>();</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(result);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>記得模組匯出物件時，因為是傳參考，所以需要先複製物件輸出</p>
+</blockquote>
+<h2 id="如何發布套件"><a href="#如何發布套件" class="headerlink" title="如何發布套件"></a>如何發布套件</h2><p>發布到 NPM 的話會需要一個帳號，所以還沒有申請的話是無法發布的，申請完畢後只要在指令列打上</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm adduser</span><br></pre></td></tr></table></figure>
+
+<p>依照提示輸入帳號、密碼及相關資訊，就會在你的帳號底下新增一組 token，而這個 token 就會在你的電腦中，等到下次要發布就不需要再輸入帳密，在這邊假設已經開發完畢了一個套件，需要發佈到 NPM 其實也很簡單</p>
+<p><img src="/artblog/deploy-your-own-npm-package/2019-11-13_12-00-15.png"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">在package.json目錄下輸入</span></span><br><span class="line">npm publish</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/deploy-your-own-npm-package/2019-11-13_12-01-25.png"></p>
+<p>程式就會自動替你將套件發布上去 NPM 了，稍後就可以在 NPM 個人帳號的 package 找到</p>
+<h3 id="如何架設私有-registry"><a href="#如何架設私有-registry" class="headerlink" title="如何架設私有 registry"></a>如何架設私有 registry</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">docker pull verdaccio/verdaccio</span><br><span class="line"></span><br><span class="line">docker run -d -v:/data/verdaccio/storage:/verdaccio/storage --name verdaccio -p 4873:4873 verdaccio/verdaccio</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">替換 registry</span></span><br><span class="line">npm config set registry http://localhost:4873/</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">輸入帳號、密碼新建一個使用者登入</span></span><br><span class="line">npm adduser</span><br></pre></td></tr></table></figure>
+
+<p>替換 registry 後，若日常 npm 使用有問題，建議還是透過 <code>npm config edit</code> 指令重設 registry</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">registry=https://registry.npmjs.org/</span><br></pre></td></tr></table></figure>
+
+<h2 id="如何更新套件"><a href="#如何更新套件" class="headerlink" title="如何更新套件"></a>如何更新套件</h2><h3 id="更新package-json的-version-版本號碼"><a href="#更新package-json的-version-版本號碼" class="headerlink" title="更新package.json的 version 版本號碼"></a>更新<code>package.json</code>的 version 版本號碼</h3><p>你可以透過手動變更<code>package.json</code>，也可以透過<code>npm version &lt;update_Type&gt;</code>的指令<br><img src="/artblog/deploy-your-own-npm-package/2019-11-13_12-18-04.png"></p>
+<h3 id="重新執行npm-publish"><a href="#重新執行npm-publish" class="headerlink" title="重新執行npm publish"></a>重新執行<code>npm publish</code></h3><h2 id="如何使用套件"><a href="#如何使用套件" class="headerlink" title="如何使用套件"></a>如何使用套件</h2><p>當套件已經發布上去之後，別的專案要使用可以直接透過下面的指令就可以自動下載套件了</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install &lt;PACKAGE_NAME&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/deploy-your-own-npm-package/2019-11-13_12-04-23.png"></p>
+<p><img src="/artblog/deploy-your-own-npm-package/2019-11-13_12-06-55.png"></p>
+<h2 id="如何取消發布"><a href="#如何取消發布" class="headerlink" title="如何取消發布"></a>如何取消發布</h2><p>如果需要撤銷發布，只要輸入下列指令即可，但是請確保是在發布後 72 小時之內做這件事情</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm unpublish &lt;PACKAGE_NAME&gt; --force</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/deploy-your-own-npm-package/2019-11-13_12-10-13.png"></p>
+<p>因為套件發布之後，可能會有人下載使用，如果有其他人依賴你的套件，就會有問題，因此官方對於撤銷發布是不建議的，也因此有很多限制</p>
+<p>關於官方對此的政策，可參考<a target="_blank" rel="noopener" href="https://www.npmjs.com/policies/unpublish">npm Unpublish Policy</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/npm/" rel="tag"># npm</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/Json-web-token/" rel="prev" title="Json web token">
+                  <i class="fa fa-angle-left"></i> Json web token
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/deploy-netcore-website-to-docker/" rel="next" title="如何打包自己的 .net core 網站到 docker">
+                  如何打包自己的 .net core 網站到 docker <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

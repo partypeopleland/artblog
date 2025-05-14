@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="先前在 2020 的時候為了練習程式碼分析工具，找到了 sonarQube 也因此撰寫了幾篇練習文章，但 2022 的今天在使用當初文章內的方法已經不適用了。可能是因為軟體更新的關係，所以這次特別紀錄一下重新練習的經過做個紀錄。先前的文章也就不再更新，將相關文章整理在左側選單，有興趣再去看。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SonarQube 程式碼分析工具 - 2022">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="先前在 2020 的時候為了練習程式碼分析工具，找到了 sonarQube 也因此撰寫了幾篇練習文章，但 2022 的今天在使用當初文章內的方法已經不適用了。可能是因為軟體更新的關係，所以這次特別紀錄一下重新練習的經過做個紀錄。先前的文章也就不再更新，將相關文章整理在左側選單，有興趣再去看。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-10-31-132901.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-10-31-133337.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-10-31-133403.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-10-31-133010.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-10-31-133519.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-10-31-133713.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-10-31-133820.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-10-31-141619.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-10-31-142613.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-10-31-142851.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-10-31-143647.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-10-31-143828.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-10-31-151310.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-06-20-100345.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-06-20-100544.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-06-15-150119.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-06-15-150218.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-06-15-150359.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-06-15-150523.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-06-15-150643.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-06-15-150753.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-06-15-151449.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-06-15-151821.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-06-15-152743.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-06-15-152622.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-06-15-152310.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-06-15-153353.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-06-15-153502.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-06-15-160746.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-06-15-161009.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-06-15-161305.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-06-20-175857.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-06-20-180100.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-06-20-180357.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-06-20-180246.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-06-20-180501.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-06-21-093900.jpg">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-06-21-094022.jpg">
+<meta property="article:published_time" content="2022-06-15T06:16:51.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.421Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="sonarQube">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/2022-10-31-132901.jpg">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/","path":"/sonarqube-analyze-2022/","title":"SonarQube 程式碼分析工具 - 2022"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>SonarQube 程式碼分析工具 - 2022 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-%E7%89%88%E6%9C%AC%E7%A2%BA%E8%AA%8D"><span class="nav-number">1.</span> <span class="nav-text">Java 版本確認</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-SonarQube"><span class="nav-number">2.</span> <span class="nav-text">安裝 SonarQube</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#From-the-zip-file"><span class="nav-number">2.1.</span> <span class="nav-text">From the zip file</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-PostgreSQL"><span class="nav-number">2.1.1.</span> <span class="nav-text">安裝 PostgreSQL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A3%9C%E5%85%85-%E5%AE%89%E8%A3%9D-PostgreSQL"><span class="nav-number">2.1.2.</span> <span class="nav-text">補充:安裝 PostgreSQL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B-PostgreSQL-%E4%BD%BF%E7%94%A8%E8%80%85%E5%8F%8A%E8%B3%87%E6%96%99%E5%BA%AB"><span class="nav-number">2.1.3.</span> <span class="nav-text">建立 PostgreSQL 使用者及資料庫</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9-sonarQube-storage-%E7%82%BA-PostgreSQL"><span class="nav-number">2.1.4.</span> <span class="nav-text">修改 sonarQube storage 為 PostgreSQL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A8%BB%E5%86%8A-sonarQube-%E6%9C%8D%E5%8B%99"><span class="nav-number">2.1.5.</span> <span class="nav-text">註冊 sonarQube 服務</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#docker"><span class="nav-number">2.2.</span> <span class="nav-text">docker</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E5%88%86%E6%9E%90%E5%B0%88%E6%A1%88"><span class="nav-number">3.</span> <span class="nav-text">建立分析專案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SonarQube-Scanner"><span class="nav-number">4.</span> <span class="nav-text">SonarQube Scanner</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DotCover-Cli-tools"><span class="nav-number">5.</span> <span class="nav-text">DotCover Cli tools</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A8%8B%E5%BC%8F%E7%A2%BC%E8%A6%86%E8%93%8B%E7%8E%87"><span class="nav-number">6.</span> <span class="nav-text">程式碼覆蓋率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E6%95%B8%E9%87%8F"><span class="nav-number">7.</span> <span class="nav-text">單元測試數量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%92%E9%99%A4%E6%AA%94%E6%A1%88"><span class="nav-number">8.</span> <span class="nav-text">排除檔案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%95%8F%E9%A1%8C%E6%8E%92%E9%99%A4"><span class="nav-number">9.</span> <span class="nav-text">問題排除</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%90%E6%9E%9C"><span class="nav-number">10.</span> <span class="nav-text">成果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A3%9C%E5%85%85-%E5%81%9C%E7%94%A8%E5%B0%88%E6%A1%88%E5%88%86%E6%9E%90%E8%A6%8F%E5%89%87"><span class="nav-number">11.</span> <span class="nav-text">補充:停用專案分析規則</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/sonarqube-analyze-2022/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="SonarQube 程式碼分析工具 - 2022 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SonarQube 程式碼分析工具 - 2022
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2022-06-15 14:16:51" itemprop="dateCreated datePublished" datetime="2022-06-15T14:16:51+08:00">2022-06-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/devOps/" itemprop="url" rel="index"><span itemprop="name">devOps</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/sonarqube-analyze-2022/" class="post-meta-item leancloud_visitors" data-flag-title="SonarQube 程式碼分析工具 - 2022" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/sonarqube-analyze-2022/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/sonarqube-analyze-2022/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>先前在 2020 的時候為了練習程式碼分析工具，找到了 <code>sonarQube</code> 也因此撰寫了幾篇練習文章，但 2022 的今天在使用當初文章內的方法已經不適用了。可能是因為軟體更新的關係，所以這次特別紀錄一下重新練習的經過做個紀錄。先前的文章也就不再更新，將相關文章整理在左側選單，有興趣再去看。</p>
+<span id="more"></span>
+
+<h2 id="Java-版本確認"><a href="#Java-版本確認" class="headerlink" title="Java 版本確認"></a>Java 版本確認</h2><p>SonarQube Server 只支援 Java 11 版本，所以如果用的是 Java 8，就需要先處理一下升級的問題。詳情請看<a target="_blank" rel="noopener" href="https://docs.sonarqube.org/latest/requirements/requirements/">Prerequisites and Overview</a></p>
+<p>不知道版本的話可以透過 <code>java -version</code> 查詢</p>
+<h2 id="安裝-SonarQube"><a href="#安裝-SonarQube" class="headerlink" title="安裝 SonarQube"></a>安裝 SonarQube</h2><p>安裝服務現在來說簡單了很多，可以使用 docker 也可以直接下載，安裝過程都算簡單，照著最新的官網說明 <a target="_blank" rel="noopener" href="https://docs.sonarqube.org/latest/setup/get-started-2-minutes/">Try Out SonarQube</a>很容易就將服務建起來了，服務建立起來後，預設透過 <code>http://localhost:9000</code>，使用 <code>admin/admin</code> 就可以登入，第一次登入後自行變更密碼，就算完成了</p>
+<p>但是這個只是方便測試使用，真正要應用還是需要像以前一樣，使用外部的 storage</p>
+<blockquote>
+<p>如果是需要安裝在 linux 的教學，可以參考這一篇文章:<a target="_blank" rel="noopener" href="https://iter01.com/506286.html">SonarQube 搭建手記</a></p>
+</blockquote>
+<h3 id="From-the-zip-file"><a href="#From-the-zip-file" class="headerlink" title="From the zip file"></a>From the zip file</h3><ol>
+<li><p><a target="_blank" rel="noopener" href="https://adoptium.net/releases.html?variant=openjdk11&jvmVariant=hotspot">Download</a> and install Java 11 on your system.</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.sonarqube.org/downloads/">Download</a> the SonarQube Community Edition zip file.</p>
+</li>
+<li><p>As a non-root user, unzip it, let’s say in C:\sonarqube or &#x2F;opt&#x2F;sonarqube.</p>
+</li>
+<li><p>As a non-root user, start the SonarQube Server:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># On Windows, execute:</span><br><span class="line">C:\sonarqube\bin\windows-x86-64\StartSonar.bat</span><br><span class="line"></span><br><span class="line"># On other operating systems, as a non-root user execute:</span><br><span class="line">/opt/sonarqube/bin/[OS]/sonar.sh console</span><br></pre></td></tr></table></figure>
+
+<p>透過官網提供的壓縮包，解壓執行之後，可以在壓縮包內找到 <code>bin/windows-x86-64/StartSonar.bat</code>，執行後稍微等一下，他會幫你建立 SonarQube Instance，再之後透過預設的帳密 <code>admin/admin</code> 就可以使用了。但是預設內建的資料庫並不提供升級、擴展，要認真使用的話還是需要另外設置資料庫</p>
+</li>
+</ol>
+<blockquote>
+<p>Embedded database should be used for evaluation purposes only</p>
+<p>The embedded database will not scale, it will not support upgrading to newer versions of SonarQube, and there is no support for migrating your data out of it into a different database &gt; engine.</p>
+</blockquote>
+<h4 id="安裝-PostgreSQL"><a href="#安裝-PostgreSQL" class="headerlink" title="安裝 PostgreSQL"></a>安裝 PostgreSQL</h4><p>直接於<a target="_blank" rel="noopener" href="https://www.enterprisedb.com/downloads/postgres-postgresql-downloads">此處</a>下載 windows 版本，但直接安裝的話，會在快結束時發生<code>failed to loaded SQL module</code>錯誤，參考下面兩篇文章後照著做就可以了</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/30689251/failed-to-load-sql-modules-into-the-database-cluster-during-postgresql-installat">Failed to load sql modules into the database cluster during PostgreSQL Installation</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43672510/article/details/122342729">windows 安装 Postgresql 记录</a></li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">net user /add postgres root</span><br><span class="line">net localgroup administrators postgres /add</span><br><span class="line">net localgroup &quot;power users&quot; postgres /add</span><br></pre></td></tr></table></figure>
+
+<p>當然新增了這個 <code>postgres</code>使用者之後，還需要去設定他的密碼，在管理介面設定一個就可以了<br><img src="/artblog/sonarqube-analyze-2022/2022-10-31-132901.jpg"></p>
+<p>接下來先新增目錄<code>D:\PostgreSQL\</code>並修改 admin , users 的權限都為完全控制，因為又有一次失敗的經驗，所以我新增了一個 NetWork Services 也一併設定完全控制</p>
+<p><img src="/artblog/sonarqube-analyze-2022/2022-10-31-133337.jpg"><br><img src="/artblog/sonarqube-analyze-2022/2022-10-31-133403.jpg"></p>
+<p>然後先重開機</p>
+<blockquote>
+<p>重開機這個步驟，很重要。</p>
+</blockquote>
+<p>重開完畢後用 <code>postgres</code> 執行 cmd , 等等要用這個 CLI 安裝<br><img src="/artblog/sonarqube-analyze-2022/2022-10-31-133010.jpg"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D:\postgresql-15.0-1-windows-x64.exe</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/sonarqube-analyze-2022/2022-10-31-133519.jpg"></p>
+<p>並把安裝目錄設定為剛才新增的 <code>D:\PostgreSQL\</code><br><img src="/artblog/sonarqube-analyze-2022/2022-10-31-133713.jpg"><br><img src="/artblog/sonarqube-analyze-2022/2022-10-31-133820.jpg"></p>
+<p>安裝過程中應該就不會出現錯誤了，接著就把剛剛新增的 windows 使用者帳號移除就行了</p>
+<h4 id="補充-安裝-PostgreSQL"><a href="#補充-安裝-PostgreSQL" class="headerlink" title="補充:安裝 PostgreSQL"></a>補充:安裝 PostgreSQL</h4><p>另外一個情況是已經安裝好了某版本，但沒有建立資料庫，windows 服務也沒有<br>這邊提供幾個參考連結:</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/36629963/how-can-i-start-postgresql-on-windows">How can I start PostgreSQL on Windows?</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/32013772/how-to-find-out-if-a-directory-is-a-valid-postgresql-cluster">How to find out if a directory is a valid PostgreSQL cluster</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/27566859/how-to-run-postgresql-as-a-service-in-windows">How to run PostgreSQL as a service in windows?</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/22766372/postgresql-pg-ctl-register-error-under-windows-7">PostgreSQL pg_ctl register error under Windows 7</a></li>
+</ol>
+<p>濃縮以上幾篇重點</p>
+<ol>
+<li>先找到安裝 postgreSQL 目錄，為的是要知道相關工具的路徑，最好是將它設定為環境變數 path 之內</li>
+<li>先確認 services.msc 當中有沒有 postgreSQL 服務，沒有的話就需要自己建一個，建立服務之前會需要新建 DB</li>
+<li>建立資料庫可指定新的目錄，例如: <code>initDB -D &quot;D:\postgres-data&quot;</code></li>
+<li>建立完成後可透過<code>pg_ctl.exe -D &quot;D:\postgres-data&quot; start -U sonar -P sonar -S auto</code>測試一下能否運作，可以運作的話就可以接著下一步做成 services (範例的 sonar 需要先建立)</li>
+<li>用管理者權限執行<code>pg_ctl.exe register -N &quot;PostgreSQL&quot; -U &quot;NT AUTHORITY\NetworkService&quot; -D &quot;D:\postgres-data&quot; -w</code>，該目錄開啟完全控制給 NETWORK SERVICE</li>
+</ol>
+<p>&#96;</p>
+<h4 id="建立-PostgreSQL-使用者及資料庫"><a href="#建立-PostgreSQL-使用者及資料庫" class="headerlink" title="建立 PostgreSQL 使用者及資料庫"></a>建立 PostgreSQL 使用者及資料庫</h4><p>習慣上會為了服務來建立一個專屬的帳號使用以控管權限，這邊也從善如流，建立一個叫做 sonar 的帳號用它提供給 sonarQube 使用</p>
+<p><img src="/artblog/sonarqube-analyze-2022/2022-10-31-141619.jpg"><br><img src="/artblog/sonarqube-analyze-2022/2022-10-31-142613.jpg"></p>
+<p>這邊我也不知道為什麼第一次建立資料庫沒出現回應，所以又做了一次，重新開 psql 改用 sonar 做登入，測試成功<br><img src="/artblog/sonarqube-analyze-2022/2022-10-31-142851.jpg"></p>
+<p>如果連線有問題，可以考慮調整一下設定，將 local 　都設成允許，但如果放在不同ＩＰ上，就要自己再研究一下怎麼設定了<br><img src="/artblog/sonarqube-analyze-2022/2022-10-31-143647.jpg"><br><img src="/artblog/sonarqube-analyze-2022/2022-10-31-143828.jpg"></p>
+<h4 id="修改-sonarQube-storage-為-PostgreSQL"><a href="#修改-sonarQube-storage-為-PostgreSQL" class="headerlink" title="修改 sonarQube storage 為 PostgreSQL"></a>修改 sonarQube storage 為 PostgreSQL</h4><blockquote>
+<p>REF:<a target="_blank" rel="noopener" href="https://docs.sonarqube.org/latest/setup/install-server/">https://docs.sonarqube.org/latest/setup/install-server/</a></p>
+</blockquote>
+<p>設定檔位於剛才的解壓縮目錄下， <code>conf/sonar.properties</code> 這個文字檔，文件中有詳細的註釋可參考，因為打算採用 <code>postgreSQL</code>，我們所需要關心的參數只有下列這三個 (因為它也支援環境變數的設定，只需要把參數名稱變成大寫，且連接符號改為底線，就可以透過環境變數來控制，這一點可以比對參考一下 docker-compose 那邊的設定)</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">sonar.jdbc.username=sonar</span></span><br><span class="line"><span class="string">sonar.jdbc.password=sonar</span></span><br><span class="line"><span class="string">sonar.jdbc.url=jdbc:postgresql://localhost/sonar</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="註冊-sonarQube-服務"><a href="#註冊-sonarQube-服務" class="headerlink" title="註冊 sonarQube 服務"></a>註冊 sonarQube 服務</h4><p>官方已經有提供 windows 使用者一個方便管理服務的批次檔，相關說明可以參考<a target="_blank" rel="noopener" href="https://docs.sonarqube.org/latest/setup/operate-server/">Operate Server</a>，因為怕關聯的網頁又改版 404，所以把指令貼在下面</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安裝、移除服務</span></span><br><span class="line"><span class="meta prompt_">&gt; </span><span class="language-bash">%SONAR_HOME%\bin\windows-x86-64\SonarService.bat install</span></span><br><span class="line"><span class="meta prompt_">&gt; </span><span class="language-bash">%SONAR_HOME%\bin\windows-x86-64\SonarService.bat uninstall</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">啟動、停止服務</span></span><br><span class="line"><span class="meta prompt_">&gt; </span><span class="language-bash">%SONAR_HOME%\bin\windows-x86-64\SonarService.bat start</span></span><br><span class="line"><span class="meta prompt_">&gt; </span><span class="language-bash">%SONAR_HOME%\bin\windows-x86-64\SonarService.bat stop</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">檢查狀態</span></span><br><span class="line"><span class="meta prompt_">&gt; </span><span class="language-bash">%SONAR_HOME%\bin\windows-x86-64\SonarService.bat status</span></span><br></pre></td></tr></table></figure>
+
+<p>當然也可以透過 <code>services.msc</code> 管理服務<br><img src="/artblog/sonarqube-analyze-2022/2022-10-31-151310.jpg"></p>
+<p>如果是在 java 8 的環境下要跑 sonarQube server , 請額外設定環境變數<code>SONAR_JAVA_PATH</code>指定 java 11 的路徑即可執行上述相關指令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set SONAR_JAVA_PATH=D:\java\11\bin\java.exe</span><br></pre></td></tr></table></figure>
+
+<h3 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name sonarqube -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true -p 9090:9000 sonarqube:latest</span><br></pre></td></tr></table></figure>
+
+<p>如果用 docker 只需要一行指令就行了，相較於以往的 docker-compose 還需要另外建立 storage，現在的安裝步驟無疑變得非常單純，但是這只能做為測試開發使用，比較適合用來熟悉這套工具的初學階段，如果是真的要搭配 CI&#x2F;CD 環境，應該還是要使用獨立的資料庫來儲存專案分析資料。</p>
+<blockquote>
+<p>指令加上 restart，可參考<a target="_blank" rel="noopener" href="https://docs.docker.com/config/containers/start-containers-automatically/">Start containers automatically</a></p>
+</blockquote>
+<p>我從<a target="_blank" rel="noopener" href="https://docs.sonarqube.org/latest/setup/install-server/">官網</a>複製他的範例<code>Docker Compose.yml file example</code>後，調整<code>port</code>改<code>9090</code></p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;3&quot;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">sonarqube:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">sonarqube:community</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">db</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">SONAR_JDBC_URL:</span> <span class="string">jdbc:postgresql://db:5432/sonar</span></span><br><span class="line">      <span class="attr">SONAR_JDBC_USERNAME:</span> <span class="string">sonar</span></span><br><span class="line">      <span class="attr">SONAR_JDBC_PASSWORD:</span> <span class="string">sonar</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">sonarqube_data:/opt/sonarqube/data</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">sonarqube_extensions:/opt/sonarqube/extensions</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">sonarqube_logs:/opt/sonarqube/logs</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;9090:9000&quot;</span></span><br><span class="line">  <span class="attr">db:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">postgres:14</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">POSTGRES_USER:</span> <span class="string">sonar</span></span><br><span class="line">      <span class="attr">POSTGRES_PASSWORD:</span> <span class="string">sonar</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">postgresql:/var/lib/postgresql</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">postgresql_data:/var/lib/postgresql/data</span></span><br><span class="line"></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">sonarqube_data:</span></span><br><span class="line">  <span class="attr">sonarqube_extensions:</span></span><br><span class="line">  <span class="attr">sonarqube_logs:</span></span><br><span class="line">  <span class="attr">postgresql:</span></span><br><span class="line">  <span class="attr">postgresql_data:</span></span><br></pre></td></tr></table></figure>
+
+<p>如果碰上了 elasticSearch 的錯誤提示 <code>bootstrap check failure [1] of [1]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]</code>，可以參考下列解法將數值設大一點點</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wsl -d docker-desktop</span><br><span class="line">sysctl -w vm.max_map_count=262144</span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+
+<p>上述的這個方法在我重開機之後失效，所以又接著查詢了一下，因為我採用的是 windows 環境的 wsl2 版本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl -l -v</span><br></pre></td></tr></table></figure>
+
+<p><img src="/artblog/sonarqube-analyze-2022/2022-06-20-100345.jpg"></p>
+<p>所以我需要設定給 <code>docker-windows</code>的設定檔是要用 <code>.wslconfig</code>，該檔案的存放位置是在 <code>%userProfile%</code></p>
+<p>從 docker-windows 的設定也可以看到這一點<br><img src="/artblog/sonarqube-analyze-2022/2022-06-20-100544.jpg"></p>
+<p>至於其他的設定的部分，想了解的可以參考網站說明:<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/wsl/wsl-config#configure-global-options-with-wslconfig">Configuration setting for .wslconfig</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[wsl2]</span><br><span class="line">kernelCommandLine = &quot;sysctl.vm.max_map_count=262144&quot;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>the file path is <code>C:\Users\&lt;UserName&gt;\.wslconfig</code></p>
+</blockquote>
+<p>設定完成之後重開 wsl 以及 docker-windows</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Get-Service LxssManager | Restart-Service</span><br></pre></td></tr></table></figure>
+
+<h2 id="建立分析專案"><a href="#建立分析專案" class="headerlink" title="建立分析專案"></a>建立分析專案</h2><p>分析專案的步驟與先前文章介紹相同，因為社群版只支援手動設置，所以請選擇 <code>Manually</code><br><img src="/artblog/sonarqube-analyze-2022/2022-06-15-150119.jpg"></p>
+<p>設定專案名稱、以及唯一識別碼<br><img src="/artblog/sonarqube-analyze-2022/2022-06-15-150218.jpg"></p>
+<p>接下來詢問如何分析，選擇本地分析 <code>Locally</code><br><img src="/artblog/sonarqube-analyze-2022/2022-06-15-150359.jpg"></p>
+<p>設定 <code>Token</code><br><img src="/artblog/sonarqube-analyze-2022/2022-06-15-150523.jpg"></p>
+<p><code>Token</code> 產生完畢，這個只會顯示一次，請記好，否則就要再重新產生一個新的<br><img src="/artblog/sonarqube-analyze-2022/2022-06-15-150643.jpg"></p>
+<p>接著選擇專案類型，這裡是用 C# .net Framekwork 作範例<br><img src="/artblog/sonarqube-analyze-2022/2022-06-15-150753.jpg"></p>
+<p>屬於 sonarQube 的分析專案設定就到這邊就告一段落，接下來就是依照顯示的</p>
+<ol>
+<li>準備 scanner</li>
+<li>執行分析</li>
+</ol>
+<h2 id="SonarQube-Scanner"><a href="#SonarQube-Scanner" class="headerlink" title="SonarQube Scanner"></a>SonarQube Scanner</h2><p>從上個步驟的連結可以看到文件有提到因應 sonarQube 服務的版本不同，也需要下載不同版本的 <code>scanner</code>，當中也特別說明了，要使用哪一種 <code>scanner</code> 與專案並無關係，因為版本是取決於安裝在電腦上的 .net SDK 版本</p>
+<p>在 .net 的部分可以使用 msbuild 或是 dotnet 其中之一，我這裡選擇的是 msbuild，也就是下面這張圖的語法<br><img src="/artblog/sonarqube-analyze-2022/2022-06-15-151449.jpg"></p>
+<p>因為這份連結文件是 local 的，所以也提供線上的文件<a target="_blank" rel="noopener" href="https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-msbuild/">SonarScanner for .NET</a><br><img src="/artblog/sonarqube-analyze-2022/2022-06-15-151821.jpg"></p>
+<p>在這個地方可以看到<a target="_blank" rel="noopener" href="https://github.com/SonarSource/sonar-scanner-msbuild/releases/download/5.6.0.48455/sonar-scanner-msbuild-5.6.0.48455-net46.zip">.NET framework 4.6+</a>，將 <code>scanner</code> 下載解壓縮後，將該目錄設置環境變數 path，方便後續執行指令可以不用打完整路徑，環境變數的設定可以在 <code>Windows 設定</code>搜尋<code>編輯環境變數</code><br><img src="/artblog/sonarqube-analyze-2022/2022-06-15-152743.jpg"><br><img src="/artblog/sonarqube-analyze-2022/2022-06-15-152622.jpg"><br><img src="/artblog/sonarqube-analyze-2022/2022-06-15-152310.jpg"></p>
+<blockquote>
+<p>因為 scanner 只支援 java 11 或 17，所以執行之前需要設置環境變數 JAVA_HOME 為 java 11 的路徑，例如</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">set JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF8</span><br><span class="line">set JAVA_HOME=D:\Java\11</span><br><span class="line">set SONAR_SCANNER_OPTS=-Xmx512m</span><br><span class="line">&quot;D:\Tool\sonar-scanner-msbuild-5.8.0.52797-net46\SonarScanner.MSBuild.exe&quot; begin /k:&quot;myProject&quot;....</span><br></pre></td></tr></table></figure>
+
+<h2 id="DotCover-Cli-tools"><a href="#DotCover-Cli-tools" class="headerlink" title="DotCover Cli tools"></a>DotCover Cli tools</h2><p>sonarQube 沒辦法自己做程式碼覆蓋率，但他可以讀取其他工具的報告來整合在自己的專案分析中，所以這邊使用的是我先前用過的 <code>dotCover cli tools</code><br>在<a target="_blank" rel="noopener" href="https://www.jetbrains.com/dotcover/download/#section=commandline">此處</a>下載最新版本<br><img src="/artblog/sonarqube-analyze-2022/2022-06-15-153353.jpg"></p>
+<p>如同剛剛的步驟解壓到自訂路徑，並設置 <code>path</code> 環境變數<br><img src="/artblog/sonarqube-analyze-2022/2022-06-15-153502.jpg"></p>
+<h2 id="程式碼覆蓋率"><a href="#程式碼覆蓋率" class="headerlink" title="程式碼覆蓋率"></a>程式碼覆蓋率</h2><p>如同<a href="https://partypeopleland.github.io/artblog/2020/08/12/SonarQube-%E6%B8%AC%E8%A9%A6%E5%A0%B1%E5%91%8A%E7%9A%84%E7%94%A2%E7%94%9F/">SonarQube-測試報告的產生</a>提過的四個步驟<br>，除了在一開始就要設定好產出報告的檔名，後續透過 <code>dotCover</code> 執行程式碼覆蓋率也需要正確產出 HTML</p>
+<p>下面的指令模擬了解決方案中，有多個測試專案的處理方式，需要個別產生報告，接著合併後，再轉為 HTML</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">dotCover cover /TargetExecutable=&quot;D:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\TestPlatform\vstest.console.exe&quot; /TargetArguments=&quot;myProject.Adapter.Test.dll&quot; /TargetWorkingDir=&quot;myProject.Adapter.Test\bin\debug&quot; /Output=&quot;myProject.Adapter.Test.dcvr&quot; /Filters=&quot;-:module=Dapper;-:module=StackExchange.Redis;-:module=myProject.DataClass;-:module=myProject.*.Test&quot;</span><br><span class="line"></span><br><span class="line">dotCover cover /TargetExecutable=&quot;D:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\TestPlatform\vstest.console.exe&quot; /TargetArguments=&quot;myProject.Core.Test.dll&quot; /TargetWorkingDir=&quot;myProject.Core.Test\bin\debug&quot; /Output=&quot;myProject.Core.Test.dcvr&quot; /Filters=&quot;-:module=Dapper;-:module=StackExchange.Redis;-:module=myProject.DataClass;-:module=myProject.*.Test&quot;</span><br><span class="line"></span><br><span class="line">dotCover cover /TargetExecutable=&quot;D:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\TestPlatform\vstest.console.exe&quot; /TargetArguments=&quot;myProject.DataService.Test.dll&quot; /TargetWorkingDir=&quot;myProject.DataService.Test\bin\debug&quot; /Output=&quot;myProject.DataService.Test.dcvr&quot; /Filters=&quot;-:module=Dapper;-:module=StackExchange.Redis;-:module=myProject.DataClass;-:module=myProject.*.Test&quot;</span><br><span class="line"></span><br><span class="line">dotCover merge --Source=&quot;myProject.Adapter.Test.dcvr;myProject.Core.Test.dcvr;myProject.DataService.Test.dcvr&quot; --Output=Merged.dcvr</span><br><span class="line"></span><br><span class="line">dotCover report --source=merged.dcvr --output=report.html --reportType=html</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>REF</strong></p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://www.jetbrains.com/help/dotcover/Running_Coverage_Analysis_from_the_Command_LIne.html#covering-multiple-test-projects">Cover multiple test projects</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jetbrains.com/help/dotcover/dotCover__Console_Runner_Commands.html#cover">dotCover 參數文件</a></li>
+</ol>
+<h2 id="單元測試數量"><a href="#單元測試數量" class="headerlink" title="單元測試數量"></a>單元測試數量</h2><p>C# 單元測試則是透過 <code>vstest.console.exe</code> 來產生報告，範例如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vstest.console.exe /Logger:trx &quot;myProject.Adapter.Test\bin\Debug\myProject.Adapter.Test.dll&quot;</span><br><span class="line">vstest.console.exe /Logger:trx &quot;myProject.Core.Test\bin\Debug\myProject.Core.Test.dll&quot;</span><br><span class="line">vstest.console.exe /Logger:trx &quot;myProject.DataService.Test\bin\Debug\myProject.DataService.Test.dll&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意事項</strong></p>
+<ol>
+<li><code>javascript</code> 分析需要 <code>node.js</code> 版本大於 <code>12.22</code> 以上</li>
+<li>單元測試產出的報告(<code>TestResults/*.trx</code>)需要每次分析後刪除，否則資料會隨著分析次數一直累加上去</li>
+</ol>
+<h2 id="排除檔案"><a href="#排除檔案" class="headerlink" title="排除檔案"></a>排除檔案</h2><p>建議先稍微看一下<a target="_blank" rel="noopener" href="https://docs.sonarqube.org/latest/project-administration/narrowing-the-focus/">Narrowing the Focus</a>，如果有排除的檔案不想被分析，可以透過分析專案的設定來排除</p>
+<p><img src="/artblog/sonarqube-analyze-2022/2022-06-15-160746.jpg"></p>
+<p>或者是使用參數，如下列指令的<code>/d:sonar.exclusions</code>參數</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SonarScanner.MSBuild.exe begin</span><br><span class="line">/k:&quot;myTestProject&quot;</span><br><span class="line">/d:sonar.host.url=&quot;http://127.0.0.1:9090&quot;</span><br><span class="line">/d:sonar.login=&quot;32aafa7ac56a55dae90d0891487e7af98506ed33&quot;</span><br><span class="line">/d:sonar.cs.dotcover.reportsPaths=&quot;report.html&quot;</span><br><span class="line">/d:sonar.cs.vstest.reportsPaths=&quot;TestResults/*.trx&quot;</span><br><span class="line">/d:sonar.exclusions=myTestProject/Scripts/Plugins/**,myTestProject/Content/**</span><br></pre></td></tr></table></figure>
+
+<p>又或者是在<code>sonarQube</code>全域進行設定<br><img src="/artblog/sonarqube-analyze-2022/2022-06-15-161009.jpg"></p>
+<table>
+<thead>
+<tr>
+<th>類型</th>
+<th>排除指令</th>
+<th>範例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>production code</td>
+<td>sonar.exclusions</td>
+<td>sonar.exclusions&#x3D;”myTestProject&#x2F;Scripts&#x2F;Plugins&#x2F;**“,”myTestProject&#x2F;Content&#x2F;**“</td>
+</tr>
+<tr>
+<td>test code</td>
+<td>sonar.test.exclusions</td>
+<td>sonar.test.exclusions&#x3D;”myTestProject.DataService.Test&#x2F;**&#x2F;*“,”myTestProject.Adapter.Test&#x2F;**&#x2F;<em>“,”myTestProject.Core.Test&#x2F;**&#x2F;</em>“</td>
+</tr>
+</tbody></table>
+<p>上面這個表格其實口語化一點就是，你自己寫的 production Code 如果有一些不想要他分析的話，像是第三方前端套件下載下來，如果它還去分析就很不必要了，就可以透過 <code>sonar.exclusions</code>排除掉；如果是自己寫的一些測試程式碼不想要分析，則是用 <code>sonar.test.exclusions</code>。如果有多個 pattern 要比對，用逗號分隔開就行了</p>
+<h2 id="問題排除"><a href="#問題排除" class="headerlink" title="問題排除"></a>問題排除</h2><p><a target="_blank" rel="noopener" href="https://docs.sonarqube.org/latest/analysis/scan/sonarscanner/">官網</a>提供的就是這幾個簡單的情況</p>
+<p>但我碰上的情況是跟這一篇相同:<a target="_blank" rel="noopener" href="https://community.sonarsource.com/t/java-lang-illegalstateexception-line-588-is-out-of-range-in-the-file/734">java.lang.IllegalStateException: Line 588 is out of range in the file</a>，簡單來說就是明明檔案只有 100 行，但提示錯誤在 101 行，網友回復也很絕，那就把提示的檔案再加一行就行了。往下看也看到有人說是需要把一些檔案清掉。我則是在分析的目錄下，將產生出來的 <code>.sonarqube</code>目錄、跑測試產生的 <code>TestResult</code>目錄都清除</p>
+<p>因為測試跑一次分析有點久，所以這兩種方式我同時採納，嘗試過後的確有效，至於哪個才是關鍵因素，那就不研究了。</p>
+<h2 id="成果"><a href="#成果" class="headerlink" title="成果"></a>成果</h2><p><img src="/artblog/sonarqube-analyze-2022/2022-06-15-161305.jpg"></p>
+<p>每一次執行分析都需要打一堆指令就很煩，對於自己 local 開發測試使用，還是最好將指令做成批次檔，每次想檢查的時候執行比較好，之後如果需要上 CI&#x2F;CD，也可以用 CLI 的方式在略微調整就可以上線，我其實比較不喜歡用包裝起來的 jenkins package 的指令</p>
+<blockquote>
+<p>關於 nvm 的部分則是因為筆電硬碟空間不夠，而用習慣的套件都還在舊版本的 node.js，如果有持續在更新且沒有硬碟空間困擾的人應該是不需要做 nvm 切換</p>
+</blockquote>
+<p><strong>完整分析指令範例</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">@REM sonarqube.bat</span></span><br><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [%<span class="number">1</span>]==[] <span class="keyword">goto</span> usage</span><br><span class="line">@<span class="built_in">CHCP</span> <span class="number">65001</span></span><br><span class="line"><span class="built_in">ECHO</span> 變更 node.js 版本 (<span class="number">16</span>.<span class="number">14</span>.<span class="number">2</span>)</span><br><span class="line">nvm use <span class="number">16</span>.<span class="number">14</span>.<span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">ECHO</span> 移除殘留暫存檔案</span><br><span class="line"><span class="built_in">del</span> *.dcvr</span><br><span class="line"><span class="built_in">del</span> report /s /q</span><br><span class="line"><span class="built_in">del</span> .sonarqube /s /q</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">ECHO</span> 分析專案...</span><br><span class="line"><span class="built_in">set</span> SONAR_SCANNER_OPTS=-Xmx512m</span><br><span class="line"><span class="comment">@REM CALL &quot;D:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\VsDevCmd.bat&quot;</span></span><br><span class="line">SonarScanner.MSBuild.exe begin /version:&quot;%~<span class="number">1</span>&quot; /k:&quot;local-MI&quot; /d:sonar.host.url=&quot;http://localhost:<span class="number">9000</span>&quot; /d:sonar.login=&quot;sqp_7d1aa4c438b3a22d6fb82b3e1bdf94beae33a1d8&quot; /d:sonar.cs.dotcover.reportsPaths=&quot;report.html&quot; /d:sonar.cs.vstest.reportsPaths=&quot;TestResults/*.trx&quot; /d:sonar.exclusions=&quot;MyProject.Web/Scripts/Plugins/**/*&quot;,&quot;MyProject.Web/Dist/**/*&quot;,&quot;MyProject.Web/Content/**/*&quot; /d:sonar.test.exclusions=&quot;MyProject.DataService.Test/**/*&quot;,&quot;MyProject.Adapter.Test/**/*&quot;,&quot;MyProject.Core.Test/**/*&quot;</span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">@REM open debug mode ==&gt; /d:sonar.verbose=true</span></span><br><span class="line"></span><br><span class="line">MsBuild.exe /t:Rebuild</span><br><span class="line"><span class="comment">@REM MSBuild.exe &quot;MyProject.Adapter.Test\MyProject.Adapter.Test.csproj&quot; /t:Rebuild /p:Configuration=Lab</span></span><br><span class="line"><span class="comment">@REM MSBuild.exe &quot;MyProject.Core.Test\MyProject.Core.Test.csproj&quot; /t:Rebuild /p:Configuration=Lab</span></span><br><span class="line"><span class="comment">@REM MSBuild.exe &quot;MyProject.DataService.Test\MyProject.DataService.Test.csproj&quot; /t:Rebuild /p:Configuration=Lab</span></span><br><span class="line"></span><br><span class="line">dotCover cover /TargetExecutable=&quot;D:\Program Files\Microsoft Visual Studio\<span class="number">2022</span>\Community\Common7\IDE\Extensions\TestPlatform\vstest.console.exe&quot; /TargetArguments=&quot;MyProject.Adapter.Test.dll&quot; /TargetWorkingDir=&quot;MyProject.Adapter.Test\bin\debug&quot; /Output=&quot;MyProject.Adapter.Test.dcvr&quot; /Filters=&quot;-:module=Dapper;-:module=StackExchange.Redis;-:module=MyProject.DataClass;-:module=MyProject.*.Test&quot;</span><br><span class="line">dotCover cover /TargetExecutable=&quot;D:\Program Files\Microsoft Visual Studio\<span class="number">2022</span>\Community\Common7\IDE\Extensions\TestPlatform\vstest.console.exe&quot; /TargetArguments=&quot;MyProject.Core.Test.dll&quot; /TargetWorkingDir=&quot;MyProject.Core.Test\bin\debug&quot; /Output=&quot;MyProject.Core.Test.dcvr&quot; /Filters=&quot;-:module=Dapper;-:module=StackExchange.Redis;-:module=MyProject.DataClass;-:module=MyProject.*.Test&quot;</span><br><span class="line">dotCover cover /TargetExecutable=&quot;D:\Program Files\Microsoft Visual Studio\<span class="number">2022</span>\Community\Common7\IDE\Extensions\TestPlatform\vstest.console.exe&quot; /TargetArguments=&quot;MyProject.DataService.Test.dll&quot; /TargetWorkingDir=&quot;MyProject.DataService.Test\bin\debug&quot; /Output=&quot;MyProject.DataService.Test.dcvr&quot; /Filters=&quot;-:module=Dapper;-:module=StackExchange.Redis;-:module=MyProject.DataClass;-:module=MyProject.*.Test&quot;</span><br><span class="line">dotCover merge --Source=&quot;MyProject.Adapter.Test.dcvr;MyProject.Core.Test.dcvr;MyProject.DataService.Test.dcvr&quot; --Output=Merged.dcvr</span><br><span class="line">dotCover report --source=merged.dcvr --output=report.html --reportType=html</span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">@REM Remove-Item –path .\TestResults\  -include *.trx –recurse</span></span><br><span class="line"><span class="built_in">del</span> testResults /s /q</span><br><span class="line"></span><br><span class="line">vstest.console.exe /Logger:trx &quot;MyProject.Adapter.Test\bin\Debug\MyProject.Adapter.Test.dll&quot;</span><br><span class="line">vstest.console.exe /Logger:trx &quot;MyProject.Core.Test\bin\Debug\MyProject.Core.Test.dll&quot;</span><br><span class="line">vstest.console.exe /Logger:trx &quot;MyProject.DataService.Test\bin\Debug\MyProject.DataService.Test.dll&quot;</span><br><span class="line"></span><br><span class="line">SonarScanner.MSBuild.exe end /d:sonar.login=&quot;sqp_7d1aa4c438b3a22d6fb82b3e1bdf94beae33a1d8&quot;</span><br><span class="line"></span><br><span class="line"><span class="built_in">ECHO</span> 變更 node.js 版本 (<span class="number">12</span>.<span class="number">16</span>.<span class="number">1</span>)</span><br><span class="line">nvm use <span class="number">12</span>.<span class="number">16</span>.<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">ECHO</span> Done!</span><br><span class="line"><span class="keyword">goto</span> :eof</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">:usage</span><br><span class="line">@<span class="built_in">echo</span> ERROR: No Version</span><br><span class="line"><span class="keyword">exit</span> /B <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="補充-停用專案分析規則"><a href="#補充-停用專案分析規則" class="headerlink" title="補充:停用專案分析規則"></a>補充:停用專案分析規則</h2><p>事情是這樣的，分析 <code>vue</code> 檔案的時候，因為先前用的是 rider 右鍵自動產生出來的範本，所以會固定產出 style 區塊標籤，但其實不會每個都需要用到，當初並沒有想太多就這樣簽入了，而現在被分析出來說這是不符合規則:<code>CSS files should not be empty</code>，這邊就用這個例子示範一下怎麼停用這一條分析規則</p>
+<p><img src="/artblog/sonarqube-analyze-2022/2022-06-20-175857.jpg"><br>首先將該規則找到，透過上圖的方式，在左上方搜尋規則名稱，出現的列表中點明細查看資訊，可以看到右上方會出現這個規則是哪一個語言</p>
+<p><img src="/artblog/sonarqube-analyze-2022/2022-06-20-180100.jpg"><br>到品質配置頁籤，將該規則複製一份，這就是我們要修改的對象</p>
+<p><img src="/artblog/sonarqube-analyze-2022/2022-06-20-180357.jpg"><br>複製出來的對象點一下，進到這個頁面，再看自己要修改什麼去點那個超連結就行了</p>
+<p><img src="/artblog/sonarqube-analyze-2022/2022-06-20-180246.jpg"><br><img src="/artblog/sonarqube-analyze-2022/2022-06-20-180501.jpg"><br>找到特定規則可選擇啟用或停用了</p>
+<p><img src="/artblog/sonarqube-analyze-2022/2022-06-21-093900.jpg"><br>在剛剛的地方點右邊修改專案</p>
+<p><img src="/artblog/sonarqube-analyze-2022/2022-06-21-094022.jpg"><br>然後輸入你要配置的設定是給哪個專案用的，找到後勾選就行了</p>
+<p>最後就是重新跑一次分析就可以了</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/sonarQube/" rel="tag"># sonarQube</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/oh-my-posh-powershell-windows-terminal-at-2022/" rel="prev" title="使用oh-my-posh美化指令列工具 at 2022">
+                  <i class="fa fa-angle-left"></i> 使用oh-my-posh美化指令列工具 at 2022
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/youtube-live-stream-chat-message-crawler/" rel="next" title="實作youtube直播聊天訊息爬蟲">
+                  實作youtube直播聊天訊息爬蟲 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>

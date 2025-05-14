@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/artblog/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/artblog/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/artblog/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/artblog/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/artblog/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha256-yIDrPSXHZdOZhAqiBP7CKzIwMQmRCJ8UeB8Jo17YC4o=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"partypeopleland.github.io","root":"/artblog/","images":"/artblog/images","scheme":"Pisces","darkmode":false,"version":"8.19.1","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜尋...","empty":"我們無法找到任何有關 ${query} 的搜索結果","hits_time":"${hits} 找到 ${time} 個結果","hits":"找到 ${hits} 個結果"},"path":"/artblog/search.json","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/artblog/js/config.js"></script>
+
+    <meta name="description" content="一直以來很想嘗試一下自動化佈署這件事情，剛好今天有點時間，就開始菜鳥練習吧，透過發佈程式碼，經由Jenkins做到自動發佈，至於單元測試、分支那些東西，菜鳥還不太會，沒關係，那就先略過吧~~">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git+Jenkins作自動化佈署">
+<meta property="og:url" content="https://partypeopleland.github.io/artblog/git-jenkins-auto-deploy/index.html">
+<meta property="og:site_name" content="Art的辦公桌">
+<meta property="og:description" content="一直以來很想嘗試一下自動化佈署這件事情，剛好今天有點時間，就開始菜鳥練習吧，透過發佈程式碼，經由Jenkins做到自動發佈，至於單元測試、分支那些東西，菜鳥還不太會，沒關係，那就先略過吧~~">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/git-jenkins-auto-deploy/1492770590_08717.png">
+<meta property="og:image" content="https://partypeopleland.github.io/artblog/git-jenkins-auto-deploy/1492770713_84888.png">
+<meta property="article:published_time" content="2017-04-21T02:42:12.000Z">
+<meta property="article:modified_time" content="2025-05-14T15:12:00.155Z">
+<meta property="article:author" content="art">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="jenkins">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://partypeopleland.github.io/artblog/git-jenkins-auto-deploy/1492770590_08717.png">
+
+
+<link rel="canonical" href="https://partypeopleland.github.io/artblog/git-jenkins-auto-deploy/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-TW","comments":true,"permalink":"https://partypeopleland.github.io/artblog/git-jenkins-auto-deploy/","path":"/git-jenkins-auto-deploy/","title":"Git+Jenkins作自動化佈署"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Git+Jenkins作自動化佈署 | Art的辦公桌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147720279-1"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-147720279-1","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/artblog/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/artblog/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/artblog/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Art的辦公桌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">有兩個螢幕真好</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜尋" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/artblog/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a></li><li class="menu-item menu-item-archives"><a href="/artblog/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a></li><li class="menu-item menu-item-series"><a href="/artblog/series/" rel="section"><i class="fa fa-th fa-fw"></i>series</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Step01%EF%BC%9A%E8%A8%AD%E5%AE%9A%E5%A5%BDIIS"><span class="nav-number">1.</span> <span class="nav-text">Step01：設定好IIS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step02%EF%BC%9AGit-Server"><span class="nav-number">2.</span> <span class="nav-text">Step02：Git Server</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step03%EF%BC%9A%E4%B8%8A%E5%82%B3%E7%A8%8B%E5%BC%8F%E5%BE%8C%E8%A7%B8%E7%99%BCJenkins"><span class="nav-number">3.</span> <span class="nav-text">Step03：上傳程式後觸發Jenkins</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step04%EF%BC%9A%E4%B8%8A%E5%82%B3%E6%80%8E%E9%BA%BC%E5%8F%AF%E4%BB%A5%E6%B2%92%E6%9C%89LFTP"><span class="nav-number">4.</span> <span class="nav-text">Step04：上傳怎麼可以沒有LFTP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step05%EF%BC%9A%E6%8A%8AJenkins%E6%90%9E%E8%B5%B7%E4%BE%86"><span class="nav-number">5.</span> <span class="nav-text">Step05：把Jenkins搞起來</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%83%E8%80%83%E6%96%87%E7%AB%A0"><span class="nav-number">6.</span> <span class="nav-text">參考文章</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">art</p>
+  <div class="site-description" itemprop="description">日常工作、學習隨筆</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/artblog/archives/">
+          <span class="site-state-item-count">151</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/artblog/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分類</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/artblog/tags/">
+        <span class="site-state-item-count">85</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/partypeopleland" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;partypeopleland" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/sliceart" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;sliceart" rel="noopener me" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://partypeopleland.github.io/artblog/git-jenkins-auto-deploy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/artblog/images/avatar.gif">
+      <meta itemprop="name" content="art">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Art的辦公桌">
+      <meta itemprop="description" content="日常工作、學習隨筆">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Git+Jenkins作自動化佈署 | Art的辦公桌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Git+Jenkins作自動化佈署
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">發表於</span>
+
+      <time title="創建時間：2017-04-21 10:42:12" itemprop="dateCreated datePublished" datetime="2017-04-21T10:42:12+08:00">2017-04-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新於</span>
+      <time title="修改時間：2025-05-14 23:12:00" itemprop="dateModified" datetime="2025-05-14T23:12:00+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分類於</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/artblog/categories/devOps/" itemprop="url" rel="index"><span itemprop="name">devOps</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/artblog/git-jenkins-auto-deploy/" class="post-meta-item leancloud_visitors" data-flag-title="Git+Jenkins作自動化佈署" title="閱讀次數">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">閱讀次數：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/artblog/git-jenkins-auto-deploy/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="/git-jenkins-auto-deploy/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>一直以來很想嘗試一下自動化佈署這件事情，剛好今天有點時間，就開始菜鳥練習吧，透過發佈程式碼，經由Jenkins做到自動發佈，至於單元測試、分支那些東西，菜鳥還不太會，沒關係，那就先略過吧~~</p>
+<span id="more"></span>
+
+<h2 id="Step01：設定好IIS"><a href="#Step01：設定好IIS" class="headerlink" title="Step01：設定好IIS"></a>Step01：設定好IIS</h2><p>這部分應該沒什麼好說的，就是把伺服器上面，新開一個站台，然後對應到實體目錄上</p>
+<h2 id="Step02：Git-Server"><a href="#Step02：Git-Server" class="headerlink" title="Step02：Git Server"></a>Step02：Git Server</h2><p>改程式碼當然需要有版控囉，先前透過Nas來搞Git我覺得真的是在搞我自己，所以基本上就沒在用了，偶然間從<a target="_blank" rel="noopener" href="https://dotblogs.com.tw/wuanunet/1">Cheng-Ju Wu</a>那邊獲得資訊，雖然他部落格文章寫得是Gogs，不過現在似乎沒有甚麼人在維護，他也推薦使用<a target="_blank" rel="noopener" href="https://docs.gitea.io/zh-tw/">Gitea</a>。因為是從原本的Gogs分出來寫的，所以大致上都跟文章介紹得差不多。</p>
+<p>有興趣了解的人可以參考一下該系列文章</p>
+<ol>
+<li>Using Gogs Git Service - <a target="_blank" rel="noopener" href="https://dotblogs.com.tw/wuanunet/2016/04/22/using-gogs-git-service-part1-install-on-windows">Part.1 - Install on Windows</a></li>
+<li>Using Gogs Git Service - <a target="_blank" rel="noopener" href="https://dotblogs.com.tw/wuanunet/2016/05/01/using-gogs-git-service-part2-authentication-smtp">Part.2 - Authentication - SMTP</a></li>
+<li>Using Gogs Git Service - <a target="_blank" rel="noopener" href="https://dotblogs.com.tw/wuanunet/2016/05/02/using-gogs-git-service-part3-diff-data-not-available">Part.3 - Diff Data Not Available 的解決方式</a></li>
+</ol>
+<h2 id="Step03：上傳程式後觸發Jenkins"><a href="#Step03：上傳程式後觸發Jenkins" class="headerlink" title="Step03：上傳程式後觸發Jenkins"></a>Step03：上傳程式後觸發Jenkins</h2><p>這邊實作的方式應該也很多種，但是我就仍然是用最簡單的一種，設定好token然後git push的時候就讓他發出這個request給jenkins</p>
+<p><img src="/artblog/git-jenkins-auto-deploy/1492770590_08717.png"></p>
+<h2 id="Step04：上傳怎麼可以沒有LFTP"><a href="#Step04：上傳怎麼可以沒有LFTP" class="headerlink" title="Step04：上傳怎麼可以沒有LFTP"></a>Step04：上傳怎麼可以沒有LFTP</h2><p>因為windows內建的ftp指令實在是不堪使用，沒有辦法達到同步這件事情，但是LFTP這東西可以做到，很幸運的找到了好心人士的文章，照著實作也的確成功了。</p>
+<p>細節就請移步前往該文章：<a target="_blank" rel="noopener" href="http://coding.bang.tw/Article/43">使用lftp指令工具差異備份檔案至FTP</a>吧，當CopyCat也不是很好。</p>
+<h2 id="Step05：把Jenkins搞起來"><a href="#Step05：把Jenkins搞起來" class="headerlink" title="Step05：把Jenkins搞起來"></a>Step05：把Jenkins搞起來</h2><p>基本上Jenkins沒有大家想的那麼神奇，最主要就是取得最新的程式碼，並且佈署到我希望他佈署的機器上面。</p>
+<p>因為剛才要從Git觸發Jenkins，所以這邊Jenkins就也要做一下設定<br><img src="/artblog/git-jenkins-auto-deploy/1492770713_84888.png"></p>
+<p>以前曾經上過保哥的課，有了解了一些，這次把它給實作出來(最基本的而已….)課程中最大的收穫就是，Jenkins其實所有的動作背後都只是幫你轉換成command line指令，透過console去偵錯為何設定不能用是最重要的。也就是因為這樣，其實我對於Git還不熟悉，只會用git clone跟git pull之類的指令，所以我很偷吃步的先在jenkins內的工作目錄當中，直接把他給git clone，之後在Jenkins之內的指令，就只是很單純的把最新的檔案抓下來，然後還原他 (老實說我真的不熟GIT，看了實際上的git的指令，應該是還要去判斷分支，還有一大堆的，不過那就留到以後一步一步學習吧，現在只是為了要能夠抓到最新版本的程式碼而已)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git pull</span><br><span class="line">git reset --hard</span><br></pre></td></tr></table></figure>
+
+<p>在Jenkins取得程式碼之後，接下來就是要準備佈署到正式機上了，一般來說要做CI、CD，肯定還要補上一堆的單元測試，然後如果Build不過，那還要通知、也不可以佈署，不過我這邊只是要實作一個很簡單的Html網站的佈署(主要是練習自動化佈署的流程)，所以這些東西就被我省略了，不過如果真的有要做自動化佈署，當然是要配合測試，才能夠品質有保障阿。</p>
+<p>佈署的部分就交給LFTP來做這件事，我也把相關的指令照著LFTP介紹的做出來了，所以在Jenkins裡面就輸入相關指令即可。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd E:\lftp</span><br><span class="line">lftp -f 23WebSiteRuleMirror.lftp</span><br></pre></td></tr></table></figure>
+
+<p>之後修改程式，將程式git push出去，jenkins就會依照我們先前設定好的步驟，將檔案抓回來更新，然後透過FTP上傳到正式機囉</p>
+<p>這邊當然還有很多缺點沒有做好，像是Git取得檔案的部分，應該要透過認證，不管是ssh還是其他方式。 (其實也有研究過，但是一直失敗)</p>
+<p>就等未來學習到了再來加強囉。</p>
+<h2 id="參考文章"><a href="#參考文章" class="headerlink" title="參考文章"></a>參考文章</h2><ol>
+<li><a target="_blank" rel="noopener" href="http://coding.bang.tw/Article/43">使用lftp指令工具差異備份檔案至FTP</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.jianshu.com/p/442a0e01dd95">Windows Git仓库遇到的坑及使用public key authentication进行认证</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.codeproject.com/articles/296398/step-by-step-setup-git-server-on-windows-with-cops">Step by Step Setup Git Server on Windows with CopSSH + msysGit and Integrate Git with Visual Studio</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/artblog/tags/git/" rel="tag"># git</a>
+              <a href="/artblog/tags/jenkins/" rel="tag"># jenkins</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/artblog/twmvc-27/" rel="prev" title="twMVC 27 研討會心得">
+                  <i class="fa fa-angle-left"></i> twMVC 27 研討會心得
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/artblog/vscode-javascript/" rel="next" title="利用VSCode開發JavaScript">
+                  利用VSCode開發JavaScript <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+  </div>
+  
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">art</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="回到頂端">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/artblog/js/comments.js"></script><script src="/artblog/js/utils.js"></script><script src="/artblog/js/motion.js"></script><script src="/artblog/js/next-boot.js"></script><script src="/artblog/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/artblog/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"GANYm2Xe6C8sVDTfwweNLhem-MdYXbMMI","app_key":"1QwRi5q7w37T7a13E124NGqG","server_url":null,"security":false}</script>
+  <script src="/artblog/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{"enable":true,"shortname":"daddyart","count":true,"i18n":{"disqus":"disqus"}}</script>
+<script src="/artblog/js/third-party/comments/disqus.js"></script>
+
+</body>
+</html>
